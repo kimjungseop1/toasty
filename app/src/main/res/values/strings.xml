@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Toasty</string>
+
+    <!--  홈  -->
+    <string name="home_nav_title_1">홈</string>
+    <string name="home_nav_title_2">보관함</string>
+    <string name="home_nav_title_3">공유공간</string>
+    <string name="home_nav_title_4">스토어</string>
+    <string name="home_nav_title_5">더보기</string>
 </resources>

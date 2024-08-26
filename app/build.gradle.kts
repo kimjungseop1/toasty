@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.fragment.ktx)
 
+    // firebase
+
     // retrofit2 네트워크 api
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
