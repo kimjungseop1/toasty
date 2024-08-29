@@ -8,9 +8,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/color_white"
         app:cardCornerRadius="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        app:cardElevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,39 +28,71 @@
                 android:id="@+id/titleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:fontFamily="@font/pretendard700"
                 android:text="제목"
+                android:textColor="@color/color_black"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toTopOf="@id/bodyView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/bodyView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="45dp"
+                android:fontFamily="@font/pretendard400"
                 android:text="내용"
+                android:textColor="@color/color_5B5B5B"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@id/btn_left"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleView"/>
+                app:layout_constraintTop_toBottomOf="@id/titleView" />
 
-            <Button
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_F0F0F0"
+                app:layout_constraintBottom_toTopOf="@id/btn_left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:fontFamily="@font/pretendard400"
+                android:gravity="center"
+                android:text="@string/splash_alert_leftBtn_text"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bodyView" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/btn_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:background="@color/color_0047FF"
+                android:fontFamily="@font/pretendard400"
+                android:gravity="center"
+                android:text="@string/splash_alert_rightBtn_text"
+                android:textColor="@color/color_white"
+                android:textSize="16dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/btn_left"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_left"
-                app:layout_constraintTop_toBottomOf="@id/bodyView" />
+                app:layout_constraintTop_toTopOf="@id/btn_left" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

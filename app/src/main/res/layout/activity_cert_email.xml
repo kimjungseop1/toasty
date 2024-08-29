@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar_style_1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/titleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cert_email_title"
+        android:textSize="36dp"
+        android:textColor="@color/color_black"
+        android:fontFamily="@font/pretendard700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar"
+        app:layout_constraintVertical_bias=".15" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/subTitleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="@string/cert_email_sub_title"
+        android:textColor="@color/color_5B5B5B"
+        android:textSize="18dp"
+        android:fontFamily="@font/pretendard400"
+        app:layout_constraintEnd_toEndOf="@id/titleView"
+        app:layout_constraintStart_toStartOf="@id/titleView"
+        app:layout_constraintTop_toBottomOf="@id/titleView"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/descImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/cert_mail"
+        android:scaleType="center"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/subTitleView"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/descTxt_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="@string/cert_email_desc_1"
+        android:textSize="17dp"
+        android:textColor="@color/color_black"
+        android:fontFamily="@font/pretendard700"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/descImg"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:textColor="@color/color_424242"
+        android:textSize="16dp"
+        android:fontFamily="@font/pretendard700"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/descTxt_1"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/descTxt_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="@string/cert_email_desc_2"
+        android:textColor="@color/color_424242"
+        android:fontFamily="@font/pretendard400"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/emailView"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputCertNum"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="14dp"
+        android:inputType="number"
+        android:background="@drawable/custom_editbox_stroke_gray_5dp"
+        android:hint="@string/cert_email_edit_hint"
+        android:textColor="@color/color_171717"
+        android:textColorHint="@color/color_CECECE"
+        android:textSize="16dp"
+        android:paddingEnd="16dp"
+        android:fontFamily="@font/pretendard400"
+        android:paddingStart="16dp"
+        app:layout_constraintWidth_percent=".7"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/descTxt_2"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/certBtn"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="10dp"
+        android:textSize="16dp"
+        android:textColor="@color/color_white"
+        android:text="@string/cert_email_send_btn"
+        android:fontFamily="@font/pretendard400"
+        android:gravity="center"
+        android:background="@drawable/custom_button_blue_round"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintBottom_toBottomOf="@id/inputCertNum"
+        app:layout_constraintTop_toTopOf="@id/inputCertNum"
+        app:layout_constraintStart_toEndOf="@id/inputCertNum"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/descTxt_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="@string/cert_email_fail_send"
+        android:textColor="@color/color_868686"
+        android:textSize="14dp"
+        android:fontFamily="@font/pretendard400"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/inputCertNum"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reSendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/cert_email_re_send"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:textColor="@color/color_0047FF"
+        android:fontFamily="@font/pretendard400"
+        app:layout_constraintBottom_toBottomOf="@id/descTxt_3"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintTop_toTopOf="@id/descTxt_3"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/cert_email_desc_3"
+        android:textColor="@color/color_5B5B5B"
+        android:textSize="13dp"
+        android:fontFamily="@font/pretendard400"
+        android:gravity="center"
+        android:lineHeight="15dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/descTxt_3"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

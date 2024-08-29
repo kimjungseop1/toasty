@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.DialogNormalBinding
 
+
 class DialogCommon : DialogFragment(), OnClickListener {
     private lateinit var dialog: Dialog
     private lateinit var dialogNormalBinding: DialogNormalBinding
@@ -25,6 +26,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
 
     private var isUpdate = false //TODO 업데이트 안내
     private var isServerOff = false //TODO 점검공지
+    private var serverTime: String = ""
     private var isDeleteHashTag = false //TODO 해시태그 삭제
 
     override fun onClick(v: View?) {
@@ -70,20 +72,23 @@ class DialogCommon : DialogFragment(), OnClickListener {
     }
 
     private fun createDialogServer(
-        leftBtn: OnClickListener
+        leftBtn: OnClickListener,
+        date: String
     ): DialogCommon {
         val dialog: DialogCommon = createNormal()
         dialog.isServerOff = true
         dialog.setLeftBtnListener(leftBtn)
+        dialog.serverTime = date
 
         return dialog
     }
 
     fun showServerCheckPopup(
         manager: FragmentManager?,
-        leftBtn: OnClickListener
+        leftBtn: OnClickListener,
+        date: String
     ) {
-        manager?.let { createDialogServer(leftBtn).show(it, "") }
+        manager?.let { createDialogServer(leftBtn, date).show(it, "") }
     }
 
     override fun dismiss() {
@@ -119,6 +124,12 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnLeft.visibility = VISIBLE
                 dialogNormalBinding.btnRight.visibility = VISIBLE
 
+                dialogNormalBinding.titleView.text =
+                    context?.let { getString(R.string.splash_alert_update_title) }
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.splash_alert_update_message)
+                }
+
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)
             }
@@ -126,6 +137,13 @@ class DialogCommon : DialogFragment(), OnClickListener {
             isServerOff -> {
                 dialogNormalBinding.btnLeft.visibility = VISIBLE
                 dialogNormalBinding.btnRight.visibility = GONE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.splash_alert_inspection_title)
+                }
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.splash_alert_inspection_message, serverTime)
+                }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
             }

@@ -1,6 +1,73 @@
 <resources>
     <string name="app_name">Toasty</string>
 
+    <!--  스플래시  -->
+    <string name="splash_title_bic">TOASTY</string>
+    <string name="splash_title_small">캐치프레이즈</string>
+    <string name="splash_alert_update_title">업데이트 안내</string>
+    <string name="splash_alert_update_message">원할한 서비스 이용을 위해\n새로운 버전을 설치해주세요</string>
+    <string name="splash_alert_leftBtn_text">앱 종료</string>
+    <string name="splash_alert_rightBtn_text">업데이트</string>
+    <string name="splash_alert_inspection_title">점검 공지</string>
+    <string name="splash_alert_inspection_message">서비스 점검중입니다.\n예상 종료 시간 : %s</string>
+
+    <!-- 로그인  -->
+    <string name="login_title_bic">TOASTY</string>
+    <string name="login_title_small">캐치프레이즈</string>
+    <string name="login_email_desc">이메일로 시작하기</string>
+    <string name="login_email_button_title">이메일로 계속하기</string>
+    <string name="login_sns_account_desc">SNS 계정으로 로그인</string>
+    <string name="login_email_editbox_hint">이메일을 입력해주세요</string>
+    <string name="login_sns_desc">SNS 계정으로 로그인</string>
+
+    <!-- 회원가입  -->
+    <string name="join_email_title">회원가입 하고\n토스티와 추억을 인쇄해보세요.</string>
+    <string name="join_email_desc_1">이메일</string>
+    <string name="join_email_desc_1_1">sample@input.email</string>
+    <string name="join_email_desc_2">이름</string>
+    <string name="join_email_desc_2_2">서비스에서 사용하실 이름을 입력해주세요</string>
+    <string name="join_email_warning_name">* 이름을 두글자 이상 입력해주세요.</string>
+    <string name="join_email_desc_3">비밀번호</string>
+    <string name="join_email_desc_3_1">비밀번호를 입력해주세요</string>
+    <string name="join_email_desc_3_2">비밀번호를 다시 입력해주세요</string>
+    <string name="join_email_warning_pw">* 비밀번호가 일치하지 않습니다.</string>
+    <string name="join_email_all_consent_desc">모든 약관에 동의합니다.</string>
+    <string name="join_email_consent_1">[필수] 이용약관</string>
+    <string name="join_email_consent_2">[필수] 개인정보 수집 및 이용</string>
+    <string name="join_email_consent_3">[선택] 광고성 정보 수신 동의</string>
+    <string name="join_email_btn">회원 가입</string>
+
+    <!-- 이메일 인증 -->
+    <string name="cert_email_title">TOASTY</string>
+    <string name="cert_email_sub_title">캐치프레이즈</string>
+    <string name="cert_email_desc_1">이메일로 전송된\n인증번호를 입력해주세요</string>
+    <string name="cert_email_desc_2">가입인증 메일을 전송하였습니다.</string>
+    <string name="cert_email_edit_hint">인증번호 4자리 입력</string>
+    <string name="cert_email_send_btn">인증</string>
+    <string name="cert_email_fail_send">메일이 오지 않으셨나요?</string>
+    <string name="cert_email_re_send">인증번호 재전송</string>
+    <string name="cert_email_desc_3">“가입 후 24시간내에 인증을 완료하여야 하며,\n인증 받지 않은 계정은 24시간 후 삭제됩니다.”</string>
+
+    <!-- 약관동의 -->
+    <string name="join_consent_title">회원가입을 위해\n아래 약관에 동의해주세요.</string>
+
+    <!-- Welcome -->
+    <string name="welcome_title">반갑습니다.\n토스티에서 다양한 추억을\n인쇄해보세요.</string>
+    <string name="welcome_btn">시작하기</string>
+
+    <!-- 이용약관, 개인정보 -->
+    <string name="polish_term_title">이용약관</string>
+    <string name="polish_term_btn">이용약관에 동의합니다.</string>
+    <string name="polish_privacy_title">개인정보 처리방침</string>
+    <string name="polish_privacy_btn">개인정보 처리방침에 동의합니다.</string>
+
+    <!-- 비밀번호 찾기 -->
+    <string name="find_pw_title">TOASTY</string>
+    <string name="find_pw_sub_title">캐치프레이즈</string>
+    <string name="find_pw_desc_1">비밀번호 재설정</string>
+    <string name="find_pw_desc_2">비밀번호를 재설정 할 수 있도록\n이메일을 전송합니다.</string>
+    <string name="find_pw_send_btn">비밀번호 재설정 메일 전송</string>
+
     <!--  홈  -->
     <string name="home_nav_title_1">홈</string>
     <string name="home_nav_title_2">보관함</string>

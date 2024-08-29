@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/titleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard700"
+        android:text="@string/login_title_bic"
+        android:textColor="@color/color_black"
+        android:textSize="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".15" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/titleSubView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/pretendard400"
+        android:text="@string/login_title_small"
+        android:textColor="@color/color_5B5B5B"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="@id/titleView"
+        app:layout_constraintStart_toStartOf="@id/titleView"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/pretendard400"
+        android:text="@string/login_email_desc"
+        android:textColor="@color/color_171717"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/titleSubView" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputEmailView"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_editbox_select"
+        android:fontFamily="@font/pretendard400"
+        android:hint="@string/login_email_editbox_hint"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/color_171717"
+        android:textColorHint="@color/color_CECECE"
+        android:textSize="16dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/emailStart"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_button_blue_round"
+        android:fontFamily="@font/pretendard400"
+        android:gravity="center"
+        android:text="@string/login_email_button_title"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/inputEmailView" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/color_BCBCBC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/emailStart"
+        app:layout_constraintVertical_bias=".2" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:fontFamily="@font/pretendard400"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:text="@string/login_sns_desc"
+        android:textColor="@color/color_6C6C6C"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="@id/divider"
+        app:layout_constraintStart_toStartOf="@id/divider"
+        app:layout_constraintTop_toTopOf="@id/divider" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/googleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_google"
+        app:layout_constraintEnd_toStartOf="@id/facebookBtn"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/desc_2" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/facebookBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_facebook"
+        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
+        app:layout_constraintEnd_toStartOf="@id/kakaoBtn"
+        app:layout_constraintStart_toEndOf="@id/googleBtn"
+        app:layout_constraintTop_toTopOf="@id/googleBtn" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/kakaoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_kakao"
+        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
+        app:layout_constraintEnd_toStartOf="@id/naverBtn"
+        app:layout_constraintStart_toEndOf="@id/facebookBtn"
+        app:layout_constraintTop_toTopOf="@id/googleBtn" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/naverBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_naver"
+        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
+        app:layout_constraintEnd_toStartOf="@id/appleBtn"
+        app:layout_constraintStart_toEndOf="@id/kakaoBtn"
+        app:layout_constraintTop_toTopOf="@id/googleBtn" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/icon_apple"
+        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/naverBtn"
+        app:layout_constraintTop_toTopOf="@id/googleBtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

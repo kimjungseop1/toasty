@@ -17,9 +17,6 @@
         android:theme="@style/Theme.MotionPic"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.component.home.MainActivity"
-            android:exported="true" />
 
         <activity
             android:name=".ui.component.splash.SplashActivity"
@@ -30,6 +27,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.component.home.MainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.login.main.LoginActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.join.main.JoinEmailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.join.consent.JoinConsentActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.join.welcome.WelcomeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.join.term_privacy.PolishWebActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.login.find_pw.FindPwActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.join.email_cert.CertEmailActivity"
+            android:exported="true" />
 
     </application>
 

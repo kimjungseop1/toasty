@@ -2,6 +2,7 @@ package com.syncrown.toasty.ui.component.home
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var backPressCloseHandler: BackPressCloseHandler
 
     override fun observeViewModel() {
