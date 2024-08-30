@@ -181,7 +181,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/custom_button_blue_round"
+            android:background="@drawable/custom_button_blue_round_5dp"
             android:fontFamily="@font/pretendard400"
             android:gravity="center"
             android:text="@string/join_email_btn"

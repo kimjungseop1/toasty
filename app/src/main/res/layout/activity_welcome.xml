@@ -26,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="31dp"
-        android:background="@drawable/custom_button_blue_round"
+        android:background="@drawable/custom_button_blue_round_5dp"
         android:gravity="center"
         android:text="@string/welcome_btn"
         android:textColor="@color/color_white"

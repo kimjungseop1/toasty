@@ -2,7 +2,7 @@ package com.syncrown.toasty.network
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.syncrown.toasty.AppData
+import com.syncrown.toasty.AppDataPref
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,7 +21,7 @@ class ToastyRepository {
 
         val interceptorAuth = Interceptor { chain: Interceptor.Chain ->
             val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer ${AppData.AccessToken}").build()
+                .addHeader("Authorization", "Bearer ${AppDataPref.AccessToken}").build()
             chain.proceed(request)
         }
 

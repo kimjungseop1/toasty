@@ -28,22 +28,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard700"
-        android:text="@string/find_pw_title"
+        android:text="@string/login_title_bic"
         android:textColor="@color/color_black"
         android:textSize="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/actionbar"
-        app:layout_constraintVertical_bias=".2" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".15" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/subTitleView"
+        android:id="@+id/titleSubView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:fontFamily="@font/pretendard400"
-        android:text="@string/find_pw_sub_title"
+        android:text="@string/login_title_small"
         android:textColor="@color/color_5B5B5B"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="@id/titleView"
@@ -51,62 +51,83 @@
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/desc_1"
+        android:id="@+id/descTxt_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/pretendard700"
-        android:text="@string/find_pw_desc_1"
-        android:textColor="@color/color_171717"
+        android:text="@string/login_pw_desc"
+        android:textColor="@color/color_black"
         android:textSize="18dp"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/subTitleView" />
+        app:layout_constraintTop_toBottomOf="@id/titleSubView" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/desc_2"
+        android:id="@+id/emailAddressTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="22dp"
         android:fontFamily="@font/pretendard400"
-        android:gravity="center"
-        android:text="@string/find_pw_desc_2"
-        android:textColor="@color/color_373843"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/desc_1" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputEmailView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/custom_editbox_solid_gray"
-        android:fontFamily="@font/pretendard400"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="afsafsf"
         android:textColor="@color/color_424242"
         android:textSize="16dp"
-        android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/desc_2" />
+        app:layout_constraintTop_toBottomOf="@id/descTxt_1" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputPwView"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:background="@drawable/custom_editbox_stroke_gray_5dp"
+        android:hint="@string/login_pw_input_email_hint"
+        android:maxLines="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/color_171717"
+        android:textColorHint="@color/color_CECECE"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/emailAddressTxt" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/sendBtn"
+        android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="47dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/custom_button_blue_round_5dp"
         android:fontFamily="@font/pretendard400"
         android:gravity="center"
-        android:text="@string/find_pw_send_btn"
+        android:text="@string/login_pw_login_btn"
         android:textColor="@color/color_white"
         android:textSize="16dp"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputEmailView" />
+        app:layout_constraintTop_toBottomOf="@id/inputPwView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/descTxt_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/pretendard400"
+        android:text="@string/login_pw_find_desc"
+        android:textColor="@color/color_868686"
+        android:textSize="14dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/findPwBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:fontFamily="@font/pretendard400"
+        android:gravity="center"
+        android:text="@string/login_pw_find"
+        android:textColor="@color/color_0047FF"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/descTxt_2"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintTop_toTopOf="@id/descTxt_2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

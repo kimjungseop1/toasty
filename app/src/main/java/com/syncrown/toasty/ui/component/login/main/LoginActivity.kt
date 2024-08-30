@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.syncrown.toasty.AppData
+import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.databinding.ActivtyLoginBinding
 import com.syncrown.toasty.ui.base.BaseActivity
-import com.syncrown.toasty.ui.component.join.consent.JoinConsentActivity
 import com.syncrown.toasty.ui.component.join.main.JoinEmailActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginActivity : BaseActivity() {
@@ -32,8 +29,8 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding.emailStart.setOnClickListener {
-            if (AppData.isEmailJoin) {
-                goConsent()
+            if (AppDataPref.isEmailJoin) {
+                goPwLogin()
             } else {
                 goEmailJoin()
             }
@@ -66,8 +63,8 @@ class LoginActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    private fun goConsent() {
-        val intent = Intent(this, JoinConsentActivity::class.java)
+    private fun goPwLogin() {
+        val intent = Intent(this, LoginPwActivity::class.java)
         startActivity(intent)
     }
 }

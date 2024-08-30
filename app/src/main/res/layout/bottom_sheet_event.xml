@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:behavior_draggable="false"
+    app:behavior_hideable="false"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_bottom_event_round_15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="14dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="14dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/desc_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="17dp"
+            android:fontFamily="@font/pretendard700"
+            android:text="@string/home_event_bottom_title"
+            android:textColor="@color/color_black"
+            android:textSize="18dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 이벤트 들어갈 부분 임시 -->
+        <View
+            android:id="@+id/emptyView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:background="#EFB1FF"
+            app:layout_constraintDimensionRatio="1:1.2"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/continueCheckView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:button="@drawable/custom_checkbox_select_1"
+            android:fontFamily="@font/pretendard400"
+            android:paddingStart="10dp"
+            android:text="@string/home_event_bottom_days_more"
+            android:textColor="@color/color_black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/emptyView" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/closeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_blue_round_2dp"
+            android:fontFamily="@font/pretendard400"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:text="@string/home_event_bottom_close"
+            android:textColor="@color/color_white"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/continueCheckView"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toTopOf="@id/continueCheckView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

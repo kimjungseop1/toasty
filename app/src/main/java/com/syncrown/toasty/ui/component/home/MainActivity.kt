@@ -1,5 +1,6 @@
 package com.syncrown.toasty.ui.component.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -7,10 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.ActivityMainBinding
+import com.syncrown.toasty.databinding.BottomSheetEventBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.BackPressCloseHandler
+import com.syncrown.toasty.ui.component.home.ar.ArCameraActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.HomeFragment
 import com.syncrown.toasty.ui.component.home.tab2_Lib.LibFragment
 import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
@@ -43,6 +48,7 @@ class MainActivity : BaseActivity() {
         backPressCloseHandler = BackPressCloseHandler(this)
         onBackPressedDispatcher.addCallback(this, backPressCloseHandler)
 
+        //TODO default Fragment
         changeFragment(HomeFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -75,6 +81,10 @@ class MainActivity : BaseActivity() {
                 else -> false
             }
         }
+
+        binding.actionbar.actionAr.setOnClickListener {
+            goARpage()
+        }
     }
 
     private fun changeFragment(fragment: Fragment): Fragment {
@@ -96,6 +106,33 @@ class MainActivity : BaseActivity() {
     }
 
     private fun updateUi(data: Unit) {
-        Log.e("jung", "call .....")
+        Log.e("jung", "updateUi call .....")
+        if (AppDataPref.isMainEvent) {
+            showEventBottomSheet()
+        }
+    }
+
+    private fun showEventBottomSheet() {
+        val binding = BottomSheetEventBinding.inflate(layoutInflater)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.window?.setDimAmount(0.7f)
+        bottomSheetDialog.setCancelable(false)
+        bottomSheetDialog.setContentView(binding.root)
+
+        binding.continueCheckView.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppDataPref.isMainEvent = false
+                AppDataPref.save(this)
+            }
+        }
+
+        binding.closeView.setOnClickListener { bottomSheetDialog.dismiss() }
+
+        bottomSheetDialog.show()
+    }
+
+    private fun goARpage() {
+        val intent = Intent(this, ArCameraActivity::class.java)
+        startActivity(intent)
     }
 }

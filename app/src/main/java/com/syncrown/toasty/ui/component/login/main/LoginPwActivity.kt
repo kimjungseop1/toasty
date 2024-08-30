@@ -1,15 +1,17 @@
-package com.syncrown.toasty.ui.component.join.welcome
+package com.syncrown.toasty.ui.component.login.main
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.syncrown.toasty.databinding.ActivityWelcomeBinding
+import com.syncrown.toasty.databinding.ActivityLoginPwBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.component.home.MainActivity
 import kotlinx.coroutines.launch
 
-class WelcomeActivity:BaseActivity() {
-    private lateinit var binding: ActivityWelcomeBinding
+class LoginPwActivity:BaseActivity() {
+    private lateinit var binding: ActivityLoginPwBinding
+    private val loginPwViewModel: LoginPwViewModel by viewModels()
 
     override fun observeViewModel() {
         lifecycleScope.launch {
@@ -18,17 +20,20 @@ class WelcomeActivity:BaseActivity() {
     }
 
     override fun initViewBinding() {
-        binding = ActivityWelcomeBinding.inflate(layoutInflater)
+        binding = ActivityLoginPwBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.welcomeStart.setOnClickListener {
-            goMain()
+        binding.actionbar.actionBack.setOnClickListener {
+            finish()
         }
 
+        binding.loginBtn.setOnClickListener {
+            goMain()
+        }
     }
 
     private fun goMain() {

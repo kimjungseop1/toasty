@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.syncrown.toasty.AppData
+import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.databinding.ActivitySplashBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.DialogCommon
@@ -36,6 +36,9 @@ class SplashActivity : BaseActivity() {
     override fun initViewBinding() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppDataPref.init(this)
+        AppDataPref.show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +47,17 @@ class SplashActivity : BaseActivity() {
         lifecycleScope.launch {
             delay(1500)
 
-            if (AppData.isUpdate) {
+            if (AppDataPref.isUpdate) {
                 showUpdateVersion()
                 return@launch
             }
 
-            if (AppData.isSystemCheck) {
+            if (AppDataPref.isSystemCheck) {
                 showServerCheck("9월30일")
                 return@launch
             }
 
-            if (AppData.isLogin) {
+            if (AppDataPref.isLogin) {
                 goMain()
             } else {
                 goLogin()
@@ -65,6 +68,7 @@ class SplashActivity : BaseActivity() {
 
     private fun goMain() {
         val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 

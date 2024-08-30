@@ -64,4 +64,15 @@ dependencies {
     implementation(libs.gson)
     // 이미지 로드
     implementation(libs.glide)
+    implementation(libs.kotlinx.coroutines.android)
+
+    //AR
+    implementation(libs.core)
+    implementation(libs.sceneform.ux)
+    implementation(libs.sceneform.core)
+
+    // exoplayer
+    implementation(libs.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
 }
