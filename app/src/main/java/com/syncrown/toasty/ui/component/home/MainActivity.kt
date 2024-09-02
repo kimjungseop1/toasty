@@ -15,8 +15,8 @@ import com.syncrown.toasty.databinding.ActivityMainBinding
 import com.syncrown.toasty.databinding.BottomSheetEventBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.BackPressCloseHandler
-import com.syncrown.toasty.ui.component.home.ar.ArCameraActivity
-import com.syncrown.toasty.ui.component.home.tab1_home.HomeFragment
+import com.syncrown.toasty.ui.component.home.ar_camera.ArCameraActivity
+import com.syncrown.toasty.ui.component.home.tab1_home.main.HomeFragment
 import com.syncrown.toasty.ui.component.home.tab2_Lib.LibFragment
 import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
 import com.syncrown.toasty.ui.component.home.tab4_store.StoreFragment
@@ -110,6 +110,8 @@ class MainActivity : BaseActivity() {
         if (AppDataPref.isMainEvent) {
             showEventBottomSheet()
         }
+
+        binding.actionbar.actionBattery.text = "53%"
     }
 
     private fun showEventBottomSheet() {

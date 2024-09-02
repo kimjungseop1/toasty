@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.ar
+package com.syncrown.toasty.ui.component.home.ar_camera
 
 import android.animation.ValueAnimator
 import android.graphics.Bitmap
@@ -32,8 +32,8 @@ import com.google.ar.sceneform.rendering.ExternalTexture
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.syncrown.toasty.R
-import com.syncrown.toasty.ui.component.home.ar.node.VideoAnchorNode
-import com.syncrown.toasty.ui.component.home.ar.node.VideoScaleType
+import com.syncrown.toasty.ui.component.home.ar_camera.node.VideoAnchorNode
+import com.syncrown.toasty.ui.component.home.ar_camera.node.VideoScaleType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -93,22 +93,14 @@ class ArVideoFragment : ArFragment() {
         fun setupAugmentedImageDatabase(config: Config, session: Session): Boolean = runBlocking {
             try {
                 val augmentedImageDatabase = AugmentedImageDatabase(session)
-                val testImage1Bitmap = loadAugmentedImageBitmapFromUrl(TEST_IMAGE_1_URL)
-                val testImage2Bitmap = loadAugmentedImageBitmapFromUrl(TEST_IMAGE_2_URL)
-                val testImage3Bitmap = loadAugmentedImageBitmapFromUrl(TEST_IMAGE_3_URL)
-                val testImage4Bitmap = loadAugmentedImageBitmapFromUrl(TEST_IMAGE_4_URL)
+                val imageUrls = listOf(TEST_IMAGE_1_URL, TEST_IMAGE_2_URL, TEST_IMAGE_3_URL, TEST_IMAGE_4_URL)
+                val videoUrls = listOf(TEST_VIDEO_1_URL, TEST_VIDEO_2_URL, TEST_VIDEO_3_URL, TEST_VIDEO_4_URL)
 
-                if (testImage1Bitmap != null) {
-                    augmentedImageDatabase.addImage(TEST_VIDEO_1_URL, testImage1Bitmap)
-                }
-                if (testImage2Bitmap != null) {
-                    augmentedImageDatabase.addImage(TEST_VIDEO_2_URL, testImage2Bitmap)
-                }
-                if (testImage3Bitmap != null) {
-                    augmentedImageDatabase.addImage(TEST_VIDEO_3_URL, testImage3Bitmap)
-                }
-                if (testImage4Bitmap != null) {
-                    augmentedImageDatabase.addImage(TEST_VIDEO_4_URL, testImage4Bitmap)
+                for (i in imageUrls.indices) {
+                    val bitmap = loadAugmentedImageBitmapFromUrl(imageUrls[i])
+                    if (bitmap != null) {
+                        augmentedImageDatabase.addImage(videoUrls[i], bitmap)
+                    }
                 }
 
                 config.augmentedImageDatabase = augmentedImageDatabase

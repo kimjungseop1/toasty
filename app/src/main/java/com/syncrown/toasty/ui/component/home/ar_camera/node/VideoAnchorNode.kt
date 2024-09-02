@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.ar.node
+package com.syncrown.toasty.ui.component.home.ar_camera.node
 
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.Node

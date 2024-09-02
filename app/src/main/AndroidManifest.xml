@@ -3,10 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Android 12 이하에서 사용 -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- Android 13 이상에서 사용 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <!-- 기타 권한들 (예: 인터넷 접근, 저장소 쓰기 등 필요시 추가) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
     <uses-feature
         android:name="android.hardware.camera.ar"
-        android:required="true"/>
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".ToastyApplication"
@@ -17,7 +37,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MotionPic"
+        android:theme="@style/Theme.Toasty"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
@@ -72,9 +92,32 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.ar.ArCameraActivity"
+            android:name=".ui.component.home.ar_camera.ArCameraActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.component.home.tab1_home.connect_device.ConnectDeviceActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.connect_cartridge.ConnectCartridgeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_guide.ArGuideActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.event.EventGuideActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_print.VideoSelectActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_print.TrimVideoActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

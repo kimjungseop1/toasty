@@ -18,6 +18,7 @@
     <string name="login_email_button_title">이메일로 계속하기</string>
     <string name="login_sns_account_desc">SNS 계정으로 로그인</string>
     <string name="login_email_editbox_hint">이메일을 입력해주세요</string>
+    <string name="login_email_validation">*올바른 이메일 주소를 입력해주세요</string>
     <string name="login_sns_desc">SNS 계정으로 로그인</string>
     <string name="login_pw_desc">이메일 로그인</string>
     <string name="login_pw_input_email_hint">비밀번호를 입력해 주세요</string>

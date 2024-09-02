@@ -81,29 +81,59 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <!--   뷰페이져   -->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="28dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/connectPrintView" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/countTxt"
+            <Button
+                android:id="@+id/arPrintBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_white"
-                android:textSize="15dp"
-                app:layout_constraintEnd_toEndOf="@id/viewpager"
-                app:layout_constraintStart_toStartOf="@id/viewpager"
-                app:layout_constraintBottom_toBottomOf="@id/viewpager"
-                app:layout_constraintTop_toTopOf="@id/viewpager"/>
+                android:text="AR영상인쇄"
+                app:layout_constraintVertical_bias=".1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/connectPrintView"/>
 
+            <Button
+                android:id="@+id/life4cutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="인생네컷"
+                app:layout_constraintStart_toEndOf="@id/arPrintBtn"
+                app:layout_constraintBottom_toBottomOf="@id/arPrintBtn"
+                app:layout_constraintTop_toTopOf="@id/arPrintBtn"/>
+
+            <Button
+                android:id="@+id/labelStickerBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="라벨스티커"
+                app:layout_constraintStart_toEndOf="@id/life4cutBtn"
+                app:layout_constraintBottom_toBottomOf="@id/arPrintBtn"
+                app:layout_constraintTop_toTopOf="@id/arPrintBtn"/>
+
+            <Button
+                android:id="@+id/freePrintBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="자유인쇄"
+                app:layout_constraintStart_toStartOf="@id/arPrintBtn"
+                app:layout_constraintTop_toBottomOf="@id/arPrintBtn"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="행사스티커"
+                app:layout_constraintStart_toEndOf="@id/freePrintBtn"
+                app:layout_constraintBottom_toBottomOf="@id/freePrintBtn"
+                app:layout_constraintTop_toTopOf="@id/freePrintBtn"/>
+
+
+            <Button
+                android:id="@+id/eventBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이벤트"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

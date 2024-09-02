@@ -75,13 +75,14 @@ class SplashActivity : BaseActivity() {
     private fun goLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun showUpdateVersion() {
         dialogCommon.showUpdatePopup(supportFragmentManager, {
-
+            //TODO cancel
         }, {
-
+            //TODO  ok
         })
     }
 
@@ -89,7 +90,7 @@ class SplashActivity : BaseActivity() {
         dialogCommon.showServerCheckPopup(
             supportFragmentManager,
             {
-
+                //TODO close
             },
             date
         )

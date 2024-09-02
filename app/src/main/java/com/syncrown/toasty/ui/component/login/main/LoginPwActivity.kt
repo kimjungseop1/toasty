@@ -34,6 +34,10 @@ class LoginPwActivity:BaseActivity() {
         binding.loginBtn.setOnClickListener {
             goMain()
         }
+
+        binding.findPwBtn.setOnClickListener {
+            loginPwViewModel.findPassWord()
+        }
     }
 
     private fun goMain() {

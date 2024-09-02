@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.ar
+package com.syncrown.toasty.ui.component.home.ar_camera
 
 import android.app.ActivityManager
 import android.content.Context

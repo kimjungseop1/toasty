@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.adapter
+package com.syncrown.toasty.ui.component.home.tab1_home.main.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context

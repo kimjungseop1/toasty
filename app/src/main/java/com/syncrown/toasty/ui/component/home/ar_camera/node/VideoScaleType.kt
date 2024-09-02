@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.ar.node
+package com.syncrown.toasty.ui.component.home.ar_camera.node
 
 /**
  * Logic is the same as [android.widget.ImageView.ScaleType]
