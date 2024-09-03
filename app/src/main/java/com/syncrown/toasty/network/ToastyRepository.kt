@@ -27,7 +27,7 @@ class ToastyRepository {
 
         val client: okhttp3.OkHttpClient = okhttp3.OkHttpClient.Builder()
             .addInterceptor(interceptor)
-//            .addInterceptor(interceptorAuth)
+            .addInterceptor(interceptorAuth)
             .retryOnConnectionFailure(true)
             .build()
 

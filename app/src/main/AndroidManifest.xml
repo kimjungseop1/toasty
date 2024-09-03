@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- Android 12 이하에서 사용 -->
@@ -41,9 +42,29 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
+        <!-- ar 설정 -->
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
+
+        <!-- 카카오 SDK 초기화 -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
+        <!-- 카카오 로그인 콜백 -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/kakao_scheme" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.component.splash.SplashActivity"
@@ -112,11 +133,11 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.ar_print.VideoSelectActivity"
+            android:name=".ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.ar_print.TrimVideoActivity"
+            android:name=".ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity"
             android:exported="true" />
     </application>
 

@@ -6,11 +6,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.identity.SignInCredential
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import com.syncrown.toasty.AppDataPref
+import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.ActivtyLoginBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.component.join.main.JoinEmailActivity
@@ -20,10 +29,26 @@ class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivtyLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
 
-    override fun observeViewModel() {
-        lifecycleScope.launch {
-
+    private val signInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            loginViewModel.handleSignInResult(result.data)
         }
+
+
+    override fun observeViewModel() {
+        loginViewModel.initialize(this)
+        loginViewModel.signInResult.observe(this, Observer { result ->
+            result.fold(
+                onSuccess = { credential ->
+                    val email = credential.id
+                    Log.e(TAG, "Signed in as $email")
+                },
+                onFailure = { exception ->
+                    Log.e(TAG, "Sign-in failed: ${exception.message}")
+                }
+            )
+
+        })
     }
 
     override fun initViewBinding() {
@@ -65,23 +90,23 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.googleBtn.setOnClickListener {
-            loginViewModel.googleLogin()
+            loginViewModel.initiateSignIn(this, signInLauncher)
         }
 
         binding.facebookBtn.setOnClickListener {
-            loginViewModel.facebookLogin()
+            //TODO 개발중
         }
 
         binding.kakaoBtn.setOnClickListener {
-            loginViewModel.kakaoLogin()
+            loginViewModel.kakaoLogin(this)
         }
 
         binding.naverBtn.setOnClickListener {
-            loginViewModel.naverLogin()
+            loginViewModel.naverLogin(this)
         }
 
         binding.appleBtn.setOnClickListener {
-            loginViewModel.appleLogin()
+            //TODO 개발중
         }
 
     }

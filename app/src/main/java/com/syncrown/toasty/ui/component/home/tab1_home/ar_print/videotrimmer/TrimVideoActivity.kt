@@ -1,9 +1,9 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.ar_print
+package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer
 
 import android.os.Bundle
 import com.syncrown.toasty.ui.base.BaseActivity
 
-class VideoSelectActivity:BaseActivity() {
+class TrimVideoActivity : BaseActivity() {
     override fun observeViewModel() {
 
     }

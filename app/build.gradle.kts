@@ -56,6 +56,19 @@ dependencies {
 
     // firebase
 
+    // kakao
+    implementation(libs.v2.user)
+    implementation(libs.v2.share)
+
+    // naver
+    implementation(libs.oauth)
+
+    // google
+    implementation(libs.google.services)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+
+
     // retrofit2 네트워크 api
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

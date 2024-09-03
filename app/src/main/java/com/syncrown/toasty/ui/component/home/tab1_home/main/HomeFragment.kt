@@ -11,6 +11,7 @@ import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.databinding.FragmentHomeBinding
 import com.syncrown.toasty.ui.component.home.MainViewModel
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_guide.ArGuideActivity
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.event.EventGuideActivity
 
@@ -71,6 +72,8 @@ class HomeFragment : Fragment() {
         } else {
             if (AppDataPref.isCatridge) {
                 // 용지와 프린트 모두 연결되있을때 영상 선택화면
+                val intent = Intent(requireContext(), VideoSelectActivity::class.java)
+                startActivity(intent)
             } else {
                 // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
             }
