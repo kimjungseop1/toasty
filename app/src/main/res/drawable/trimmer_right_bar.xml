@@ -3,23 +3,23 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@color/color_white"/>
             <corners
-                    android:bottomRightRadius="2dp"
-                    android:topRightRadius="2dp"/>
+                    android:bottomRightRadius="6dp"
+                    android:topRightRadius="6dp"/>
             <size
                     android:width="10dp"
-                    android:height="39dp"/>
+                    android:height="54dp"/>
         </shape>
     </item>
 
     <item android:gravity="center">
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/black"/>
+            <solid android:color="@color/color_868686"/>
             <size
                     android:width="2dp"
-                    android:height="9dp"/>
-            <corners android:radius="2dp"/>
+                    android:height="37dp"/>
+            <corners android:radius="1dp"/>
         </shape>
     </item>
 

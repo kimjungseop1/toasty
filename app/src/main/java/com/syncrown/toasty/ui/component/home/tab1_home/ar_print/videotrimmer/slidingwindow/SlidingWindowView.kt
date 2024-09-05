@@ -1,11 +1,14 @@
 package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.slidingwindow
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.MotionEvent.*
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -15,9 +18,9 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 internal class SlidingWindowView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
     private val HOLD_LEFT_BAR = 0
@@ -70,8 +73,8 @@ internal class SlidingWindowView @JvmOverloads constructor(
     private val borderPaint: Paint = Paint().apply { isAntiAlias = true }
     private val overlayPaint: Paint = Paint().apply { isAntiAlias = true }
 
-    private var leftBarX = -1f    // Left-Top
-    private var rightBarX = -1f   // Left-Top
+    var leftBarX = -1f    // Left-Top
+    var rightBarX = -1f   // Left-Top
 
     private var leftBarXPercentage = -1f
     private var rightBarXPercentage = -1f
@@ -170,28 +173,29 @@ internal class SlidingWindowView @JvmOverloads constructor(
         // Left side overlay
         if (leftBarX > barWidth) {
             canvas.drawRect(
-                    barWidth,
-                    borderWidth,
-                    leftBarX,
-                    height - borderWidth,
-                    overlayPaint
+                barWidth,
+                borderWidth,
+                leftBarX,
+                height - borderWidth,
+                overlayPaint
             )
         }
 
         // Right side overlay
         if (rightBarX < width - 2 * barWidth) {
             canvas.drawRect(
-                    rightBarX + barWidth,
-                    borderWidth,
-                    width - barWidth,
-                    height - borderWidth,
-                    overlayPaint
+                rightBarX + barWidth,
+                borderWidth,
+                width - barWidth,
+                height - borderWidth,
+                overlayPaint
             )
         }
     }
 
     /* -------------------------------------------------------------------------------------------*/
     /* OnTouch */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return when (event.action) {
             ACTION_DOWN -> onDown(event.x, event.y)

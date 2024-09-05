@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_black">#000000</color>
+    <color name="color_50black">#50000000</color>
     <color name="color_white">#FFFFFF</color>
 
     <color name="color_868686">#868686</color>
@@ -18,4 +19,5 @@
     <color name="color_70000000">#70000000</color>
     <color name="color_800047FF">#800047FF</color>
     <color name="color_80FF0000">#80FF0000</color>
+    <color name="color_FF0000">#FF0000</color>
 </resources>

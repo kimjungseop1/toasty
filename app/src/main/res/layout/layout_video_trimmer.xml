@@ -11,9 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/slidingWindowView" />
@@ -22,12 +22,32 @@
         android:id="@+id/slidingWindowView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="11dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/playheadView"
+        android:layout_width="7dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_custom_play_head"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/videoFrameListView"
+        app:layout_constraintStart_toStartOf="@id/videoFrameListView"
+        app:layout_constraintTop_toTopOf="@id/videoFrameListView" />
+
+    <TextView
+        android:id="@+id/durationView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/pretendard700"
+        android:textColor="@android:color/white"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/videoFrameListView"
+        app:layout_constraintEnd_toEndOf="@id/videoFrameListView"
+        app:layout_constraintTop_toTopOf="@id/videoFrameListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

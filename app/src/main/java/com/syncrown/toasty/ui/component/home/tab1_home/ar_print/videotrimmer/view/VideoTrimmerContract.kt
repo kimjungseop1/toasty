@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer
+package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.view
 
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.data.TrimmerDraft
 import java.io.File

@@ -1,14 +1,14 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect
+package com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.syncrown.toasty.databinding.ItemGridVideoBinding
+import com.syncrown.toasty.databinding.ItemGridLibBinding
 
-class GridItemAdapter(private val items: List<GridItem>) :
-    RecyclerView.Adapter<GridItemAdapter.GridViewHolder>() {
+class LibGridItemAdapter(private val items: List<GridItem>) :
+    RecyclerView.Adapter<LibGridItemAdapter.GridViewHolder>() {
 
-    inner class GridViewHolder(private val binding: ItemGridVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class GridViewHolder(private val binding: ItemGridLibBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GridItem) {
             binding.thumbnailView.setImageResource(item.imageResId)
             binding.playTimeView.text = item.text
@@ -16,7 +16,7 @@ class GridItemAdapter(private val items: List<GridItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
-        val binding = ItemGridVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemGridLibBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GridViewHolder(binding)
     }
 

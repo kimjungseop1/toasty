@@ -68,7 +68,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
 
-
     // retrofit2 네트워크 api
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -81,7 +80,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.kotlinx.coroutines.android)
 
-    //AR
+    // AR
     implementation(libs.core)
     implementation(libs.sceneform.ux)
     implementation(libs.sceneform.core)
@@ -91,4 +90,7 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.transformer)
+
+    // spinner
+
 }

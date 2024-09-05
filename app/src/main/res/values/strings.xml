@@ -91,6 +91,14 @@
     <string name="home_connect_print_message">프린터가 연결되어 있지 않습니다.\n아래 버튼을 눌러 토스티 프린터를 연결해주세요.</string>
     <string name="home_connect_print_btn"><u>프린트 연결</u></string>
 
+    <!-- 용지부족화면 -->
+    <string name="cartridge_empty_action_text_1">AR 영상 인쇄</string>
+    <string name="cartridge_empty_action_text_2">인생 네컷</string>
+    <string name="cartridge_empty_action_text_3">자유 인쇄</string>
+    <string name="cartridge_empty_action_text_4">라벨 스티커</string>
+    <string name="cartridge_empty_action_text_5">행사 스티커</string>
+    <string name="cartridge_empty_title">용지가 없습니다.</string>
+    <string name="cartridge_empty_sub_title">인쇄하고 싶은 용지를 선택해서 만든 후\n보관함에 저장하시면 나중에 인쇄할 수 있어요.</string>
 
 
 

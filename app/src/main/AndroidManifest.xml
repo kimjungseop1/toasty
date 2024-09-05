@@ -55,13 +55,15 @@
         <!-- 카카오 로그인 콜백 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:noHistory="true"
-            android:exported="true">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
@@ -138,6 +140,10 @@
 
         <activity
             android:name=".ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity"
             android:exported="true" />
     </application>
 

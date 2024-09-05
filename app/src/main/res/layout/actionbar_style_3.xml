@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@color/color_white">
+    android:background="@android:color/transparent">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/action_back"
-        android:layout_width="62dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
+        android:paddingStart="20dp"
+        android:paddingEnd="11dp"
         android:scaleType="center"
-        android:src="@drawable/icon_back"
+        android:src="@drawable/icon_back_w"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:fontFamily="@font/pretendard700"
-        android:gravity="center"
-        android:textColor="@color/color_black"
+        android:gravity="center_vertical"
+        android:textColor="@color/color_white"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/action_back"
@@ -32,10 +34,11 @@
         android:id="@+id/action_etc"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:fontFamily="@font/pretendard700"
         android:gravity="center"
-        android:textColor="@color/color_black"
+        android:paddingEnd="20dp"
+        android:textColor="@color/color_white"
         android:textSize="16dp"
+        android:fontFamily="@font/pretendard700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

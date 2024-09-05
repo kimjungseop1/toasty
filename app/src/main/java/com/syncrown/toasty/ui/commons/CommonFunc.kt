@@ -51,5 +51,26 @@ class CommonFunc {
             val density = context.resources.displayMetrics.density
             return Math.round(dp * density)
         }
+
+        fun dpToPx(dp: Float, context: Context): Float {
+            val density = context.resources.displayMetrics.density
+            return dp * density
+        }
+
+        fun pxToDp(context: Context, px: Float): Float {
+            return px / context.resources.displayMetrics.density
+        }
+
+        /**
+         * millisecond를 변경
+         */
+        fun convertMillisToMMSS(milliseconds: Long): String {
+            val seconds = milliseconds / 1000
+            val minutes = seconds / 60
+            val remainingSeconds = seconds % 60
+
+            return String.format("%02d:%02d", minutes, remainingSeconds)
+        }
+
     }
 }

@@ -1,13 +1,19 @@
 package com.syncrown.toasty.ui.component.home
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.R
@@ -17,7 +23,7 @@ import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.BackPressCloseHandler
 import com.syncrown.toasty.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.main.HomeFragment
-import com.syncrown.toasty.ui.component.home.tab2_Lib.LibFragment
+import com.syncrown.toasty.ui.component.home.tab2_Lib.main.LibFragment
 import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
 import com.syncrown.toasty.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.toasty.ui.component.home.tab5_more.MoreFragment
@@ -112,7 +118,36 @@ class MainActivity : BaseActivity() {
         }
 
         binding.actionbar.actionBattery.text = "53%"
+
+        // 네비게이션 뱃지가 필요할때 사용
+        showBottomNavigationViewBadge(this, binding.bottomNavigation, 2)
     }
+
+    @SuppressLint("RestrictedApi")
+    fun showBottomNavigationViewBadge(
+        context: Context,
+        navigationView: BottomNavigationView,
+        index: Int
+    ) {
+        val bottomNavigationMenuView = navigationView.getChildAt(0) as BottomNavigationMenuView
+        val v = bottomNavigationMenuView.getChildAt(index)
+        val itemView = v as BottomNavigationItemView
+
+        val badge = LayoutInflater.from(context)
+            .inflate(R.layout.notification_badge, bottomNavigationMenuView, false)
+
+        itemView.addView(badge)
+    }
+
+    @SuppressLint("RestrictedApi")
+    fun hideBottomNavigationViewBadge(navigationView: BottomNavigationView, index: Int) {
+        val bottomNavigationMenuView = navigationView.getChildAt(0) as BottomNavigationMenuView
+        val v = bottomNavigationMenuView.getChildAt(index)
+        val itemView = v as BottomNavigationItemView
+
+        itemView.removeViewAt(itemView.childCount - 1)
+    }
+
 
     private fun showEventBottomSheet() {
         val binding = BottomSheetEventBinding.inflate(layoutInflater)

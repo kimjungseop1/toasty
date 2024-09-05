@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect
+package com.syncrown.toasty.ui.commons
 
 import android.graphics.Rect
 import android.view.View

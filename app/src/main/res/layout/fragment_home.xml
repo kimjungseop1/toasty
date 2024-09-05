@@ -81,6 +81,29 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!--   뷰페이져   -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/bannerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/connectPrintView" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/pageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                app:layout_constraintEnd_toEndOf="@id/bannerView"
+                app:layout_constraintStart_toStartOf="@id/bannerView"
+                app:layout_constraintBottom_toBottomOf="@id/bannerView"
+                app:layout_constraintTop_toTopOf="@id/bannerView"/>
+
+
             <Button
                 android:id="@+id/arPrintBtn"
                 android:layout_width="wrap_content"
@@ -89,7 +112,7 @@
                 app:layout_constraintVertical_bias=".1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/connectPrintView"/>
+                app:layout_constraintTop_toBottomOf="@id/bannerView"/>
 
             <Button
                 android:id="@+id/life4cutBtn"
@@ -125,16 +148,16 @@
                 app:layout_constraintBottom_toBottomOf="@id/freePrintBtn"
                 app:layout_constraintTop_toTopOf="@id/freePrintBtn"/>
 
-
-            <Button
-                android:id="@+id/eventBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이벤트"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/mainEventView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
