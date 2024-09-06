@@ -46,6 +46,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="45dp"
                 android:fontFamily="@font/pretendard400"
+                android:gravity="center"
                 android:text="내용"
                 android:textColor="@color/color_5B5B5B"
                 android:textSize="16dp"

@@ -8,12 +8,12 @@ import com.bumptech.glide.Glide
 import com.syncrown.toasty.databinding.ItemGridVideoBinding
 import com.syncrown.toasty.ui.commons.CommonFunc
 
-class GridItemAdapter(
+class SelectGridItemAdapter(
     private val context: Context,
     private val items: List<VideoInfo>,
     private val itemClickListener: OnItemClickListener
 ) :
-    RecyclerView.Adapter<GridItemAdapter.GridViewHolder>() {
+    RecyclerView.Adapter<SelectGridItemAdapter.GridViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(videoInfo: VideoInfo)

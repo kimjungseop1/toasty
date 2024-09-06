@@ -92,5 +92,6 @@ dependencies {
     implementation(libs.androidx.media3.transformer)
 
     // spinner
+    implementation(libs.nice.spinner)
 
 }

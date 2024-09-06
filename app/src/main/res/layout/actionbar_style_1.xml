@@ -7,9 +7,11 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/action_back"
-        android:layout_width="62dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
+        android:paddingStart="21dp"
+        android:paddingEnd="15dp"
         android:scaleType="center"
         android:src="@drawable/icon_back"
         app:layout_constraintBottom_toBottomOf="parent"

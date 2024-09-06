@@ -145,6 +145,10 @@
         <activity
             android:name=".ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -28,6 +28,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isServerOff = false //TODO 점검공지
     private var serverTime: String = ""
     private var isDeleteHashTag = false //TODO 해시태그 삭제
+    private var isEditCancel = false //TODO 인쇄편집 취소
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -49,6 +50,26 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogEditCancel(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isEditCancel = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showEditCancel(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogEditCancel(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogUpdate(
@@ -156,10 +177,30 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnRight.setOnClickListener(this)
             }
 
+            isEditCancel -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_msg)
+                }
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.edit_video_print_alert_left_btn)
+                }
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.edit_video_print_alert_right_btn)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
             else -> {
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)
-
             }
         }
 

@@ -101,5 +101,11 @@
     <string name="cartridge_empty_sub_title">인쇄하고 싶은 용지를 선택해서 만든 후\n보관함에 저장하시면 나중에 인쇄할 수 있어요.</string>
 
 
-
+    <!-- 인쇄편집 -->
+    <string name="edit_video_print_alert_title">알림</string>
+    <string name="edit_video_print_alert_msg">편집중인 내용을 취소하고\n돌아가시겠습니까?</string>
+    <string name="edit_video_print_alert_left_btn">계속 편집하기</string>
+    <string name="edit_video_print_alert_right_btn">편집 취소</string>
+    <string name="edit_video_print_title">인쇄 편집</string>
+    <string name="edit_video_print_print">인쇄</string>
 </resources>

@@ -2,17 +2,13 @@ package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,11 +22,15 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.syncrown.toasty.databinding.ActivityTrimVideoBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.CommonFunc
-import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.tools.convertMillisToMinutesSeconds
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.view.VideoTrimmerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
-@UnstableApi
+@SuppressLint("UnsafeOptInUsageError")
 class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChangedListener {
     private lateinit var binding: ActivityTrimVideoBinding
 
@@ -53,7 +53,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
         )
     }
 
-
     private var videoPath: String = ""
 
     override fun observeViewModel() {
@@ -71,47 +70,41 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.actionbar.actionBack.setOnClickListener { finish() }
+
         binding.actionbar.actionEtc.setOnClickListener {
             if (videoPath.isNotEmpty() || startMillis != 0L || endMillis != 0L) {
-                val isSave = binding.videoTrimmerView.saveSelectedVideoRangeToDownloadFolder(
+                val isSave = binding.videoTrimmerView.saveSelectedVideoRangeToCacheFolder(
                     this,
                     File(videoPath),
                     startMillis,
                     endMillis
                 )
 
-                if (isSave) {
-                    Toast.makeText(this, "save success", Toast.LENGTH_SHORT).show()
-
+                if (isSave.first) {
+                    Toast.makeText(this, "영상 클립 완료 및 인쇄 편집 페이지 이동", Toast.LENGTH_SHORT).show()
                     // 인쇄 편집으로 이동
-
+                    val filePath = isSave.second
+                    Log.e("jung", "send file path : $filePath")
+                    goEditVideoPrint(filePath)
 
                 } else {
-                    Toast.makeText(this, "save fail", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "클립 실패!!!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        binding.pickVideoBtn.setOnClickListener {
-            pickVideo()
-        }
-    }
-
-    private val pickVideoLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            videoPath = getRealPathFromMediaData(data?.data)
-            Log.e("jung", "path : $videoPath, " + data?.data + ", " + File(videoPath).absolutePath)
+        videoPath = intent.getStringExtra("VIDEO_FILE_PATH").toString()
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(100)
             displayTrimmerView(videoPath)
         }
     }
 
-    private fun pickVideo() {
-        Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
-            type = "video/*"
-        }.also { pickVideoLauncher.launch(it) }
+    override fun onDestroy() {
+        super.onDestroy()
+        player.stop()
+        player.release()
     }
 
     override fun onStart() {
@@ -170,8 +163,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
         }
     }
 
-    /* -------------------------------------------------------------------------------------------*/
-    /* VideoTrimmerView.OnSelectedRangeChangedListener */
     override fun onSelectRangeStart() {
         player.playWhenReady = false
     }
@@ -186,8 +177,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
         playVideo(videoPath, startMillis, endMillis)
     }
 
-    /* -------------------------------------------------------------------------------------------*/
-    /* VideoTrimmer */
     private fun displayTrimmerView(path: String) {
         binding.videoTrimmerView
             .setVideo(File(path))
@@ -199,8 +188,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
             .show()
     }
 
-    /* -------------------------------------------------------------------------------------------*/
-    /* ExoPlayer3 */
     @OptIn(UnstableApi::class)
     private fun playVideo(path: String, startMillis: Long, endMillis: Long) {
         if (path.isBlank()) return
@@ -225,30 +212,12 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
 
     }
 
-    /* -------------------------------------------------------------------------------------------*/
-    /* Internal helpers */
-    private fun getRealPathFromMediaData(data: Uri?): String {
-        data ?: return ""
-
-        var cursor: Cursor? = null
-        try {
-            cursor = contentResolver.query(
-                data,
-                arrayOf(MediaStore.Video.Media.DATA),
-                null, null, null
-            )
-
-            val col = cursor?.getColumnIndex(MediaStore.Video.Media.DATA) ?: -1
-            cursor?.moveToFirst()
-
-            return cursor?.getString(col) ?: ""
-        } finally {
-            cursor?.close()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun goEditVideoPrint(filePath: String?) {
+        player.stop()
         player.release()
+
+        val intent = Intent(this, EditVideoPrintActivity::class.java)
+        intent.putExtra("CACHE_FILE_PATH", filePath)
+        startActivity(intent)
     }
 }

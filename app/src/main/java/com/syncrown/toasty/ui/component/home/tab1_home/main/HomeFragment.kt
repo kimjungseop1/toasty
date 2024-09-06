@@ -141,6 +141,10 @@ class HomeFragment : Fragment() {
             if (AppDataPref.isCatridge) {
                 // 용지와 프린트 모두 연결되있을때 영상 선택화면
                 val intent = Intent(requireContext(), VideoSelectActivity::class.java)
+                intent.putExtra(
+                    "FROM_HOME_CATEGORY",
+                    getString(R.string.cartridge_empty_action_text_1)
+                )
                 startActivity(intent)
             } else {
                 // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동

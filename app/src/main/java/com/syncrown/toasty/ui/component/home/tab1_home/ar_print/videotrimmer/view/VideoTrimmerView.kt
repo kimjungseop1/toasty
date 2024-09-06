@@ -278,22 +278,15 @@ class VideoTrimmerView @JvmOverloads constructor(
         presenter?.show()
     }
 
-    fun getTrimmerDraft(): TrimmerDraft? = presenter?.getTrimmerDraft()
-
-    fun restoreTrimmer(draft: TrimmerDraft) {
-        presenter?.restoreTrimmer(draft)
-    }
-
     @SuppressLint("WrongConstant")
-    fun saveSelectedVideoRangeToDownloadFolder(
+    fun saveSelectedVideoRangeToCacheFolder(
         context: Context,
         videoFile: File,
         startMillis: Long,
         endMillis: Long
-    ): Boolean {
-        val downloadFolder =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val outputFile = File(downloadFolder, "toasty_video_${System.currentTimeMillis()}.mp4")
+    ): Pair<Boolean, String?> {
+        val cacheFolder = context.cacheDir
+        val outputFile = File(cacheFolder, "toasty_video_${System.currentTimeMillis()}.mp4")
 
         val extractor = MediaExtractor()
         val muxer: MediaMuxer
@@ -348,17 +341,17 @@ class VideoTrimmerView @JvmOverloads constructor(
                 extractor.advance()
             }
 
-
             muxer.stop()
             muxer.release()
             extractor.release()
 
-            return true
+            // 성공적으로 저장되었으므로, 파일 경로를 반환
+            return Pair(true, outputFile.absolutePath)
 
         } catch (e: IOException) {
             e.printStackTrace()
             extractor.release()
-            return false
+            return Pair(false, null)
         }
     }
 

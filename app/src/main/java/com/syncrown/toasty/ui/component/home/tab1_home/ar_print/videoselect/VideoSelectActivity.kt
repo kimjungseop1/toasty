@@ -1,26 +1,32 @@
 package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect
 
-import android.content.Context
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
+import androidx.activity.viewModels
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import com.syncrown.toasty.databinding.ActivityVideoSelectBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.GridSpacingItemDecoration
-import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.GridItemAdapter
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.SelectGridItemAdapter
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.VideoInfo
-import com.syncrown.toasty.ui.component.home.tab1_home.main.adapter.MainEventAdapter
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity
 
 
 class VideoSelectActivity : BaseActivity() {
     private lateinit var binding: ActivityVideoSelectBinding
-    private lateinit var videoSelectViewModel: VideoSelectViewModel
+    private val videoSelectViewModel: VideoSelectViewModel by viewModels()
 
     override fun observeViewModel() {
+        videoSelectViewModel.folderNames.observe(this) { folderNames ->
+            setSpinner(folderNames)
+        }
 
+        videoSelectViewModel.videoList.observe(this) { videoList ->
+            setVideoList(videoList)
+        }
     }
 
     override fun initViewBinding() {
@@ -31,59 +37,41 @@ class VideoSelectActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val actionTitle: String = intent.getStringExtra("FROM_HOME_CATEGORY").toString()
+        binding.actionbar.actionTitle.text = actionTitle
         binding.actionbar.actionBack.setOnClickListener { finish() }
 
-
-        setVideoList()
+        videoSelectViewModel.loadFolderNames(this)
+        videoSelectViewModel.loadVideoList(this)
     }
 
-    private fun getAllMp4FilesWithDuration(context: Context): List<VideoInfo> {
-        val videoList = mutableListOf<VideoInfo>()
-        val projection = arrayOf(
-            MediaStore.Video.Media._ID,
-            MediaStore.Video.Media.DISPLAY_NAME,
-            MediaStore.Video.Media.DATA, // Deprecated in API 29, use ContentUris instead
-            MediaStore.Video.Media.DURATION // Duration in milliseconds
+    private fun setSpinner(folderNames: List<String>) {
+        val arrayList = ArrayList<String>()
+        arrayList.add(
+            "전체보기" + " (" + folderNames.sumOf {
+                it.substringAfterLast(" (").substringBeforeLast(")").toInt()
+            } + ")"
         )
+        arrayList.addAll(folderNames)
 
-        val selection = "${MediaStore.Video.Media.MIME_TYPE} = ?"
-        val selectionArgs = arrayOf("video/mp4")
+        binding.folderSpinner.attachDataSource(arrayList)
+        binding.folderSpinner.selectedIndex = 0
+        binding.folderSpinner.setOnSpinnerItemSelectedListener { parent, view, position, id ->
+            val selectedFolder = parent.getItemAtPosition(position).toString().split(" (")[0]
+            videoSelectViewModel.loadVideoList(this, selectedFolder)
+        }
+    }
 
-        val sortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
+    private fun setVideoList(videoList: List<VideoInfo>) {
+        val spanCount = 4
+        val spacing = 6
+        val includeEdge = false
 
-        val queryUri: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-
-        val cursor = context.contentResolver.query(
-            queryUri,
-            projection,
-            selection,
-            selectionArgs,
-            sortOrder
-        )
-
-        cursor?.use {
-            val idColumn = it.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-            val dataColumn =
-                it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA) // Deprecated in API 29
-            val durationColumn = it.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
-
-            while (it.moveToNext()) {
-                val id = it.getLong(idColumn)
-                val filePath =
-                    it.getString(dataColumn) // Deprecated in API 29, consider using contentUri to access file
-                val duration = it.getLong(durationColumn) // Duration in milliseconds
-
-                videoList.add(VideoInfo(filePath, duration))
+        binding.videoListView.itemDecorationCount.let { count ->
+            for (i in 0 until count) {
+                binding.videoListView.removeItemDecorationAt(0)
             }
         }
-
-        return videoList
-    }
-
-    private fun setVideoList() {
-        val spanCount = 4 // 3 열 그리드 레이아웃
-        val spacing = 6 // dp로 설정된 아이템 간 간격
-        val includeEdge = false // 아이템의 가장자리에 간격 포함 여부
 
         binding.videoListView.layoutManager = GridLayoutManager(this, spanCount)
         binding.videoListView.addItemDecoration(
@@ -94,16 +82,23 @@ class VideoSelectActivity : BaseActivity() {
             )
         )
 
-        val adapter = GridItemAdapter(
+        val adapter = SelectGridItemAdapter(
             this,
-            getAllMp4FilesWithDuration(this),
-            object : GridItemAdapter.OnItemClickListener {
+            videoList,
+            object : SelectGridItemAdapter.OnItemClickListener {
                 override fun onItemClick(videoInfo: VideoInfo) {
-                    Log.e("jung", "path : " + videoInfo.filePath)
+                    goVideoTrim(videoInfo.filePath)
                 }
             })
 
         binding.videoListView.adapter = adapter
+    }
+
+    @OptIn(UnstableApi::class)
+    private fun goVideoTrim(filePath: String) {
+        val intent = Intent(this, TrimVideoActivity::class.java)
+        intent.putExtra("VIDEO_FILE_PATH", filePath)
+        startActivity(intent)
     }
 
 
