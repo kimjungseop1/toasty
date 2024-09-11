@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.media.MediaCodec
 import android.media.MediaExtractor
+import android.media.MediaMetadataRetriever
 import android.media.MediaMuxer
 import android.os.Environment
 import android.util.AttributeSet
@@ -307,6 +308,14 @@ class VideoTrimmerView @JvmOverloads constructor(
                 val trackIndex = muxer.addTrack(format)
                 trackIndexMap[i] = trackIndex
             }
+
+            // 회전 정보 얻기
+            val metadataRetriever = MediaMetadataRetriever()
+            metadataRetriever.setDataSource(videoFile.absolutePath)
+            val rotation = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toInt() ?: 0
+            metadataRetriever.release()
+            // 회전 정보를 설정
+            muxer.setOrientationHint(rotation)
 
             // 시작 시간으로 이동
             extractor.seekTo(startMillis * 1000, MediaExtractor.SEEK_TO_CLOSEST_SYNC)

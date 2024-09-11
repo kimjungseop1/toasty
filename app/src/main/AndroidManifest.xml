@@ -148,7 +148,8 @@
 
         <activity
             android:name=".ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

@@ -94,4 +94,7 @@ dependencies {
     // spinner
     implementation(libs.nice.spinner)
 
+    // image editor
+    implementation(libs.photoeditor)
+
 }

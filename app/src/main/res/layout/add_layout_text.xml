@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_b2black">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/item_color"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/selector_menu_color"
+            android:scaleType="fitCenter"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_style"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/item_style"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/selector_menu_style"
+            android:scaleType="fitCenter"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_font"
+            app:layout_constraintStart_toEndOf="@id/item_color"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/item_font"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/selector_menu_font"
+            android:scaleType="fitCenter"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_style"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--글자 색상 선택-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/colorView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--  사이즈, 정렬, 크기  -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/styleView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/inputSize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/sizeDone"
+            app:layout_constraintTop_toTopOf="@id/sizeDone"
+            app:layout_constraintEnd_toStartOf="@id/sizeDone"/>
+
+        <Button
+            android:id="@+id/sizeDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--  폰트  -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fontView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuView">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

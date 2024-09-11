@@ -27,11 +27,70 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/includeView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/desc_1">
 
+        <ImageView
+            android:id="@+id/photoEditorImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/photoEditorImageView"
+            app:layout_constraintEnd_toEndOf="@id/photoEditorImageView"
+            app:layout_constraintStart_toStartOf="@id/photoEditorImageView"
+            app:layout_constraintTop_toTopOf="@id/photoEditorImageView">
+
+            <!-- 추가될 DraggableEditText가 이 컨테이너에 들어감 -->
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/includeView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/printAreaView">
+
+        <!--   썸네일   -->
+        <include
+            android:id="@+id/thumbLayout"
+            layout="@layout/add_layout_thumbnail"
+            android:visibility="gone" />
+
+        <!--   영역   -->
+
+        <!--   텍스트   -->
+        <include
+            android:id="@+id/textLayout"
+            layout="@layout/add_layout_text"
+            android:visibility="gone" />
+
+        <!--   드로잉   -->
+
+        <!--   스티커   -->
+
+        <!--   기타   -->
+        <include
+            android:id="@+id/etcLayout"
+            layout="@layout/add_layout_etc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

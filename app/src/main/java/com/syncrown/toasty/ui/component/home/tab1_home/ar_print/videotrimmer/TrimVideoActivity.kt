@@ -21,6 +21,7 @@ import androidx.media3.exoplayer.source.ClippingMediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.syncrown.toasty.databinding.ActivityTrimVideoBinding
 import com.syncrown.toasty.ui.base.BaseActivity
+import com.syncrown.toasty.ui.commons.ActivityFinishManager
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.view.VideoTrimmerView
@@ -56,7 +57,13 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
     private var videoPath: String = ""
 
     override fun observeViewModel() {
-
+        // 다음화면인 인쇄편집에서 영상변경 선택시 현재 액티비티로 오면 안됨
+        ActivityFinishManager.finishActivityEvent.observe(this) { activityClass ->
+            if (activityClass == this::class.java) {
+                finish()
+                ActivityFinishManager.finishActivityEvent.postValue(null)
+            }
+        }
     }
 
     override fun initViewBinding() {
@@ -82,14 +89,14 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
                 )
 
                 if (isSave.first) {
-                    Toast.makeText(this, "영상 클립 완료 및 인쇄 편집 페이지 이동", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "영상 클립 완료", Toast.LENGTH_SHORT).show()
                     // 인쇄 편집으로 이동
                     val filePath = isSave.second
                     Log.e("jung", "send file path : $filePath")
                     goEditVideoPrint(filePath)
 
                 } else {
-                    Toast.makeText(this, "클립 실패!!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "영상 클립 실패!!!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

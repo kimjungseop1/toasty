@@ -20,6 +20,7 @@ constraintlayout = "2.1.4"
 niceSpinner = "1.4.4"
 oauth = "5.10.0"
 okhttp = "2.7.5"
+photoeditor = "3.0.2"
 playServicesAuth = "21.2.0"
 retrofit = "2.9.0"
 core = "1.44.0"
@@ -54,6 +55,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 nice-spinner = { module = "com.github.arcadefire:nice-spinner", version.ref = "niceSpinner" }
 oauth = { module = "com.navercorp.nid:oauth", version.ref = "oauth" }
 okhttp = { module = "com.squareup.okhttp:okhttp", version.ref = "okhttp" }
+photoeditor = { module = "com.burhanrashid52:photoeditor", version.ref = "photoeditor" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 core = { module = "com.google.ar:core", version.ref = "core" }

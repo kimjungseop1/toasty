@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_b3black">
+
+    <View
+        android:id="@+id/etc_divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_5B5B5B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/etc_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="26dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/etc_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="26dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clView_1"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="39dp"
+        app:layout_constraintEnd_toStartOf="@id/etc_right"
+        app:layout_constraintStart_toEndOf="@id/etc_left"
+        app:layout_constraintTop_toBottomOf="@id/etc_divider_1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etc_desc_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard400"
+            android:text="공개설정"
+            android:textColor="@color/color_white"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/etc_divider_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/color_868686"
+        app:layout_constraintEnd_toStartOf="@id/etc_right"
+        app:layout_constraintStart_toEndOf="@id/etc_left"
+        app:layout_constraintTop_toBottomOf="@id/clView_1" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clView_2"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        app:layout_constraintEnd_toStartOf="@id/etc_right"
+        app:layout_constraintStart_toEndOf="@id/etc_left"
+        app:layout_constraintTop_toBottomOf="@id/etc_divider_2">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etc_desc_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard400"
+            android:text="태그설정"
+            android:textColor="@color/color_white"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/etc_divider_3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/color_868686"
+        app:layout_constraintEnd_toStartOf="@id/etc_right"
+        app:layout_constraintStart_toEndOf="@id/etc_left"
+        app:layout_constraintTop_toBottomOf="@id/clView_2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clView_3"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        app:layout_constraintEnd_toStartOf="@id/etc_right"
+        app:layout_constraintStart_toEndOf="@id/etc_left"
+        app:layout_constraintTop_toBottomOf="@id/etc_divider_3">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etc_desc_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard400"
+            android:text="인쇄물 미리보기"
+            android:textColor="@color/color_white"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

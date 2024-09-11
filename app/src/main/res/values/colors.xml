@@ -4,6 +4,8 @@
     <color name="color_50black">#50000000</color>
     <color name="color_white">#FFFFFF</color>
     <color name="color_60black">#66000000</color>
+    <color name="color_b3black">#b3000000</color>
+    <color name="color_b2black">#b2000000</color>
 
     <color name="color_868686">#868686</color>
     <color name="color_0047FF">#0047FF</color>
@@ -21,4 +23,5 @@
     <color name="color_800047FF">#800047FF</color>
     <color name="color_80FF0000">#80FF0000</color>
     <color name="color_FF0000">#FF0000</color>
+    <color name="color_DDE02E">#DDE02E</color>
 </resources>
