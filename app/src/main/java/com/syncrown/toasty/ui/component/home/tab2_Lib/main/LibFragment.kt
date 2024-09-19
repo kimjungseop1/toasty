@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.BottomSheetCartridgeBinding
@@ -16,7 +16,8 @@ import com.syncrown.toasty.databinding.FragmentLibBinding
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.GridSpacingItemDecoration
 import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.GridItem
-import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.LibLinearItemAdapter
+import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.LibGridItemAdapter
+
 
 class LibFragment : Fragment() {
     private lateinit var binding: FragmentLibBinding
@@ -56,9 +57,9 @@ class LibFragment : Fragment() {
 
     private fun updateRecyclerUi() {
         if (binding.btn4.isSelected) {
-            showGridStyle()
+            showGridStyle(3,3)
         } else {
-            showLinearStyle()
+            showGridStyle(1,3)
         }
     }
 
@@ -98,38 +99,36 @@ class LibFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
-    private fun showGridStyle() {
+    private fun showGridStyle(spanCount: Int, spacing: Int) {
         val items = listOf(
             GridItem(R.drawable.icon_home, "00:00"),
             GridItem(R.drawable.icon_home, "00:00"),
             GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00")
+            GridItem(R.drawable.icon_home, "00:00"),
+            GridItem(R.drawable.icon_home, "00:00"),
+            GridItem(R.drawable.icon_home, "00:00"),
+            GridItem(R.drawable.icon_home, "00:00"),
         )
 
-        val spanCount = 3 // 3 열 그리드 레이아웃
-        val spacing = 3 // dp로 설정된 아이템 간 간격
-        val includeEdge = false // 아이템의 가장자리에 간격 포함 여부
+        clearItemDecorations(binding.recyclerLib)
 
         binding.recyclerLib.layoutManager = GridLayoutManager(requireContext(), spanCount)
         binding.recyclerLib.addItemDecoration(
             GridSpacingItemDecoration(
                 spanCount,
                 CommonFunc.dpToPx(spacing, requireContext()),
-                includeEdge
+                false
             )
         )
 
-        //binding.recyclerLib.adapter = GridItemAdapter(items)
+        binding.recyclerLib.adapter = LibGridItemAdapter(items)
     }
 
-    private fun showLinearStyle() {
-        val arrayList = ArrayList<String>()
-        arrayList.add("1")
-        arrayList.add("2")
-        arrayList.add("3")
-        arrayList.add("4")
-
-        binding.recyclerLib.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerLib.adapter = LibLinearItemAdapter(arrayList)
+    private fun clearItemDecorations(recyclerView: RecyclerView) {
+        val decorationCount = recyclerView.itemDecorationCount
+        for (i in decorationCount - 1 downTo 0) {
+            recyclerView.removeItemDecorationAt(i)
+        }
     }
+
 }

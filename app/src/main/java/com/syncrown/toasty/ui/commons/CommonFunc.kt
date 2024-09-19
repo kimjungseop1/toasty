@@ -3,8 +3,11 @@ package com.syncrown.toasty.ui.commons
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Base64
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class CommonFunc {
@@ -73,6 +76,16 @@ class CommonFunc {
                 }
             }
             return dir?.delete() ?: false
+        }
+
+        /**
+         * 비트맵 이미지를 서버에 전송하기전 Base64인코딩
+         */
+        fun bitmapToBase64(bitmap: Bitmap): String {
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val byteArray = outputStream.toByteArray()
+            return Base64.encodeToString(byteArray, Base64.DEFAULT)
         }
 
     }

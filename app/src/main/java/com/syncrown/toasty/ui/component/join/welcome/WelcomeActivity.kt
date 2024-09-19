@@ -12,9 +12,7 @@ class WelcomeActivity:BaseActivity() {
     private lateinit var binding: ActivityWelcomeBinding
 
     override fun observeViewModel() {
-        lifecycleScope.launch {
 
-        }
     }
 
     override fun initViewBinding() {

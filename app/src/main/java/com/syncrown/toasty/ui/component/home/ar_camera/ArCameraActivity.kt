@@ -16,9 +16,7 @@ class ArCameraActivity : BaseActivity() {
     private lateinit var binding: ActivityArMainBinding
 
     override fun observeViewModel() {
-        lifecycleScope.launch {
 
-        }
     }
 
     override fun initViewBinding() {
@@ -38,6 +36,10 @@ class ArCameraActivity : BaseActivity() {
             }
         } else {
             Toast.makeText(this, "지원되지 않는 단말기입니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.actionbar.actionBack.setOnClickListener {
+            finish()
         }
     }
 

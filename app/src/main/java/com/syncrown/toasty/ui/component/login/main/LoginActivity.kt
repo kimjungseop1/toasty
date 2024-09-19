@@ -6,28 +6,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.identity.SignInCredential
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
-import com.syncrown.toasty.AppDataPref
-import com.syncrown.toasty.R
+import com.facebook.CallbackManager
 import com.syncrown.toasty.databinding.ActivtyLoginBinding
+import com.syncrown.toasty.network.NetworkResult
 import com.syncrown.toasty.ui.base.BaseActivity
+import com.syncrown.toasty.ui.commons.DialogCommon
 import com.syncrown.toasty.ui.component.join.main.JoinEmailActivity
-import kotlinx.coroutines.launch
+
 
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivtyLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
+
+    private val callbackManager = CallbackManager.Factory.create()
 
     private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -36,6 +30,47 @@ class LoginActivity : BaseActivity() {
 
 
     override fun observeViewModel() {
+        loginViewModel.checkMemberResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data?.let { data ->
+                        when (data.msgCode) {
+                            "SUCCESS" -> {
+                                if (data.member_check == 1) {
+                                    //TODO 회원이면 이메일 입력 화면으로 이동
+
+                                    //TODO 회원이지만 SNS로 기가입 상태일때
+                                    val dialogCommon = DialogCommon()
+                                    dialogCommon.showAlreadyJoined(supportFragmentManager, {
+
+                                    }, "kakao")
+                                } else {
+                                    //TODO 비회원이면 이메일 가입신청
+                                }
+                            }
+
+                            "FAIL" -> {
+                                Log.e(TAG, "실패")
+                            }
+
+                            "NONE_ID" -> {
+                                Log.e(TAG, "아이디가 없음")
+                            }
+
+                            else -> {
+                                Log.e(TAG, "알수없는 메시지 코드 : ${data.msgCode} ")
+                            }
+                        }
+
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "네트워크 오류")
+                }
+            }
+        }
+
         loginViewModel.initialize(this)
         loginViewModel.signInResult.observe(this, Observer { result ->
             result.fold(
@@ -74,6 +109,12 @@ class LoginActivity : BaseActivity() {
                     binding.inputEmailView.isActivated = true
                     binding.emailValidTxt.visibility = View.VISIBLE
                 }
+
+                if (email.isNotEmpty() && email.matches(emailPattern)) {
+                    binding.emailStart.isSelected = true
+                } else {
+                    binding.emailStart.isSelected = false
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -81,11 +122,13 @@ class LoginActivity : BaseActivity() {
             }
         })
 
+        binding.emailStart.isSelected = false
         binding.emailStart.setOnClickListener {
-            if (AppDataPref.isEmailJoin) {
+            if (binding.emailStart.isSelected) {
+//            loginViewModel.checkMember(binding.inputEmailView.text.toString())
+
+//            goEmailJoin()
                 goPwLogin()
-            } else {
-                goEmailJoin()
             }
         }
 
@@ -94,7 +137,7 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.facebookBtn.setOnClickListener {
-            //TODO 개발중
+            loginViewModel.facebookLogin(this, callbackManager)
         }
 
         binding.kakaoBtn.setOnClickListener {
@@ -113,11 +156,13 @@ class LoginActivity : BaseActivity() {
 
     private fun goEmailJoin() {
         val intent = Intent(this, JoinEmailActivity::class.java)
+        intent.putExtra("INPUT_EMAIL_ADDRESS", binding.inputEmailView.text.toString())
         startActivity(intent)
     }
 
     private fun goPwLogin() {
         val intent = Intent(this, LoginPwActivity::class.java)
+        intent.putExtra("INPUT_EMAIL_ADDRESS", binding.inputEmailView.text.toString())
         startActivity(intent)
     }
 }

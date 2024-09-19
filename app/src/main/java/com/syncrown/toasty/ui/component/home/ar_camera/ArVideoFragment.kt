@@ -93,8 +93,10 @@ class ArVideoFragment : ArFragment() {
         fun setupAugmentedImageDatabase(config: Config, session: Session): Boolean = runBlocking {
             try {
                 val augmentedImageDatabase = AugmentedImageDatabase(session)
-                val imageUrls = listOf(TEST_IMAGE_1_URL, TEST_IMAGE_2_URL, TEST_IMAGE_3_URL, TEST_IMAGE_4_URL)
-                val videoUrls = listOf(TEST_VIDEO_1_URL, TEST_VIDEO_2_URL, TEST_VIDEO_3_URL, TEST_VIDEO_4_URL)
+                val imageUrls =
+                    listOf(TEST_IMAGE_1_URL, TEST_IMAGE_2_URL, TEST_IMAGE_3_URL, TEST_IMAGE_4_URL)
+                val videoUrls =
+                    listOf(TEST_VIDEO_1_URL, TEST_VIDEO_2_URL, TEST_VIDEO_3_URL, TEST_VIDEO_4_URL)
 
                 for (i in imageUrls.indices) {
                     val bitmap = loadAugmentedImageBitmapFromUrl(imageUrls[i])
@@ -129,13 +131,10 @@ class ArVideoFragment : ArFragment() {
     }
 
     private fun createArScene() {
-        // Create an ExternalTexture for displaying the contents of the video.
         externalTexture = ExternalTexture().also {
             mediaPlayer.setVideoSurface(it.surface)
         }
 
-        // Create a renderable with a material that has a parameter of type 'samplerExternal' so that
-        // it can display an ExternalTexture.
         ModelRenderable.builder()
             .setSource(requireContext(), R.raw.augmented_video_model)
             .build()
@@ -155,18 +154,11 @@ class ArVideoFragment : ArFragment() {
         }
     }
 
-    /**
-     * In this case, we want to support the playback of one video at a time.
-     * Therefore, if ARCore loses current active image FULL_TRACKING we will pause the video.
-     * If the same image gets FULL_TRACKING back, the video will resume.
-     * If a new image will become active, then the corresponding video will start from scratch.
-     */
     override fun onUpdate(frameTime: FrameTime) {
         val frame = arSceneView.arFrame ?: return
 
         val updatedAugmentedImages = frame.getUpdatedTrackables(AugmentedImage::class.java)
 
-        // If current active augmented image isn't tracked anymore and video playback is started - pause video playback
         val nonFullTrackingImages =
             updatedAugmentedImages.filter { it.trackingMethod != AugmentedImage.TrackingMethod.FULL_TRACKING }
         activeAugmentedImage?.let { activeAugmentedImage ->
@@ -183,7 +175,6 @@ class ArVideoFragment : ArFragment() {
             return
         }
 
-        // If current active augmented image is tracked but video playback is paused - resume video playback
         activeAugmentedImage?.let { activeAugmentedImage ->
             if (fullTrackingImages.any {
                     it.index == activeAugmentedImage.index
@@ -195,7 +186,6 @@ class ArVideoFragment : ArFragment() {
             }
         }
 
-        // Otherwise - make the first tracked image active and start video playback
         fullTrackingImages.firstOrNull()?.let { augmentedImage ->
             try {
                 playbackArVideo(augmentedImage.name, augmentedImage)
@@ -230,7 +220,6 @@ class ArVideoFragment : ArFragment() {
 
         lifecycleScope.launch {
             try {
-                // 비디오 URL로 MediaMetadataRetriever 설정
                 val metadataRetriever = MediaMetadataRetriever()
 
                 metadataRetriever.setDataSource(videoUrl)
@@ -245,13 +234,11 @@ class ArVideoFragment : ArFragment() {
                     metadataRetriever.extractMetadata(METADATA_KEY_VIDEO_ROTATION)?.toFloatOrNull()
                         ?: 0f
 
-                // 비디오 회전을 고려하여 이미지 크기 변환
                 val imageSize = RectF(0f, 0f, augmentedImage.extentX, augmentedImage.extentZ)
                     .transform(rotationMatrix(videoRotation))
 
                 val videoScaleType = VideoScaleType.CenterCrop
 
-                // 비디오 속성 설정
                 videoAnchorNode.setVideoProperties(
                     videoWidth = videoWidth,
                     videoHeight = videoHeight,
@@ -261,7 +248,6 @@ class ArVideoFragment : ArFragment() {
                     videoScaleType = videoScaleType
                 )
 
-                // 비디오 재질 매개변수 업데이트
                 videoRenderable.material.apply {
                     setFloat2(MATERIAL_IMAGE_SIZE, imageSize.width(), imageSize.height())
                     setFloat2(MATERIAL_VIDEO_SIZE, videoWidth, videoHeight)
@@ -271,7 +257,6 @@ class ArVideoFragment : ArFragment() {
                     )
                 }
 
-                // 미디어 플레이어 준비 및 시작
                 mediaPlayer.apply {
                     setMediaItem(MediaItem.fromUri(videoUrl))
                     repeatMode = Player.REPEAT_MODE_ONE // 반복재생
@@ -279,15 +264,13 @@ class ArVideoFragment : ArFragment() {
                     prepare()
                 }
 
-                // 비디오 앵커 업데이트
                 videoAnchorNode.anchor?.detach()
                 videoAnchorNode.anchor = augmentedImage.createAnchor(augmentedImage.centerPose)
 
                 activeAugmentedImage = augmentedImage
 
-                // 프레임 사용 가능 시 비디오 페이드 인
                 externalTexture.surfaceTexture.setOnFrameAvailableListener {
-                    it.setOnFrameAvailableListener(null) // 리스너가 한 번만 호출되도록 설정
+                    it.setOnFrameAvailableListener(null)
                     fadeInVideo()
                 }
             } catch (e: Exception) {

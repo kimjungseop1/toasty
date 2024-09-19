@@ -95,7 +95,7 @@
         android:layout_width="0dp"
         android:layout_height="51dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/custom_button_blue_round_5dp"
+        android:background="@drawable/bg_button_selector_disable_enable"
         android:fontFamily="@font/pretendard400"
         android:gravity="center"
         android:text="@string/login_email_button_title"

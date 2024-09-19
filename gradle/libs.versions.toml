@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.1"
+facebookAndroidSdk = "[4,5)"
 firebaseAuth = "23.0.0"
 firebaseBom = "33.2.0"
 fragmentKtx = "1.8.2"
@@ -31,6 +32,7 @@ media3Exoplayer = "1.4.0"
 media3Session = "1.4.0"
 kotlinxCoroutinesAndroid = "1.8.0"
 annotation = "1.8.2"
+ucrop = "2.2.8"
 v2User = "2.12.0"
 
 [libraries]
@@ -39,6 +41,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -69,6 +72,7 @@ androidx-media3-transformer = { module = "androidx.media3:media3-transformer", v
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3Exoplayer" }
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3Exoplayer" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 v2-share = { module = "com.kakao.sdk:v2-share", version.ref = "v2User" }
 v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "v2User" }
 

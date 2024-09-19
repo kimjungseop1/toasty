@@ -1,7 +1,9 @@
 package com.syncrown.toasty.ui.component.login.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -9,10 +11,16 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -23,6 +31,10 @@ import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.syncrown.toasty.R
 import com.syncrown.toasty.network.NaverClient
+import com.syncrown.toasty.network.NetworkResult
+import com.syncrown.toasty.network.ToastyRepository
+import com.syncrown.toasty.network.model.RequestCheckMember
+import com.syncrown.toasty.network.model.ResponseCheckMember
 import com.syncrown.toasty.ui.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +42,31 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+
 class LoginViewModel : BaseViewModel() {
+    private val toastyRepository: ToastyRepository = ToastyRepository()
+    private val checkMemberResponseLiveData: LiveData<NetworkResult<ResponseCheckMember>> =
+        toastyRepository.checkMemberLiveDataRepository
+
+    /**
+     * =============================================================================================
+     * 회원여부 체크
+     * =============================================================================================
+     */
+    fun checkMember(memberId: String) {
+        viewModelScope.launch {
+            val requestCheckMember = RequestCheckMember()
+            requestCheckMember.apply {
+                user_id = memberId
+            }
+
+            toastyRepository.requestCheckMember(requestCheckMember)
+        }
+    }
+
+    fun checkMemberResponseLiveData(): LiveData<NetworkResult<ResponseCheckMember>> {
+        return checkMemberResponseLiveData
+    }
 
     /**
      * =============================================================================================
@@ -90,8 +126,37 @@ class LoginViewModel : BaseViewModel() {
      * 페이스북
      * =============================================================================================
      */
-    fun facebookLogin() {
+    fun facebookLogin(activity: Activity, callbackManager: CallbackManager) {
+        LoginManager.getInstance().logInWithReadPermissions(
+            activity, listOf("email", "public_profile")
+        )
 
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Log.e("Callback :: ", "onSuccess")
+                requestMe(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.e("Callback :: ", "onCancel")
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.e("Callback :: ", "onError : ${error.message}")
+            }
+        })
+
+    }
+
+    private fun requestMe(token: AccessToken) {
+        val graphRequest = GraphRequest.newMeRequest(token) { `object`, _ ->
+            Log.e("result", `object`.toString())
+        }
+
+        val parameters = Bundle()
+        parameters.putString("fields", "id,name,email,gender,birthday")
+        graphRequest.parameters = parameters
+        graphRequest.executeAsync()
     }
 
     /**

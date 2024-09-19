@@ -8,4 +8,8 @@
         <attr name="vtv_window_border_color" format="color" />
         <attr name="vtv_overlay_color" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="PhotoEditorView">
+        <attr name="photo_src" format="integer" />
+    </declare-styleable>
 </resources>

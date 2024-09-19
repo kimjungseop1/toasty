@@ -28,20 +28,15 @@
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/includeView"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/desc_1">
 
-        <ImageView
+        <com.syncrown.toasty.ui.photoeditor.PhotoEditorView
             android:id="@+id/photoEditorImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <FrameLayout
             android:id="@+id/container"
@@ -57,14 +52,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/includeView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/printAreaView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <!--   썸네일   -->
         <include
@@ -81,18 +75,24 @@
             android:visibility="gone" />
 
         <!--   드로잉   -->
+        <include
+            android:id="@+id/drawingLayout"
+            layout="@layout/add_layout_draw"
+            android:visibility="gone" />
 
         <!--   스티커   -->
+        <include
+            android:id="@+id/stickerLayout"
+            layout="@layout/add_layout_sticker"
+            android:visibility="gone"/>
 
         <!--   기타   -->
         <include
             android:id="@+id/etcLayout"
             layout="@layout/add_layout_etc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomMenu"

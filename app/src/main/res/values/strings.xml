@@ -4,6 +4,8 @@
     <string name="kakao_scheme">kakao80fe788ee827bf52b012dfb4c6b78a3a</string>
     <string name="google_client_id">593219985516–804hlbe1iv3vi5epgkfa826i24lt3r4v.apps.googleusercontent.com</string>
 
+    <string name="facebook_app_id">405879092532692</string>
+
     <!--  스플래시  -->
     <string name="splash_title_bic">TOASTY</string>
     <string name="splash_title_small">캐치프레이즈</string>
@@ -28,6 +30,7 @@
     <string name="login_pw_login_btn">로그인</string>
     <string name="login_pw_find_desc">비밀번호를 잊어버리셨나요?</string>
     <string name="login_pw_find"><u>비밀번호 찾기</u></string>
+    <string name="login_alert_already_sns">입력하신 이메일은\n%s 으로 가입되어 있습니다.\n소셜 버튼을 눌러 로그인해주세요.</string>
 
     <!-- 회원가입  -->
     <string name="join_email_title">회원가입 하고\n토스티와 추억을 인쇄해보세요.</string>
@@ -40,6 +43,7 @@
     <string name="join_email_desc_3_1">비밀번호를 입력해주세요</string>
     <string name="join_email_desc_3_2">비밀번호를 다시 입력해주세요</string>
     <string name="join_email_warning_pw">* 비밀번호가 일치하지 않습니다.</string>
+    <string name="join_email_warning_pw_length">* 비밀번호는 6자 이상으로 입력해주세요.</string>
     <string name="join_email_all_consent_desc">모든 약관에 동의합니다.</string>
     <string name="join_email_consent_1">[필수] 이용약관</string>
     <string name="join_email_consent_2">[필수] 개인정보 수집 및 이용</string>
@@ -58,6 +62,9 @@
     <string name="cert_email_desc_3">“가입 후 24시간내에 인증을 완료하여야 하며,\n인증 받지 않은 계정은 24시간 후 삭제됩니다.”</string>
     <string name="cert_email_fail_code_num">인증번호가 일치하지 않습니다.\n다시 확인해주세요.</string>
     <string name="cert_email_success_code_num">인증번호가 재전송되었습니다.\n이메일을 확인해주세요.</string>
+
+    <!--  비밀번호 재설정  -->
+    <string name="password_re_send_success">이메일로 비밀번호를 재설정 할 수 있는\n링크가 전달되었습니다.</string>
 
     <!-- 약관동의 -->
     <string name="join_consent_title">회원가입을 위해\n아래 약관에 동의해주세요.</string>
@@ -110,4 +117,10 @@
     <string name="edit_video_print_print">인쇄</string>
 
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
+
+
+    <!--  더보기  -->
+    <string name="more_logout_popup_message">로그아웃 하시겠습니까?</string>
+    <string name="more_logout_popup_cancel">취소</string>
+    <string name="more_logout_popup_ok">로그아웃</string>
 </resources>

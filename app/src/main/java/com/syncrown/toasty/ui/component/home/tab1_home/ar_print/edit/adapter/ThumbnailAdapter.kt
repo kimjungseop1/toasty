@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.syncrown.toasty.databinding.ItemThumbnailBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ThumbnailAdapter(
     private val context: Context,
@@ -35,10 +39,14 @@ class ThumbnailAdapter(
     }
 
     override fun onBindViewHolder(holder: ThumbnailViewHolder, position: Int) {
-        val bitmap = thumbnails[position]
-        Glide.with(context)
-            .load(bitmap)
-            .into(holder.binding.itemThumb)
+        CoroutineScope(Dispatchers.IO).launch {
+            val bitmap = thumbnails[position]
+            withContext(Dispatchers.Main) {
+                Glide.with(context)
+                    .load(bitmap)
+                    .into(holder.binding.itemThumb)
+            }
+        }
     }
 
     override fun getItemCount(): Int = thumbnails.size

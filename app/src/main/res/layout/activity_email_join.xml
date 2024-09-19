@@ -5,319 +5,350 @@
     android:layout_height="match_parent"
     android:background="@color/color_white">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="20dp" />
-
     <include
         android:id="@+id/actionbar"
         layout="@layout/actionbar_style_1" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/titleView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:fontFamily="@font/pretendard700"
-        android:gravity="center"
-        android:lineHeight="29dp"
-        android:text="@string/join_email_title"
-        android:textColor="@color/color_black"
-        android:textSize="24dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/descTxt_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard400"
-        android:text="@string/join_email_desc_1"
-        android:textColor="@color/color_171717"
-        android:textSize="14dp"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/titleView" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputEmailView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/custom_editbox_solid_gray"
-        android:fontFamily="@font/pretendard400"
-        android:hint="@string/join_email_desc_1_1"
-        android:maxLines="1"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColor="@color/color_171717"
-        android:textColorHint="@color/color_CECECE"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/descTxt_1" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/descTxt_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard400"
-        android:text="@string/join_email_desc_2"
-        android:textColor="@color/color_171717"
-        android:textSize="14dp"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputEmailView" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="20dp" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputNameView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/custom_editbox_select"
-        android:fontFamily="@font/pretendard400"
-        android:hint="@string/join_email_desc_2_2"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColor="@color/color_171717"
-        android:textColorHint="@color/color_CECECE"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/descTxt_2" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/pretendard700"
+                android:gravity="center"
+                android:lineHeight="29dp"
+                android:text="@string/join_email_title"
+                android:textColor="@color/color_black"
+                android:textSize="24dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/warningName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:fontFamily="@font/pretendard400"
-        android:text="@string/join_email_warning_name"
-        android:textColor="@color/color_FF5139"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputNameView" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/descTxt_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_desc_1"
+                android:textColor="@color/color_171717"
+                android:textSize="14dp"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/titleView" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/descTxt_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard400"
-        android:text="@string/join_email_desc_3"
-        android:textColor="@color/color_171717"
-        android:textSize="14dp"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/warningName" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/inputEmailView"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/custom_editbox_solid_gray"
+                android:fontFamily="@font/pretendard400"
+                android:hint="@string/join_email_desc_1_1"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/color_171717"
+                android:textColorHint="@color/color_CECECE"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/descTxt_1" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputPwView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/custom_editbox_select"
-        android:fontFamily="@font/pretendard400"
-        android:hint="@string/join_email_desc_3_1"
-        android:maxLines="1"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingEnd="56dp"
-        android:textColor="@color/color_171717"
-        android:textColorHint="@color/color_CECECE"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/descTxt_3" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/descTxt_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_desc_2"
+                android:textColor="@color/color_171717"
+                android:textSize="14dp"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/inputEmailView" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/pw1ShowBtn"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:background="?attr/selectableItemBackground"
-        android:scaleType="center"
-        android:src="@drawable/icon_show"
-        app:layout_constraintBottom_toBottomOf="@id/inputPwView"
-        app:layout_constraintEnd_toEndOf="@id/inputPwView"
-        app:layout_constraintTop_toTopOf="@id/inputPwView" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputNameView"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/custom_editbox_select"
+                android:fontFamily="@font/pretendard400"
+                android:hint="@string/join_email_desc_2_2"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/color_171717"
+                android:textColorHint="@color/color_CECECE"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/descTxt_2" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputPwMoreView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/custom_editbox_select"
-        android:fontFamily="@font/pretendard400"
-        android:hint="@string/join_email_desc_3_2"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="56dp"
-        android:textColor="@color/color_171717"
-        android:textColorHint="@color/color_CECECE"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputPwView" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/warningName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_warning_name"
+                android:textColor="@color/color_FF5139"
+                android:textSize="13dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/inputNameView" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/pw2ShowBtn"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
-        android:background="?attr/selectableItemBackground"
-        android:scaleType="center"
-        android:src="@drawable/icon_show"
-        app:layout_constraintBottom_toBottomOf="@id/inputPwMoreView"
-        app:layout_constraintEnd_toEndOf="@id/inputPwMoreView"
-        app:layout_constraintTop_toTopOf="@id/inputPwMoreView" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/descTxt_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_desc_3"
+                android:textColor="@color/color_171717"
+                android:textSize="14dp"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/warningName" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/warningPw"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:fontFamily="@font/pretendard400"
-        android:text="@string/join_email_warning_pw"
-        android:textColor="@color/color_FF5139"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputPwMoreView" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputPwView"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/custom_editbox_select"
+                android:fontFamily="@font/pretendard400"
+                android:hint="@string/join_email_desc_3_1"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="56dp"
+                android:textColor="@color/color_171717"
+                android:textColorHint="@color/color_CECECE"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/descTxt_3" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/custom_editbox_stroke_gray"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/warningPw">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/warningLength"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_warning_pw_length"
+                android:textColor="@color/color_FF5139"
+                android:textSize="13dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/inputPwView" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/allConsentBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:button="@drawable/custom_checkbox_select_1"
-            android:fontFamily="@font/pretendard400"
-            android:paddingStart="10dp"
-            android:text="@string/join_email_all_consent_desc"
-            android:textColor="@color/color_black"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/pw1ShowBtn"
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="center"
+                android:src="@drawable/icon_show"
+                app:layout_constraintBottom_toBottomOf="@id/inputPwView"
+                app:layout_constraintEnd_toEndOf="@id/inputPwView"
+                app:layout_constraintTop_toTopOf="@id/inputPwView" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_1"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="7dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/clView">
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputPwMoreView"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/custom_editbox_select"
+                android:fontFamily="@font/pretendard400"
+                android:hint="@string/join_email_desc_3_2"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="56dp"
+                android:textColor="@color/color_171717"
+                android:textColorHint="@color/color_CECECE"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/warningLength" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/consentBtn_1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:button="@drawable/custom_checkbox_select_2"
-            android:fontFamily="@font/pretendard400"
-            android:paddingStart="10dp"
-            android:text="@string/join_email_consent_1"
-            android:textColor="@color/color_5B5B5B"
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/pw2ShowBtn"
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="center"
+                android:src="@drawable/icon_show"
+                app:layout_constraintBottom_toBottomOf="@id/inputPwMoreView"
+                app:layout_constraintEnd_toEndOf="@id/inputPwMoreView"
+                app:layout_constraintTop_toTopOf="@id/inputPwMoreView" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/consentDetail_1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="center"
-            android:src="@drawable/icon_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/warningPw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/pretendard400"
+                android:text="@string/join_email_warning_pw"
+                android:textColor="@color/color_FF5139"
+                android:textSize="13dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/inputPwMoreView" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_2"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/clView_1">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_editbox_stroke_gray"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/warningPw">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/consentBtn_2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:button="@drawable/custom_checkbox_select_2"
-            android:fontFamily="@font/pretendard400"
-            android:paddingStart="10dp"
-            android:text="@string/join_email_consent_2"
-            android:textColor="@color/color_5B5B5B"
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/allConsentBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:button="@drawable/custom_checkbox_select_1"
+                    android:fontFamily="@font/pretendard400"
+                    android:paddingStart="10dp"
+                    android:text="@string/join_email_all_consent_desc"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/consentDetail_2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:background="?attr/selectableItemBackground"
-            android:scaleType="center"
-            android:src="@drawable/icon_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_1"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_marginTop="7dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/clView">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_3"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/clView_2">
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/consentBtn_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:button="@drawable/custom_checkbox_select_2"
+                    android:fontFamily="@font/pretendard400"
+                    android:paddingStart="10dp"
+                    android:text="@string/join_email_consent_1"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/consentBtn_3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:button="@drawable/custom_checkbox_select_2"
-            android:fontFamily="@font/pretendard400"
-            android:paddingStart="10dp"
-            android:text="@string/join_email_consent_3"
-            android:textColor="@color/color_5B5B5B"
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/consentDetail_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_2"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/clView_1">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/consentBtn_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:button="@drawable/custom_checkbox_select_2"
+                    android:fontFamily="@font/pretendard400"
+                    android:paddingStart="10dp"
+                    android:text="@string/join_email_consent_2"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/consentDetail_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_3"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/clView_2">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/consentBtn_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:button="@drawable/custom_checkbox_select_2"
+                    android:fontFamily="@font/pretendard400"
+                    android:paddingStart="10dp"
+                    android:text="@string/join_email_consent_3"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -341,7 +372,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/custom_button_blue_round_5dp"
+            android:background="@drawable/bg_button_selector_disable_enable"
             android:fontFamily="@font/pretendard400"
             android:gravity="center"
             android:text="@string/join_email_btn"

@@ -23,6 +23,7 @@ import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.BackPressCloseHandler
 import com.syncrown.toasty.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.main.HomeFragment
+import com.syncrown.toasty.ui.component.home.tab1_home.search.SearchActivity
 import com.syncrown.toasty.ui.component.home.tab2_Lib.main.LibFragment
 import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
 import com.syncrown.toasty.ui.component.home.tab4_store.StoreFragment
@@ -86,6 +87,10 @@ class MainActivity : BaseActivity() {
 
                 else -> false
             }
+        }
+
+        binding.actionbar.actionSearch.setOnClickListener {
+            goSearch()
         }
 
         binding.actionbar.actionAr.setOnClickListener {
@@ -170,6 +175,11 @@ class MainActivity : BaseActivity() {
 
     private fun goARpage() {
         val intent = Intent(this, ArCameraActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goSearch() {
+        val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
     }
 }

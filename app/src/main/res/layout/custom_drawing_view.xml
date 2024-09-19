@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- CustomDrawingView -->
-    <com.syncrown.toasty.ui.editor.CustomDrawingView
+    <com.syncrown.toasty.ui.editor_test.CustomDrawingView
         android:id="@+id/drawingView"
         android:layout_width="0dp"
         android:layout_height="0dp"

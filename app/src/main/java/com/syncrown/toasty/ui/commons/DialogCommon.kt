@@ -27,8 +27,11 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isUpdate = false //TODO 업데이트 안내
     private var isServerOff = false //TODO 점검공지
     private var serverTime: String = ""
+    private var isJoin = false //TODO 소셜 기가입 계정 알림
+    private var snsPlatform: String = ""
     private var isDeleteHashTag = false //TODO 해시태그 삭제
     private var isEditCancel = false //TODO 인쇄편집 취소
+    private var isLogout = false //TODO 로그아웃
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -112,6 +115,46 @@ class DialogCommon : DialogFragment(), OnClickListener {
         manager?.let { createDialogServer(leftBtn, date).show(it, "") }
     }
 
+    private fun createDialogAlreadyJoined(
+        leftBtn: OnClickListener,
+        platform: String
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isJoin = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.snsPlatform = platform
+
+        return dialog
+    }
+
+    fun showAlreadyJoined(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        platform: String
+    ) {
+        manager?.let { createDialogAlreadyJoined(leftBtn, platform) }
+    }
+
+    private fun createDialogLogout(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isLogout = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showLogout(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogLogout(leftBtn, rightBtn).show(it, "") }
+    }
+
     override fun dismiss() {
         if (dialog.isShowing) {
             dialog.dismiss()
@@ -169,6 +212,18 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
             }
 
+            isJoin -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = GONE
+
+                dialogNormalBinding.titleView.text = "알림"
+                dialogNormalBinding.bodyView.text = context.let {
+                    getString(R.string.login_alert_already_sns, snsPlatform)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+            }
+
             isDeleteHashTag -> {
                 dialogNormalBinding.btnLeft.visibility = VISIBLE
                 dialogNormalBinding.btnRight.visibility = VISIBLE
@@ -192,6 +247,30 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 }
                 dialogNormalBinding.btnRight.text = context?.let {
                     getString(R.string.edit_video_print_alert_right_btn)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isLogout -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.more_logout_popup_message)
+                }
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.more_logout_popup_cancel)
+                }
+
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.more_logout_popup_ok)
                 }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)

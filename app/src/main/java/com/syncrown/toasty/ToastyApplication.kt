@@ -3,6 +3,7 @@ package com.syncrown.toasty
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.facebook.FacebookSdk
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
@@ -31,6 +32,8 @@ class ToastyApplication : Application() {
         KakaoSdk.init(this, kakao_app_key)
 
         NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+        FacebookSdk.sdkInitialize(this);
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }

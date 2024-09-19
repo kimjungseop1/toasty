@@ -68,6 +68,10 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
 
+    // facebook
+    implementation(libs.facebook.android.sdk)
+
+
     // retrofit2 네트워크 api
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -94,7 +98,6 @@ dependencies {
     // spinner
     implementation(libs.nice.spinner)
 
-    // image editor
-    implementation(libs.photoeditor)
-
+    // image cropper
+    implementation(libs.ucrop)
 }

@@ -68,6 +68,11 @@
             </intent-filter>
         </activity>
 
+        <!--   페이스북     -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name=".ui.component.splash.SplashActivity"
             android:exported="true">
@@ -150,6 +155,47 @@
             android:name=".ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.alert.AlertActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.scrap.ScrapActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.cutoff.CutOffActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.alert_setting.AlertSettingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.account.AccountManageActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.notice.NoticeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.account.name.ChangeNameActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.account.pw.ChangePwActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.account.withdrawal.WithdrawalActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.search.SearchActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

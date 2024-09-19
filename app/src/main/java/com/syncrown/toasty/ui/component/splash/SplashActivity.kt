@@ -57,11 +57,9 @@ class SplashActivity : BaseActivity() {
                 return@launch
             }
 
-            if (AppDataPref.isLogin) {
-                goMain()
-            } else {
-                goLogin()
-            }
+            //임시
+            goMain()
+//            goLogin()
 
         }
     }

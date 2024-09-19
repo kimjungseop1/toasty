@@ -1,9 +1,13 @@
 package com.syncrown.toasty.ui.commons
 
 import android.content.Context
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.CustomToastBinding
 
@@ -15,7 +19,6 @@ class CustomToast(private val context: Context) {
 
         // 레이아웃 내의 이미지와 텍스트를 설정합니다.
         binding.toastMsg.text = message
-        binding.toastClose.setOnClickListener { toast?.cancel() }
         when (type) {
             CustomToastType.FAIL -> {
                 binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_1)
@@ -29,14 +32,23 @@ class CustomToast(private val context: Context) {
 
             CustomToastType.WARNING -> {
                 binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_3)
-                binding.toastClose.visibility = View.GONE
                 true
             }
         }
 
+        // 토스트 생성 및 설정
         toast = Toast(context).apply {
-            duration = Toast.LENGTH_LONG
+            duration = Toast.LENGTH_SHORT
             view = binding.root
+
+            // 그라비티와 레이아웃 파라미터 설정
+            setGravity(Gravity.BOTTOM, 0, 100)  // 위치를 필요에 따라 조정
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            binding.root.layoutParams = layoutParams
+
             show()
         }
 
