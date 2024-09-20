@@ -7,8 +7,8 @@
     <string name="facebook_app_id">405879092532692</string>
 
     <!--  스플래시  -->
-    <string name="splash_title_bic">TOASTY</string>
-    <string name="splash_title_small">캐치프레이즈</string>
+    <string name="splash_title_bic">ARPANG</string>
+    <string name="splash_title_small">AR 즐거움이 팡팡</string>
     <string name="splash_alert_update_title">업데이트 안내</string>
     <string name="splash_alert_update_message">원할한 서비스 이용을 위해\n새로운 버전을 설치해주세요</string>
     <string name="splash_alert_leftBtn_text">앱 종료</string>
@@ -118,9 +118,9 @@
 
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
 
-
     <!--  더보기  -->
     <string name="more_logout_popup_message">로그아웃 하시겠습니까?</string>
     <string name="more_logout_popup_cancel">취소</string>
     <string name="more_logout_popup_ok">로그아웃</string>
+
 </resources>

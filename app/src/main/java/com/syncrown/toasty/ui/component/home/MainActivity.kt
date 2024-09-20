@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -58,30 +59,41 @@ class MainActivity : BaseActivity() {
         //TODO default Fragment
         changeFragment(HomeFragment())
 
+        binding.bottomNavigation.itemIconTintList = null
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_1 -> {
                     changeFragment(HomeFragment())
+                    binding.actionbar.actionTitle.text =
+                        ContextCompat.getString(this, R.string.splash_title_bic)
                     true
                 }
 
                 R.id.nav_2 -> {
                     changeFragment(LibFragment())
+                    binding.actionbar.actionTitle.text =
+                        ContextCompat.getString(this, R.string.home_nav_title_2)
                     true
                 }
 
                 R.id.nav_3 -> {
                     changeFragment(ShareFragment())
+                    binding.actionbar.actionTitle.text =
+                        ContextCompat.getString(this, R.string.home_nav_title_3)
                     true
                 }
 
                 R.id.nav_4 -> {
                     changeFragment(StoreFragment())
+                    binding.actionbar.actionTitle.text =
+                        ContextCompat.getString(this, R.string.home_nav_title_4)
                     true
                 }
 
                 R.id.nav_5 -> {
                     changeFragment(MoreFragment())
+                    binding.actionbar.actionTitle.text =
+                        ContextCompat.getString(this, R.string.home_nav_title_5)
                     true
                 }
 

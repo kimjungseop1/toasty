@@ -14,7 +14,6 @@
             android:longClickable="false"
             android:inputType="text"
             android:imeOptions="actionDone"
-            android:fontFamily="@font/pretendard400"
             android:textColorHint="@color/color_CECECE"
             android:background="@drawable/custom_bg_edit"
             app:layout_constraintTop_toTopOf="parent"

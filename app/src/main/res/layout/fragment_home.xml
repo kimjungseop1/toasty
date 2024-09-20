@@ -55,7 +55,6 @@
                         android:id="@+id/connectPrintTxt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/pretendard400"
                         android:lineHeight="19dp"
                         android:text="@string/home_connect_print_message"
                         android:textColor="@color/color_black"
@@ -69,9 +68,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="21dp"
-                        android:fontFamily="@font/pretendard700"
                         android:text="@string/home_connect_print_btn"
-                        android:textColor="@color/color_0047FF"
+                        android:textColor="@color/color_8e5d4b"
                         android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -87,8 +85,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:clipToPadding="false"
                 android:clipChildren="false"
+                android:clipToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/connectPrintView" />
@@ -98,55 +96,247 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_black"
+                app:layout_constraintBottom_toBottomOf="@id/bannerView"
                 app:layout_constraintEnd_toEndOf="@id/bannerView"
                 app:layout_constraintStart_toStartOf="@id/bannerView"
-                app:layout_constraintBottom_toBottomOf="@id/bannerView"
-                app:layout_constraintTop_toTopOf="@id/bannerView"/>
+                app:layout_constraintTop_toTopOf="@id/bannerView" />
 
-
-            <Button
-                android:id="@+id/arPrintBtn"
-                android:layout_width="wrap_content"
+            <!--    토스터로 할수있는 작업들    -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AR영상인쇄"
-                app:layout_constraintVertical_bias=".1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/bannerView"/>
+                android:background="@color/color_f5f5f5"
+                android:paddingStart="20dp"
+                android:paddingTop="32dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="37dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bannerView">
 
-            <Button
-                android:id="@+id/life4cutBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="인생네컷"
-                app:layout_constraintStart_toEndOf="@id/arPrintBtn"
-                app:layout_constraintBottom_toBottomOf="@id/arPrintBtn"
-                app:layout_constraintTop_toTopOf="@id/arPrintBtn"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/desc_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프린터가 연결되어 있지 않아요"
+                    android:textColor="@color/color_black"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/labelStickerBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="라벨스티커"
-                app:layout_constraintStart_toEndOf="@id/life4cutBtn"
-                app:layout_constraintBottom_toBottomOf="@id/arPrintBtn"
-                app:layout_constraintTop_toTopOf="@id/arPrintBtn"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/desc_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="토스티로 할 수 있는 작업들이에요"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="@id/desc_1"
+                    app:layout_constraintTop_toBottomOf="@id/desc_1" />
 
-            <Button
-                android:id="@+id/freePrintBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="자유인쇄"
-                app:layout_constraintStart_toStartOf="@id/arPrintBtn"
-                app:layout_constraintTop_toBottomOf="@id/arPrintBtn"/>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/arCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintEnd_toStartOf="@id/life4cutCardView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/desc_2">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="행사스티커"
-                app:layout_constraintStart_toEndOf="@id/freePrintBtn"
-                app:layout_constraintBottom_toBottomOf="@id/freePrintBtn"
-                app:layout_constraintTop_toTopOf="@id/freePrintBtn"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/arPrintBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_ar_home"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:text="AR 영상 인쇄"
+                            android:textColor="@color/color_black"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/arPrintBtn" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/life4cutCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/arCardView"
+                    app:layout_constraintEnd_toStartOf="@id/labelCardView"
+                    app:layout_constraintStart_toEndOf="@id/arCardView"
+                    app:layout_constraintTop_toTopOf="@id/arCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/life4cutBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_4cut_home"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:text="인생두컷"
+                            android:textColor="@color/color_black"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/life4cutBtn" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/labelCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/life4cutCardView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/life4cutCardView"
+                    app:layout_constraintTop_toTopOf="@id/life4cutCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/labelStickerBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_sticker_home"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:text="라벨 스티커"
+                            android:textColor="@color/color_black"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/labelStickerBtn" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/festivalCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintEnd_toEndOf="@id/arCardView"
+                    app:layout_constraintStart_toStartOf="@id/arCardView"
+                    app:layout_constraintTop_toBottomOf="@id/arCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/festivalStickerBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_festival_home"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:text="행사 스티커"
+                            android:textColor="@color/color_black"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/festivalStickerBtn" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/freeCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintEnd_toEndOf="@id/life4cutCardView"
+                    app:layout_constraintStart_toStartOf="@id/life4cutCardView"
+                    app:layout_constraintTop_toBottomOf="@id/life4cutCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/freePrintBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_free_home"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:text="행사 스티커"
+                            android:textColor="@color/color_black"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/freePrintBtn" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -155,9 +345,9 @@
         android:id="@+id/mainEventView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintVertical_bias="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

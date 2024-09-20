@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/cateTypeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="인생네컷"
+        android:textColor="@color/color_424242"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/nameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="홍길동님"
+        android:textColor="@color/color_424242"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cateTypeView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:text="2일전"
+        android:textColor="@color/color_5B5B5B"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/nameView"
+        app:layout_constraintStart_toEndOf="@id/nameView"
+        app:layout_constraintTop_toTopOf="@id/nameView" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/thumbnailView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sample_img_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameView" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/likeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_like_unsel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/thumbnailView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/likeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="111"
+        android:textColor="@color/color_black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/likeBtn"
+        app:layout_constraintStart_toEndOf="@id/likeBtn"
+        app:layout_constraintTop_toTopOf="@id/likeBtn" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/commentBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_comment"
+        app:layout_constraintBottom_toBottomOf="@id/likeBtn"
+        app:layout_constraintStart_toEndOf="@id/likeView"
+        app:layout_constraintTop_toTopOf="@id/likeBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/commentCnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="111"
+        android:textColor="@color/color_black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/commentBtn"
+        app:layout_constraintStart_toEndOf="@id/commentBtn"
+        app:layout_constraintTop_toTopOf="@id/commentBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/currentCommentView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:text="풍경이 정말 예쁘네요. 이벤트 일등은 님이신듯..."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/likeBtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

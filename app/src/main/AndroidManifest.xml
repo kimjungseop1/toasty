@@ -196,6 +196,9 @@
             android:name=".ui.component.home.tab1_home.search.SearchActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.component.home.tab2_Lib.detail.LibDetailActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

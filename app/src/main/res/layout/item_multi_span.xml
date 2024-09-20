@@ -8,24 +8,12 @@
         android:id="@+id/thumbnailView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:background="@color/color_FF5139"
+        android:src="@drawable/sample_img_1"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/playTimeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias=".1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/thumbnailView"
-        app:layout_constraintVertical_bias=".9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@
                 android:textSize="30dp"
                 android:textColor="@color/color_white"
                 android:gravity="center"
-                android:background="@color/color_0047FF"
+                android:background="@color/color_8e5d4b"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

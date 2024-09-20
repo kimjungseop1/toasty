@@ -1,11 +1,14 @@
 package com.syncrown.toasty.ui.component.home.tab2_Lib.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.toasty.R
@@ -15,52 +18,58 @@ import com.syncrown.toasty.databinding.BottomSheetTypeBinding
 import com.syncrown.toasty.databinding.FragmentLibBinding
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.GridSpacingItemDecoration
+import com.syncrown.toasty.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.GridItem
 import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.LibGridItemAdapter
+import com.syncrown.toasty.ui.component.home.tab2_Lib.main.adapter.MultiSelectAdapter
 
 
-class LibFragment : Fragment() {
+class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
+    MultiSelectAdapter.OnItemSelectedListener {
     private lateinit var binding: FragmentLibBinding
+
+    private val itemList = listOf("전체", "AR 영상", "인생네컷", "자유인쇄", "라벨 스티커", "행사 스티커")
+    private lateinit var categoryAdapter: MultiSelectAdapter
+
+    companion object {
+        private const val GRID_SPAN_COUNT = 3
+        private const val LINEAR_SPAN_COUNT = 1
+        private const val SPACE = 3
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLibBinding.inflate(layoutInflater)
 
-        binding.btn1.setOnClickListener {
+        binding.filterBtn.setOnClickListener {
             // 필터팝업
             showFilterBottomSheet()
         }
 
-        binding.btn2.setOnClickListener {
+        binding.paperBtn.setOnClickListener {
             // 용지팝업
             showCartridgeBottomSheet()
         }
 
-        binding.btn3.setOnClickListener {
-            // 유형팝업
+        categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
+        binding.contentsBtn.setOnClickListener {
+            // 컨텐츠팝업
             showTypeBottomSheet()
         }
 
-        binding.btn4.isSelected = true
-        updateRecyclerUi()
+        showGridStyle(GRID_SPAN_COUNT, SPACE)
+        binding.gridBtn.setOnClickListener {
+            showGridStyle(GRID_SPAN_COUNT, SPACE)
+        }
 
-        binding.btn4.setOnClickListener {
-            binding.btn4.isSelected = !binding.btn4.isSelected
-            updateRecyclerUi()
+        binding.linearBtn.setOnClickListener {
+            showGridStyle(LINEAR_SPAN_COUNT, SPACE)
         }
 
         return binding.root
-    }
-
-    private fun updateRecyclerUi() {
-        if (binding.btn4.isSelected) {
-            showGridStyle(3,3)
-        } else {
-            showGridStyle(1,3)
-        }
     }
 
     private fun showFilterBottomSheet() {
@@ -88,26 +97,38 @@ class LibFragment : Fragment() {
     }
 
     private fun showTypeBottomSheet() {
-        val binding = BottomSheetTypeBinding.inflate(layoutInflater)
+        val sheetBinding = BottomSheetTypeBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setCancelable(false)
-        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.setContentView(sheetBinding.root)
 
-        binding.closeBtn.setOnClickListener { bottomSheetDialog.dismiss() }
+        sheetBinding.closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        sheetBinding.recyclerCate.layoutManager = LinearLayoutManager(requireContext())
+        sheetBinding.recyclerCate.adapter = categoryAdapter
+
+        sheetBinding.submitBtn.setOnClickListener {
+            if (binding.contentsBtn.text.toString().isEmpty()) {
+                categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
+            }
+            bottomSheetDialog.dismiss()
+        }
 
         bottomSheetDialog.show()
     }
 
     private fun showGridStyle(spanCount: Int, spacing: Int) {
         val items = listOf(
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
-            GridItem(R.drawable.icon_home, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
+            GridItem(R.drawable.sample_img_1, "00:00"),
         )
 
         clearItemDecorations(binding.recyclerLib)
@@ -121,7 +142,7 @@ class LibFragment : Fragment() {
             )
         )
 
-        binding.recyclerLib.adapter = LibGridItemAdapter(items)
+        binding.recyclerLib.adapter = LibGridItemAdapter(items, spanCount, this)
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -131,4 +152,31 @@ class LibFragment : Fragment() {
         }
     }
 
+    // 보관함 목록의 아이템을 선택
+    override fun onItemClick(position: Int) {
+        Log.e("jung", "click pos : $position")
+        goDetail()
+    }
+
+    // 전체 컨텐츠 팝업화면의 리스트 아이템 선택
+    override fun onItemSelected(position: Int, isSelected: Boolean) {
+        Log.e("jung", "pos : $position, isSelected : $isSelected")
+        var currentText = binding.contentsBtn.text.toString()
+
+        if (isSelected) {
+            if (!currentText.contains(itemList[position])) {
+                binding.contentsBtn.append(itemList[position])
+            }
+        } else {
+            if (currentText.contains(itemList[position])) {
+                currentText = currentText.replace(itemList[position], "")
+                binding.contentsBtn.text = currentText.trim()
+            }
+        }
+    }
+
+    private fun goDetail() {
+        val intent = Intent(requireContext(), LibDetailActivity::class.java)
+        startActivity(intent)
+    }
 }

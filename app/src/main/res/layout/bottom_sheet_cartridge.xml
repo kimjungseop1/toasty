@@ -52,6 +52,8 @@
                 android:id="@+id/closeBtn"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/icon_popup_close"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +86,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/custom_button_blue_round_5dp"
+            android:background="@drawable/custom_button_brown_round_5dp"
             android:gravity="center"
             android:text="적용"
             android:textColor="@color/color_white"
