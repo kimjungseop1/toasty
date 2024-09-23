@@ -199,6 +199,10 @@
         <activity
             android:name=".ui.component.home.tab2_Lib.detail.LibDetailActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.paper_guide.PaperGuideActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

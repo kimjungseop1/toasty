@@ -2,12 +2,20 @@ package com.syncrown.toasty.ui.component.home
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.syncrown.toasty.ui.base.BaseViewModel
 
 class MainViewModel : BaseViewModel() {
     /***********************************************************************************************
      * 메인
      **********************************************************************************************/
+    private val _onPaperGuideActivityClosed : MutableLiveData<String> = MutableLiveData("")
+    val onPaperGuideActivityClosed: LiveData<String> get() = _onPaperGuideActivityClosed
+
+    fun paperGuideActivityClosed(newMessage: String) {
+        _onPaperGuideActivityClosed.postValue(newMessage)
+    }
 
 
     /***********************************************************************************************

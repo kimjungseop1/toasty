@@ -33,4 +33,11 @@
             @android:color/transparent
         </item>
     </style>
+    
+    <style name="tabTextSizeStyle" parent="TextAppearance.Design.Tab">
+        <item name="paddingStart">18dp</item>
+        <item name="paddingEnd">18dp</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

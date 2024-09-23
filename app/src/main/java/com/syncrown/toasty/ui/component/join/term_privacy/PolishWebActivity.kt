@@ -65,14 +65,12 @@ class PolishWebActivity : BaseActivity() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
                     // 페이지 로드 시작 시 필요한 작업 수행
-                    Log.e("jung", "페이지 로드 시작")
                 }
 
                 // 페이지 로드 완료 시 호출
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
                     // 페이지 로드 완료 시 필요한 작업 수행
-                    Log.e("jung", "페이지 로드 완료")
                 }
 
                 // 페이지 로드 오류 시 호출
@@ -83,7 +81,6 @@ class PolishWebActivity : BaseActivity() {
                 ) {
                     super.onReceivedError(view, request, error)
                     // 오류 발생 시 처리
-                    Log.e("jung", "페이지 로드 오류")
                 }
 
                 // 특정 URL 요청을 가로채서 다른 동작을 수행할 때 사용

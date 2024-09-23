@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -30,6 +31,7 @@ import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
 import com.syncrown.toasty.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.toasty.ui.component.home.tab5_more.MoreFragment
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -39,6 +41,15 @@ class MainActivity : BaseActivity() {
     private lateinit var backPressCloseHandler: BackPressCloseHandler
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            mainViewModel.onPaperGuideActivityClosed.observe(this@MainActivity, Observer { value ->
+                if (value.equals("GO_STORE")) {
+                    onPaperGuideClosed()
+                    mainViewModel.paperGuideActivityClosed("")
+                }
+            })
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 fetchDataFromNetwork()
@@ -165,7 +176,6 @@ class MainActivity : BaseActivity() {
         itemView.removeViewAt(itemView.childCount - 1)
     }
 
-
     private fun showEventBottomSheet() {
         val binding = BottomSheetEventBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(this)
@@ -183,6 +193,10 @@ class MainActivity : BaseActivity() {
         binding.closeView.setOnClickListener { bottomSheetDialog.dismiss() }
 
         bottomSheetDialog.show()
+    }
+
+    fun onPaperGuideClosed() {
+        binding.bottomNavigation.selectedItemId = R.id.nav_4
     }
 
     private fun goARpage() {
