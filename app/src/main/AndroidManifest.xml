@@ -203,6 +203,10 @@
         <activity
             android:name=".ui.component.home.tab1_home.paper_guide.PaperGuideActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.connect_device.guide.DeviceHowUseActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

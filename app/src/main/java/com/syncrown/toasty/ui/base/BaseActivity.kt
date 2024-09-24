@@ -1,5 +1,6 @@
 package com.syncrown.toasty.ui.base
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -12,5 +13,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initViewBinding()
         observeViewModel()
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 }

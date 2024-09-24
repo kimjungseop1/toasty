@@ -8,9 +8,9 @@ import com.google.android.material.tabs.TabLayout
 import com.syncrown.toasty.R
 
 /**
- * 홈화면에서 이렇게 활용해 볼까요에서 사용
+ * 디바이스 연결 사용방법 가이드에서 사용
  */
-class CustomTabLayout @JvmOverloads constructor(
+class CustomTabLayout2 @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -23,16 +23,16 @@ class CustomTabLayout @JvmOverloads constructor(
 
     private fun customizeTabBackground(tab: Tab) {
         // 모서리를 둥글게 만들기 위한 GradientDrawable 설정
-        val radius = CommonFunc.dpToPx(20f,context)
+        val radius = CommonFunc.dpToPx(13f,context)
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.RECTANGLE
-        drawable.setColor(ContextCompat.getColor(context, R.color.color_FBCF45))
+        drawable.setColor(ContextCompat.getColor(context, R.color.color_white))
         drawable.cornerRadius = radius
 
         // 선택되지 않은 상태의 배경
         val unselectedDrawable = GradientDrawable()
         unselectedDrawable.shape = GradientDrawable.RECTANGLE
-        unselectedDrawable.setColor(ContextCompat.getColor(context, R.color.color_F0F0F0))
+        unselectedDrawable.setColor(ContextCompat.getColor(context, android.R.color.transparent))
         unselectedDrawable.cornerRadius = radius
 
         // 선택된 탭의 배경과 그렇지 않은 탭의 배경을 설정

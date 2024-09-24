@@ -1,6 +1,7 @@
 package com.syncrown.toasty.ui.component.home.tab1_home.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +33,20 @@ class Case1Fragment : Fragment() {
         arrayList.add("1")
         arrayList.add("1")
 
-        binding.recyclerCase.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerCase.adapter = CaseListAdapter(requireContext(), arrayList)
+        binding.recyclerCase.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val caseAdapter = CaseListAdapter(requireContext(), arrayList)
+        caseAdapter.setOnItemClickListener(object : CaseListAdapter.OnItemClickListener {
+            override fun onClick(position: Int) {
+                Log.e("jung", "click $position")
+            }
+        })
+        binding.recyclerCase.adapter = caseAdapter
+
         binding.recyclerCase.addItemDecoration(
             HorizontalSpaceItemDecoration(
                 CommonFunc.dpToPx(
-                    16,
+                    12,
                     requireContext()
                 )
             )

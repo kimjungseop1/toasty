@@ -134,7 +134,7 @@ class HomeFragment : Fragment() {
         val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pagerWidth)
         val screenWidth = resources.displayMetrics.widthPixels
         val pagerPadding = ((screenWidth - pagerWidth) * 0.5).toInt()
-        val offsetPx = ((screenWidth - pagerWidth) * 0.25).toInt()
+        val offsetPx = ((screenWidth - pagerWidth) * 0.05).toInt()
 
         binding.bannerView.currentItem = 0
         binding.pageView.text = binding.bannerView.currentItem.toString() + " /" + arrayList.size
@@ -147,6 +147,7 @@ class HomeFragment : Fragment() {
                     binding.pageView.text = "$currentPage / $totalItems"
                 }
             })
+
         binding.bannerView.apply {
             adapter = bannerAdapter
             offscreenPageLimit = arrayList.size
@@ -180,7 +181,7 @@ class HomeFragment : Fragment() {
         for (i in 0 until tabStrip.childCount) {
             val tab = tabStrip.getChildAt(i)
             val layoutParams = tab.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.marginEnd = CommonFunc.dpToPx(5, requireContext()) // 탭 사이의 간격 (픽셀)
+            layoutParams.marginEnd = CommonFunc.dpToPx(5, requireContext())
             tab.requestLayout()
         }
     }
@@ -206,24 +207,25 @@ class HomeFragment : Fragment() {
             // 처음 진입시 가이드 화면으로 이동
             val intent = Intent(requireContext(), ArGuideActivity::class.java)
             startActivity(intent)
+
+            AppDataPref.isArGuide = false
+            AppDataPref.save(requireActivity())
         } else {
-            if (AppDataPref.isCatridge) {
-                // 용지와 프린트 모두 연결되있을때 영상 선택화면
-                val intent = Intent(requireContext(), VideoSelectActivity::class.java)
-                intent.putExtra(
-                    "FROM_HOME_CATEGORY",
-                    getString(R.string.cartridge_empty_action_text_1)
-                )
-                startActivity(intent)
-            } else {
-                // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
-                val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-                intent.putExtra(
-                    "FROM_HOME_CATEGORY",
-                    getString(R.string.cartridge_empty_action_text_1)
-                )
-                startActivity(intent)
-            }
+            //개발중 임시 진입
+            val intent = Intent(requireContext(), VideoSelectActivity::class.java)
+            intent.putExtra(
+                "FROM_HOME_CATEGORY",
+                getString(R.string.cartridge_empty_action_text_1)
+            )
+            startActivity(intent)
+
+//            // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
+//            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+//            intent.putExtra(
+//                "FROM_HOME_CATEGORY",
+//                getString(R.string.cartridge_empty_action_text_1)
+//            )
+//            startActivity(intent)
         }
     }
 

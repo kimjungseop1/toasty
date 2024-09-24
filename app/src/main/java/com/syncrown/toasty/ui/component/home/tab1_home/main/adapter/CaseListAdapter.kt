@@ -10,7 +10,7 @@ import com.syncrown.toasty.databinding.ItemMainEventBinding
 class CaseListAdapter(
     private val context: Context,
     private val sliderItems: ArrayList<String>
-) : RecyclerView.Adapter<CaseListAdapter.SlideBannerHolder>() {
+) : RecyclerView.Adapter<CaseListAdapter.CaseHolder>() {
 
     interface OnItemClickListener {
         fun onClick(position: Int)
@@ -20,8 +20,8 @@ class CaseListAdapter(
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlideBannerHolder {
-        return SlideBannerHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CaseHolder {
+        return CaseHolder(
             ItemCaseBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -30,7 +30,7 @@ class CaseListAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: SlideBannerHolder, position: Int) {
+    override fun onBindViewHolder(holder: CaseHolder, position: Int) {
         holder.onBind(context, position)
     }
 
@@ -38,7 +38,7 @@ class CaseListAdapter(
         return sliderItems.size
     }
 
-    inner class SlideBannerHolder(binding: ItemCaseBinding) :
+    inner class CaseHolder(binding: ItemCaseBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val eventBinding: ItemCaseBinding = binding
         fun onBind(context: Context?, position: Int) {

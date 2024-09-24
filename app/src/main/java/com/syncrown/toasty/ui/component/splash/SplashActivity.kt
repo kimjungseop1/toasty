@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.syncrown.toasty.AppDataPref
 import com.syncrown.toasty.databinding.ActivitySplashBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.DialogCommon
+import com.syncrown.toasty.ui.commons.SplashViewModelFactory
 import com.syncrown.toasty.ui.component.home.MainActivity
 import com.syncrown.toasty.ui.component.login.main.LoginActivity
 import kotlinx.coroutines.delay
@@ -20,7 +22,11 @@ import kotlinx.coroutines.launch
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
-    private val splashViewModel: SplashViewModel by viewModels()
+    private lateinit var splashViewModel: SplashViewModel
+    companion object {
+        private const val REQUEST_UPDATE_CODE = 100
+    }
+
 
     private val dialogCommon = DialogCommon()
 
@@ -44,18 +50,19 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val factory = SplashViewModelFactory(application)
+        splashViewModel = ViewModelProvider(this, factory).get(SplashViewModel::class.java)
+
         lifecycleScope.launch {
             delay(1500)
 
-            if (AppDataPref.isUpdate) {
+            //TODO 앱 업데이 체크후 팝업 발생
+            splashViewModel.checkForUpdate()
+            splashViewModel.onUpdateAvailableListener = {
                 showUpdateVersion()
-                return@launch
             }
 
-            if (AppDataPref.isSystemCheck) {
-                showServerCheck("9월30일")
-                return@launch
-            }
+
 
             //임시
             goMain()
@@ -81,6 +88,7 @@ class SplashActivity : BaseActivity() {
             //TODO cancel
         }, {
             //TODO  ok
+            splashViewModel.checkForUpdateAndStart(this, REQUEST_UPDATE_CODE)
         })
     }
 

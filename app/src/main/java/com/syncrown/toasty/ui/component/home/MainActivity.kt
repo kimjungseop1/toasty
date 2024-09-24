@@ -145,8 +145,6 @@ class MainActivity : BaseActivity() {
             showEventBottomSheet()
         }
 
-        binding.actionbar.actionBattery.text = "53%"
-
         // 네비게이션 뱃지가 필요할때 사용
         showBottomNavigationViewBadge(this, binding.bottomNavigation, 2)
     }
@@ -195,7 +193,7 @@ class MainActivity : BaseActivity() {
         bottomSheetDialog.show()
     }
 
-    fun onPaperGuideClosed() {
+    private fun onPaperGuideClosed() {
         binding.bottomNavigation.selectedItemId = R.id.nav_4
     }
 

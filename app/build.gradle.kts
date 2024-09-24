@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -100,4 +99,11 @@ dependencies {
 
     // image cropper
     implementation(libs.ucrop)
+
+    // dot indicator
+    implementation(libs.dotsindicator)
+
+    //noinspection RiskyLibrary
+    implementation(libs.play.core)
+
 }

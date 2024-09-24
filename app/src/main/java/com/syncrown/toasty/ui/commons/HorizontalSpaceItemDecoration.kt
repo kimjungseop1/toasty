@@ -8,7 +8,6 @@ class HorizontalSpaceItemDecoration(private val spaceWidth: Int) : RecyclerView.
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         outRect.right = spaceWidth
 
-        // Optionally, add space to the left of the first item and right of the last item
         if (parent.getChildAdapterPosition(view) == 0) {
             outRect.left = spaceWidth
         }

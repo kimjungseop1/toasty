@@ -10,10 +10,101 @@
         layout="@layout/actionbar_style_1" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AR영상인쇄 가이드"
+        android:layout_marginTop="27dp"
+        android:text="AR 영상 인쇄"
+        android:textColor="@color/color_black"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="움직이는 영상을 인쇄하고,\n추억을 보관해보세요."
+        android:textColor="@color/color_black"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dotIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        app:dotsColor="@color/color_868686"
+        app:dotsSize="14dp"
+        app:dotsSpacing="14dp"
+        app:dotsWidthFactor="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/desc_2"
+        app:progressMode="false"
+        app:selectedDotColor="@color/color_face45" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pagerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dotIndicator" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="19dp"
+        android:text="인쇄된 영상은, 애플리케이션의 스캐너를 사용하여 AR로 재생할 수 있습니다."
+        android:textColor="@color/color_black"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pagerView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/startView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/desc_3"
+        app:layout_constraintVertical_bias="1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_CECECE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/printStartView"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/custom_button_brown_round_5dp"
+            android:gravity="center"
+            android:text="AR 영상 인쇄 시작하기"
+            android:textColor="@color/color_white"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_black"
     app:behavior_draggable="false"
     app:behavior_hideable="false"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bodyView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_bottom_event_round_15dp"
+        android:clipChildren="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -57,7 +60,8 @@
             android:id="@+id/continueCheckView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="18dp"
             android:button="@drawable/custom_checkbox_select_1"
             android:paddingStart="10dp"
             android:text="@string/home_event_bottom_days_more"
@@ -84,4 +88,5 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toTopOf="@id/continueCheckView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
