@@ -207,6 +207,22 @@
         <activity
             android:name=".ui.component.home.tab1_home.connect_device.guide.DeviceHowUseActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.preview.PreViewCartridgeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.life2cut.edit.EditPrint2CutImageActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.life2cut.crop.CropImageActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

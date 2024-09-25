@@ -1,31 +1,28 @@
-package com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter
+package com.syncrown.toasty.ui.component.home.tab1_home.life2cut.image_select.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.syncrown.toasty.databinding.ItemGridVideoBinding
-import com.syncrown.toasty.ui.commons.CommonFunc
+import com.syncrown.toasty.databinding.ItemGridImageBinding
 
-class SelectGridItemAdapter(
+class ImageSelectGridItemAdapter(
     private val context: Context,
-    private val items: List<VideoInfo>,
+    private val items: List<ImageInfo>,
     private val itemClickListener: OnItemClickListener
 ) :
-    RecyclerView.Adapter<SelectGridItemAdapter.GridViewHolder>() {
+    RecyclerView.Adapter<ImageSelectGridItemAdapter.GridViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(videoInfo: VideoInfo)
+        fun onItemClick(imageInfo: ImageInfo)
     }
 
-    inner class GridViewHolder(private val binding: ItemGridVideoBinding) :
+    inner class GridViewHolder(private val binding: ItemGridImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: List<VideoInfo>, position: Int) {
+        fun bind(item: List<ImageInfo>, position: Int) {
 
             Glide.with(context).load(item[position].filePath).into(binding.thumbnailView)
-
-            binding.playTimeView.text = CommonFunc.convertMillisToMMSS(item[position].duration)
 
             binding.root.setOnClickListener {
                 itemClickListener.onItemClick(item[position])
@@ -35,7 +32,7 @@ class SelectGridItemAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val binding =
-            ItemGridVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemGridImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GridViewHolder(binding)
     }
 
@@ -46,7 +43,6 @@ class SelectGridItemAdapter(
     override fun getItemCount(): Int = items.size
 }
 
-data class VideoInfo(
-    val filePath: String,
-    val duration: Long // Duration in milliseconds
+data class ImageInfo(
+    val filePath: String
 )

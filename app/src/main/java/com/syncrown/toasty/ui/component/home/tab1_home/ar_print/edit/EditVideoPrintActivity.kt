@@ -5,18 +5,15 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.ActivityEditVideoPrintBinding
-import com.syncrown.toasty.databinding.CustomDrawingViewBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.ActivityFinishManager
 import com.syncrown.toasty.ui.commons.CommonFunc
@@ -29,19 +26,12 @@ import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.adapter.Sti
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.adapter.ThumbnailAdapter
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.adapter.VideoEditAdapter
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity
-import com.syncrown.toasty.ui.editor_test.CustomDrawingView
 import com.syncrown.toasty.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.toasty.ui.photoeditor.PhotoEditor
 import com.syncrown.toasty.ui.photoeditor.PhotoEditorView
 import com.syncrown.toasty.ui.photoeditor.TextStyleBuilder
 import com.syncrown.toasty.ui.photoeditor.ViewType
 import com.syncrown.toasty.ui.photoeditor.shape.ShapeBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 
 class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,

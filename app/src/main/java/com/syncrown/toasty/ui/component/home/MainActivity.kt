@@ -31,7 +31,6 @@ import com.syncrown.toasty.ui.component.home.tab3_share.ShareFragment
 import com.syncrown.toasty.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.toasty.ui.component.home.tab5_more.MoreFragment
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -176,7 +175,7 @@ class MainActivity : BaseActivity() {
 
     private fun showEventBottomSheet() {
         val binding = BottomSheetEventBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)

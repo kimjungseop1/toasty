@@ -400,18 +400,32 @@
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--     서비스 이용 가이드       -->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/serviceGuideView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bg_home_guide_banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clView_1" />
+
             <!--    이렇게 활용해 볼까요     -->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/desc_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="37dp"
                 android:text="이렇게 활용해 볼까요?"
                 android:textColor="@color/color_8e5d4b"
                 android:textSize="24dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/clView_1" />
+                app:layout_constraintTop_toBottomOf="@id/serviceGuideView" />
 
             <com.syncrown.toasty.ui.commons.CustomTabLayout
                 android:id="@+id/customTabView"

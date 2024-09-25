@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.1"
+androidImageCropper = "4.6.0"
 coreVersion = "1.10.3"
 dotsindicator = "5.0"
 facebookAndroidSdk = "[4,5)"
@@ -38,6 +39,7 @@ ucrop = "2.2.8"
 v2User = "2.12.0"
 
 [libraries]
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }

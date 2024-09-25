@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
         //TODO 메인 베너
         showSlideBanner()
 
-        //TODO 용지 장착 가이드
+        //TODO 용지 장착 가이드 (프린트 연결되고 용지 없는 상태에서 visible)
         binding.guidePaperBtn.setOnClickListener {
             goPaperGuide()
         }
@@ -80,6 +80,11 @@ class HomeFragment : Fragment() {
         //TODO 라벨 스티커
         binding.labelStickerBtn.setOnClickListener {
             goLabelSticker()
+        }
+
+        //TODO 서비스 이용 가이드
+        binding.serviceGuideView.setOnClickListener {
+
         }
 
         //TODO 이렇게 활용해 볼까요
@@ -212,26 +217,34 @@ class HomeFragment : Fragment() {
             AppDataPref.save(requireActivity())
         } else {
             //개발중 임시 진입
-            val intent = Intent(requireContext(), VideoSelectActivity::class.java)
-            intent.putExtra(
-                "FROM_HOME_CATEGORY",
-                getString(R.string.cartridge_empty_action_text_1)
-            )
-            startActivity(intent)
-
-//            // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
-//            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+//            val intent = Intent(requireContext(), VideoSelectActivity::class.java)
 //            intent.putExtra(
 //                "FROM_HOME_CATEGORY",
 //                getString(R.string.cartridge_empty_action_text_1)
 //            )
 //            startActivity(intent)
+
+            // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra(
+                "FROM_HOME_CATEGORY",
+                getString(R.string.cartridge_empty_action_text_1)
+            )
+            startActivity(intent)
         }
     }
 
     private fun goLife4Cut() {
+//        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+//        intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_2))
+//        startActivity(intent)
+
+        // 용지가 없거나 프린트 미연결상태 용지화면으로 이동
         val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_2))
+        intent.putExtra(
+            "FROM_HOME_CATEGORY",
+            getString(R.string.cartridge_empty_action_text_2)
+        )
         startActivity(intent)
     }
 

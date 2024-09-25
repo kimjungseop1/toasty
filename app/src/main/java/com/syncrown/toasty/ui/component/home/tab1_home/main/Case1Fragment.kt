@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.toasty.databinding.FragmentCase1Binding
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.HorizontalSpaceItemDecoration
 import com.syncrown.toasty.ui.component.home.tab1_home.main.adapter.CaseListAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Case1Fragment : Fragment() {
     private lateinit var binding: FragmentCase1Binding
+    private lateinit var arrayList: ArrayList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,10 +33,19 @@ class Case1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val arrayList = ArrayList<String>()
+        lifecycleScope.launch {
+            arrayList = ArrayList()
+
+            setContentList()
+            updateView()
+        }
+    }
+
+    private fun setContentList() {
         arrayList.add("1")
         arrayList.add("1")
         arrayList.add("1")
+
 
         binding.recyclerCase.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -51,7 +65,15 @@ class Case1Fragment : Fragment() {
                 )
             )
         )
+    }
 
-
+    private fun updateView() {
+        if (arrayList.size == 0) {
+            binding.recyclerCase.visibility = View.GONE
+            binding.emptyView.visibility = View.VISIBLE
+        } else {
+            binding.recyclerCase.visibility = View.VISIBLE
+            binding.emptyView.visibility = View.GONE
+        }
     }
 }

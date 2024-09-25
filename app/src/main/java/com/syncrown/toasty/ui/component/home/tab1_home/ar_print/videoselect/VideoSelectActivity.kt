@@ -10,8 +10,8 @@ import com.syncrown.toasty.databinding.ActivityVideoSelectBinding
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.GridSpacingItemDecoration
-import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.SelectGridItemAdapter
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.VideoInfo
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videoselect.adapter.VideoSelectGridItemAdapter
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity
 
 
@@ -82,10 +82,10 @@ class VideoSelectActivity : BaseActivity() {
             )
         )
 
-        val adapter = SelectGridItemAdapter(
+        val adapter = VideoSelectGridItemAdapter(
             this,
             videoList,
-            object : SelectGridItemAdapter.OnItemClickListener {
+            object : VideoSelectGridItemAdapter.OnItemClickListener {
                 override fun onItemClick(videoInfo: VideoInfo) {
                     goVideoTrim(videoInfo.filePath)
                 }

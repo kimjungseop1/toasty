@@ -106,4 +106,7 @@ dependencies {
     //noinspection RiskyLibrary
     implementation(libs.play.core)
 
+    //crop image
+    implementation(libs.android.image.cropper)
+
 }
