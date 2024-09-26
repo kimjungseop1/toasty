@@ -17,8 +17,8 @@
     <string name="splash_alert_inspection_message">서비스 점검중입니다.\n예상 종료 시간 : %s</string>
 
     <!-- 로그인  -->
-    <string name="login_title_bic">TOASTY</string>
-    <string name="login_title_small">캐치프레이즈</string>
+    <string name="login_title_bic">ARPANG</string>
+    <string name="login_title_small">AR 즐거움이 팡팡</string>
     <string name="login_email_desc">이메일로 시작하기</string>
     <string name="login_email_button_title">이메일로 계속하기</string>
     <string name="login_sns_account_desc">SNS 계정으로 로그인</string>
@@ -124,4 +124,8 @@
     <string name="more_logout_popup_cancel">취소</string>
     <string name="more_logout_popup_ok">로그아웃</string>
 
+    <!--  태그입력  -->
+    <string name="tag_popup_content_message">해당 태그를 삭제하시겠습니까?</string>
+    <string name="tag_popup_left_btn">닫기</string>
+    <string name="tag_popup_right_btn">삭제</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.syncrown.toasty.ui.commons
 
 import android.annotation.SuppressLint
+import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -88,5 +89,19 @@ class CommonFunc {
             return Base64.encodeToString(byteArray, Base64.DEFAULT)
         }
 
+        @SuppressLint("Range", "Recycle")
+        fun path2uri(context: Context, filePath: String): Uri {
+            val cursor = context.contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
+                "_data = '$filePath'", null, null
+            )
+
+            cursor!!.moveToNext()
+            val id = cursor.getInt(cursor.getColumnIndex("_id"))
+            val uri =
+                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id.toLong())
+
+            return uri
+        }
     }
 }

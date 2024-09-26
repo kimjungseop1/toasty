@@ -177,7 +177,6 @@ class MainActivity : BaseActivity() {
         val binding = BottomSheetEventBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)
 
         binding.continueCheckView.setOnCheckedChangeListener { _, isChecked ->

@@ -1,4 +1,4 @@
-package com.syncrown.toasty.ui.component.login.main
+package com.syncrown.toasty.ui.component.login
 
 import android.app.Activity
 import android.content.Context

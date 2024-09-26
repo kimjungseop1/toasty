@@ -32,6 +32,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isDeleteHashTag = false //TODO 해시태그 삭제
     private var isEditCancel = false //TODO 인쇄편집 취소
     private var isLogout = false //TODO 로그아웃
+    private var isTagDelete = false //TODO 태그 삭제
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -53,6 +54,26 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogTagDelete(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isTagDelete = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showTagDelete(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogTagDelete(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogEditCancel(
@@ -271,6 +292,30 @@ class DialogCommon : DialogFragment(), OnClickListener {
 
                 dialogNormalBinding.btnRight.text = context?.let {
                     getString(R.string.more_logout_popup_ok)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isTagDelete -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.tag_popup_content_message)
+                }
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.tag_popup_right_btn)
                 }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)

@@ -103,10 +103,14 @@ dependencies {
     // dot indicator
     implementation(libs.dotsindicator)
 
-    //noinspection RiskyLibrary
+    // noinspection RiskyLibrary
     implementation(libs.play.core)
 
-    //crop image
+    // crop image
     implementation(libs.android.image.cropper)
+
+    // dynamically add view
+    implementation(libs.flexbox)
+
 
 }

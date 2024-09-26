@@ -88,7 +88,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.login.main.LoginActivity"
+            android:name=".ui.component.login.LoginActivity"
             android:exported="true" />
 
         <activity
@@ -108,15 +108,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.login.find_pw.FindPwActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.join.email_cert.CertEmailActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".ui.component.login.main.LoginPwActivity"
             android:exported="true" />
 
         <activity
@@ -222,6 +214,14 @@
 
         <activity
             android:name=".ui.component.home.tab1_home.life2cut.crop.CropImageActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.life2cut.input_tag.InputTagActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.life2cut.preview.TwoCutPreviewActivity"
             android:exported="true" />
     </application>
 

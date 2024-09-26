@@ -26,6 +26,7 @@
         android:text="@string/login_title_bic"
         android:textColor="@color/color_black"
         android:textSize="36dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -44,61 +45,6 @@
         app:layout_constraintStart_toStartOf="@id/titleView"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/desc_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="@string/login_email_desc"
-        android:textColor="@color/color_171717"
-        android:textSize="16dp"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/titleSubView" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputEmailView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/custom_editbox_select"
-        android:hint="@string/login_email_editbox_hint"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:maxLines="1"
-        android:textColor="@color/color_171717"
-        android:textColorHint="@color/color_CECECE"
-        android:textSize="16dp"
-        android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/desc_1" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/emailValidTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/login_email_validation"
-        android:textSize="13dp"
-        android:visibility="gone"
-        android:textColor="@color/color_FF5139"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/inputEmailView"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/emailStart"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_button_selector_disable_enable"
-        android:gravity="center"
-        android:text="@string/login_email_button_title"
-        android:textColor="@color/color_white"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/emailValidTxt" />
-
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
@@ -107,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/emailStart"
+        app:layout_constraintTop_toBottomOf="@id/titleSubView"
         app:layout_constraintVertical_bias=".2" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -125,63 +71,119 @@
         app:layout_constraintStart_toStartOf="@id/divider"
         app:layout_constraintTop_toTopOf="@id/divider" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/googleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:src="@drawable/icon_google"
-        app:layout_constraintEnd_toStartOf="@id/facebookBtn"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/custom_editbox_stroke_gray_5dp"
+        android:drawableStart="@drawable/icon_google"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="구글 로그인"
+        android:textColor="@color/color_black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/facebookBtn"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/desc_2" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/facebookBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:src="@drawable/icon_facebook"
-        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
-        app:layout_constraintEnd_toStartOf="@id/kakaoBtn"
-        app:layout_constraintStart_toEndOf="@id/googleBtn"
-        app:layout_constraintTop_toTopOf="@id/googleBtn" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/kakaoBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:src="@drawable/icon_kakao"
-        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
-        app:layout_constraintEnd_toStartOf="@id/naverBtn"
-        app:layout_constraintStart_toEndOf="@id/facebookBtn"
-        app:layout_constraintTop_toTopOf="@id/googleBtn" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/naverBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:src="@drawable/icon_naver"
-        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
-        app:layout_constraintEnd_toStartOf="@id/appleBtn"
-        app:layout_constraintStart_toEndOf="@id/kakaoBtn"
-        app:layout_constraintTop_toTopOf="@id/googleBtn" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/appleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="center"
-        android:src="@drawable/icon_apple"
-        app:layout_constraintBottom_toBottomOf="@id/googleBtn"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/custom_facebook_solid_5dp"
+        android:drawableStart="@drawable/icon_facebook"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="페이스북 로그인"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/kakaoBtn"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/naverBtn"
-        app:layout_constraintTop_toTopOf="@id/googleBtn" />
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/googleBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/kakaoBtn"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/custom_kakao_solid_5dp"
+        android:drawableStart="@drawable/icon_kakao"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="카카오 로그인"
+        android:textColor="@color/color_black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/naverBtn"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/facebookBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/naverBtn"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/custom_naver_solid_5dp"
+        android:drawableStart="@drawable/icon_naver"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="네이버 로그인"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/appleBtn"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/kakaoBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appleBtn"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/custom_apple_solid_5dp"
+        android:drawableStart="@drawable/icon_apple"
+        android:drawablePadding="20dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="Apple 로그인"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/naverBtn" />
+
+    <Button
+        android:id="@+id/goMainBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="goMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

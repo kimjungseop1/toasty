@@ -3,7 +3,6 @@ package com.syncrown.toasty.ui.component.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +13,7 @@ import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.DialogCommon
 import com.syncrown.toasty.ui.commons.SplashViewModelFactory
 import com.syncrown.toasty.ui.component.home.MainActivity
-import com.syncrown.toasty.ui.component.login.main.LoginActivity
+import com.syncrown.toasty.ui.component.login.LoginActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -65,8 +64,7 @@ class SplashActivity : BaseActivity() {
 
 
             //임시
-            goMain()
-//            goLogin()
+            goLogin()
 
         }
     }

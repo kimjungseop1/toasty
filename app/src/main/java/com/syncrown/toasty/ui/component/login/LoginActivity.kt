@@ -1,11 +1,8 @@
-package com.syncrown.toasty.ui.component.login.main
+package com.syncrown.toasty.ui.component.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -14,7 +11,7 @@ import com.syncrown.toasty.databinding.ActivtyLoginBinding
 import com.syncrown.toasty.network.NetworkResult
 import com.syncrown.toasty.ui.base.BaseActivity
 import com.syncrown.toasty.ui.commons.DialogCommon
-import com.syncrown.toasty.ui.component.join.main.JoinEmailActivity
+import com.syncrown.toasty.ui.component.home.MainActivity
 
 
 class LoginActivity : BaseActivity() {
@@ -94,44 +91,6 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
-        binding.inputEmailView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val email = binding.inputEmailView.text?.trim().toString()
-                if (email.isEmpty() || email.matches(emailPattern)) {
-                    binding.inputEmailView.isActivated = false
-                    binding.emailValidTxt.visibility = View.GONE
-                } else {
-                    binding.inputEmailView.isActivated = true
-                    binding.emailValidTxt.visibility = View.VISIBLE
-                }
-
-                if (email.isNotEmpty() && email.matches(emailPattern)) {
-                    binding.emailStart.isSelected = true
-                } else {
-                    binding.emailStart.isSelected = false
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-
-        binding.emailStart.isSelected = false
-        binding.emailStart.setOnClickListener {
-            if (binding.emailStart.isSelected) {
-//            loginViewModel.checkMember(binding.inputEmailView.text.toString())
-
-//            goEmailJoin()
-                goPwLogin()
-            }
-        }
-
         binding.googleBtn.setOnClickListener {
             loginViewModel.initiateSignIn(this, signInLauncher)
         }
@@ -152,17 +111,11 @@ class LoginActivity : BaseActivity() {
             //TODO 개발중
         }
 
-    }
+        binding.goMainBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
 
-    private fun goEmailJoin() {
-        val intent = Intent(this, JoinEmailActivity::class.java)
-        intent.putExtra("INPUT_EMAIL_ADDRESS", binding.inputEmailView.text.toString())
-        startActivity(intent)
-    }
-
-    private fun goPwLogin() {
-        val intent = Intent(this, LoginPwActivity::class.java)
-        intent.putExtra("INPUT_EMAIL_ADDRESS", binding.inputEmailView.text.toString())
-        startActivity(intent)
     }
 }
