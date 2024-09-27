@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Toasty</string>
+    <string name="app_name">알팡</string>
     <string name="kakao_app_key">80fe788ee827bf52b012dfb4c6b78a3a</string>
     <string name="kakao_scheme">kakao80fe788ee827bf52b012dfb4c6b78a3a</string>
     <string name="google_client_id">593219985516–804hlbe1iv3vi5epgkfa826i24lt3r4v.apps.googleusercontent.com</string>

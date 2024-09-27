@@ -21,6 +21,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Toasty"
+rootProject.name = "arpang"
 include(":app")
  
