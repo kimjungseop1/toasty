@@ -57,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/firstImageView" />
 
-    <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
+    <com.syncrown.toasty.ui.photoeditor.PhotoEditorView
         android:id="@+id/photoEditorImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"

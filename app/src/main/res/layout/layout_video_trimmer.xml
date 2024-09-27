@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/slidingWindowView" />
 
-    <com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videotrimmer.slidingwindow.SlidingWindowView
+    <com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.slidingwindow.SlidingWindowView
         android:id="@+id/slidingWindowView"
         android:layout_width="0dp"
         android:layout_height="0dp"

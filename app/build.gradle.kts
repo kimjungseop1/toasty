@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.syncrown.arpang"
+    namespace = "com.syncrown.toasty"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.syncrown.arpang"
+        applicationId = "com.syncrown.toasty"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
