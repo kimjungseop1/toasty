@@ -34,7 +34,9 @@ import com.syncrown.toasty.network.NaverClient
 import com.syncrown.toasty.network.NetworkResult
 import com.syncrown.toasty.network.ArPangRepository
 import com.syncrown.toasty.network.model.RequestCheckMember
+import com.syncrown.toasty.network.model.RequestJoinDto
 import com.syncrown.toasty.network.model.ResponseCheckMember
+import com.syncrown.toasty.network.model.ResponseJoinDto
 import com.syncrown.toasty.ui.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,13 +49,14 @@ class LoginViewModel : BaseViewModel() {
     private val arPangRepository: ArPangRepository = ArPangRepository()
     private val checkMemberResponseLiveData: LiveData<NetworkResult<ResponseCheckMember>> =
         arPangRepository.checkMemberLiveDataRepository
+    private val joinMemberResponseLiveData: LiveData<NetworkResult<ResponseJoinDto>> = arPangRepository.joinLiveDataRepository
 
     /**
      * =============================================================================================
      * 회원여부 체크
      * =============================================================================================
      */
-    fun checkMember(memberId: String) {
+    private fun checkMember(memberId: String) {
         viewModelScope.launch {
             val requestCheckMember = RequestCheckMember()
             requestCheckMember.apply {
@@ -66,6 +69,21 @@ class LoginViewModel : BaseViewModel() {
 
     fun checkMemberResponseLiveData(): LiveData<NetworkResult<ResponseCheckMember>> {
         return checkMemberResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 가입신청
+     * =============================================================================================
+     */
+    fun joinMember(requestJoinDto : RequestJoinDto) {
+        viewModelScope.launch {
+            arPangRepository.requestJoin(requestJoinDto)
+        }
+    }
+
+    fun joinMemberResponseLiveData(): LiveData<NetworkResult<ResponseJoinDto>> {
+        return joinMemberResponseLiveData
     }
 
     /**
@@ -192,11 +210,10 @@ class LoginViewModel : BaseViewModel() {
     private fun getKaKaoProfile(context: Context, snsToken: String) {
         UserApiClient.instance.me { user: User?, throwable: Throwable? ->
             if (user != null) {
-                //TODO 로그인 api
-                val nick = user.kakaoAccount!!.profile!!.nickname
+                //TODO
+                val email = user.kakaoAccount!!.email
 
-                // 여기서 로그인
-
+                checkMember("k $email")
             } else {
                 Toast.makeText(context, "계정 정보가 없습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -245,10 +262,11 @@ class LoginViewModel : BaseViewModel() {
                 val email = response.response.email
                 val name = response.response.name
 
-                Log.d("NaverProfile", "User email: $email")
-                Log.d("NaverProfile", "User name: $name")
+                Log.d("jung", "User email: $email")
+                Log.d("jung", "User name: $name")
 
-                // 여기서 로그인 처리 (UI 업데이트 등)
+                // 회원여부체크
+                checkMember("n $email")
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {

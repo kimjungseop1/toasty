@@ -208,12 +208,12 @@ class HomeFragment : Fragment() {
 
     private fun goArPrint() {
         if (AppDataPref.isArGuide) {
+            AppDataPref.isArGuide = false
+            AppDataPref.save(requireActivity())
+
             // 처음 진입시 가이드 화면으로 이동
             val intent = Intent(requireContext(), ArGuideActivity::class.java)
             startActivity(intent)
-
-            AppDataPref.isArGuide = false
-            AppDataPref.save(requireActivity())
         } else {
             //개발중 임시 진입
 //            val intent = Intent(requireContext(), VideoSelectActivity::class.java)

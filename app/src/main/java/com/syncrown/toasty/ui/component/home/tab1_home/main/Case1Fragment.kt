@@ -40,9 +40,9 @@ class Case1Fragment : Fragment() {
     }
 
     private fun setContentList() {
-        arrayList.add("1")
-        arrayList.add("1")
-        arrayList.add("1")
+//        arrayList.add("1")
+//        arrayList.add("1")
+//        arrayList.add("1")
 
 
         binding.recyclerCase.layoutManager =

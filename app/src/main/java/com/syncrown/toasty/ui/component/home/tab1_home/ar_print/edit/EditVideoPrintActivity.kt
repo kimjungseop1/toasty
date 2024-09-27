@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.toasty.R
 import com.syncrown.toasty.databinding.ActivityEditVideoPrintBinding
 import com.syncrown.toasty.ui.base.BaseActivity
-import com.syncrown.toasty.ui.commons.ActivityFinishManager
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.ActivityFinishManager
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.commons.DialogCommon
 import com.syncrown.toasty.ui.commons.HorizontalSpaceItemDecoration

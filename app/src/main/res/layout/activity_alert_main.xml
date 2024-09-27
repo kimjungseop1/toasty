@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
 
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar_style_1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/divider_today"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/color_F0F0F0"
+        android:gravity="center"
+        android:text="오늘"
+        android:textColor="@color/color_black"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerToday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_today" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/divider_week"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/color_F0F0F0"
+        android:gravity="center"
+        android:text="최근 일주일"
+        android:textColor="@color/color_black"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerToday" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_week" />
 </androidx.constraintlayout.widget.ConstraintLayout>

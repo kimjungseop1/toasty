@@ -3,6 +3,7 @@ package com.syncrown.toasty.ui.component.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,6 +39,8 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var backPressCloseHandler: BackPressCloseHandler
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     override fun observeViewModel() {
         lifecycleScope.launch {
@@ -111,6 +114,10 @@ class MainActivity : BaseActivity() {
             }
         }
 
+        binding.actionbar.actionCs.setOnClickListener {
+            goCS()
+        }
+
         binding.actionbar.actionSearch.setOnClickListener {
             goSearch()
         }
@@ -174,10 +181,14 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showEventBottomSheet() {
+        if (bottomSheetDialog?.isShowing == true) {
+            return
+        }
+
         val binding = BottomSheetEventBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
-        bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
+        bottomSheetDialog?.window?.setDimAmount(0.7f)
+        bottomSheetDialog?.setContentView(binding.root)
 
         binding.continueCheckView.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -186,9 +197,9 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        binding.closeView.setOnClickListener { bottomSheetDialog.dismiss() }
+        binding.closeView.setOnClickListener { bottomSheetDialog?.dismiss() }
 
-        bottomSheetDialog.show()
+        bottomSheetDialog?.show()
     }
 
     private fun onPaperGuideClosed() {
@@ -202,6 +213,11 @@ class MainActivity : BaseActivity() {
 
     private fun goSearch() {
         val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goCS() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pf.kakao.com/_umBxmxb/chat"))
         startActivity(intent)
     }
 }

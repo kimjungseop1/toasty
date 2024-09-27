@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar_style_1" />
+
+    <View
+        android:id="@+id/divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_CECECE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".5" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:text="내가 구독"
+        android:textColor="@color/color_black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/subscribeI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="88"
+        android:textColor="@color/color_black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/desc_1"
+        app:layout_constraintStart_toStartOf="@id/desc_1"
+        app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="나를 구독"
+        android:textColor="@color/color_black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/desc_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/desc_1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/subscribeMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="88"
+        android:textColor="@color/color_black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/desc_2"
+        app:layout_constraintStart_toStartOf="@id/desc_2"
+        app:layout_constraintTop_toBottomOf="@id/desc_2" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSubscribe"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="51dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subscribeI" />
+</androidx.constraintlayout.widget.ConstraintLayout>

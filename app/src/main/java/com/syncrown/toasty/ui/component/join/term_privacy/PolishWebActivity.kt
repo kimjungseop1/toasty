@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -102,6 +103,12 @@ class PolishWebActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (preActivity == 0) {
+            binding.clView.visibility = View.GONE
+        } else {
+            binding.clView.visibility = View.VISIBLE
+        }
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()

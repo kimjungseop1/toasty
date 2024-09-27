@@ -27,23 +27,14 @@ class LoginActivity : BaseActivity() {
 
 
     override fun observeViewModel() {
+        //TODO 회원여부 체크 옵져브
         loginViewModel.checkMemberResponseLiveData().observe(this) { result ->
             when (result) {
                 is NetworkResult.Success -> {
                     result.data?.let { data ->
                         when (data.msgCode) {
                             "SUCCESS" -> {
-                                if (data.member_check == 1) {
-                                    //TODO 회원이면 이메일 입력 화면으로 이동
-
-                                    //TODO 회원이지만 SNS로 기가입 상태일때
-                                    val dialogCommon = DialogCommon()
-                                    dialogCommon.showAlreadyJoined(supportFragmentManager, {
-
-                                    }, "kakao")
-                                } else {
-                                    //TODO 비회원이면 이메일 가입신청
-                                }
+                                Log.e(TAG, "성공")
                             }
 
                             "FAIL" -> {
@@ -51,7 +42,8 @@ class LoginActivity : BaseActivity() {
                             }
 
                             "NONE_ID" -> {
-                                Log.e(TAG, "아이디가 없음")
+                                Log.e(TAG, "아이디가 없음 회원가입으로")
+
                             }
 
                             else -> {
@@ -68,6 +60,34 @@ class LoginActivity : BaseActivity() {
             }
         }
 
+        //TODO 가입신청 옵져브
+        loginViewModel.joinMemberResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data?.let { data ->
+                        when (data.msgCode) {
+                            "DUPPLE" -> {
+                                Log.e(TAG, "아이디 중복")
+                            }
+
+                            "SUCCESS" -> {
+                                Log.e(TAG, "성공")
+                            }
+
+                            else -> {
+                                Log.e(TAG, "알수없는 메시지 코드 : ${data.msgCode} ")
+                            }
+                        }
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "네트워크 오류")
+                }
+            }
+        }
+
+        //TODO 구글 로그인 관련
         loginViewModel.initialize(this)
         loginViewModel.signInResult.observe(this, Observer { result ->
             result.fold(
@@ -79,7 +99,6 @@ class LoginActivity : BaseActivity() {
                     Log.e(TAG, "Sign-in failed: ${exception.message}")
                 }
             )
-
         })
     }
 

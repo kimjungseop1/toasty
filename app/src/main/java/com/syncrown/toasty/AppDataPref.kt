@@ -35,6 +35,8 @@ class AppDataPref {
             editor.putString("accessToken", AccessToken)
             editor.putBoolean("isMainEvent", isMainEvent)
             editor.putBoolean("isArGuide", isArGuide)
+
+            editor.apply()
         }
 
         fun clear(activity: Activity) {
@@ -48,6 +50,7 @@ class AppDataPref {
         fun show() {
             Log.i(TAG, "=================================================")
             Log.i(TAG, "accessToken = $AccessToken")
+            Log.i(TAG, "isArGuide = $isArGuide")
             Log.i(TAG, "=================================================")
         }
     }

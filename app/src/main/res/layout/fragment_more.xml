@@ -31,6 +31,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".25" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/nameTxt"
                     android:layout_width="wrap_content"
@@ -39,6 +46,7 @@
                     android:text="홍길동"
                     android:textColor="@color/color_black"
                     android:textSize="20dp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,13 +92,12 @@
                     android:id="@+id/scrapBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
                     android:foreground="?attr/selectableItemBackground"
                     android:text="스크랩"
                     android:textColor="@color/color_black"
                     android:textSize="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/alertView"
-                    app:layout_constraintStart_toEndOf="@id/alertCnt"
+                    app:layout_constraintStart_toEndOf="@id/guideline_1"
                     app:layout_constraintTop_toTopOf="@id/alertView" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -106,13 +113,15 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/subscribeI"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
                     android:text="88"
                     android:textColor="@color/color_black"
                     android:textSize="20dp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/desc_2"
                     app:layout_constraintStart_toStartOf="@id/desc_2"
                     app:layout_constraintTop_toBottomOf="@id/desc_2" />
@@ -121,23 +130,24 @@
                     android:id="@+id/desc_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="29dp"
                     android:text="나를 구독"
                     android:textColor="@color/color_black"
                     android:textSize="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/desc_2"
-                    app:layout_constraintStart_toEndOf="@id/desc_2"
+                    app:layout_constraintStart_toEndOf="@id/guideline_1"
                     app:layout_constraintTop_toTopOf="@id/desc_2" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/subscribeMe"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
                     android:text="88"
                     android:textColor="@color/color_black"
                     android:textSize="20dp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@id/desc_3"
                     app:layout_constraintStart_toStartOf="@id/desc_3"
                     app:layout_constraintTop_toBottomOf="@id/desc_3" />

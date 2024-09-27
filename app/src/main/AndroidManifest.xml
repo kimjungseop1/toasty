@@ -223,6 +223,10 @@
         <activity
             android:name=".ui.component.home.tab1_home.life2cut.preview.TwoCutPreviewActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.subscribe.SubscribeActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

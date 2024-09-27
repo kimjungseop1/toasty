@@ -17,6 +17,7 @@ import com.syncrown.toasty.ui.component.home.tab5_more.alert_setting.AlertSettin
 import com.syncrown.toasty.ui.component.home.tab5_more.cutoff.CutOffActivity
 import com.syncrown.toasty.ui.component.home.tab5_more.notice.NoticeActivity
 import com.syncrown.toasty.ui.component.home.tab5_more.scrap.ScrapActivity
+import com.syncrown.toasty.ui.component.home.tab5_more.subscribe.SubscribeActivity
 import com.syncrown.toasty.ui.component.join.term_privacy.PolishWebActivity
 
 class MoreFragment : Fragment() {
@@ -51,12 +52,12 @@ class MoreFragment : Fragment() {
 
         //TODO 내가 구독
         binding.subscribeI.setOnClickListener {
-
+            goSubscribe()
         }
 
         //TODO 나를 구독
         binding.subscribeMe.setOnClickListener {
-
+            goSubscribe()
         }
 
         //TODO 로그아웃
@@ -114,6 +115,11 @@ class MoreFragment : Fragment() {
 
         }
 
+    }
+
+    private fun goSubscribe() {
+        val intent = Intent(requireContext(), SubscribeActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goAlert() {

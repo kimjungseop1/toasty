@@ -21,7 +21,7 @@ import androidx.media3.exoplayer.source.ClippingMediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.syncrown.toasty.databinding.ActivityTrimVideoBinding
 import com.syncrown.toasty.ui.base.BaseActivity
-import com.syncrown.toasty.ui.commons.ActivityFinishManager
+import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.ActivityFinishManager
 import com.syncrown.toasty.ui.commons.CommonFunc
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.edit.EditVideoPrintActivity
 import com.syncrown.toasty.ui.component.home.tab1_home.ar_print.videotrimmer.view.VideoTrimmerView
