@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/actionbar">
 
-        <com.syncrown.toasty.ui.commons.CustomTabLayout2
+        <com.syncrown.arpang.ui.commons.CustomTabLayout2
             android:id="@+id/customTabView"
             android:layout_width="match_parent"
             android:layout_height="41dp"

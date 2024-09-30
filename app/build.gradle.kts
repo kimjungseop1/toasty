@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.syncrown.toasty"
+    namespace = "com.syncrown.arpang"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.syncrown.toasty"
+        applicationId = "com.syncrown.arpang"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -111,6 +111,5 @@ dependencies {
 
     // dynamically add view
     implementation(libs.flexbox)
-
 
 }

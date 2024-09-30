@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/desc_1">
 
-        <com.syncrown.toasty.ui.photoeditor.PhotoEditorView
+        <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
             android:id="@+id/photoEditorImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

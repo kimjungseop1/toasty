@@ -9,6 +9,9 @@
     <!--  스플래시  -->
     <string name="splash_title_bic">ARPANG</string>
     <string name="splash_title_small">AR 즐거움이 팡팡</string>
+    <string name="splash_alert_permission_title">권한 필요</string>
+    <string name="splash_alert_permission_message">앱의 기능을 사용하기 위해 필요한 권한이 거부되었습니다. 설정에서 권한을 허용해주세요.</string>
+    <string name="splash_alert_permission_btn">설정으로 이동</string>
     <string name="splash_alert_update_title">업데이트 안내</string>
     <string name="splash_alert_update_message">원할한 서비스 이용을 위해\n새로운 버전을 설치해주세요</string>
     <string name="splash_alert_leftBtn_text">앱 종료</string>
@@ -51,7 +54,7 @@
     <string name="join_email_btn">회원 가입</string>
 
     <!-- 이메일 인증 -->
-    <string name="cert_email_title">TOASTY</string>
+    <string name="cert_email_title">ARPANG</string>
     <string name="cert_email_sub_title">캐치프레이즈</string>
     <string name="cert_email_desc_1">이메일로 전송된\n인증번호를 입력해주세요</string>
     <string name="cert_email_desc_2">가입인증 메일을 전송하였습니다.</string>
@@ -80,7 +83,7 @@
     <string name="polish_privacy_btn">개인정보 처리방침에 동의합니다.</string>
 
     <!-- 비밀번호 찾기 -->
-    <string name="find_pw_title">TOASTY</string>
+    <string name="find_pw_title">ARPANG</string>
     <string name="find_pw_sub_title">캐치프레이즈</string>
     <string name="find_pw_desc_1">비밀번호 재설정</string>
     <string name="find_pw_desc_2">비밀번호를 재설정 할 수 있도록\n이메일을 전송합니다.</string>
@@ -101,7 +104,7 @@
 
     <!-- 용지부족화면 -->
     <string name="cartridge_empty_action_text_1">AR 영상 인쇄</string>
-    <string name="cartridge_empty_action_text_2">인생 네컷</string>
+    <string name="cartridge_empty_action_text_2">인생 두컷</string>
     <string name="cartridge_empty_action_text_3">자유 인쇄</string>
     <string name="cartridge_empty_action_text_4">라벨 스티커</string>
     <string name="cartridge_empty_action_text_5">행사 스티커</string>
