@@ -14,6 +14,7 @@ import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.adapter.Subscri
 
 class SubscribeActivity : BaseActivity() {
     private lateinit var binding: ActivitySubscribeBinding
+    private lateinit var subscribeListAdapter: SubscribeListAdapter
 
     override fun observeViewModel() {
 
@@ -44,17 +45,18 @@ class SubscribeActivity : BaseActivity() {
         arrayList.add("")
 
         binding.recyclerSubscribe.layoutManager = LinearLayoutManager(this)
-        binding.recyclerSubscribe.adapter = SubscribeListAdapter(
+        subscribeListAdapter = SubscribeListAdapter(
             this,
             arrayList,
             object : SubscribeListAdapter.OnItemClickListener {
                 override fun onClick(position: Int, view: View) {
-                    showPopupWindow(view)
+                    showPopupWindow(view, position)
                 }
             })
+        binding.recyclerSubscribe.adapter = subscribeListAdapter
     }
 
-    private fun showPopupWindow(anchor: View) {
+    private fun showPopupWindow(anchor: View, position: Int) {
         val popBinding = PopupSubscribeBinding.inflate(LayoutInflater.from(this))
 
         val popupWindow = PopupWindow(
@@ -69,7 +71,7 @@ class SubscribeActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
-
+                subscribeListAdapter.removeItem(position)
             })
             popupWindow.dismiss()
         }

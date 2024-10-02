@@ -25,6 +25,42 @@ class AlertSettingActivity : BaseActivity() {
 
         binding.actionbar.actionTitle.text = "알림 설정"
 
+        enableState(false)
+        setAlarmSetting()
 
+    }
+
+    private fun setAlarmSetting() {
+        binding.allAlertSwitch.setOnCheckedChangeListener { _, isChecked ->
+            enableState(isChecked)
+        }
+
+        binding.eventSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+        }
+
+        binding.subscribeSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+        }
+
+        binding.likeSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+        }
+
+        binding.commentSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+        }
+    }
+
+    private fun enableState(isChecked: Boolean) {
+        binding.eventSwitch.isEnabled = isChecked
+        binding.subscribeSwitch.isEnabled = isChecked
+        binding.likeSwitch.isEnabled = isChecked
+        binding.commentSwitch.isEnabled = isChecked
+
+        binding.eventView.isEnabled = isChecked
+        binding.subscribeView.isEnabled = isChecked
+        binding.likeView.isEnabled = isChecked
+        binding.commentView.isEnabled = isChecked
     }
 }

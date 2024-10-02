@@ -39,6 +39,18 @@
         app:layout_constraintStart_toEndOf="@id/nameView"
         app:layout_constraintTop_toTopOf="@id/nameView" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/eventBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_banner_event_invite"
+        android:text="이벤트 참여작"
+        android:textColor="@color/color_black"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/nameView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/nameView" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/thumbnailView"
         android:layout_width="match_parent"

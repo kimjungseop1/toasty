@@ -60,8 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="이벤트/공지사항"
-            android:textColor="@color/color_black"
+            android:textColor="@color/enable_checkbox_color"
             android:textSize="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -101,8 +102,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="구독설정"
-            android:textColor="@color/color_black"
+            android:textColor="@color/enable_checkbox_color"
             android:textSize="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -142,8 +144,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="좋아요"
-            android:textColor="@color/color_black"
+            android:textColor="@color/enable_checkbox_color"
             android:textSize="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -183,8 +186,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="댓글"
-            android:textColor="@color/color_black"
+            android:textColor="@color/enable_checkbox_color"
             android:textSize="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

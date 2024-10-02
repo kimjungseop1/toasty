@@ -71,6 +71,11 @@ class HomeFragment : Fragment() {
             goLife4Cut()
         }
 
+        //TODO 행사 스트커
+        binding.labelStickerBtn.setOnClickListener {
+            goFestivalSticker()
+        }
+
         //TODO 자유 인쇄
         binding.freePrintBtn.setOnClickListener {
             goFreePrint()
@@ -83,7 +88,7 @@ class HomeFragment : Fragment() {
 
         //TODO 서비스 이용 가이드
         binding.serviceGuideView.setOnClickListener {
-
+            goServiceManual()
         }
 
         //TODO 이렇게 활용해 볼까요
@@ -253,10 +258,18 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
+    private fun goServiceManual() {
+
+    }
+
     private fun goFreePrint() {
         val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
         intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_3))
         startActivity(intent)
+    }
+
+    private fun goFestivalSticker() {
+
     }
 
     private fun goEventGuide() {
@@ -277,6 +290,4 @@ class HomeFragment : Fragment() {
                 homeViewModel.paperGuideActivityClosed(message ?: "")
             }
         }
-
-
 }

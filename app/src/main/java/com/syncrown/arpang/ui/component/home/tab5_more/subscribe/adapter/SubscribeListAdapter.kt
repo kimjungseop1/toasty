@@ -49,4 +49,10 @@ class SubscribeListAdapter(
             }
         }
     }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, items.size)
+    }
 }

@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,9 +29,10 @@ import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.HomeFragment
 import com.syncrown.arpang.ui.component.home.tab1_home.search.SearchActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment
-import com.syncrown.arpang.ui.component.home.tab3_share.ShareFragment
+import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.MoreFragment
+import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,12 +75,23 @@ class MainActivity : BaseActivity() {
         changeFragment(HomeFragment())
 
         binding.bottomNavigation.itemIconTintList = null
+        binding.actionbar.actionCs.visibility = View.VISIBLE
+        binding.actionbar.actionSearch.visibility = View.VISIBLE
+        binding.actionbar.actionSubscribe.visibility = View.GONE
+        binding.actionbar.actionAr.visibility = View.VISIBLE
+
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_1 -> {
                     changeFragment(HomeFragment())
                     binding.actionbar.actionTitle.text =
                         ContextCompat.getString(this, R.string.splash_title_bic)
+
+                    binding.actionbar.root.visibility = View.VISIBLE
+                    binding.actionbar.actionCs.visibility = View.VISIBLE
+                    binding.actionbar.actionSearch.visibility = View.VISIBLE
+                    binding.actionbar.actionSubscribe.visibility = View.GONE
+                    binding.actionbar.actionAr.visibility = View.VISIBLE
                     true
                 }
 
@@ -86,6 +99,12 @@ class MainActivity : BaseActivity() {
                     changeFragment(LibFragment())
                     binding.actionbar.actionTitle.text =
                         ContextCompat.getString(this, R.string.home_nav_title_2)
+
+                    binding.actionbar.root.visibility = View.VISIBLE
+                    binding.actionbar.actionCs.visibility = View.GONE
+                    binding.actionbar.actionSearch.visibility = View.VISIBLE
+                    binding.actionbar.actionSubscribe.visibility = View.GONE
+                    binding.actionbar.actionAr.visibility = View.VISIBLE
                     true
                 }
 
@@ -93,13 +112,19 @@ class MainActivity : BaseActivity() {
                     changeFragment(ShareFragment())
                     binding.actionbar.actionTitle.text =
                         ContextCompat.getString(this, R.string.home_nav_title_3)
+
+                    binding.actionbar.root.visibility = View.VISIBLE
+                    binding.actionbar.actionCs.visibility = View.GONE
+                    binding.actionbar.actionSearch.visibility = View.VISIBLE
+                    binding.actionbar.actionSubscribe.visibility = View.VISIBLE
+                    binding.actionbar.actionAr.visibility = View.VISIBLE
                     true
                 }
 
                 R.id.nav_4 -> {
                     changeFragment(StoreFragment())
-                    binding.actionbar.actionTitle.text =
-                        ContextCompat.getString(this, R.string.home_nav_title_4)
+
+                    binding.actionbar.root.visibility = View.GONE
                     true
                 }
 
@@ -107,6 +132,12 @@ class MainActivity : BaseActivity() {
                     changeFragment(MoreFragment())
                     binding.actionbar.actionTitle.text =
                         ContextCompat.getString(this, R.string.home_nav_title_5)
+
+                    binding.actionbar.root.visibility = View.VISIBLE
+                    binding.actionbar.actionCs.visibility = View.GONE
+                    binding.actionbar.actionSearch.visibility = View.VISIBLE
+                    binding.actionbar.actionSubscribe.visibility = View.GONE
+                    binding.actionbar.actionAr.visibility = View.VISIBLE
                     true
                 }
 
@@ -120,6 +151,10 @@ class MainActivity : BaseActivity() {
 
         binding.actionbar.actionSearch.setOnClickListener {
             goSearch()
+        }
+
+        binding.actionbar.actionSubscribe.setOnClickListener {
+            goSubscribe()
         }
 
         binding.actionbar.actionAr.setOnClickListener {
@@ -204,6 +239,11 @@ class MainActivity : BaseActivity() {
 
     private fun onPaperGuideClosed() {
         binding.bottomNavigation.selectedItemId = R.id.nav_4
+    }
+
+    private fun goSubscribe() {
+        val intent = Intent(this, SubscribeActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goARpage() {

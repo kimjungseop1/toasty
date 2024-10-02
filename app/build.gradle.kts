@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("kotlin-parcelize")
+    id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -54,6 +55,9 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
 
     // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging.ktx)
 
     // kakao
     implementation(libs.v2.user)
@@ -69,7 +73,6 @@ dependencies {
 
     // facebook
     implementation(libs.facebook.android.sdk)
-
 
     // retrofit2 네트워크 api
     implementation(libs.retrofit)

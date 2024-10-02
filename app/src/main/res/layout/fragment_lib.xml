@@ -68,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
             android:scaleType="center"
-            android:src="@drawable/icon_grid"
+            android:src="@drawable/bg_grid_linear_change_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/linearBtn"
             app:layout_constraintTop_toTopOf="parent" />
@@ -79,7 +79,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="14dp"
             android:scaleType="center"
-            android:src="@drawable/icon_linear"
+            android:src="@drawable/bg_grid_linear_change_2"
             android:text="변경"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "228227154329",
+    "project_id": "arpang-58fd3",
+    "storage_bucket": "arpang-58fd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228227154329:android:d57e81794dd656996c5308",
+        "android_client_info": {
+          "package_name": "com.syncrown.arpang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVauq91yB1pBN1r2xZY8framjNEhmXwVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

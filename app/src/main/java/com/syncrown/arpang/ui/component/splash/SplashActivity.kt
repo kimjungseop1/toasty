@@ -78,7 +78,7 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val factory = SplashViewModelFactory(application)
-        splashViewModel = ViewModelProvider(this, factory).get(SplashViewModel::class.java)
+        splashViewModel = ViewModelProvider(this, factory)[SplashViewModel::class.java]
 
         if (checkAndRequestPermissions()) {
             proceedToNextStep()

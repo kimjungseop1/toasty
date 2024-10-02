@@ -44,6 +44,11 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     ): View {
         binding = FragmentLibBinding.inflate(layoutInflater)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.filterBtn.setOnClickListener {
             // 필터팝업
             showFilterBottomSheet()
@@ -61,20 +66,26 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         }
 
         showGridStyle(GRID_SPAN_COUNT, SPACE)
+        binding.gridBtn.isSelected = true
+        binding.linearBtn.isSelected = false
+
         binding.gridBtn.setOnClickListener {
+            binding.gridBtn.isSelected = true
+            binding.linearBtn.isSelected = false
             showGridStyle(GRID_SPAN_COUNT, SPACE)
         }
 
         binding.linearBtn.setOnClickListener {
+            binding.gridBtn.isSelected = false
+            binding.linearBtn.isSelected = true
             showGridStyle(LINEAR_SPAN_COUNT, SPACE)
         }
-
-        return binding.root
     }
 
     private fun showFilterBottomSheet() {
         val binding = BottomSheetFilterBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetDialog =
+            BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)
@@ -86,7 +97,8 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
     private fun showCartridgeBottomSheet() {
         val binding = BottomSheetCartridgeBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetDialog =
+            BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)
@@ -98,7 +110,8 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
     private fun showTypeBottomSheet() {
         val sheetBinding = BottomSheetTypeBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetDialog =
+            BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(sheetBinding.root)
