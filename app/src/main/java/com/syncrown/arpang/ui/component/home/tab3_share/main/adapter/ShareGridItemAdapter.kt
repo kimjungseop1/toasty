@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab3_share.adapter
+package com.syncrown.arpang.ui.component.home.tab3_share.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

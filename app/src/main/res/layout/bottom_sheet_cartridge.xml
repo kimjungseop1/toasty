@@ -43,7 +43,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:gravity="center"
-                android:text="용지"
+                android:text="인쇄설정"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toTopOf="@id/divider_1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -71,13 +73,234 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clView_2"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clView_1">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:text="인쇄 매수"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="46dp"
+                android:text="인쇄 농도"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="@id/desc_2"
+                app:layout_constraintTop_toBottomOf="@id/desc_2" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clConcentration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintBottom_toBottomOf="@id/desc_3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/guideline_center"
+                app:layout_constraintTop_toTopOf="@id/desc_3">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/concentration_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_concentration_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/concentration_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_concentration_2"
+                    app:layout_constraintBottom_toBottomOf="@id/concentration_1"
+                    app:layout_constraintStart_toEndOf="@id/concentration_1"
+                    app:layout_constraintTop_toTopOf="@id/concentration_1" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/concentration_3"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_concentration_3"
+                    app:layout_constraintBottom_toBottomOf="@id/concentration_2"
+                    app:layout_constraintStart_toEndOf="@id/concentration_2"
+                    app:layout_constraintTop_toTopOf="@id/concentration_2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="인쇄 종류"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="@id/desc_3"
+                app:layout_constraintTop_toBottomOf="@id/clConcentration" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clPrintType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/guideline_center"
+                app:layout_constraintTop_toTopOf="@id/desc_4">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/printType_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_paper_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="텍스트 인쇄"
+                    android:textColor="@color/color_black"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@id/printType_1"
+                    app:layout_constraintStart_toStartOf="@id/printType_1"
+                    app:layout_constraintTop_toBottomOf="@id/printType_1" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/printType_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_paper_img"
+                    app:layout_constraintBottom_toBottomOf="@id/printType_1"
+                    app:layout_constraintStart_toEndOf="@id/printType_1"
+                    app:layout_constraintTop_toTopOf="@id/printType_1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="사진 인쇄"
+                    android:textColor="@color/color_black"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@id/printType_2"
+                    app:layout_constraintStart_toStartOf="@id/printType_2"
+                    app:layout_constraintTop_toBottomOf="@id/printType_2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="인쇄 방식"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="@id/desc_4"
+                app:layout_constraintTop_toBottomOf="@id/clPrintType" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/guideline_center"
+                app:layout_constraintTop_toTopOf="@id/desc_5">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/onePaper"
+                    android:layout_width="78dp"
+                    android:layout_height="76dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_paper_1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="한장씩 인쇄"
+                    android:textColor="@color/color_black"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@id/onePaper"
+                    app:layout_constraintStart_toStartOf="@id/onePaper"
+                    app:layout_constraintTop_toBottomOf="@id/onePaper" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/twoPaper"
+                    android:layout_width="78dp"
+                    android:layout_height="76dp"
+                    android:layout_marginStart="9dp"
+                    android:background="@drawable/selector_print_paper"
+                    android:scaleType="center"
+                    android:src="@drawable/icon_paper_2"
+                    app:layout_constraintBottom_toBottomOf="@id/onePaper"
+                    app:layout_constraintStart_toEndOf="@id/onePaper"
+                    app:layout_constraintTop_toTopOf="@id/onePaper" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="연속으로 인쇄"
+                    android:textColor="@color/color_black"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@id/twoPaper"
+                    app:layout_constraintStart_toStartOf="@id/twoPaper"
+                    app:layout_constraintTop_toBottomOf="@id/twoPaper" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:id="@+id/divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_CECECE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clView_2" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/submitBtn"
@@ -88,12 +311,12 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/custom_button_brown_round_5dp"
             android:gravity="center"
-            android:text="적용"
+            android:text="인쇄"
             android:textColor="@color/color_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/clView_2" />
+            app:layout_constraintTop_toBottomOf="@id/divider_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

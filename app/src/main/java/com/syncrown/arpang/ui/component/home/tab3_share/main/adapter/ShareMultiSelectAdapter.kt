@@ -1,8 +1,9 @@
-package com.syncrown.arpang.ui.component.home.tab3_share.adapter
+package com.syncrown.arpang.ui.component.home.tab3_share.main.adapter
 
 import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -73,6 +74,12 @@ class ShareMultiSelectAdapter(
                     R.color.color_white
                 )
             )
+        }
+
+        if (position == 0) {
+            holder.binding.divider.visibility = View.VISIBLE
+        } else {
+            holder.binding.divider.visibility = View.GONE
         }
 
         // 아이템 클릭 시 선택 및 해제 처리

@@ -1,11 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_f5f5f5">
 
     <include
         android:id="@+id/actionbar"
         layout="@layout/actionbar_style_6" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clEventView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/eventProfile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_img_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="이벤트 타이틀"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/eventBanner"
+                    app:layout_constraintStart_toEndOf="@id/eventProfile"
+                    app:layout_constraintTop_toTopOf="@id/eventProfile" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventBanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_banner_event_invite"
+                    android:text="이벤트 참여작"
+                    android:textColor="@color/color_black"
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="@id/eventProfile"
+                    app:layout_constraintStart_toStartOf="@id/eventTitle"
+                    app:layout_constraintTop_toBottomOf="@id/eventTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clContentView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clEventView">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".5" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/contentTypeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="17dp"
+                    android:text="인생두컷"
+                    android:textColor="@color/color_424242"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/nameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="홍길동"
+                    android:textColor="@color/color_424242"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="@id/contentTypeView"
+                    app:layout_constraintTop_toBottomOf="@id/contentTypeView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dateView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:text="2일전"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@id/nameView"
+                    app:layout_constraintStart_toEndOf="@id/nameView"
+                    app:layout_constraintTop_toTopOf="@id/nameView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/anotherLinkView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:text="홍길동님의 다른 게시글"
+                    android:textColor="@color/color_8e5d4b"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@id/nameView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/contentTypeView" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/contentImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_img_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/nameView" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/tagView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    app:layout_constraintEnd_toEndOf="@id/contentImage"
+                    app:layout_constraintStart_toStartOf="@id/contentImage"
+                    app:layout_constraintTop_toBottomOf="@id/contentImage" />
+
+                <View
+                    android:id="@+id/divider_1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@color/color_CECECE"
+                    app:layout_constraintEnd_toEndOf="@id/tagView"
+                    app:layout_constraintStart_toStartOf="@id/tagView"
+                    app:layout_constraintTop_toBottomOf="@id/tagView" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/likeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginBottom="17dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_like_unsel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/divider_1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/likeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="111"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/likeView"
+                    app:layout_constraintStart_toEndOf="@id/likeView"
+                    app:layout_constraintTop_toTopOf="@id/likeView" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/commentView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_comment"
+                    app:layout_constraintBottom_toBottomOf="@id/likeView"
+                    app:layout_constraintStart_toEndOf="@id/guideline_center"
+                    app:layout_constraintTop_toTopOf="@id/likeView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/commentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="111"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/commentView"
+                    app:layout_constraintStart_toEndOf="@id/commentView"
+                    app:layout_constraintTop_toTopOf="@id/commentView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="67dp"
+                android:background="@color/color_white"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clContentView"
+                app:layout_constraintVertical_bias="0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputComment"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        android:background="@drawable/custom_bottom_event_round_15dp"
+        android:elevation="5dp"
+        android:gravity="top"
+        android:hint="댓글을 남겨주세요"
+        android:imeOptions="actionDone"
+        android:paddingStart="15dp"
+        android:paddingTop="19dp"
+        android:paddingEnd="0dp"
+        android:textColor="@color/color_black"
+        android:textColorHint="@color/color_868686"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/custom_button_brown_round_5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp"
+        android:text="등록"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        android:translationZ="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/inputComment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inputComment"
+        app:layout_constraintVertical_bias=".9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

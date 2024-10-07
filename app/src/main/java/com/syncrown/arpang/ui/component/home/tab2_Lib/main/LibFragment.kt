@@ -60,6 +60,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         }
 
         categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
+        binding.contentsBtn.text = itemList[0]
         binding.contentsBtn.setOnClickListener {
             // 컨텐츠팝업
             showTypeBottomSheet()
@@ -87,7 +88,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         val bottomSheetDialog =
             BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)
 
         binding.closeBtn.setOnClickListener { bottomSheetDialog.dismiss() }
@@ -100,8 +100,25 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         val bottomSheetDialog =
             BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(binding.root)
+
+        binding.concentration1.setOnClickListener {
+            binding.concentration1.isSelected = true
+            binding.concentration2.isSelected = false
+            binding.concentration3.isSelected = false
+        }
+
+        binding.concentration2.setOnClickListener {
+            binding.concentration1.isSelected = false
+            binding.concentration2.isSelected = true
+            binding.concentration3.isSelected = false
+        }
+
+        binding.concentration3.setOnClickListener {
+            binding.concentration1.isSelected = false
+            binding.concentration2.isSelected = false
+            binding.concentration3.isSelected = true
+        }
 
         binding.closeBtn.setOnClickListener { bottomSheetDialog.dismiss() }
 
@@ -113,7 +130,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         val bottomSheetDialog =
             BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setCancelable(false)
         bottomSheetDialog.setContentView(sheetBinding.root)
 
         sheetBinding.closeBtn.setOnClickListener {
@@ -124,9 +140,10 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         sheetBinding.recyclerCate.adapter = categoryAdapter
 
         sheetBinding.submitBtn.setOnClickListener {
-            if (binding.contentsBtn.text.toString().isEmpty()) {
-                categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
-            }
+            val selectedCategories = categoryAdapter.getSelectedItems()
+            Log.e("jung", "size : " + selectedCategories.size)
+            updateSelectedCategories(selectedCategories)
+
             bottomSheetDialog.dismiss()
         }
 
@@ -173,19 +190,18 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
     // 전체 컨텐츠 팝업화면의 리스트 아이템 선택
     override fun onItemSelected(position: Int, isSelected: Boolean) {
-        Log.e("jung", "pos : $position, isSelected : $isSelected")
-        var currentText = binding.contentsBtn.text.toString()
 
-        if (isSelected) {
-            if (!currentText.contains(itemList[position])) {
-                binding.contentsBtn.append(itemList[position])
-            }
+    }
+
+    private fun updateSelectedCategories(selectedCategories: List<Int>) {
+        binding.contentsBtn.text = itemList[selectedCategories[0]]
+
+        if (categoryAdapter.getSelectedItemCount() > 1) {
+            binding.selectContentCnt.visibility = View.VISIBLE
         } else {
-            if (currentText.contains(itemList[position])) {
-                currentText = currentText.replace(itemList[position], "")
-                binding.contentsBtn.text = currentText.trim()
-            }
+            binding.selectContentCnt.visibility = View.GONE
         }
+        binding.selectContentCnt.text = categoryAdapter.getSelectedItemCount().toString()
     }
 
     private fun goDetail() {

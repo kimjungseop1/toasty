@@ -18,9 +18,9 @@ import com.syncrown.arpang.databinding.BottomSheetShareBinding
 import com.syncrown.arpang.databinding.FragmentShareBinding
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.tab3_share.adapter.GridItem
-import com.syncrown.arpang.ui.component.home.tab3_share.adapter.ShareGridItemAdapter
-import com.syncrown.arpang.ui.component.home.tab3_share.adapter.ShareMultiSelectAdapter
+import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.GridItem
+import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
+import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.detail.ShareDetailActivity
 
 class ShareFragment : Fragment(), ShareGridItemAdapter.OnItemClickListener,

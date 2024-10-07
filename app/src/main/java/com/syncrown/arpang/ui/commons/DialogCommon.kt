@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.commons
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -35,6 +36,8 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isLogout = false //TODO 로그아웃
     private var isTagDelete = false //TODO 태그 삭제
     private var isSubscribeDel = false //TODO 나를 구독한사람 삭제
+    private var isCommentDel = false //TODO 공유공간 상세 코멘트 삭제
+    private var isCommentReport = false //TODO 공유공간 상세 코멘트 신고
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -56,6 +59,46 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogCommentReport(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isCommentReport = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showCommentReport(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogCommentReport(leftBtn, rightBtn).show(it, "") }
+    }
+
+    private fun createDialogCommentDelete(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isCommentDel = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showCommentDelete(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogCommentDelete(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogSubscribeDelete(
@@ -230,6 +273,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
             ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = Dialog(requireActivity())
         dialog.window?.apply {
@@ -401,6 +445,48 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnRight.text = context?.let {
                     getString(R.string.tag_popup_right_btn)
                 }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isCommentDel -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = "삭제한 컨텐츠는 다시 복구할 수 없습니다.\n삭제하시겠습니까?"
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.tag_popup_right_btn)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isCommentReport -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = "게시글을 신고하시겠습니까?\n신고가 누적된 게시글은 게시가 취소됩니다."
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = "신고"
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)

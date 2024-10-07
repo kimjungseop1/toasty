@@ -1,7 +1,10 @@
 package com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +20,6 @@ class MultiSelectAdapter(
     interface OnItemSelectedListener {
         fun onItemSelected(position: Int, isSelected: Boolean)
     }
-
-    //    private val selectedItems = ArrayList<Int>()
 
     // 첫 번째 아이템을 기본으로 선택된 상태로 추가
     private val selectedItems = ArrayList<Int>().apply {
@@ -38,6 +39,7 @@ class MultiSelectAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemList[position]
         holder.binding.contentView.text = item
@@ -46,9 +48,11 @@ class MultiSelectAdapter(
             holder.binding.contentView.setTextColor(
                 ContextCompat.getColor(
                     context,
-                    R.color.color_316bff
+                    R.color.color_8e5d4b
                 )
             )
+
+            holder.binding.contentView.typeface = Typeface.DEFAULT_BOLD
 
             holder.binding.root.setBackgroundColor(
                 ContextCompat.getColor(
@@ -64,6 +68,8 @@ class MultiSelectAdapter(
                 )
             )
 
+            holder.binding.contentView.typeface = Typeface.DEFAULT
+
             holder.binding.root.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
@@ -72,23 +78,45 @@ class MultiSelectAdapter(
             )
         }
 
+        if (position == 0) {
+            holder.binding.divider.visibility = View.VISIBLE
+        } else {
+            holder.binding.divider.visibility = View.GONE
+        }
+
         // 아이템 클릭 시 선택 및 해제 처리
         holder.itemView.setOnClickListener {
-            val isSelected: Boolean
-            if (selectedItems.contains(position)) {
-                selectedItems.remove(position)  // 선택 해제
-                isSelected = false
+            if (position == 0) {
+                // 0번째 아이템 선택 시 나머지 선택 해제
+                selectedItems.clear()
+                selectedItems.add(0)
             } else {
-                selectedItems.add(position)  // 선택
-                isSelected = true
+                if (selectedItems.contains(0)) {
+                    // 다른 아이템 선택 시 0번째 아이템 선택 해제
+                    selectedItems.remove(0)
+                }
+                if (selectedItems.contains(position)) {
+                    // 이미 선택된 아이템 해제
+                    selectedItems.remove(position)
+                } else {
+                    // 선택되지 않은 아이템 선택
+                    selectedItems.add(position)
+                }
             }
-            notifyItemChanged(position)
-
-            itemSelectedListener.onItemSelected(position, isSelected)
+            notifyDataSetChanged()
+            itemSelectedListener.onItemSelected(position, selectedItems.contains(position))
         }
     }
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    fun getSelectedItemCount(): Int {
+        return selectedItems.size
+    }
+
+    fun getSelectedItems(): List<Int> {
+        return selectedItems
     }
 }
