@@ -252,6 +252,14 @@
         <activity
             android:name=".ui.component.home.tab1_home.festival_sticker.EditFestivalActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.label_sticker.EditLabelStickerActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.free_print.EditFreePrintActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -15,6 +15,8 @@ import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect.Vide
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeContentGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeMenuListAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.EditFreePrintActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.EditLabelStickerActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.preview.PreViewCartridgeActivity
 
@@ -114,6 +116,7 @@ class EmptyCartridgeActivity : BaseActivity() {
 
                         getString(R.string.cartridge_empty_action_text_4) -> {
                             // 라벨 스티커
+                            goLabelSticker()
                         }
 
                         getString(R.string.cartridge_empty_action_text_5) -> {
@@ -123,6 +126,7 @@ class EmptyCartridgeActivity : BaseActivity() {
 
                         getString(R.string.cartridge_empty_action_text_3) -> {
                             // 자유 인쇄
+                            goFreePrint()
                         }
 
                     }
@@ -168,6 +172,16 @@ class EmptyCartridgeActivity : BaseActivity() {
 
     private fun goFestivalSticker() {
         val intent = Intent(this, EditFestivalActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goLabelSticker() {
+        val intent = Intent(this, EditLabelStickerActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goFreePrint() {
+        val intent = Intent(this, EditFreePrintActivity::class.java)
         startActivity(intent)
     }
 }

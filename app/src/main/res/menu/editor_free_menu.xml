@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_1"
+        android:icon="@drawable/icon_sel_thumbnail"
+        android:title="사진 추가" />
+    <item
+        android:id="@+id/edit_2"
+        android:icon="@drawable/icon_sel_text"
+        android:title="텍스트" />
+    <item
+        android:id="@+id/edit_3"
+        android:icon="@drawable/edit_sticker"
+        android:title="스티커" />
+    <item
+        android:id="@+id/edit_4"
+        android:icon="@drawable/edit_draw"
+        android:title="드로잉" />
+    <item
+        android:id="@+id/edit_5"
+        android:icon="@drawable/icon_sel_etc"
+        android:title="기타" />
+</menu>
