@@ -25,7 +25,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var leftClickListener: OnClickListener? = null
     private var rightClickListener: OnClickListener? = null
 
-    private var isPermission = false // 권한 체크 팝업
+    private var isPermission = false //TODO 권한 체크 팝업
     private var isUpdate = false //TODO 업데이트 안내
     private var isServerOff = false //TODO 점검공지
     private var serverTime: String = ""

@@ -12,7 +12,6 @@ class AppDataPref {
         var AccessToken = ""
 
         var isMainEvent = true // 메인화면에서 이벤트팝업 더이상 보지않기
-        var isArGuide = true // AR 영상 인쇄 카테고리 최초 선택 가이드보여줄것인지
 
 
         fun init(activity: Activity?) {
@@ -22,7 +21,6 @@ class AppDataPref {
 
             AccessToken = preferences.getString("accessToken", null).toString()
             isMainEvent = preferences.getBoolean("isMainEvent", true)
-            isArGuide = preferences.getBoolean("isArGuide", true)
         }
 
         @SuppressLint("CommitPrefEdits")
@@ -34,7 +32,6 @@ class AppDataPref {
             val editor = pref.edit()
             editor.putString("accessToken", AccessToken)
             editor.putBoolean("isMainEvent", isMainEvent)
-            editor.putBoolean("isArGuide", isArGuide)
 
             editor.apply()
         }
@@ -50,7 +47,6 @@ class AppDataPref {
         fun show() {
             Log.i(TAG, "=================================================")
             Log.i(TAG, "accessToken = $AccessToken")
-            Log.i(TAG, "isArGuide = $isArGuide")
             Log.i(TAG, "=================================================")
         }
     }

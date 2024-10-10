@@ -52,6 +52,7 @@
             android:paddingBottom="8dp"
             android:textColor="@color/color_8e5d4b"
             android:textSize="14dp"
+            android:text="용지"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/filterBtn"
             app:layout_constraintTop_toTopOf="parent" />

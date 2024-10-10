@@ -24,6 +24,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.ar_guide.ArGuideActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.event.EventGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
@@ -67,22 +68,22 @@ class HomeFragment : Fragment() {
         }
 
         //TODO 인생 네컷
-        binding.life4cutBtn.setOnClickListener {
+        binding.life4cutCardView.setOnClickListener {
             goLife4Cut()
         }
 
         //TODO 행사 스트커
-        binding.labelStickerBtn.setOnClickListener {
+        binding.festivalCardView.setOnClickListener {
             goFestivalSticker()
         }
 
         //TODO 자유 인쇄
-        binding.freePrintBtn.setOnClickListener {
+        binding.freeCardView.setOnClickListener {
             goFreePrint()
         }
 
         //TODO 라벨 스티커
-        binding.labelStickerBtn.setOnClickListener {
+        binding.labelCardView.setOnClickListener {
             goLabelSticker()
         }
 
@@ -212,37 +213,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun goArPrint() {
-        if (AppDataPref.isArGuide) {
-            AppDataPref.isArGuide = false
-            AppDataPref.save(requireActivity())
-
-            // 처음 진입시 가이드 화면으로 이동
-            val intent = Intent(requireContext(), ArGuideActivity::class.java)
-            startActivity(intent)
-        } else {
-            //개발중 임시 진입
-//            val intent = Intent(requireContext(), VideoSelectActivity::class.java)
-//            intent.putExtra(
-//                "FROM_HOME_CATEGORY",
-//                getString(R.string.cartridge_empty_action_text_1)
-//            )
-//            startActivity(intent)
-
-            // 처음 진입은 아니지만 용지가 없거나 프린트 미연결상태 용지화면으로 이동
-            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-            intent.putExtra(
-                "FROM_HOME_CATEGORY",
-                getString(R.string.cartridge_empty_action_text_1)
-            )
-            startActivity(intent)
-        }
+        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+        intent.putExtra(
+            "FROM_HOME_CATEGORY",
+            getString(R.string.cartridge_empty_action_text_1)
+        )
+        startActivity(intent)
     }
 
     private fun goLife4Cut() {
-//        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-//        intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_2))
-//        startActivity(intent)
-
         // 용지가 없거나 프린트 미연결상태 용지화면으로 이동
         val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
         intent.putExtra(
@@ -269,7 +248,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun goFestivalSticker() {
-
+        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+        intent.putExtra(
+            "FROM_HOME_CATEGORY",
+            getString(R.string.cartridge_empty_action_text_5)
+        )
+        startActivity(intent)
     }
 
     private fun goEventGuide() {

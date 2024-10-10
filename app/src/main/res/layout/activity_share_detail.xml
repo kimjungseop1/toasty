@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="17dp"
-                    android:text="인생두컷"
+                    android:text="인생 두컷"
                     android:textColor="@color/color_424242"
                     android:textSize="12dp"
                     android:textStyle="bold"

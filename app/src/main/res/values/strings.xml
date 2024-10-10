@@ -119,7 +119,7 @@
     <string name="edit_video_print_alert_right_btn">편집 취소</string>
     <string name="edit_video_print_title">인쇄 편집</string>
     <string name="edit_video_print_print">인쇄</string>
-
+    <string name="edit_text_style_b"><u>B</u></string>
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
 
     <!--  더보기  -->

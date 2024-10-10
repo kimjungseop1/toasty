@@ -14,6 +14,7 @@ import com.syncrown.arpang.ui.commons.HorizontalSpaceItemDecoration
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeContentGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeMenuListAdapter
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.preview.PreViewCartridgeActivity
 
@@ -117,6 +118,7 @@ class EmptyCartridgeActivity : BaseActivity() {
 
                         getString(R.string.cartridge_empty_action_text_5) -> {
                             // 행사 스트커
+                            goFestivalSticker()
                         }
 
                         getString(R.string.cartridge_empty_action_text_3) -> {
@@ -161,6 +163,11 @@ class EmptyCartridgeActivity : BaseActivity() {
 
     private fun goPreviewCartridge() {
         val intent = Intent(this, PreViewCartridgeActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goFestivalSticker() {
+        val intent = Intent(this, EditFestivalActivity::class.java)
         startActivity(intent)
     }
 }

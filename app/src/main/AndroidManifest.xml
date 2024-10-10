@@ -243,11 +243,15 @@
 
         <activity
             android:name=".ui.component.home.tab5_more.notice.detail.NoticeDetailActivity"
-            android:enabled="true" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.component.home.tab3_share.detail.ShareDetailActivity"
-            android:enabled="true" />
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.festival_sticker.EditFestivalActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

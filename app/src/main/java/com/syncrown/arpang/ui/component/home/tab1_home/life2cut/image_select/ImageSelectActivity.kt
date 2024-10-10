@@ -47,7 +47,7 @@ class ImageSelectActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "인생두컷"
+        binding.actionbar.actionTitle.text = "인생 두컷"
         binding.actionbar.actionEtc.text = "만들기"
         binding.actionbar.actionEtc.setOnClickListener {
             goEditImagePrint()

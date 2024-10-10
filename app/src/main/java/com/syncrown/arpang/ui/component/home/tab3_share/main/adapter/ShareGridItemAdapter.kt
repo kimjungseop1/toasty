@@ -3,10 +3,8 @@ package com.syncrown.arpang.ui.component.home.tab3_share.main.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.syncrown.arpang.databinding.ItemMultiSpanBinding
 import com.syncrown.arpang.databinding.ItemShareMultiBinding
 import com.syncrown.arpang.databinding.ItemShareSingleBinding
-import com.syncrown.arpang.databinding.ItemSingleSpanBinding
 
 class ShareGridItemAdapter(
     private val items: List<GridItem>,

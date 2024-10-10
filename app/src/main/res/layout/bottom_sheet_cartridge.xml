@@ -97,6 +97,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputNum"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="18dp"
+                android:paddingStart="12dp"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                android:inputType="number"
+                android:background="@drawable/custom_editbox_stroke_gray_5dp"
+                app:layout_constraintBottom_toBottomOf="@id/desc_2"
+                app:layout_constraintTop_toTopOf="@id/desc_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline_center"/>
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/desc_3"
                 android:layout_width="wrap_content"
