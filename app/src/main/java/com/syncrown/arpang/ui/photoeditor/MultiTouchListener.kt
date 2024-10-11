@@ -29,8 +29,8 @@ internal class MultiTouchListener(
     private val isRotateEnabled = true
     private val isTranslateEnabled = true
     private val isScaleEnabled = true
-    private val minimumScale = 0.5f
-    private val maximumScale = 10.0f
+    private val minimumScale = 0.3f
+    private val maximumScale = 5.0f
     private var mActivePointerId = INVALID_POINTER_ID
     private var mPrevX = 0f
     private var mPrevY = 0f
@@ -215,8 +215,8 @@ internal class MultiTouchListener(
         private fun adjustTranslation(view: View, deltaX: Float, deltaY: Float) {
             val deltaVector = floatArrayOf(deltaX, deltaY)
             view.matrix.mapVectors(deltaVector)
-            view.translationX = view.translationX + deltaVector[0]
-            view.translationY = view.translationY + deltaVector[1]
+            view.translationX += deltaVector[0]
+            view.translationY += deltaVector[1]
         }
 
         private fun computeRenderOffset(view: View, pivotX: Float, pivotY: Float) {
@@ -231,8 +231,8 @@ internal class MultiTouchListener(
             view.matrix.mapPoints(currPoint)
             val offsetX = currPoint[0] - prevPoint[0]
             val offsetY = currPoint[1] - prevPoint[1]
-            view.translationX = view.translationX - offsetX
-            view.translationY = view.translationY - offsetY
+            view.translationX -= offsetX
+            view.translationY -= offsetY
         }
     }
 

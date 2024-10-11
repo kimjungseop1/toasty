@@ -3,13 +3,21 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgPhotoEditorClose"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_gravity="top|end"
         android:elevation="1dp"
         android:src="@drawable/ico_delete_box" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgPhotoEditorCrop"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="bottom|end"
+        android:elevation="1dp"
+        android:src="@drawable/ico_crop_box" />
 
     <FrameLayout
         android:id="@+id/frmBorder"
@@ -18,15 +26,15 @@
         android:layout_margin="8dp"
         android:background="@drawable/border_dash_stroke_3dp">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgPhotoEditorImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="4dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ico_delete_box" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_img_1" />
 
     </FrameLayout>
 

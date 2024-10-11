@@ -260,6 +260,18 @@
         <activity
             android:name=".ui.component.home.tab1_home.free_print.EditFreePrintActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.free_print.select.SelectFreePrintActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.free_print.preview.FreePrintPreviewActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

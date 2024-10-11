@@ -45,13 +45,22 @@ internal abstract class Graphic(
     protected fun toggleSelection() {
         val frmBorder = rootView.findViewById<View>(R.id.frmBorder)
         val imgClose = rootView.findViewById<View>(R.id.imgPhotoEditorClose)
+        val imgCrop = rootView.findViewById<View>(R.id.imgPhotoEditorCrop)
+        val editText = rootView.findViewById<View>(R.id.tvPhotoEditorText)
+
         if (frmBorder != null) {
-            frmBorder.setBackgroundResource(R.drawable.rounded_border_tv)
+            frmBorder.setBackgroundResource(R.drawable.border_dash_stroke_3dp)
             frmBorder.tag = true
         }
         if (imgClose != null) {
             imgClose.visibility = View.VISIBLE
         }
+        if (imgCrop != null) {
+            imgCrop.visibility = View.VISIBLE
+        }
+
+        editText?.requestFocus()
+        editText?.isEnabled = true
     }
 
     protected fun buildGestureController(

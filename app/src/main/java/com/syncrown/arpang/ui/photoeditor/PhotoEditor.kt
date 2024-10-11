@@ -26,6 +26,10 @@ interface PhotoEditor {
      */
     fun addImage(desiredImage: Bitmap)
 
+    fun addFreeImage(desiredImage: Bitmap)
+
+    fun addDrawing()
+
     /**
      * This add the text on the [PhotoEditorView] with provided parameters
      * by default [TextView.setText] will be 18sp
@@ -56,6 +60,11 @@ interface PhotoEditor {
      */
     @SuppressLint("ClickableViewAccessibility")
     fun addText(text: String, styleBuilder: TextStyleBuilder?)
+
+    /**
+     * @param styleBuilder text style builder with your style
+     */
+    fun addEditText(styleBuilder: TextStyleBuilder?)
 
     /**
      * This will update text and color on provided view

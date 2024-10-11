@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.free_print
 
 import FreeStickerAdapter
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
@@ -14,6 +15,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,10 +25,15 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditFreePrintBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
+import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.preview.FreePrintPreviewActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.select.SelectFreePrintActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
+import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
 import com.syncrown.arpang.ui.photoeditor.shape.ShapeBuilder
 
@@ -36,6 +44,18 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     private lateinit var mPhotoEditor: PhotoEditor
     private lateinit var mPhotoEditorView: PhotoEditorView
     private lateinit var mShapeBuilder: ShapeBuilder
+
+    private lateinit var dialogCommon: DialogCommon
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
+        }
+    }
 
     override fun observeViewModel() {
 
@@ -48,8 +68,16 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(callback)
+        dialogCommon = DialogCommon()
+
         binding.actionbar.actionBack.setOnClickListener {
-            finish()
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
         }
 
         binding.actionbar.actionTitle.text = "인쇄 편집"
@@ -61,7 +89,7 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         //에디터 초기화
         mPhotoEditorView = binding.photoEditorView
         mPhotoEditor = PhotoEditor.Builder(this, mPhotoEditorView)
-            .setPinchTextScalable(true)
+        .setPinchTextScalable(true)
             .build()
         mPhotoEditor.setOnPhotoEditorListener(this)
         mPhotoEditorView.source.setImageDrawable(
@@ -75,60 +103,48 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     }
 
     private fun setNavigationView() {
+        binding.bottomNavigation.menu.findItem(R.id.edit_1).setCheckable(false)
+
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            binding.bottomNavigation.menu.findItem(R.id.edit_4).setCheckable(false)
-            mPhotoEditor.setBrushDrawingMode(false)
+            initStateEditor()
 
-            binding.iconView.root.visibility = View.GONE
-            binding.etcSettingView.root.visibility = View.GONE
-            binding.textEditView.root.visibility = View.GONE
-
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.edit_1 -> {
                     selectImage()
                     true
                 }
 
                 R.id.edit_2 -> {
-                    if (binding.textEditView.root.visibility == View.VISIBLE) {
-                        binding.textEditView.root.visibility = View.GONE
-                    } else {
-                        binding.textEditView.root.visibility = View.VISIBLE
-                        setEditText()
-                    }
+                    binding.textEditView.root.visibility = View.VISIBLE
+
+                    val styleBuilder = TextStyleBuilder()
+                    styleBuilder.withTextColor(
+                        ContextCompat.getColor(
+                            this,
+                            R.color.color_black
+                        )
+                    )
+
+                    mPhotoEditor.addEditText(styleBuilder)
+
+                    setEditText()
                     true
                 }
 
                 R.id.edit_3 -> {
-                    if (binding.iconView.root.visibility == View.VISIBLE) {
-                        binding.iconView.root.visibility = View.GONE
-                    } else {
-                        binding.iconView.root.visibility = View.VISIBLE
-                        setStickerIcon()
-                    }
+                    binding.iconView.root.visibility = View.VISIBLE
+                    setStickerIcon()
                     true
                 }
 
                 R.id.edit_4 -> {
-                    if (item.isCheckable) {
-                        mPhotoEditor.setBrushDrawingMode(false)
-                        item.setCheckable(false)
-                    } else {
-                        mPhotoEditor.setBrushDrawingMode(true)
-                        mShapeBuilder = ShapeBuilder()
-                        mPhotoEditor.setShape(mShapeBuilder.withShapeColor(Color.BLACK))
-                        item.setCheckable(true)
-                    }
+                    mPhotoEditor.addDrawing()
                     true
                 }
 
                 R.id.edit_5 -> {
-                    if (binding.etcSettingView.root.visibility == View.VISIBLE) {
-                        binding.etcSettingView.root.visibility = View.GONE
-                    } else {
-                        binding.etcSettingView.root.visibility = View.VISIBLE
-                        setEtcSetting()
-                    }
+                    binding.etcSettingView.root.visibility = View.VISIBLE
+                    setEtcSetting()
                     true
                 }
 
@@ -138,9 +154,29 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
 
     }
 
-    private fun selectImage() {
-
+    private fun initStateEditor() {
+        mPhotoEditor.clearHelperBox()
+        mPhotoEditor.setBrushDrawingMode(false)
+        hideKeyBoard()
+        binding.iconView.root.visibility = View.GONE
+        binding.etcSettingView.root.visibility = View.GONE
+        binding.textEditView.root.visibility = View.GONE
     }
+
+    private fun selectImage() {
+        val intent = Intent(this, SelectFreePrintActivity::class.java)
+        selectImageLauncher.launch(intent)
+    }
+
+    private val selectImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val bitmap = FreeImageStorage.bitmap
+                bitmap?.let {
+                    mPhotoEditor.addFreeImage(it)
+                }
+            }
+        }
 
     private fun setEditText() {
         binding.textEditView.editText.setOnClickListener {
@@ -304,18 +340,34 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     }
 
     override fun onIconClick(bitmap: Bitmap) {
-        binding.photoEditorView.source.setImageBitmap(bitmap)
+        mPhotoEditor.addImage(bitmap)
     }
 
     private fun setEtcSetting() {
+        binding.etcSettingView.publicSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+        }
+
+        binding.etcSettingView.tagSetting.setOnClickListener {
+            goTagSetting()
+        }
+
+        binding.etcSettingView.preview.setOnClickListener {
+            goPreview()
+        }
+    }
+
+    override fun onEditTextChangeListener(rootView: View, text: String, colorCode: Int) {
 
     }
 
-    override fun onEditTextChangeListener(rootView: View, text: String, colorCode: Int) {}
+    override fun onAddViewListener(viewType: ViewType, numberOfAddedViews: Int) {
 
-    override fun onAddViewListener(viewType: ViewType, numberOfAddedViews: Int) {}
+    }
 
-    override fun onRemoveViewListener(viewType: ViewType, numberOfAddedViews: Int) {}
+    override fun onRemoveViewListener(viewType: ViewType, numberOfAddedViews: Int) {
+
+    }
 
     override fun onStartViewChangeListener(viewType: ViewType) {
         Log.d(TAG, "onStartViewChangeListener() called with: viewType = [$viewType]")
@@ -327,5 +379,15 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
 
     override fun onTouchSourceImage(event: MotionEvent) {
         Log.d(TAG, "onTouchView() called with: event = [$event]")
+    }
+
+    private fun goTagSetting() {
+        val intent = Intent(this, FreePrintTagSettingActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goPreview() {
+        val intent = Intent(this, FreePrintPreviewActivity::class.java)
+        startActivity(intent)
     }
 }

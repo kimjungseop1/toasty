@@ -55,4 +55,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="NoUnderlineEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
 </resources>

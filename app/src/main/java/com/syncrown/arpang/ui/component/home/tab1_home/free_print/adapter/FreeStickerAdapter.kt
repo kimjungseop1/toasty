@@ -14,7 +14,6 @@ class FreeStickerAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<FreeStickerAdapter.ViewHolder>() {
     private var mIconListener: IconListener? = null
-    private var selectedPosition = RecyclerView.NO_POSITION
 
     fun setIconListener(iconListener: IconListener?) {
         mIconListener = iconListener
@@ -33,41 +32,44 @@ class FreeStickerAdapter(
         // Load image into the ImageView
         Glide.with(context)
             .asBitmap()
-            .load(R.drawable.sample_img_1)
+            .load(stickerPathList[position])
             .into(holder.binding.imgTemp)
 
     }
 
     override fun getItemCount(): Int {
-        return 30
+        return stickerPathList.size
     }
 
     inner class ViewHolder(val binding: RowTemplateBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 val adapterPosition = layoutPosition
+                if (mIconListener != null) {
+                    Glide.with(itemView.context)
+                        .asBitmap()
+                        .load(stickerPathList[adapterPosition])
+                        .into(object : CustomTarget<Bitmap?>(256, 256) {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
+                                mIconListener?.onIconClick(resource)
+                            }
 
-                // Update selected position
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-//                    notifyItemChanged(selectedPosition)
-                    selectedPosition = adapterPosition
-                    notifyItemChanged(selectedPosition)
-
-                    // Trigger listener callback
-                    mIconListener?.let { listener ->
-                        Glide.with(itemView.context)
-                            .asBitmap()
-                            .load(R.drawable.sample_img_1)
-                            .into(object : CustomTarget<Bitmap?>(256, 256) {
-                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
-                                    listener.onIconClick(resource)
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {}
-                            })
-                    }
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
                 }
             }
         }
     }
+
+    private val stickerPathList = arrayOf(
+        "https://cdn-icons-png.flaticon.com/256/4392/4392452.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392455.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392459.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392462.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392465.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392467.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392469.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392471.png",
+        "https://cdn-icons-png.flaticon.com/256/4392/4392522.png",
+    )
 }

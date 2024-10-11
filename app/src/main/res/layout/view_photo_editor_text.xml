@@ -9,17 +9,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:background="@drawable/rounded_border_tv">
+        android:background="@drawable/border_dash_stroke_3dp">
 
-        <TextView
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvPhotoEditorText"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="4dp"-->
+        <!--            android:textColor="#000000"-->
+        <!--            android:textSize="18sp"-->
+        <!--            tools:text="@string/editor_activity_text_double_click"-->
+        <!--            tools:textColor="@android:color/black" />-->
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/tvPhotoEditorText"
+            style="@style/NoUnderlineEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            tools:text="Burhanuddin"
-            tools:textColor="@android:color/black" />
+            android:gravity="start"
+            android:hint="@string/editor_activity_text_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/color_CECECE"
+            android:textColorHint="@color/color_CECECE"
+            android:textSize="18dp" />
 
     </FrameLayout>
 
@@ -27,8 +42,8 @@
         android:id="@+id/imgPhotoEditorClose"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_gravity="top|start"
+        android:layout_gravity="top|end"
         android:elevation="1dp"
-        android:src="@drawable/ic_remove" />
+        android:src="@drawable/ico_delete_box" />
 
 </FrameLayout>

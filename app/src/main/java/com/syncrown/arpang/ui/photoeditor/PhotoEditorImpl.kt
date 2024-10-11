@@ -56,6 +56,20 @@ internal class PhotoEditorImpl @SuppressLint("ClickableViewAccessibility") const
         addToEditor(sticker)
     }
 
+    override fun addFreeImage(desiredImage: Bitmap) {
+        val multiTouchListener = getMultiTouchListener(true)
+        val selectImage = SelectImage(photoEditorView, multiTouchListener, viewState, mGraphicManager)
+        selectImage.buildView(desiredImage)
+        addToEditor(selectImage)
+    }
+
+    override fun addDrawing() {
+        val multiTouchListener = getMultiTouchListener(true)
+        val drawingImage = DrawingImage(photoEditorView, multiTouchListener, viewState, mGraphicManager)
+        drawingImage.buildView()
+        addToEditor(drawingImage)
+    }
+
     override fun addText(text: String, colorCodeTextView: Int) {
         addText(null, text, colorCodeTextView)
     }
@@ -80,6 +94,20 @@ internal class PhotoEditorImpl @SuppressLint("ClickableViewAccessibility") const
             mGraphicManager
         )
         textGraphic.buildView(text, styleBuilder)
+        addToEditor(textGraphic)
+    }
+
+    override fun addEditText(styleBuilder: TextStyleBuilder?) {
+        drawingView.enableDrawing(false)
+        val multiTouchListener = getMultiTouchListener(isTextPinchScalable)
+        val textGraphic = EditText(
+            photoEditorView,
+            multiTouchListener,
+            viewState,
+            mDefaultTextTypeface,
+            mGraphicManager
+        )
+        textGraphic.buildView(styleBuilder)
         addToEditor(textGraphic)
     }
 

@@ -135,4 +135,9 @@
     <string name="tag_popup_content_message">해당 태그를 삭제하시겠습니까?</string>
     <string name="tag_popup_left_btn">닫기</string>
     <string name="tag_popup_right_btn">삭제</string>
+
+
+
+    <!-- 에디터  -->
+    <string name="editor_activity_text_hint">입력해주세요</string>
 </resources>
