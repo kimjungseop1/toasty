@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import com.syncrown.arpang.R
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.PhotoEditorClient
@@ -31,6 +32,7 @@ internal class DrawingImage(
     private lateinit var mShapeBuilder: ShapeBuilder
 
     private lateinit var editorView: PhotoEditorView
+
     fun buildView() {
         mPhotoEditor.setBrushDrawingMode(true)
         mShapeBuilder = ShapeBuilder()

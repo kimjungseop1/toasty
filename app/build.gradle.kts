@@ -111,6 +111,8 @@ dependencies {
 
     // crop image
     implementation(libs.android.image.cropper)
+    implementation("com.github.yalantis:ucrop:2.2.6")
+
 
     // dynamically add view
     implementation(libs.flexbox)

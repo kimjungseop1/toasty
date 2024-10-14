@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.flexbox.FlexboxLayout
 import com.syncrown.arpang.databinding.ActivityInputTagBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.DialogCommon
+import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag.adapter.TagUseListAdapter
 
 class InputTagActivity : BaseActivity() {
     private lateinit var binding: ActivityInputTagBinding
@@ -33,7 +35,7 @@ class InputTagActivity : BaseActivity() {
         binding.actionbar.actionTitle.text = "태그 입력"
         binding.actionbar.actionEtc.text = "완료"
         binding.actionbar.actionEtc.setOnClickListener {
-
+            finish()
         }
 
         binding.inputTagView.addTextChangedListener(object : TextWatcher {
@@ -86,9 +88,32 @@ class InputTagActivity : BaseActivity() {
             }
         }
 
+        setUsedTag()
+
+        setInterestedTag()
     }
 
-    private fun isValidation():Boolean {
+    private fun isValidation(): Boolean {
         return binding.inputTagView.text.toString().isNotEmpty()
+    }
+
+    private fun setUsedTag() {
+        val arrayList = ArrayList<String>()
+        arrayList.add("1")
+        arrayList.add("1")
+        arrayList.add("1")
+        //사용했던 태그
+        binding.recyclerUsed.layoutManager = LinearLayoutManager(this)
+        binding.recyclerUsed.adapter = TagUseListAdapter(this, arrayList)
+    }
+
+    private fun setInterestedTag() {
+        val arrayList = ArrayList<String>()
+        arrayList.add("1")
+        arrayList.add("1")
+        arrayList.add("1")
+        //인기있는 태그
+        binding.recyclerPopular.layoutManager = LinearLayoutManager(this)
+        binding.recyclerPopular.adapter = TagUseListAdapter(this, arrayList)
     }
 }

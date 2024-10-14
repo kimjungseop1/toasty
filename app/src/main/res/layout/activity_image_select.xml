@@ -85,7 +85,7 @@
         android:background="@color/color_white"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
-        android:text="인쇄할 이미지를 3장 선택해주세요"
+        android:text="인쇄할 이미지를 2장 선택해주세요"
         android:textColor="@color/color_868686"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@id/divider"

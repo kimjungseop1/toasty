@@ -64,7 +64,7 @@ class ImageSelectViewModel : BaseViewModel() {
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.DATA
             )
-            val mimeTypes = arrayOf("image/jpeg", "image/png", "image/gif")
+            val mimeTypes = arrayOf("image/jpeg", "image/png")
             val selection: String
             val selectionArgs: Array<String>
 
@@ -95,11 +95,13 @@ class ImageSelectViewModel : BaseViewModel() {
                 while (it.moveToNext()) {
                     val filePath = it.getString(dataColumn)
                     val file = File(filePath)
-                    val parentFolder = file.parentFile?.name
 
-                    // 폴더 이름이 맞거나 전체보기를 선택한 경우에만 이미지 추가
-                    if (folderName == null || parentFolder == folderName || folderName.contains("전체보기")) {
-                        imageList.add(ImageInfo(filePath))
+                    if (file.exists()) {
+                        val parentFolder = file.parentFile?.name
+
+                        if (folderName == null || parentFolder == folderName || folderName.contains("전체보기")) {
+                            imageList.add(ImageInfo(filePath))
+                        }
                     }
                 }
             }

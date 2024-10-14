@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.graphics.drawable.toBitmap
 import com.syncrown.arpang.R
 import com.syncrown.arpang.ui.photoeditor.FilterImageView.OnImageChangedListener
 

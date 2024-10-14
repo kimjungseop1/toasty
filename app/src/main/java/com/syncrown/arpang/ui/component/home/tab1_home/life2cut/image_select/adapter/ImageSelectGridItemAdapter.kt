@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.syncrown.arpang.databinding.ItemGridImageBinding
 
 class ImageSelectGridItemAdapter(
@@ -22,7 +23,11 @@ class ImageSelectGridItemAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: List<ImageInfo>, position: Int) {
 
-            Glide.with(context).load(item[position].filePath).into(binding.thumbnailView)
+            Glide.with(context)
+                .load(item[position].filePath)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.thumbnailView)
 
             binding.root.setOnClickListener {
                 itemClickListener.onItemClick(item[position])

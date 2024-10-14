@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.photoeditor
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
@@ -56,9 +57,9 @@ internal class PhotoEditorImpl @SuppressLint("ClickableViewAccessibility") const
         addToEditor(sticker)
     }
 
-    override fun addFreeImage(desiredImage: Bitmap) {
+    override fun addFreeImage(activity: Activity, desiredImage: Bitmap) {
         val multiTouchListener = getMultiTouchListener(true)
-        val selectImage = SelectImage(photoEditorView, multiTouchListener, viewState, mGraphicManager)
+        val selectImage = SelectImage(activity, photoEditorView, multiTouchListener, viewState, mGraphicManager)
         selectImage.buildView(desiredImage)
         addToEditor(selectImage)
     }

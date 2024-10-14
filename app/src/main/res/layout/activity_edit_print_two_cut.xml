@@ -35,36 +35,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/firstImageView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/resultImg"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="1.5:1"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/desc_1" />
+        app:layout_constraintTop_toBottomOf="@id/desc_1">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/secondImageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="1.5:1"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/firstImageView" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/firstImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1.65:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
-        android:id="@+id/photoEditorImageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/secondImageView"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toTopOf="@id/firstImageView" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/secondImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1.65:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstImageView" />
+
+        <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
+            android:id="@+id/photoEditorImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/secondImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/firstImageView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 스티커 뷰 -->
     <include

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.syncrown.arpang.databinding.ActivityPaperGuideBinding
 import com.syncrown.arpang.ui.base.BaseActivity
+import com.syncrown.arpang.ui.commons.DialogProgressCommon
 
 class PaperGuideActivity : BaseActivity() {
     private lateinit var binding: ActivityPaperGuideBinding
@@ -22,6 +23,11 @@ class PaperGuideActivity : BaseActivity() {
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
+        }
+
+        binding.protoTypeLink.setOnClickListener {
+            val dialogCommon = DialogProgressCommon()
+            dialogCommon.showLoading(supportFragmentManager)
         }
 
         binding.connectStoreView.setOnClickListener {

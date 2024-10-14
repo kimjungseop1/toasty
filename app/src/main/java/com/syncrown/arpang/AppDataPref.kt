@@ -13,6 +13,11 @@ class AppDataPref {
 
         var isMainEvent = true // 메인화면에서 이벤트팝업 더이상 보지않기
 
+        var isArPrintPreView = true // ar인쇄 미리보기
+        var isTwoCutPreView = true // 인생두컷 미리보기
+        var isFreePreView = true // 자유인쇄 미리보기
+        var isLabelPreView = true // 라벨프린트 미리보기
+        var isFestivalPreView = true // 행사스티커 미리보기
 
         fun init(activity: Activity?) {
             val manager = activity!!.packageManager
@@ -21,6 +26,12 @@ class AppDataPref {
 
             AccessToken = preferences.getString("accessToken", null).toString()
             isMainEvent = preferences.getBoolean("isMainEvent", true)
+
+            isArPrintPreView = preferences.getBoolean("isArPrintPreView", true)
+            isTwoCutPreView = preferences.getBoolean("isTwoCutPreView", true)
+            isFreePreView = preferences.getBoolean("isFreePreView", true)
+            isLabelPreView = preferences.getBoolean("isLabelPreView", true)
+            isFestivalPreView = preferences.getBoolean("isFestivalPreView", true)
         }
 
         @SuppressLint("CommitPrefEdits")
@@ -32,6 +43,12 @@ class AppDataPref {
             val editor = pref.edit()
             editor.putString("accessToken", AccessToken)
             editor.putBoolean("isMainEvent", isMainEvent)
+
+            editor.putBoolean("isArPrintPreView", isArPrintPreView)
+            editor.putBoolean("isTwoCutPreView", isTwoCutPreView)
+            editor.putBoolean("isFreePreView", isFreePreView)
+            editor.putBoolean("isLabelPreView", isLabelPreView)
+            editor.putBoolean("isFestivalPreView", isFestivalPreView)
 
             editor.apply()
         }

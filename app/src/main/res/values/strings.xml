@@ -111,6 +111,8 @@
     <string name="cartridge_empty_title">용지가 없습니다.</string>
     <string name="cartridge_empty_sub_title">인쇄하고 싶은 용지를 선택해서 만든 후\n보관함에 저장하시면 나중에 인쇄할 수 있어요.</string>
 
+    <!-- 용지 장착 -->
+    <string name="cartridge_add_proto_type"><u>프로토타입용 링크 : 용지 장착 인식</u></string>
 
     <!-- 인쇄편집 -->
     <string name="edit_video_print_alert_title">알림</string>

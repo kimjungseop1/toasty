@@ -206,10 +206,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.connect_device.guide.DeviceHowUseActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.home.tab1_home.preview.PreViewCartridgeActivity"
             android:exported="true" />
 
@@ -272,6 +268,10 @@
         <activity
             android:name=".ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity"
             android:exported="true" />
+
+        <!--   자유편집 -> 이미지 크롭기능     -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity" android:exported="true"/>
     </application>
 
 </manifest>

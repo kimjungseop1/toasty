@@ -3,8 +3,8 @@ package com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.guide.GuideUse1Fragment
-import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.guide.GuideUse2Fragment
+import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.GuideUse1Fragment
+import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.GuideUse2Fragment
 
 class UsePagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

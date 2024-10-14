@@ -1,10 +1,13 @@
 package com.syncrown.arpang.ui.photoeditor
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import com.syncrown.arpang.R
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.PhotoEditorClient
 import com.syncrown.arpang.ui.photoeditor.MultiTouchListener.OnGestureControl
 
 /**
@@ -42,11 +45,13 @@ internal abstract class Graphic(
         imgClose?.setOnClickListener { graphicManager?.removeView(this@Graphic) }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected fun toggleSelection() {
         val frmBorder = rootView.findViewById<View>(R.id.frmBorder)
         val imgClose = rootView.findViewById<View>(R.id.imgPhotoEditorClose)
         val imgCrop = rootView.findViewById<View>(R.id.imgPhotoEditorCrop)
         val editText = rootView.findViewById<View>(R.id.tvPhotoEditorText)
+        val draws = rootView.findViewById<View>(R.id.imgPhotoEditorDraw)
 
         if (frmBorder != null) {
             frmBorder.setBackgroundResource(R.drawable.border_dash_stroke_3dp)
@@ -57,6 +62,9 @@ internal abstract class Graphic(
         }
         if (imgCrop != null) {
             imgCrop.visibility = View.VISIBLE
+        }
+        if (draws != null) {
+            PhotoEditorClient.photoEditor?.setBrushDrawingMode(true)
         }
 
         editText?.requestFocus()

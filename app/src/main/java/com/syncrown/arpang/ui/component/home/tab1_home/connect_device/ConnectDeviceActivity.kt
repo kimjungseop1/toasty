@@ -4,12 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayoutMediator
 import com.syncrown.arpang.databinding.ActivityConnectDeviceBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.VerticalSpaceItemDecoration
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter.DeviceListAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.guide.DeviceHowUseActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter.UsePagerAdapter
 
 class ConnectDeviceActivity : BaseActivity() {
     private lateinit var binding: ActivityConnectDeviceBinding
@@ -38,10 +39,8 @@ class ConnectDeviceActivity : BaseActivity() {
 
         }
 
-        //사용방법 보러가기
-        binding.howUseBtn.setOnClickListener {
-            goHowUse()
-        }
+        //사용방법
+        setUsePager()
     }
 
     private fun setDeviceList() {
@@ -68,8 +67,19 @@ class ConnectDeviceActivity : BaseActivity() {
         )
     }
 
-    private fun goHowUse() {
-        val intent = Intent(this, DeviceHowUseActivity::class.java)
-        startActivity(intent)
+    private fun setUsePager() {
+        binding.viewPagerView.adapter = UsePagerAdapter(this)
+        binding.viewPagerView.isUserInputEnabled = false
+        TabLayoutMediator(binding.customTabView, binding.viewPagerView) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = "토스티"
+                }
+
+                1 -> {
+                    tab.text = "오브니"
+                }
+            }
+        }.attach()
     }
 }

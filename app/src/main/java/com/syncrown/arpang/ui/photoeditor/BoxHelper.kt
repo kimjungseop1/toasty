@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
 import com.syncrown.arpang.R
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.PhotoEditorClient
 

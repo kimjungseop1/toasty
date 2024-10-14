@@ -3,13 +3,24 @@ package com.syncrown.arpang.ui.commons
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.syncrown.arpang.R
 
 class BackPressCloseHandler(
     private val activity: Activity,
+    private val selectedView: BottomNavigationView,
     private var backKeyPressedTime: Long = 0L,
     private var toast: Toast? = null
 ) : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
+        if (selectedView.selectedItemId != R.id.nav_1) {
+            selectedView.selectedItemId = R.id.nav_1
+        } else {
+            timerFinish()
+        }
+    }
+
+    private fun timerFinish() {
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis()
             showGuide()

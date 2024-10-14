@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar">
@@ -131,7 +132,8 @@
                 android:id="@+id/recyclerUsed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
+                android:layout_marginTop="21dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/desc_3" />
@@ -165,7 +167,8 @@
                 android:id="@+id/recyclerPopular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
+                android:layout_marginTop="21dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/desc_4" />

@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.photoeditor
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
@@ -26,7 +27,7 @@ interface PhotoEditor {
      */
     fun addImage(desiredImage: Bitmap)
 
-    fun addFreeImage(desiredImage: Bitmap)
+    fun addFreeImage(activity: Activity, desiredImage: Bitmap)
 
     fun addDrawing()
 

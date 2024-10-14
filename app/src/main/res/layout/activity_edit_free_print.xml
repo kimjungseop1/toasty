@@ -21,18 +21,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar" />
 
-    <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
-        android:id="@+id/photoEditorView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/resultImg"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="30dp"
-        android:background="@color/color_F0F0F0"
         app:layout_constraintDimensionRatio="1:1.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/desc_1" />
+        app:layout_constraintTop_toBottomOf="@id/desc_1">
+
+        <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
+            android:id="@+id/photoEditorView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/color_F0F0F0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--  텍스트  -->
     <include

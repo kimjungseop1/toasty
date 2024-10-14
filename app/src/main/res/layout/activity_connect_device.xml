@@ -36,13 +36,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="36dp" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent=".8" />
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/desc_1"
                 android:layout_width="wrap_content"
@@ -73,7 +66,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                app:layout_constraintBottom_toTopOf="@id/searchBtn"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/desc_2"
@@ -92,42 +84,72 @@
                 android:text="다시 검색하기"
                 android:textColor="@color/color_5B5B5B"
                 android:textSize="14dp"
-                app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerDevice" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_F0F0F0"
+                android:layout_marginTop="35dp"
+                app:layout_constraintTop_toBottomOf="@id/searchBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/desc_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
                 android:drawableStart="@drawable/idea_light_bulb"
                 android:text="프린터 연결이 어려우신가요?"
                 android:textColor="@color/color_black"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/howUseBtn"
+                app:layout_constraintBottom_toTopOf="@id/cardTabView"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
+                app:layout_constraintTop_toBottomOf="@id/divider"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/howUseBtn"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardTabView"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_button_gray_round_3dp"
-                android:gravity="center"
-                android:text="사용방법 보러가기"
-                android:textColor="@color/color_424242"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline_right"
-                app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/desc_3" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="@color/color_f5f5f5"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desc_3">
+
+                <com.syncrown.arpang.ui.commons.CustomTabLayout2
+                    android:id="@+id/customTabView"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    app:tabIndicator="@null"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/color_black"
+                    app:tabTextAppearance="@style/tabTextSizeStyle2"
+                    app:tabTextColor="@color/color_424242" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardTabView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

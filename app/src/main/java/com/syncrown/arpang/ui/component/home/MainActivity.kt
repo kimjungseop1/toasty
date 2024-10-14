@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -44,6 +45,16 @@ class MainActivity : BaseActivity() {
 
     private var bottomSheetDialog: BottomSheetDialog? = null
 
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (binding.bottomNavigation.selectedItemId != R.id.nav_1) {
+                Log.e("jung","aaaaa")
+            } else {
+                Log.e("jung","bbbbb")
+            }
+        }
+    }
+
     override fun observeViewModel() {
         lifecycleScope.launch {
             mainViewModel.onPaperGuideActivityClosed.observe(this@MainActivity, Observer { value ->
@@ -68,7 +79,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        backPressCloseHandler = BackPressCloseHandler(this)
+        backPressCloseHandler = BackPressCloseHandler(this, binding.bottomNavigation)
         onBackPressedDispatcher.addCallback(this, backPressCloseHandler)
 
         //TODO default Fragment

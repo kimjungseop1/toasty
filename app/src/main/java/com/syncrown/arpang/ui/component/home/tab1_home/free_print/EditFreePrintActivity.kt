@@ -4,7 +4,8 @@ import FreeStickerAdapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditFreePrintBinding
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -36,6 +38,7 @@ import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
 import com.syncrown.arpang.ui.photoeditor.shape.ShapeBuilder
+import com.yalantis.ucrop.UCrop
 
 class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     OnPhotoEditorListener {
@@ -56,6 +59,8 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
             })
         }
     }
+
+    private lateinit var resultBitmap: Bitmap
 
     override fun observeViewModel() {
 
@@ -83,7 +88,16 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         binding.actionbar.actionTitle.text = "인쇄 편집"
         binding.actionbar.actionEtc.text = "인쇄"
         binding.actionbar.actionEtc.setOnClickListener {
+            mPhotoEditor.clearHelperBox()
 
+            if (AppDataPref.isFreePreView) {
+                goPreview()
+            } else {
+                resultBitmap = getBitmapFromView(binding.resultImg)
+                FreeImageStorage.bitmap = resultBitmap
+
+                
+            }
         }
 
         //에디터 초기화
@@ -173,10 +187,27 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
             if (result.resultCode == RESULT_OK) {
                 val bitmap = FreeImageStorage.bitmap
                 bitmap?.let {
-                    mPhotoEditor.addFreeImage(it)
+                    mPhotoEditor.addFreeImage(this, it)
                 }
             }
         }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(data!!)
+            resultUri?.let {
+                val croppedBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(it))
+                croppedBitmap?.let { bitmap ->
+                    // 크롭된 이미지를 추가
+                    mPhotoEditor.addFreeImage(this, bitmap)
+                }
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(data!!)
+            cropError?.printStackTrace()
+        }
+    }
 
     private fun setEditText() {
         binding.textEditView.editText.setOnClickListener {
@@ -386,7 +417,26 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         startActivity(intent)
     }
 
+    private fun getBitmapFromView(view: View): Bitmap {
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY)
+        )
+        val width = view.measuredWidth
+        val height = view.measuredHeight
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+        canvas.translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
+        view.draw(canvas)
+
+        return bitmap
+    }
+
     private fun goPreview() {
+        resultBitmap = getBitmapFromView(binding.resultImg)
+        FreeImageStorage.bitmap = resultBitmap
+
         val intent = Intent(this, FreePrintPreviewActivity::class.java)
         startActivity(intent)
     }

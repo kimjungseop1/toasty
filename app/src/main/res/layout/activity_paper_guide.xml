@@ -54,11 +54,57 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="37dp"
-                app:layout_constraintDimensionRatio="2:1"
                 android:background="@color/color_F0F0F0"
+                app:layout_constraintDimensionRatio="2:1"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/desc_3"/>
+                app:layout_constraintTop_toBottomOf="@id/desc_3" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/descTxt_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="asafasfasfsf"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/guideImg_1" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/guideImg_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="37dp"
+                android:background="@color/color_F0F0F0"
+                app:layout_constraintDimensionRatio="2:1"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/descTxt_1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/descTxt_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="asafasfasfsf"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/guideImg_2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/protoTypeLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cartridge_add_proto_type"
+                android:textColor="@color/color_8e5d4b"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/connectStoreView"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/descTxt_2" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/connectStoreView"
