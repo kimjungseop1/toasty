@@ -2,7 +2,9 @@ package com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker
 
 import BottomTemplateAdapter
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
@@ -14,21 +16,46 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityFestivalEditBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
+import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.preview.FestivalPreviewActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.tag.FestivalTagSettingActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.FreeImageStorage
 import kotlinx.coroutines.launch
+import org.angmarch.views.OnSpinnerItemSelectedListener
+import java.util.LinkedList
 
 
 class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListener {
     private lateinit var binding: ActivityFestivalEditBinding
+
+    private lateinit var dialogCommon: DialogCommon
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            //소프트키 뒤로 버튼 처리
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
+
+        }
+    }
+
+    private lateinit var resultBitmap: Bitmap
 
     override fun observeViewModel() {
 
@@ -41,21 +68,33 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(callback)
+        dialogCommon = DialogCommon()
+
         binding.actionbar.actionBack.setOnClickListener {
-            finish()
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
         }
         binding.actionbar.actionTitle.text = "인쇄 편집"
         binding.actionbar.actionEtc.text = "인쇄"
         binding.actionbar.actionEtc.setOnClickListener {
+            if (AppDataPref.isFestivalPreView) {
+                goPreview()
+            } else {
+                resultBitmap = CommonFunc.getBitmapFromView(binding.festivalView)
+                FestivalImageStorage.bitmap = resultBitmap
 
+            }
         }
 
         lifecycleScope.launch {
             setNavigationView()
 
             binding.bottomNavigation.selectedItemId = R.id.edit_1
-
-
         }
 
         //에디트 텍스트 편집시 템플릿선택창, 기타설정창 없어지도록
@@ -69,8 +108,6 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
             } else {
                 hideKeyBoard()
             }
-
-            setEditView()
         }
     }
 
@@ -96,11 +133,14 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
         }
 
         // 텍스트 편집
-        val items = arrayOf("10","12","14","16","18")
-        val myAdapter = ArrayAdapter(this, R.layout.spinner_item_edit_text_size, items)
-        binding.textEditView.sizeSpinner.adapter = myAdapter
-        binding.textEditView.sizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val items: List<String> = LinkedList(mutableListOf("10", "12", "14", "16", "18", "20", "24"))
+        binding.textEditView.sizeSpinner.attachDataSource(items)
+        binding.textEditView.sizeSpinner.selectedIndex = 6
+        binding.textEditView.sizeSpinner.setTextColor(ContextCompat.getColor(this, R.color.color_white))
+        binding.textEditView.sizeSpinner.onSpinnerItemSelectedListener =
+            OnSpinnerItemSelectedListener { _, _, position, _ ->
+                binding.textEditView.sizeSpinner.setTextColor(ContextCompat.getColor(this, R.color.color_white))
+
                 val focusedEditText = currentFocus as? AppCompatEditText
                 val textSize = when (position) {
                     0 -> 10f
@@ -108,16 +148,14 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
                     2 -> 14f
                     3 -> 16f
                     4 -> 18f
-                    else -> 16f
+                    5 -> 20f
+                    6 -> 24f
+                    else -> 24f
                 }
 
                 focusedEditText?.textSize = textSize
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-        }
 
         binding.textEditView.horizontalBtn.setOnClickListener {
             val focusedEditText = currentFocus as? AppCompatEditText
@@ -205,24 +243,33 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
 
             when (item.itemId) {
                 R.id.edit_1 -> {
-
-                    if (binding.templateView.root.visibility == View.VISIBLE) {
-                        binding.templateView.root.visibility = View.GONE
-                    } else {
-                        binding.templateView.root.visibility = View.VISIBLE
-                        setTemplateView()
-                    }
+                    binding.templateView.root.visibility = View.VISIBLE
+                    setTemplateView()
                     true
                 }
 
                 R.id.edit_2 -> {
+                    binding.textEditView.root.visibility = View.VISIBLE
+                    setEditView()
+                    true
+                }
 
-                    if (binding.etcSettingView.root.visibility == View.VISIBLE) {
-                        binding.etcSettingView.root.visibility = View.GONE
-                    } else {
-                        binding.etcSettingView.root.visibility = View.VISIBLE
+                R.id.edit_3 -> {
+                    binding.etcSettingView.root.visibility = View.VISIBLE
+
+                    binding.etcSettingView.publicSwitch.setOnCheckedChangeListener { _, isChecked ->
+                        if (isChecked) {
+
+                        }
                     }
 
+                    binding.etcSettingView.tagSetting.setOnClickListener {
+                        goTagSetting()
+                    }
+
+                    binding.etcSettingView.preview.setOnClickListener {
+                        goPreview()
+                    }
                     true
                 }
 
@@ -292,5 +339,18 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
             .load(bitmap)
             .circleCrop()
             .into(binding.templateImg)
+    }
+
+    private fun goTagSetting() {
+        val intent = Intent(this, FestivalTagSettingActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goPreview() {
+        resultBitmap = CommonFunc.getBitmapFromView(binding.festivalView)
+        FestivalImageStorage.bitmap = resultBitmap
+
+        val intent = Intent(this, FestivalPreviewActivity::class.java)
+        startActivity(intent)
     }
 }

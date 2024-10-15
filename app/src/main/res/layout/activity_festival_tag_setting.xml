@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar_style_1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="25dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="25dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:text="태그 입력"
+                android:textColor="@color/color_black"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:text="보관함 분류나 공유에 사용됩니다.\n추가한 태그를 삭제하려면 다시 선택해주세요."
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputTagView"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/custom_editbox_stroke_gray_5dp"
+                android:hint="#태그입력"
+                android:paddingStart="12dp"
+                android:textColorHint="@color/color_CECECE"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toStartOf="@id/addBtn"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/desc_2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/addBtn"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_button_selector_disable_enable"
+                android:gravity="center"
+                android:text="추가"
+                android:textColor="@color/editext_select_color"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/inputTagView"
+                app:layout_constraintDimensionRatio="1.5:1"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintTop_toTopOf="@id/inputTagView" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexTagView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/inputTagView" />
+
+            <View
+                android:id="@+id/divider_1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="45dp"
+                android:background="@color/color_CECECE"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/flexTagView" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:text="내가 사용 했던 태그"
+                android:textColor="@color/color_5B5B5B"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/divider_1"
+                app:layout_constraintEnd_toEndOf="@id/divider_1"
+                app:layout_constraintStart_toStartOf="@id/divider_1"
+                app:layout_constraintTop_toTopOf="@id/divider_1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerUsed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/desc_3" />
+
+            <View
+                android:id="@+id/divider_2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="53dp"
+                android:background="@color/color_CECECE"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/recyclerUsed" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white"
+                android:paddingStart="57dp"
+                android:paddingEnd="57dp"
+                android:text="인기 있는 태그"
+                android:textColor="@color/color_5B5B5B"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/divider_2"
+                app:layout_constraintEnd_toEndOf="@id/divider_2"
+                app:layout_constraintStart_toStartOf="@id/divider_2"
+                app:layout_constraintTop_toTopOf="@id/divider_2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPopular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintStart_toEndOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/desc_4" />
+
+            <!--      내가 사용 했던 태그 그룹      -->
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupUsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="divider_1, desc_3, recyclerUsed" />
+
+            <!--      인기있는 태그 그룹      -->
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupPopular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="divider_2, desc_4, recyclerPopular" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

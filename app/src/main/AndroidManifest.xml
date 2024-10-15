@@ -269,9 +269,34 @@
             android:name=".ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.component.home.tab1_home.label_sticker.preview.LabelStickerPreviewActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.label_sticker.tag.LabelStickerTagSettingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.festival_sticker.preview.FestivalPreviewActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.festival_sticker.tag.FestivalTagSettingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_print.preview.ArPrintPreviewActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.ar_print.tag.ArPrintTagSettingActivity"
+            android:exported="true" />
+
         <!--   자유편집 -> 이미지 크롭기능     -->
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity" android:exported="true"/>
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

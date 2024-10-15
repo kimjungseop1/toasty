@@ -35,19 +35,7 @@
         <com.syncrown.arpang.ui.photoeditor.PhotoEditorView
             android:id="@+id/photoEditorImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/photoEditorImageView"
-            app:layout_constraintEnd_toEndOf="@id/photoEditorImageView"
-            app:layout_constraintStart_toStartOf="@id/photoEditorImageView"
-            app:layout_constraintTop_toTopOf="@id/photoEditorImageView">
-
-            <!-- 추가될 DraggableEditText가 이 컨테이너에 들어감 -->
-        </FrameLayout>
+            android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -63,32 +51,34 @@
         <include
             android:id="@+id/thumbLayout"
             layout="@layout/add_layout_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!--   영역   -->
 
         <!--   텍스트   -->
         <include
-            android:id="@+id/textLayout"
-            layout="@layout/add_layout_text"
-            android:visibility="gone" />
-
-        <!--   드로잉   -->
-        <include
-            android:id="@+id/drawingLayout"
-            layout="@layout/add_layout_draw"
+            android:id="@+id/textEditView"
+            layout="@layout/bottom_festival_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!--   스티커   -->
         <include
-            android:id="@+id/stickerLayout"
-            layout="@layout/add_layout_sticker"
-            android:visibility="gone"/>
+            android:id="@+id/iconView"
+            layout="@layout/popup_sticker_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <!--   기타   -->
         <include
-            android:id="@+id/etcLayout"
-            layout="@layout/add_layout_etc"
+            android:id="@+id/etcSettingView"
+            layout="@layout/bottom_festival_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
     </FrameLayout>

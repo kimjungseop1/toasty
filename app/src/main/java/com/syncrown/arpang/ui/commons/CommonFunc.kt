@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
+import android.view.View
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -101,6 +103,22 @@ class CommonFunc {
                 ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id.toLong())
 
             return uri
+        }
+
+        fun getBitmapFromView(view: View): Bitmap {
+            view.measure(
+                View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY)
+            )
+            val width = view.measuredWidth
+            val height = view.measuredHeight
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+            val canvas = Canvas(bitmap)
+            canvas.translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
+            view.draw(canvas)
+
+            return bitmap
         }
     }
 }

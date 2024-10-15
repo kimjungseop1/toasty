@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemMainEventBinding
 
 class MainEventAdapter(
@@ -40,11 +42,15 @@ class MainEventAdapter(
     inner class SlideBannerHolder(binding: ItemMainEventBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val eventBinding: ItemMainEventBinding = binding
-        fun onBind(context: Context?, position: Int) {
-            // 데이터 바인딩 로직
-            eventBinding.cdView.setOnClickListener {
+        fun onBind(context: Context, position: Int) {
+            eventBinding.root.setOnClickListener {
                 mListener?.onClick(position)
             }
+
+            Glide.with(context)
+                .load(R.drawable.sample_img_1)
+                .circleCrop()
+                .into(eventBinding.itemImage)
         }
     }
 

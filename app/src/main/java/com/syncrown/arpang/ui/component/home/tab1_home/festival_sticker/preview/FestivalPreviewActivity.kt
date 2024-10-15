@@ -1,21 +1,21 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.life2cut.preview
+package com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.preview
 
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.syncrown.arpang.AppDataPref
-import com.syncrown.arpang.databinding.ActivityTwoCutPreviewBinding
+import com.syncrown.arpang.databinding.ActivityFestivalPreviewBinding
 import com.syncrown.arpang.ui.base.BaseActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.TwoCutImageStorage
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.FestivalImageStorage
 
-class TwoCutPreviewActivity : BaseActivity() {
-    private lateinit var binding: ActivityTwoCutPreviewBinding
+class FestivalPreviewActivity : BaseActivity() {
+    private lateinit var binding: ActivityFestivalPreviewBinding
 
     override fun observeViewModel() {
 
     }
 
     override fun initViewBinding() {
-        binding = ActivityTwoCutPreviewBinding.inflate(layoutInflater)
+        binding = ActivityFestivalPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -27,14 +27,15 @@ class TwoCutPreviewActivity : BaseActivity() {
         binding.actionbar.actionTitle.text = "미리보기"
         binding.actionbar.actionEtc.text = "인쇄"
         binding.actionbar.actionEtc.setOnClickListener {
-            AppDataPref.isTwoCutPreView = binding.previewBtn.isChecked
+            AppDataPref.isFestivalPreView = binding.previewBtn.isChecked
             AppDataPref.save(this)
         }
 
         Glide.with(this)
-            .load(TwoCutImageStorage.bitmap)
-            .into(binding.resultImg)
+            .load(FestivalImageStorage.bitmap)
+            .circleCrop()
+            .into(binding.prevImg)
 
-        binding.previewBtn.isChecked = AppDataPref.isTwoCutPreView
+        binding.previewBtn.isChecked = AppDataPref.isFestivalPreView
     }
 }

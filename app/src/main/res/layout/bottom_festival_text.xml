@@ -75,16 +75,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <org.angmarch.views.NiceSpinner
                 android:id="@+id/sizeSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:popupBackground="@android:color/transparent"
-                android:spinnerMode="dropdown"
+                android:backgroundTint="@android:color/transparent"
+                android:backgroundTintMode="src_in"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:textTint="@color/color_black"
+                app:arrowTint="@color/color_white"
                 app:layout_constraintBottom_toBottomOf="@id/desc_1"
                 app:layout_constraintStart_toEndOf="@id/guideline_40"
                 app:layout_constraintTop_toTopOf="@id/desc_1" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupVertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="desc_2, horizontalBtn, verticalBtn" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/desc_2"
@@ -244,6 +253,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headView">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerFont"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

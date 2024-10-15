@@ -59,7 +59,6 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
 
     private lateinit var mPhotoEditor: PhotoEditor
     private lateinit var mPhotoEditorView: PhotoEditorView
-    private lateinit var mShapeBuilder: ShapeBuilder
 
     private lateinit var dialogCommon: DialogCommon
     private val callback = object : OnBackPressedCallback(true) {
@@ -110,7 +109,7 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
             if (AppDataPref.isTwoCutPreView) {
                 go2CutPreview()
             } else {
-                resultBitmap = getBitmapFromView(binding.resultImg)
+                resultBitmap = CommonFunc.getBitmapFromView(binding.resultImg)
                 TwoCutImageStorage.bitmap = resultBitmap
 
                 val isSuccess = saveBitmapToDownloadFolder(resultBitmap)
@@ -141,22 +140,6 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
         lifecycleScope.launch {
             setEditView()
         }
-    }
-
-    private fun getBitmapFromView(view: View): Bitmap {
-        view.measure(
-            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY)
-        )
-        val width = view.measuredWidth
-        val height = view.measuredHeight
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        canvas.translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
-        view.draw(canvas)
-
-        return bitmap
     }
 
     private fun saveBitmapToDownloadFolder(bitmap: Bitmap): Boolean {
@@ -302,7 +285,7 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
     private fun go2CutPreview() {
         mPhotoEditor.clearHelperBox()
 
-        resultBitmap = getBitmapFromView(binding.resultImg)
+        resultBitmap = CommonFunc.getBitmapFromView(binding.resultImg)
         TwoCutImageStorage.bitmap = resultBitmap
 
         val intent = Intent(this, TwoCutPreviewActivity::class.java)

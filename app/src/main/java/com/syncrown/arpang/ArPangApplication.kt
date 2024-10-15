@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
+import com.syncrown.arpang.ui.commons.FontManager
 
 class ArPangApplication : Application() {
     private var instance: ArPangApplication? = null
@@ -37,5 +38,7 @@ class ArPangApplication : Application() {
         FacebookSdk.sdkInitialize(this)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        FontManager.init(this)
     }
 }

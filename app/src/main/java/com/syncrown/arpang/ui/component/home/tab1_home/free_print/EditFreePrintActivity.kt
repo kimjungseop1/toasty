@@ -39,6 +39,8 @@ import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
 import com.syncrown.arpang.ui.photoeditor.shape.ShapeBuilder
 import com.yalantis.ucrop.UCrop
+import org.angmarch.views.OnSpinnerItemSelectedListener
+import java.util.LinkedList
 
 class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     OnPhotoEditorListener {
@@ -46,7 +48,6 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
 
     private lateinit var mPhotoEditor: PhotoEditor
     private lateinit var mPhotoEditorView: PhotoEditorView
-    private lateinit var mShapeBuilder: ShapeBuilder
 
     private lateinit var dialogCommon: DialogCommon
     private val callback = object : OnBackPressedCallback(true) {
@@ -93,10 +94,10 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
             if (AppDataPref.isFreePreView) {
                 goPreview()
             } else {
-                resultBitmap = getBitmapFromView(binding.resultImg)
+                resultBitmap = CommonFunc.getBitmapFromView(binding.resultImg)
                 FreeImageStorage.bitmap = resultBitmap
 
-                
+
             }
         }
 
@@ -231,35 +232,27 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         }
 
         // 텍스트 편집
-        val items = arrayOf("10", "12", "14", "16", "18", "20", "24")
-        val myAdapter = ArrayAdapter(this, R.layout.spinner_item_edit_text_size, items)
-        binding.textEditView.sizeSpinner.adapter = myAdapter
-        binding.textEditView.sizeSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val focusedEditText = currentFocus as? AppCompatEditText
-                    val textSize = when (position) {
-                        0 -> 10f
-                        1 -> 12f
-                        2 -> 14f
-                        3 -> 16f
-                        4 -> 18f
-                        5 -> 20f
-                        6 -> 24f
-                        else -> 24f
-                    }
+        val items: List<String> = LinkedList(mutableListOf("10", "12", "14", "16", "18", "20", "24"))
+        binding.textEditView.sizeSpinner.attachDataSource(items)
+        binding.textEditView.sizeSpinner.selectedIndex = 6
+        binding.textEditView.sizeSpinner.setTextColor(ContextCompat.getColor(this, R.color.color_white))
+        binding.textEditView.sizeSpinner.onSpinnerItemSelectedListener =
+            OnSpinnerItemSelectedListener { _, _, position, _ ->
+                binding.textEditView.sizeSpinner.setTextColor(ContextCompat.getColor(this, R.color.color_white))
 
-                    focusedEditText?.textSize = textSize
+                val focusedEditText = currentFocus as? AppCompatEditText
+                val textSize = when (position) {
+                    0 -> 10f
+                    1 -> 12f
+                    2 -> 14f
+                    3 -> 16f
+                    4 -> 18f
+                    5 -> 20f
+                    6 -> 24f
+                    else -> 24f
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
+                focusedEditText?.textSize = textSize
             }
 
         binding.textEditView.horizontalBtn.setOnClickListener {
@@ -417,24 +410,8 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         startActivity(intent)
     }
 
-    private fun getBitmapFromView(view: View): Bitmap {
-        view.measure(
-            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY)
-        )
-        val width = view.measuredWidth
-        val height = view.measuredHeight
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        canvas.translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
-        view.draw(canvas)
-
-        return bitmap
-    }
-
     private fun goPreview() {
-        resultBitmap = getBitmapFromView(binding.resultImg)
+        resultBitmap = CommonFunc.getBitmapFromView(binding.resultImg)
         FreeImageStorage.bitmap = resultBitmap
 
         val intent = Intent(this, FreePrintPreviewActivity::class.java)

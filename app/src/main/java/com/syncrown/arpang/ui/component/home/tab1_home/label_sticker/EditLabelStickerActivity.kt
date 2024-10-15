@@ -2,29 +2,59 @@ package com.syncrown.arpang.ui.component.home.tab1_home.label_sticker
 
 import BottomIconAdapter
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditLabelStickerBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
+import com.syncrown.arpang.ui.commons.DialogCommon
+import com.syncrown.arpang.ui.commons.FontManager
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.adapter.FontAdapter
+import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.preview.LabelStickerPreviewActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.tag.LabelStickerTagSettingActivity
 import kotlinx.coroutines.launch
+import org.angmarch.views.OnSpinnerItemSelectedListener
+import java.util.LinkedList
+
 
 class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener {
     private lateinit var binding: ActivityEditLabelStickerBinding
+
+    private lateinit var dialogCommon: DialogCommon
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            //소프트키 뒤로 버튼 처리
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
+
+        }
+    }
+
+    private lateinit var resultBitmap: Bitmap
 
     override fun observeViewModel() {
 
@@ -37,21 +67,61 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(callback)
+        dialogCommon = DialogCommon()
+
         binding.actionbar.actionBack.setOnClickListener {
-            finish()
+            dialogCommon.showEditCancel(supportFragmentManager, {
+                //TODO 계속 편집
+            }, {
+                //TODO 편집 취소
+                finish()
+            })
         }
 
         binding.actionbar.actionTitle.text = "인쇄 편집"
         binding.actionbar.actionEtc.text = "인쇄"
         binding.actionbar.actionEtc.setOnClickListener {
+            if (AppDataPref.isLabelPreView) {
+                goPreview()
+            } else {
 
+            }
         }
 
         lifecycleScope.launch {
             setNavigationView()
 
             binding.bottomNavigation.selectedItemId = R.id.edit_1
+
+            setInput()
         }
+
+    }
+
+    private fun setInput() {
+        // 텍스트뷰의 길이를 초과할 경우 마지막 입력 문자 제거
+        binding.inputText.requestFocus()
+        binding.inputText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                val paint = binding.inputText.paint
+                val availableWidth =
+                    binding.inputText.width - binding.inputText.paddingLeft - binding.inputText.paddingRight
+                val textWidth = paint.measureText(p0.toString())
+
+                if (textWidth > availableWidth) {
+                    p0?.delete(p0.length - 1, p0.length)
+                }
+            }
+        })
 
     }
 
@@ -81,6 +151,7 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
                     } else {
                         binding.textEditView.root.visibility = View.VISIBLE
                         setEditText()
+                        setEditFont()
                     }
                     true
                 }
@@ -90,7 +161,14 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
                         binding.etcSettingView.root.visibility = View.GONE
                     } else {
                         binding.etcSettingView.root.visibility = View.VISIBLE
-                        setEtcSetting()
+                    }
+
+                    binding.etcSettingView.tagSetting.setOnClickListener {
+                        goTagSetting()
+                    }
+
+                    binding.etcSettingView.preview.setOnClickListener {
+                        goPreview()
                     }
                     true
                 }
@@ -130,6 +208,30 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
         Glide.with(this).load(bitmap).into(binding.iconImg)
     }
 
+    private fun setEditFont() {
+        binding.textEditView.editFont.setOnClickListener {
+            binding.textEditView.editText.isSelected = false
+            binding.textEditView.editFont.isSelected = true
+
+            binding.textEditView.editView.visibility = View.GONE
+            binding.textEditView.fontEditView.visibility = View.VISIBLE
+
+            hideKeyBoard()
+        }
+
+        binding.textEditView.recyclerFont.layoutManager = LinearLayoutManager(this)
+        val fontItems = FontManager.getFontItems()
+        val adapter = FontAdapter(this,
+            fontItems
+        ) { _, typeface ->
+            val focusedEditText = currentFocus as? AppCompatEditText
+
+            focusedEditText?.typeface = typeface
+        }
+        binding.textEditView.recyclerFont.adapter = adapter
+
+    }
+
     private fun setEditText() {
         binding.textEditView.editText.setOnClickListener {
             binding.textEditView.editText.isSelected = true
@@ -141,73 +243,41 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
             hideKeyBoard()
         }
 
-        binding.textEditView.editFont.setOnClickListener {
-            binding.textEditView.editText.isSelected = false
-            binding.textEditView.editFont.isSelected = true
+        val items: List<String> =
+            LinkedList(mutableListOf("10", "12", "14", "16", "18", "20", "24"))
+        binding.textEditView.sizeSpinner.attachDataSource(items)
+        binding.textEditView.sizeSpinner.selectedIndex = 6
+        binding.textEditView.sizeSpinner.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.color_white
+            )
+        )
+        binding.textEditView.sizeSpinner.onSpinnerItemSelectedListener =
+            OnSpinnerItemSelectedListener { _, _, position, _ ->
+                binding.textEditView.sizeSpinner.setTextColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.color_white
+                    )
+                )
 
-            binding.textEditView.editView.visibility = View.GONE
-            binding.textEditView.fontEditView.visibility = View.VISIBLE
-
-            hideKeyBoard()
-        }
-
-        // 텍스트 편집
-        val items = arrayOf("10", "12", "14", "16", "18", "20", "24")
-        val myAdapter = ArrayAdapter(this, R.layout.spinner_item_edit_text_size, items)
-        binding.textEditView.sizeSpinner.adapter = myAdapter
-        binding.textEditView.sizeSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val focusedEditText = currentFocus as? AppCompatEditText
-                    val textSize = when (position) {
-                        0 -> 10f
-                        1 -> 12f
-                        2 -> 14f
-                        3 -> 16f
-                        4 -> 18f
-                        5 -> 20f
-                        6 -> 24f
-                        else -> 24f
-                    }
-
-                    focusedEditText?.textSize = textSize
+                val focusedEditText = currentFocus as? AppCompatEditText
+                val textSize = when (position) {
+                    0 -> 10f
+                    1 -> 12f
+                    2 -> 14f
+                    3 -> 16f
+                    4 -> 18f
+                    5 -> 20f
+                    6 -> 24f
+                    else -> 24f
                 }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
+                focusedEditText?.textSize = textSize
             }
 
-        binding.textEditView.horizontalBtn.setOnClickListener {
-            val focusedEditText = currentFocus as? AppCompatEditText
-            binding.textEditView.horizontalBtn.isSelected = true
-            binding.textEditView.verticalBtn.isSelected = false
-
-            focusedEditText?.let {
-                val verticalText = it.text.toString()
-                val horizontalText = verticalText.replace("\n", "")
-                it.setText(horizontalText)
-            }
-
-        }
-
-        binding.textEditView.verticalBtn.setOnClickListener {
-            val focusedEditText = currentFocus as? AppCompatEditText
-            binding.textEditView.horizontalBtn.isSelected = false
-            binding.textEditView.verticalBtn.isSelected = true
-
-            focusedEditText?.let {
-                val originalText = it.text.toString()
-                val verticalText = originalText.toCharArray().joinToString("\n")
-                it.setText(verticalText)
-            }
-
-        }
+        binding.textEditView.groupVertical.visibility = View.GONE
 
         binding.textEditView.alignLeftBtn.setOnClickListener {
             val focusedEditText = currentFocus as? AppCompatEditText
@@ -252,9 +322,16 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
             focusedEditText?.typeface = Typeface.DEFAULT_BOLD
         }
 
+        binding.textEditView.styleBtn.isSelected = false
         binding.textEditView.styleBtn.setOnClickListener {
             val focusedEditText = currentFocus as? AppCompatEditText
-            focusedEditText?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            if (binding.textEditView.styleBtn.isSelected) {
+                binding.textEditView.styleBtn.isSelected = false
+                focusedEditText?.paintFlags = Paint.LINEAR_TEXT_FLAG
+            } else {
+                binding.textEditView.styleBtn.isSelected = true
+                focusedEditText?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            }
         }
     }
 
@@ -265,9 +342,16 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
         }
     }
 
-    private fun setEtcSetting() {
+    private fun goPreview() {
+        resultBitmap = CommonFunc.getBitmapFromView(binding.contentView)
+        LabelStickerImageStorage.bitmap = resultBitmap
 
+        val intent = Intent(this, LabelStickerPreviewActivity::class.java)
+        startActivity(intent)
     }
 
-
+    private fun goTagSetting() {
+        val intent = Intent(this, LabelStickerTagSettingActivity::class.java)
+        startActivity(intent)
+    }
 }

@@ -7,15 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.syncrown.arpang.databinding.ItemThumbnailBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ThumbnailAdapter(
     private val context: Context,
     private val thumbnails: List<Bitmap>,
-    private val listener: OnItemClickListener // 추가된 부분
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<ThumbnailAdapter.ThumbnailViewHolder>() {
 
     fun interface OnItemClickListener {
@@ -39,14 +35,10 @@ class ThumbnailAdapter(
     }
 
     override fun onBindViewHolder(holder: ThumbnailViewHolder, position: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val bitmap = thumbnails[position]
-            withContext(Dispatchers.Main) {
-                Glide.with(context)
-                    .load(bitmap)
-                    .into(holder.binding.itemThumb)
-            }
-        }
+        val bitmap = thumbnails[position]
+        Glide.with(context)
+            .load(bitmap)
+            .into(holder.binding.itemThumb)
     }
 
     override fun getItemCount(): Int = thumbnails.size
