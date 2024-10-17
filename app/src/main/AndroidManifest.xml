@@ -72,6 +72,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoInitEnabled"
+            android:value="false" />
 
         <activity
             android:name=".ui.component.splash.SplashActivity"
@@ -101,10 +104,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.join.main.JoinEmailActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.join.consent.JoinConsentActivity"
             android:exported="true" />
 
@@ -114,10 +113,6 @@
 
         <activity
             android:name=".ui.component.join.term_privacy.PolishWebActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".ui.component.join.email_cert.CertEmailActivity"
             android:exported="true" />
 
         <activity
@@ -133,7 +128,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.ar_guide.ArGuideActivity"
+            android:name=".ui.component.home.tab1_home.ar_print.guide.ArGuideActivity"
             android:exported="true" />
 
         <activity
@@ -291,6 +286,10 @@
 
         <activity
             android:name=".ui.component.home.tab1_home.ar_print.tag.ArPrintTagSettingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.subscribe.detail.SubscribeDetailActivity"
             android:exported="true" />
 
         <!--   자유편집 -> 이미지 크롭기능     -->

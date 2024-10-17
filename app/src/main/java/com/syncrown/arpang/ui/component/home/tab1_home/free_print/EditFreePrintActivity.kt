@@ -29,6 +29,7 @@ import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.preview.FreePrintPreviewActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.select.SelectFreePrintActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity
@@ -56,7 +57,7 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
     }
@@ -82,7 +83,7 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
 
@@ -415,6 +416,12 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
         FreeImageStorage.bitmap = resultBitmap
 
         val intent = Intent(this, FreePrintPreviewActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }

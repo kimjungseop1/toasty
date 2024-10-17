@@ -6,20 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemSubscribeBinding
+import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeType
 
 class SubscribeListAdapter(
     private val context: Context,
     private val items: ArrayList<String>,
-    private var mlistener: OnItemClickListener
+    private val type: SubscribeType,
+    private var mDelListener: OnItemDeleteListener,
+    private var mListener: OnItemClickListener
 ) : RecyclerView.Adapter<SubscribeListAdapter.SubscribeHolder>() {
 
-    interface OnItemClickListener {
-        fun onClick(position: Int, view: View)
+    interface OnItemDeleteListener {
+        fun onDelete(position: Int, view: View)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        mlistener = listener
+    interface OnItemClickListener {
+        fun onClick(position: Int)
     }
+
+//    fun setOnItemDeleteListener(listener: OnItemDeleteListener) {
+//        mDelListener = listener
+//    }
+//
+//    fun setOnItemClickListener(listener: OnItemClickListener) {
+//        mListener = listener
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscribeHolder {
         return SubscribeHolder(
@@ -42,10 +53,19 @@ class SubscribeListAdapter(
     inner class SubscribeHolder(binding: ItemSubscribeBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val binding: ItemSubscribeBinding = binding
-        fun onBind(context: Context?, position: Int) {
-            // 데이터 바인딩 로직
+        fun onBind(context: Context, position: Int) {
+            if (type == SubscribeType.MY) {
+                binding.moreView.visibility = View.GONE
+            } else {
+                binding.moreView.visibility = View.VISIBLE
+            }
+
             binding.moreView.setOnClickListener {
-                mlistener?.onClick(position, binding.moreView)
+                mDelListener.onDelete(position, binding.moreView)
+            }
+
+            binding.root.setOnClickListener {
+                mListener.onClick(position)
             }
         }
     }

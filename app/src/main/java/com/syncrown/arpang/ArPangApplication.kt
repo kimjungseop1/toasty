@@ -35,7 +35,7 @@ class ArPangApplication : Application() {
 
         NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
 
-        FacebookSdk.sdkInitialize(this)
+        FacebookSdk.fullyInitialize()
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 

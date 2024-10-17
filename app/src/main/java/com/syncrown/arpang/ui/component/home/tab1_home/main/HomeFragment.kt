@@ -20,11 +20,10 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentHomeBinding
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.component.home.MainViewModel
-import com.syncrown.arpang.ui.component.home.tab1_home.ar_guide.ArGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.guide.ArGuideActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.event.EventGuideActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
@@ -141,7 +140,7 @@ class HomeFragment : Fragment() {
         arrayList.add("3")
         arrayList.add("4")
 
-        val pagerWidth = resources.getDimensionPixelOffset(R.dimen.pagerWidth)
+        val pagerWidth = resources.displayMetrics.widthPixels * 0.9
         val screenWidth = resources.displayMetrics.widthPixels
         val pagerPadding = ((screenWidth - pagerWidth) * 0.5).toInt()
         val offsetPx = ((screenWidth - pagerWidth) * 0.05).toInt()
@@ -213,16 +212,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun goArPrint() {
-        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra(
-            "FROM_HOME_CATEGORY",
-            getString(R.string.cartridge_empty_action_text_1)
-        )
-        startActivity(intent)
+        if (AppDataPref.isArGuideFirst) {
+            val intent = Intent(requireContext(), ArGuideActivity::class.java)
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra(
+                "FROM_HOME_CATEGORY",
+                getString(R.string.cartridge_empty_action_text_1)
+            )
+            startActivity(intent)
+        }
     }
 
     private fun goLife4Cut() {
-        // 용지가 없거나 프린트 미연결상태 용지화면으로 이동
         val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
         intent.putExtra(
             "FROM_HOME_CATEGORY",

@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatEditText
@@ -29,6 +30,7 @@ import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.FontManager
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.commons.HorizontalSpaceItemDecoration
+import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ActivityFinishManager
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ArImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.edit.adapter.NavBarItem
@@ -64,7 +66,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                 //TODO 계속편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
     }
@@ -97,7 +99,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                 //TODO 계속편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
         binding.actionbar.actionTitle.text =
@@ -136,13 +138,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     private fun setBottomMenuList() {
         val arrayList = ArrayList<NavBarItem>()
         arrayList.add(NavBarItem(R.drawable.icon_change_video, R.drawable.icon_sel_change, "영상 변경"))
-        arrayList.add(
-            NavBarItem(
-                R.drawable.icon_video_thumbnail,
-                R.drawable.icon_sel_thumbnail,
-                "썸네일"
-            )
-        )
+        arrayList.add(NavBarItem(R.drawable.icon_video_thumbnail, R.drawable.icon_sel_thumbnail, "썸네일"))
         arrayList.add(NavBarItem(R.drawable.icon_video_frame, R.drawable.icon_sel_frame, "영역"))
         arrayList.add(NavBarItem(R.drawable.icon_video_text, R.drawable.icon_sel_text, "텍스트"))
         arrayList.add(NavBarItem(R.drawable.icon_video_draw, R.drawable.icon_sel_draw, "드로잉"))
@@ -195,7 +191,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
                 2 -> {
                     //TODO  영역
-                    Log.e(TAG, "crop")
+                    Toast.makeText(this, "영역...", Toast.LENGTH_SHORT).show()
                 }
 
                 3 -> {
@@ -492,7 +488,6 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     override fun onStickerClick(bitmap: Bitmap) {
         mPhotoEditor.addImage(bitmap)
         binding.recyclerEdit.findViewHolderForLayoutPosition(5)?.itemView?.performClick()
-
     }
 
     /** ----- 스티커 관련 리스너 end **/
@@ -507,6 +502,12 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
     private fun goTagSetting() {
         val intent = Intent(this, ArPrintTagSettingActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }

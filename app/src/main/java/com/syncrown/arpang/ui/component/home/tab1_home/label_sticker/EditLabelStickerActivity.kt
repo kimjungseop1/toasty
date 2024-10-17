@@ -29,6 +29,7 @@ import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.FontManager
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.adapter.FontAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.preview.LabelStickerPreviewActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.tag.LabelStickerTagSettingActivity
@@ -48,7 +49,7 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
 
         }
@@ -75,7 +76,7 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
 
@@ -352,6 +353,12 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
 
     private fun goTagSetting() {
         val intent = Intent(this, LabelStickerTagSettingActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }

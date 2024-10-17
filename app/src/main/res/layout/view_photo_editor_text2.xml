@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -11,15 +10,21 @@
         android:layout_margin="8dp"
         android:background="@drawable/border_dash_stroke_3dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/tvPhotoEditorText"
+            style="@style/NoUnderlineEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            tools:text="@string/editor_activity_text_hint"
-            tools:textColor="@android:color/black" />
+            android:layout_margin="8dp"
+            android:gravity="start"
+            android:hint="@string/editor_activity_text_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textColor="@color/color_CECECE"
+            android:textColorHint="@color/color_CECECE"
+            android:textSize="18dp" />
 
     </FrameLayout>
 

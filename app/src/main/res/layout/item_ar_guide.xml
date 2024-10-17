@@ -11,7 +11,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:adjustViewBounds="true"
-        android:background="@color/color_face45"
+        android:src="@drawable/sample_img_1"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:.9"

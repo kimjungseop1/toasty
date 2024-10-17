@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityShareDetailBinding
 import com.syncrown.arpang.databinding.PopupSubscribeBinding
@@ -42,11 +43,25 @@ class ShareDetailActivity : BaseActivity() {
 
         binding.actionbar.actionTitle.text = "공유공간"
 
-        binding.actionbar.actionScrap.setOnClickListener {
+        binding.actionbar.actionEtc1.text = "인쇄"
+        binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.icon_action_print
+            ), null, null, null
+        )
+        binding.actionbar.actionEtc1.setOnClickListener {
 
         }
 
-        binding.actionbar.actionPrint.setOnClickListener {
+        binding.actionbar.actionEtc2.text = "스크랩"
+        binding.actionbar.actionEtc2.setCompoundDrawablesWithIntrinsicBounds(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.icon_action_scrap
+            ), null, null, null
+        )
+        binding.actionbar.actionEtc2.setOnClickListener {
 
         }
 
@@ -64,6 +79,11 @@ class ShareDetailActivity : BaseActivity() {
     }
 
     private fun showEventView() {
+        Glide.with(this)
+            .load(R.drawable.sample_img_1)
+            .circleCrop()
+            .into(binding.eventProfile)
+
 
     }
 

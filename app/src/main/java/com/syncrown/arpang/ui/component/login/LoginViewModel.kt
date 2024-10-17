@@ -3,7 +3,6 @@ package com.syncrown.arpang.ui.component.login
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -31,9 +30,9 @@ import com.kakao.sdk.user.model.User
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.syncrown.arpang.R
+import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NaverClient
 import com.syncrown.arpang.network.NetworkResult
-import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
@@ -44,8 +43,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import okhttp3.*
-import java.io.IOException
 
 
 class LoginViewModel : BaseViewModel() {

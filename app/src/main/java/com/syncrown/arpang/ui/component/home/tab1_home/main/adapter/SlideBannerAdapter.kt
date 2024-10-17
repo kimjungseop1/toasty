@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemHomeBannerBinding
 
 class SlideBannerAdapter(
@@ -51,8 +53,11 @@ class SlideBannerAdapter(
     inner class SlideBannerHolder(binding: ItemHomeBannerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val bannerBinding: ItemHomeBannerBinding = binding
-        fun onBind(context: Context?, position: Int) {
+        fun onBind(context: Context, position: Int) {
             // 데이터 바인딩 로직
+            Glide.with(context)
+                .load(R.drawable.sample_img_1)
+                .into(bannerBinding.bannerImg)
         }
 
         val runnable = Runnable {

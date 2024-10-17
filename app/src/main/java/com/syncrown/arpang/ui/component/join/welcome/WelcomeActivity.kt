@@ -6,7 +6,7 @@ import com.syncrown.arpang.databinding.ActivityWelcomeBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.MainActivity
 
-class WelcomeActivity:BaseActivity() {
+class WelcomeActivity : BaseActivity() {
     private lateinit var binding: ActivityWelcomeBinding
 
     override fun observeViewModel() {

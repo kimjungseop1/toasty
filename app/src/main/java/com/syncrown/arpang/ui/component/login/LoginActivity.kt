@@ -12,6 +12,7 @@ import com.syncrown.arpang.databinding.ActivtyLoginBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.MainActivity
+import com.syncrown.arpang.ui.component.join.consent.JoinConsentActivity
 
 
 class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
@@ -19,12 +20,6 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
     private val loginViewModel: LoginViewModel by viewModels()
 
     private val callbackManager = CallbackManager.Factory.create()
-
-    private val signInLauncher =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            loginViewModel.handleSignInResult(result.data)
-        }
-
 
     override fun observeViewModel() {
         //TODO 회원여부 체크 옵져브
@@ -72,6 +67,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
                             "SUCCESS" -> {
                                 Log.e(TAG, "성공")
+                                goJoinConsent()
                             }
 
                             else -> {
@@ -139,8 +135,17 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
     }
 
+    private val signInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            loginViewModel.handleSignInResult(result.data)
+        }
+
     override fun onAppleEmailSuccess(email: String) {
         Toast.makeText(this, "Apple 로그인 성공! 이메일: $email", Toast.LENGTH_SHORT).show()
+    }
 
+    private fun goJoinConsent() {
+        val intent = Intent(this, JoinConsentActivity::class.java)
+        startActivity(intent)
     }
 }

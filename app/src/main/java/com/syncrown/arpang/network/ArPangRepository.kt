@@ -6,8 +6,10 @@ import com.google.gson.GsonBuilder
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseJoinDto
+import com.syncrown.arpang.network.model.ResponseLoginDto
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -50,32 +52,43 @@ class ArPangRepository {
             .create(ArPangInterface::class.java)
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //TODO 회원여부 확인
+    /***********************************************************************************************
+     * 각 뷰모델에서 사용하기 위한 라이브데이터
+     **********************************************************************************************/
+    //TODO 001. 회원여부 확인
     val checkMemberLiveDataRepository: MutableLiveData<NetworkResult<ResponseCheckMember>> =
         MutableLiveData()
 
-    //TODO 가입신청
+    //TODO 002. 가입신청
     val joinLiveDataRepository: MutableLiveData<NetworkResult<ResponseJoinDto>> = MutableLiveData()
 
+    //TODO 003. 로그인
+    val loginLiveDataRepository: MutableLiveData<NetworkResult<ResponseLoginDto>> =
+        MutableLiveData()
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //TODO 004.
 
+    /***********************************************************************************************
+     * API response를 라이브데이터에 추가
+     **********************************************************************************************/
+    //TODO 001. 회원여부 확인
     fun requestCheckMember(requestCheckMember: RequestCheckMember) {
-        arPangInterface.postCheckMember(requestCheckMember).enqueue(object : Callback<ResponseCheckMember> {
-            override fun onResponse(
-                call: Call<ResponseCheckMember>,
-                response: Response<ResponseCheckMember>
-            ) {
-                checkMemberLiveDataRepository.postValue(NetworkResult.Success(response.body()))
-            }
+        arPangInterface.postCheckMember(requestCheckMember)
+            .enqueue(object : Callback<ResponseCheckMember> {
+                override fun onResponse(
+                    call: Call<ResponseCheckMember>,
+                    response: Response<ResponseCheckMember>
+                ) {
+                    checkMemberLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                }
 
-            override fun onFailure(call: Call<ResponseCheckMember>, t: Throwable) {
-                checkMemberLiveDataRepository.postValue(NetworkResult.Error(t.message))
-            }
-        })
+                override fun onFailure(call: Call<ResponseCheckMember>, t: Throwable) {
+                    checkMemberLiveDataRepository.postValue(NetworkResult.Error(t.message))
+                }
+            })
     }
 
+    //TODO 002. 가입신청
     fun requestJoin(requestJoinDto: RequestJoinDto) {
         arPangInterface.postJoin(requestJoinDto).enqueue(object :
             Callback<ResponseJoinDto> {
@@ -97,6 +110,30 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseJoinDto>, t: Throwable) {
                 joinLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 003. 로그인
+    fun requestLogin(requestLoginDto: RequestLoginDto) {
+        arPangInterface.postLogin(requestLoginDto).enqueue(object : Callback<ResponseLoginDto> {
+            override fun onResponse(
+                call: Call<ResponseLoginDto>,
+                response: Response<ResponseLoginDto>
+            ) {
+                if (response.code() == 200) {
+                    loginLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    loginLiveDataRepository.postValue(
+                        NetworkResult.Error(
+                            response.message().toString()
+                        )
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
+                loginLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

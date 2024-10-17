@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +27,7 @@ import com.syncrown.arpang.databinding.ActivityMainBinding
 import com.syncrown.arpang.databinding.BottomSheetEventBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.BackPressCloseHandler
+import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
 import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.HomeFragment
 import com.syncrown.arpang.ui.component.home.tab1_home.search.SearchActivity
@@ -169,7 +171,7 @@ class MainActivity : BaseActivity() {
         }
 
         binding.actionbar.actionAr.setOnClickListener {
-            goARpage()
+            goArPage()
         }
     }
 
@@ -236,6 +238,39 @@ class MainActivity : BaseActivity() {
         bottomSheetDialog?.window?.setDimAmount(0.7f)
         bottomSheetDialog?.setContentView(binding.root)
 
+        val pageData = listOf("1", "2", "3")
+        val adapter = MainEventPagerAdapter(this, pageData, object : MainEventPagerAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+
+            }
+        })
+        binding.eventViewPager.adapter = adapter
+        binding.eventViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                adapter.updateCurrentPage(position)
+
+                val pageInfo = adapter.getPageInfo()
+                binding.pageView.text = pageInfo
+            }
+        })
+
+        binding.pageView.text = adapter.getPageInfo()
+
+        binding.leftBtn.setOnClickListener {
+            val currentPosition = binding.eventViewPager.currentItem
+            if (currentPosition > 0) {
+                binding.eventViewPager.currentItem = currentPosition - 1
+            }
+        }
+
+        binding.rightBtn.setOnClickListener {
+            val currentPosition = binding.eventViewPager.currentItem
+            if (currentPosition < adapter.itemCount - 1) {
+                binding.eventViewPager.currentItem = currentPosition + 1
+            }
+        }
+
         binding.continueCheckView.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppDataPref.isMainEvent = false
@@ -257,7 +292,7 @@ class MainActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    private fun goARpage() {
+    private fun goArPage() {
         val intent = Intent(this, ArCameraActivity::class.java)
         startActivity(intent)
     }

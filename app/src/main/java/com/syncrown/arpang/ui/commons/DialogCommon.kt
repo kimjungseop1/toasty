@@ -38,6 +38,8 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isSubscribeDel = false //TODO 나를 구독한사람 삭제
     private var isCommentDel = false //TODO 공유공간 상세 코멘트 삭제
     private var isCommentReport = false //TODO 공유공간 상세 코멘트 신고
+    private var isSubscribeReport = false //TODO 구독리스트 상세 신고
+    private var isSubscribeReject = false //TODO 구독리스트 상세 차단
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -79,6 +81,46 @@ class DialogCommon : DialogFragment(), OnClickListener {
         rightBtn: OnClickListener
     ) {
         manager?.let { createDialogCommentReport(leftBtn, rightBtn).show(it, "") }
+    }
+
+    private fun createDialogSubscribeDetailReport(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isSubscribeReport = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showSubscribeDetailReport(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogSubscribeDetailReport(leftBtn, rightBtn).show(it, "") }
+    }
+
+    private fun createDialogSubscribeDetailReject(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isSubscribeReject = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showSubscribeDetailReject(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogSubscribeDetailReject(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogCommentDelete(
@@ -487,6 +529,46 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 }
 
                 dialogNormalBinding.btnRight.text = "신고"
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isSubscribeReport -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = "사용자를 신고하시겠습니까?\n신고가 누적된 사용자는 관리자 판단하에\n사용이 제한 될 수 있습니다."
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = "신고"
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isSubscribeReject -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = "사용자를 차단하면 더이상 상대방의 컨텐츠를\n볼 수 없습니다.또한 구독중이면 구독이 취소됩니다.\n차단하시겠습니까?"
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = "차단"
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)

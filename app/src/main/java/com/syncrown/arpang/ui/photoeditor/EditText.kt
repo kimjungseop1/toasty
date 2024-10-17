@@ -21,7 +21,7 @@ internal class EditText(
     context = mPhotoEditorView.context,
     graphicManager = mGraphicManager,
     viewType = ViewType.TEXT,
-    layoutId = R.layout.view_photo_editor_text
+    layoutId = R.layout.view_photo_editor_text2
 ) {
     private var mTextView: AppCompatEditText? = null
 

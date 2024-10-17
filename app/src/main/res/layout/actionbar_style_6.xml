@@ -31,33 +31,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/action_scrap"
+        android:id="@+id/action_etc_2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/icon_action_scrap"
         android:drawablePadding="5dp"
         android:paddingTop="17dp"
         android:paddingBottom="17dp"
-        android:text="스크랩"
         android:textColor="@color/color_black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/action_print"
+        app:layout_constraintEnd_toStartOf="@id/action_etc_1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/action_print"
+        android:id="@+id/action_etc_1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/icon_action_print"
         android:drawablePadding="5dp"
         android:paddingTop="17dp"
         android:paddingBottom="17dp"
-        android:text="인쇄"
         android:textColor="@color/color_black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

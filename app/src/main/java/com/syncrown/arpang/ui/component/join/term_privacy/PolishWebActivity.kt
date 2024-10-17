@@ -1,7 +1,6 @@
 package com.syncrown.arpang.ui.component.join.term_privacy
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityWebPolishBinding
 import com.syncrown.arpang.ui.base.BaseActivity
-import com.syncrown.arpang.ui.component.join.main.JoinEmailActivity
 import kotlinx.coroutines.launch
 
 class PolishWebActivity : BaseActivity() {
@@ -47,6 +45,7 @@ class PolishWebActivity : BaseActivity() {
                 binding.consentBtn.text = ContextCompat.getString(this, R.string.polish_term_btn)
 
                 baseUrl = "http://192.168.0.4:8090/ntv/mypagee/clauses"
+
             }
 
             "privacy" -> {
@@ -115,18 +114,6 @@ class PolishWebActivity : BaseActivity() {
         }
 
         binding.consentBtn.setOnClickListener {
-            var value: Int = if (type == "term") {
-                1
-            } else {
-                2
-            }
-
-            if (preActivity == 1) {
-                val intent = Intent(this, JoinEmailActivity::class.java)
-                intent.putExtra("WEB_RESULT_DATA", value)
-                setResult(RESULT_OK, intent)
-            }
-
             finish()
         }
     }

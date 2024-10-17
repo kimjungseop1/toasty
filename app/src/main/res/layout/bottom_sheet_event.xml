@@ -30,29 +30,60 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="14dp" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/desc_1"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/controlView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="17dp"
-            android:text="@string/home_event_bottom_title"
-            android:textColor="@color/color_black"
-            android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="31dp"
+            android:layout_marginTop="11dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toTopOf="parent" >
 
-        <!-- 이벤트 들어갈 부분 임시 -->
-        <View
-            android:id="@+id/emptyView"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/leftBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingStart="12dp"
+                android:src="@drawable/icon_main_left_event"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/pageView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="1/1"
+                android:textColor="@color/color_black"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:textSize="13dp"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@id/leftBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/rightBtn"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/rightBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingEnd="12dp"
+                android:src="@drawable/icon_main_right_event"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 이벤트 들어갈 부분 -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/eventViewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="15dp"
-            android:background="#EFB1FF"
-            app:layout_constraintDimensionRatio="1:1.2"
+            android:layout_marginTop="11dp"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/desc_1" />
+            app:layout_constraintTop_toBottomOf="@id/controlView" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/continueCheckView"
@@ -67,7 +98,7 @@
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/emptyView" />
+            app:layout_constraintTop_toBottomOf="@id/eventViewPager" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/closeView"

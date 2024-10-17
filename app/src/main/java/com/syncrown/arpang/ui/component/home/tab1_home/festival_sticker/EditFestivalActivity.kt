@@ -30,6 +30,7 @@ import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.preview.FestivalPreviewActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.tag.FestivalTagSettingActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.FreeImageStorage
@@ -49,7 +50,7 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
 
         }
@@ -76,7 +77,7 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
                 //TODO 계속 편집
             }, {
                 //TODO 편집 취소
-                finish()
+                goMain()
             })
         }
         binding.actionbar.actionTitle.text = "인쇄 편집"
@@ -351,6 +352,12 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
         FestivalImageStorage.bitmap = resultBitmap
 
         val intent = Intent(this, FestivalPreviewActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }

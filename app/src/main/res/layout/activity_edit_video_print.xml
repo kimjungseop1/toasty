@@ -82,7 +82,7 @@
             android:visibility="gone" />
 
     </FrameLayout>
-
+    
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomMenu"
         android:layout_width="match_parent"
