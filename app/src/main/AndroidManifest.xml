@@ -124,15 +124,11 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.connect_cartridge.ConnectCartridgeActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.home.tab1_home.ar_print.guide.ArGuideActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.event.EventGuideActivity"
+            android:name=".ui.component.home.tab1_home.event.EventDetailActivity"
             android:exported="true" />
 
         <activity
@@ -181,10 +177,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab5_more.account.pw.ChangePwActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.home.tab5_more.account.withdrawal.WithdrawalActivity"
             android:exported="true" />
 
@@ -197,11 +189,11 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.paper_guide.PaperGuideActivity"
+            android:name=".ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.preview.PreViewCartridgeActivity"
+            android:name=".ui.component.home.tab1_home.empty_cartridge.preview.PreViewCartridgeActivity"
             android:exported="true" />
 
         <activity
@@ -290,6 +282,22 @@
 
         <activity
             android:name=".ui.component.home.tab5_more.subscribe.detail.SubscribeDetailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.manual.UseManual1DepthActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.manual.UseManual2DepthActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab1_home.manual.UseManualWebDetailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.component.home.tab5_more.event.EventAllActivity"
             android:exported="true" />
 
         <!--   자유편집 -> 이미지 크롭기능     -->

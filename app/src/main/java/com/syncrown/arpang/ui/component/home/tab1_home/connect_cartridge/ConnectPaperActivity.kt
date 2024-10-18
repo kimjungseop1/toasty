@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.paper_guide
+package com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import com.syncrown.arpang.databinding.ActivityPaperGuideBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogProgressCommon
 
-class PaperGuideActivity : BaseActivity() {
+class ConnectPaperActivity : BaseActivity() {
     private lateinit var binding: ActivityPaperGuideBinding
 
     override fun observeViewModel() {

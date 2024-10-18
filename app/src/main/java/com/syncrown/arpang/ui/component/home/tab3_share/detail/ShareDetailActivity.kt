@@ -180,7 +180,7 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 val customToast = CustomToast(this)
-                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.SUCCESS)
+                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }
@@ -207,7 +207,7 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 val customToast = CustomToast(this)
-                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.SUCCESS)
+                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }

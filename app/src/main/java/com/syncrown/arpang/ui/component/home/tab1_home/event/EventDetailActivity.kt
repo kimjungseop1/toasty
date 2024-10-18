@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.syncrown.arpang.databinding.ActivityEventGuideBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 
-class EventGuideActivity : BaseActivity() {
+class EventDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityEventGuideBinding
 
     override fun observeViewModel() {

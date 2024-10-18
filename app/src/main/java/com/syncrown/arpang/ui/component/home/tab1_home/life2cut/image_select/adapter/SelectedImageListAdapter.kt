@@ -36,7 +36,7 @@ class SelectedImageListAdapter(
 
     override fun onBindViewHolder(holder: ImageListHolder, position: Int) {
         val imageInfo = items[position]
-        holder.onBind(context, imageInfo)
+        holder.onBind(context, imageInfo, position)
     }
 
     override fun getItemCount(): Int {
@@ -46,11 +46,13 @@ class SelectedImageListAdapter(
     inner class ImageListHolder(private val binding: ItemSelectedImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        @SuppressLint("NotifyDataSetChanged")
-        fun onBind(context: Context, imageInfo: ImageInfo) {
+        @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+        fun onBind(context: Context, imageInfo: ImageInfo, position: Int) {
             binding.deleteBtn.setOnClickListener {
                 mListener?.onClick(imageInfo)
             }
+
+            binding.positionView.text = (position + 1).toString()
 
             Glide.with(context)
                 .load(imageInfo.filePath)

@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.connect_device
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.syncrown.arpang.databinding.ActivityConnectDeviceBinding
@@ -46,25 +47,34 @@ class ConnectDeviceActivity : BaseActivity() {
     private fun setDeviceList() {
         //임시 data
         val arrayList = ArrayList<String>()
-        arrayList.add("TOASTY MK1 (N1501152)")
-        arrayList.add("OVENY MK1 (N1501152)")
+//        arrayList.add("TOASTY MK1 (N1501152)")
+//        arrayList.add("OVENY MK1 (N1501152)")
 
-        val adapter = DeviceListAdapter(this, arrayList)
-        binding.recyclerDevice.layoutManager = LinearLayoutManager(this)
-        adapter.setOnItemClickListener(object : DeviceListAdapter.OnItemClickListener {
-            override fun onClick(position: Int) {
-                Log.e("jung", "click : $position")
-            }
-        })
-        binding.recyclerDevice.adapter = adapter
-        binding.recyclerDevice.addItemDecoration(
-            VerticalSpaceItemDecoration(
-                CommonFunc.dpToPx(
-                    16,
-                    this
+        if (arrayList.size > 0) {
+            binding.recyclerDevice.visibility = View.VISIBLE
+            binding.emptyView.visibility = View.GONE
+
+            val adapter = DeviceListAdapter(this, arrayList)
+            binding.recyclerDevice.layoutManager = LinearLayoutManager(this)
+            adapter.setOnItemClickListener(object : DeviceListAdapter.OnItemClickListener {
+                override fun onClick(position: Int) {
+                    Log.e("jung", "click : $position")
+                }
+            })
+            binding.recyclerDevice.adapter = adapter
+            binding.recyclerDevice.addItemDecoration(
+                VerticalSpaceItemDecoration(
+                    CommonFunc.dpToPx(
+                        16,
+                        this
+                    )
                 )
             )
-        )
+        } else {
+            binding.recyclerDevice.visibility = View.GONE
+            binding.emptyView.visibility = View.VISIBLE
+        }
+
     }
 
     private fun setUsePager() {

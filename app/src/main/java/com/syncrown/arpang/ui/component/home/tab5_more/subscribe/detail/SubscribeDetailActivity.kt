@@ -201,7 +201,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             }, {
                 //신고
                 val customToast = CustomToast(this)
-                customToast.showToast("사용자를 신고하였습니다.", CustomToastType.SUCCESS)
+                customToast.showToast("사용자를 신고하였습니다.", CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }
@@ -214,7 +214,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             }, {
                 //차단
                 val customToast = CustomToast(this)
-                customToast.showToast("사용자를 차단하였습니다.", CustomToastType.SUCCESS)
+                customToast.showToast("사용자를 차단하였습니다.", CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }

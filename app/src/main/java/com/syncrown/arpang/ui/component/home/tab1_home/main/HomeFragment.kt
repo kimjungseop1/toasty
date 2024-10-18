@@ -23,11 +23,12 @@ import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.guide.ArGuideActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.event.EventGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.event.EventDetailActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.paper_guide.PaperGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -241,7 +242,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun goServiceManual() {
-
+        val intent = Intent(requireContext(), UseManual1DepthActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goFreePrint() {
@@ -260,12 +262,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun goEventGuide() {
-        val intent = Intent(requireContext(), EventGuideActivity::class.java)
+        val intent = Intent(requireContext(), EventDetailActivity::class.java)
         startActivity(intent)
     }
 
     private fun goPaperGuide() {
-        val intent = Intent(requireContext(), PaperGuideActivity::class.java)
+        val intent = Intent(requireContext(), ConnectPaperActivity::class.java)
         paperGuideLauncher.launch(intent)
     }
 

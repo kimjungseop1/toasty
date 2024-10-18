@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.preview
+package com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.preview
 
 import android.content.Intent
 import android.os.Bundle

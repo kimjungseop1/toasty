@@ -9,6 +9,14 @@
         android:id="@+id/actionbar"
         layout="@layout/actionbar_style_1" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_f5f5f5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left"
         android:layout_width="wrap_content"
@@ -39,7 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/custom_editbox_stroke_gray_5dp"
+        android:background="@drawable/custom_editbox_solid_white_5dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:textColor="@color/color_black"
@@ -50,19 +58,20 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/desc_2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="* (이름 변경 관련 정책 기재. ) 이름은 한달에 한번만 변경할 수 있습니다."
         android:textColor="@color/color_black"
         android:textSize="14dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_right"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintEnd_toEndOf="@id/inputName"
+        app:layout_constraintStart_toStartOf="@id/inputName"
         app:layout_constraintTop_toBottomOf="@id/inputName" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:background="@color/color_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

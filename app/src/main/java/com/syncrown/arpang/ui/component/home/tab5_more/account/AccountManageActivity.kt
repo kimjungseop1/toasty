@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.syncrown.arpang.databinding.ActivityAccountManageBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.account.name.ChangeNameActivity
-import com.syncrown.arpang.ui.component.home.tab5_more.account.pw.ChangePwActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.account.withdrawal.WithdrawalActivity
 
 class AccountManageActivity : BaseActivity() {
@@ -33,10 +32,6 @@ class AccountManageActivity : BaseActivity() {
             goChangeName()
         }
 
-        binding.clView3.setOnClickListener {
-            goChangePw()
-        }
-
         binding.withdrawalTxt.setOnClickListener {
             goWithdrawal()
         }
@@ -45,11 +40,6 @@ class AccountManageActivity : BaseActivity() {
 
     private fun goChangeName() {
         val intent = Intent(this, ChangeNameActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun goChangePw() {
-        val intent = Intent(this, ChangePwActivity::class.java)
         startActivity(intent)
     }
 

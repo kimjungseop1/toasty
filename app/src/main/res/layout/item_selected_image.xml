@@ -8,22 +8,36 @@
         android:id="@+id/thumbnailView"
         android:layout_width="85dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginTop="5dp"
-        android:scaleType="centerCrop"
+        android:layout_marginEnd="5dp"
         android:background="@color/color_F0F0F0"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/positionView"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/bg_image_select_count"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/color_white"
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@id/thumbnailView"
+        app:layout_constraintTop_toTopOf="@id/thumbnailView" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/deleteBtn"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/icon_image_delete"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:src="@drawable/icon_image_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

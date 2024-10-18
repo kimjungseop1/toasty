@@ -171,38 +171,6 @@
                 app:layout_constraintTop_toBottomOf="@id/clView_1" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/extraService_1"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/color_white"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingStart="28dp"
-                android:text="토스티를 통해 제공하는 부가 서비스 1"
-                android:textColor="@color/color_black"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/showEventAll" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/extraService_2"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/color_white"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:paddingStart="28dp"
-                android:text="토스티를 통해 제공하는 부가 서비스 2"
-                android:textColor="@color/color_black"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/extraService_1" />
-
-            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cutOffView"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -216,7 +184,7 @@
                 android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/extraService_2" />
+                app:layout_constraintTop_toBottomOf="@id/showEventAll" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/alertSetting"

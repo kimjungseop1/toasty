@@ -36,47 +36,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_1"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAddView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
+        android:clipToPadding="false"
+        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/desc_1">
+        app:layout_constraintTop_toBottomOf="@id/desc_1" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerAddView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingStart="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/emptyAddView"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:gravity="center"
-            android:text="선택된 이미지가 없습니다."
-            android:textColor="@color/color_868686"
-            android:textSize="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/emptyAddView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="선택된 이미지가 없습니다."
+        android:textColor="@color/color_868686"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerAddView"
+        app:layout_goneMarginTop="52dp" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="61dp"
         android:background="@color/color_CECECE"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/clView_1" />
+        app:layout_constraintTop_toBottomOf="@id/emptyAddView"
+        app:layout_goneMarginTop="25dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/desc_2"

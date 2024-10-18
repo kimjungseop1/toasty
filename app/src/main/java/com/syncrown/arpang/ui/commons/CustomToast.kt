@@ -17,17 +17,17 @@ class CustomToast(private val context: Context) {
         // 레이아웃 내의 이미지와 텍스트를 설정합니다.
         binding.toastMsg.text = message
         when (type) {
-            CustomToastType.FAIL -> {
+            CustomToastType.BLACK -> {
                 binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_1)
                 true
             }
 
-            CustomToastType.SUCCESS -> {
+            CustomToastType.BLUE -> {
                 binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_2)
                 true
             }
 
-            CustomToastType.WARNING -> {
+            CustomToastType.RED -> {
                 binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_3)
                 true
             }

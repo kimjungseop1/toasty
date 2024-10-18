@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.arpang.databinding.ActivityImageSelectBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
+import com.syncrown.arpang.ui.commons.CustomToast
+import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.commons.HorizontalSpaceItemDecoration
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.edit.EditPrint2CutImageActivity
@@ -22,6 +24,8 @@ class ImageSelectActivity : BaseActivity() {
     private lateinit var binding: ActivityImageSelectBinding
     private val imageSelectViewModel: ImageSelectViewModel by viewModels()
 
+    private lateinit var selectedImg: MutableList<ImageInfo>
+
     override fun observeViewModel() {
         imageSelectViewModel.folderNames.observe(this) { folderNames ->
             setSpinner(folderNames)
@@ -32,6 +36,7 @@ class ImageSelectActivity : BaseActivity() {
         }
 
         imageSelectViewModel.selectedImages.observe(this) { selectedImages ->
+            selectedImg = selectedImages
             setSelectedImageList(selectedImages)
         }
     }
@@ -50,7 +55,12 @@ class ImageSelectActivity : BaseActivity() {
         binding.actionbar.actionTitle.text = "인생 두컷"
         binding.actionbar.actionEtc.text = "만들기"
         binding.actionbar.actionEtc.setOnClickListener {
-            goEditImagePrint()
+            if (selectedImg.size != 2) {
+                val customToast = CustomToast(this)
+                customToast.showToast("이미지를 선택해주세요", CustomToastType.BLACK)
+            } else {
+                goEditImagePrint()
+            }
         }
 
         imageSelectViewModel.loadFolderNames(this)

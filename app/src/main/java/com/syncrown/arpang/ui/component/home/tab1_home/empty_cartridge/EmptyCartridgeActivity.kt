@@ -18,7 +18,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFest
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.EditFreePrintActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.EditLabelStickerActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.preview.PreViewCartridgeActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.preview.PreViewCartridgeActivity
 
 class EmptyCartridgeActivity : BaseActivity() {
     private lateinit var binding: ActivityEmptyCartridgeBinding

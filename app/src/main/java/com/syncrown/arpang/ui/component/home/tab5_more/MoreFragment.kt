@@ -15,6 +15,7 @@ import com.syncrown.arpang.ui.component.home.tab5_more.account.AccountManageActi
 import com.syncrown.arpang.ui.component.home.tab5_more.alert.AlertActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.alert_setting.AlertSettingActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.cutoff.CutOffActivity
+import com.syncrown.arpang.ui.component.home.tab5_more.event.EventAllActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.NoticeActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.scrap.ScrapActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
@@ -74,7 +75,7 @@ class MoreFragment : Fragment() {
 
         //TODO 이벤트 모두보기
         binding.showEventAll.setOnClickListener {
-
+            goEventAllView()
         }
 
         //TODO 차단관리
@@ -129,6 +130,11 @@ class MoreFragment : Fragment() {
 
     private fun goScrap() {
         val intent = Intent(requireContext(), ScrapActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goEventAllView() {
+        val intent = Intent(requireContext(), EventAllActivity::class.java)
         startActivity(intent)
     }
 
