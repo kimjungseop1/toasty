@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.account
 
 import android.content.Intent
 import android.os.Bundle
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityAccountManageBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.account.name.ChangeNameActivity
@@ -26,7 +27,7 @@ class AccountManageActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "계정관리"
+        binding.actionbar.actionTitle.text = getString(R.string.account_title)
 
         binding.clView2.setOnClickListener {
             goChangeName()

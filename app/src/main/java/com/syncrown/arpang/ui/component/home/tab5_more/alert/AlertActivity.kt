@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.alert
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityAlertMainBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.alert.adapter.AlertListAdapter
@@ -24,7 +25,7 @@ class AlertActivity:BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "알림"
+        binding.actionbar.actionTitle.text = getString(R.string.alert_title)
 
         setTodayList()
 

@@ -1,6 +1,7 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.account.name
 
 import android.os.Bundle
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityChangeNameBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomToast
@@ -25,7 +26,7 @@ class ChangeNameActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "이름 변경"
+        binding.actionbar.actionTitle.text = getString(R.string.account_change_name)
 
         binding.changeBtn.setOnClickListener {
             val customToast = CustomToast(this)

@@ -45,7 +45,7 @@ class ScrapActivity : BaseActivity(), ShareGridItemAdapter.OnItemClickListener,
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "스크랩"
+        binding.actionbar.actionTitle.text = getString(R.string.scrap_title)
 
         setMenuView()
 

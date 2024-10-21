@@ -28,36 +28,38 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.network.ArPangRepository
-import com.syncrown.arpang.network.NaverClient
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember
-import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
-import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.json.JSONException
+import kotlin.coroutines.resumeWithException
 
 
 class LoginViewModel : BaseViewModel() {
     private val arPangRepository: ArPangRepository = ArPangRepository()
     private val checkMemberResponseLiveData: LiveData<NetworkResult<ResponseCheckMember>> =
         arPangRepository.checkMemberLiveDataRepository
-    private val joinMemberResponseLiveData: LiveData<NetworkResult<ResponseJoinDto>> =
-        arPangRepository.joinLiveDataRepository
 
     /**
      * =============================================================================================
      * 회원여부 체크
      * =============================================================================================
      */
-    private fun checkMember(memberId: String) {
+    fun checkMember(memberId: String) {
         viewModelScope.launch {
             val requestCheckMember = RequestCheckMember()
             requestCheckMember.apply {
@@ -70,21 +72,6 @@ class LoginViewModel : BaseViewModel() {
 
     fun checkMemberResponseLiveData(): LiveData<NetworkResult<ResponseCheckMember>> {
         return checkMemberResponseLiveData
-    }
-
-    /**
-     * =============================================================================================
-     * 가입신청
-     * =============================================================================================
-     */
-    fun joinMember(requestJoinDto: RequestJoinDto) {
-        viewModelScope.launch {
-            arPangRepository.requestJoin(requestJoinDto)
-        }
-    }
-
-    fun joinMemberResponseLiveData(): LiveData<NetworkResult<ResponseJoinDto>> {
-        return joinMemberResponseLiveData
     }
 
     /**
@@ -154,7 +141,7 @@ class LoginViewModel : BaseViewModel() {
             .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
                     Log.e("Callback :: ", "onSuccess")
-                    requestMe(loginResult.accessToken)
+                    requestMe(activity, loginResult.accessToken)
                 }
 
                 override fun onCancel() {
@@ -168,9 +155,24 @@ class LoginViewModel : BaseViewModel() {
 
     }
 
-    private fun requestMe(token: AccessToken) {
+    private fun requestMe(activity: Activity, token: AccessToken) {
         val graphRequest = GraphRequest.newMeRequest(token) { `object`, _ ->
-            Log.e("result", `object`.toString())
+            try {
+                val uniqueId = `object`?.optString("id", null) ?: ""
+
+                // Log the results
+                Log.e("Facebook User ID : ", uniqueId)
+
+                AppDataPref.userId = uniqueId
+                AppDataPref.save(activity)
+
+                val userId = "f $uniqueId"
+
+                checkMember(userId)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                Log.e("Error", "Failed to parse user data: ${e.message}")
+            }
         }
 
         val parameters = Bundle()
@@ -184,23 +186,23 @@ class LoginViewModel : BaseViewModel() {
      * 카카오
      * =============================================================================================
      */
-    fun kakaoLogin(context: Context) {
+    fun kakaoLogin(activity: Activity) {
         viewModelScope.launch {
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-                UserApiClient.instance.loginWithKakaoTalk(context) { token: OAuthToken?, error: Throwable? ->
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(activity)) {
+                UserApiClient.instance.loginWithKakaoTalk(activity) { token: OAuthToken?, error: Throwable? ->
                     if (token != null) {
                         val snsToken = token.accessToken
                         Log.e(TAG, snsToken)
-                        getKaKaoProfile(context, snsToken)
+                        getKaKaoProfile(activity, snsToken)
                     }
 
                     error?.printStackTrace()
                 }
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(context) { token: OAuthToken?, error: Throwable? ->
+                UserApiClient.instance.loginWithKakaoAccount(activity) { token: OAuthToken?, error: Throwable? ->
                     if (token != null) {
                         val snsToken = token.accessToken
-                        getKaKaoProfile(context, snsToken)
+                        getKaKaoProfile(activity, snsToken)
                     }
 
                     error?.printStackTrace()
@@ -209,15 +211,18 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
-    private fun getKaKaoProfile(context: Context, snsToken: String) {
+    private fun getKaKaoProfile(activity: Activity, snsToken: String) {
         UserApiClient.instance.me { user: User?, throwable: Throwable? ->
             if (user != null) {
                 //TODO
-                val email = user.kakaoAccount!!.email
+                val id = user.id
+                var userId = "k $id"
+                AppDataPref.userId = userId
+                AppDataPref.save(activity)
 
-                checkMember("k $email")
+                checkMember(userId)
             } else {
-                Toast.makeText(context, "계정 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "계정 정보가 없습니다.", Toast.LENGTH_SHORT).show()
             }
             throwable?.printStackTrace()
         }
@@ -229,14 +234,14 @@ class LoginViewModel : BaseViewModel() {
      * 네이버
      * =============================================================================================
      */
-    fun naverLogin(context: Context) {
-        NaverIdLoginSDK.authenticate(context, object : OAuthLoginCallback {
+    fun naverLogin(activity: Activity) {
+        NaverIdLoginSDK.authenticate(activity, object : OAuthLoginCallback {
             override fun onSuccess() {
                 // 로그인 성공 처리
                 val accessToken = NaverIdLoginSDK.getAccessToken()
                 if (accessToken != null) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        fetchNaverUserProfile(accessToken)
+                        fetchNaverUserProfile(activity)
                     }
                 }
             }
@@ -254,28 +259,41 @@ class LoginViewModel : BaseViewModel() {
         })
     }
 
-    private suspend fun fetchNaverUserProfile(accessToken: String?) {
+    private suspend fun fetchNaverUserProfile(activity: Activity) {
         try {
-            val naverApiService = NaverClient.instance
-            val response = naverApiService.getUserProfile("Bearer $accessToken")
+            val result = withContext(Dispatchers.IO) {
+                suspendCancellableCoroutine { continuation ->
+                    NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
+                        override fun onSuccess(result: NidProfileResponse) {
+                            continuation.resume(result) {}
+                        }
+
+                        override fun onFailure(httpStatus: Int, message: String) {
+                            continuation.resumeWithException(Exception("Profile API failed with status $httpStatus: $message"))
+                        }
+
+                        override fun onError(errorCode: Int, message: String) {
+                            continuation.resumeWithException(Exception("Profile API error: $message"))
+                        }
+                    })
+                }
+            }
+
+            val uniqueId = result.profile?.id
+            Log.e("jung", "uniqueid : $uniqueId")
+            val userId = "n $uniqueId"
+            AppDataPref.userId = userId
+            AppDataPref.save(activity)
 
             withContext(Dispatchers.Main) {
-                // 가져온 이메일 및 사용자 정보 처리
-                val email = response.response.email
-                val name = response.response.name
-
-                Log.d("jung", "User email: $email")
-                Log.d("jung", "User name: $name")
-
-                // 회원여부체크
-                checkMember("n $email")
+                checkMember(userId)
             }
+
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                e.printStackTrace()
-            }
+            e.printStackTrace()
         }
     }
+
 
     /**
      * =============================================================================================

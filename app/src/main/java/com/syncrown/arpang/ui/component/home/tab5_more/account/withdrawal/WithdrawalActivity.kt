@@ -26,7 +26,7 @@ class WithdrawalActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "회원 탈퇴"
+        binding.actionbar.actionTitle.text = getString(R.string.more_account_withdrawal)
 
         val text = getString(R.string.account_withdrawal_polish)
         val spannableString = SpannableString(text)

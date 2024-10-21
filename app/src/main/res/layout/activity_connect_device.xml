@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
-                android:text="디바이스 연결"
+                android:text="@string/device_connect_title"
                 android:textColor="@color/color_black"
                 android:textSize="24dp"
                 android:textStyle="bold"
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="연결 가능한 디바이스가 검색되었습니다."
+                android:text="@string/device_connect_sub_title"
                 android:textColor="@color/color_black"
                 android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +92,7 @@
                 android:drawableStart="@drawable/icon_retry"
                 android:drawablePadding="8dp"
                 android:gravity="center"
-                android:text="다시 검색하기"
+                android:text="@string/device_connect_re_search"
                 android:textColor="@color/color_black"
                 android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="31dp"
                 android:drawableStart="@drawable/idea_light_bulb"
-                android:text="프린터 연결이 어려우신가요?"
+                android:text="@string/device_connect_guide_title"
                 android:textColor="@color/color_black"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -127,41 +127,51 @@
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintVertical_chainStyle="packed" />
 
-            <androidx.cardview.widget.CardView
+            <include
                 android:id="@+id/cardTabView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="20dp"
-                app:cardBackgroundColor="@color/color_f5f5f5"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/desc_3">
-
-                <com.syncrown.arpang.ui.commons.CustomTabLayout2
-                    android:id="@+id/customTabView"
-                    android:layout_width="match_parent"
-                    android:layout_height="41dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    app:tabIndicator="@null"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/color_black"
-                    app:tabTextAppearance="@style/tabTextSizeStyle2"
-                    app:tabTextColor="@color/color_424242" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPagerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:nestedScrollingEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="22dp"
+                layout="@layout/fragment_connect_device_1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardTabView" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desc_3"/>
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/cardTabView"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                app:cardBackgroundColor="@color/color_f5f5f5"-->
+<!--                app:cardCornerRadius="16dp"-->
+<!--                app:cardElevation="0dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/desc_3">-->
+
+<!--                <com.syncrown.arpang.ui.commons.CustomTabLayout2-->
+<!--                    android:id="@+id/customTabView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="41dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_margin="4dp"-->
+<!--                    app:tabIndicator="@null"-->
+<!--                    app:tabMode="fixed"-->
+<!--                    app:tabSelectedTextColor="@color/color_black"-->
+<!--                    app:tabTextAppearance="@style/tabTextSizeStyle2"-->
+<!--                    app:tabTextColor="@color/color_424242" />-->
+<!--            </androidx.cardview.widget.CardView>-->
+
+<!--            <androidx.viewpager2.widget.ViewPager2-->
+<!--                android:id="@+id/viewPagerView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:nestedScrollingEnabled="true"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/cardTabView" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

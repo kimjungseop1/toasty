@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.event
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEventAllBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -26,7 +27,7 @@ class EventAllActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "전체 이벤트"
+        binding.actionbar.actionTitle.text = getString(R.string.all_event_title)
 
         setEventList()
     }

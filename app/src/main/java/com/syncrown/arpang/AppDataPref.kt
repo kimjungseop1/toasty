@@ -9,7 +9,8 @@ class AppDataPref {
     companion object {
         private var TAG: String = "jung"
 
-        var AccessToken = ""
+        var AccessToken = "" // 로그인 토큰
+        var userId = "" // 사용자 id
 
         var isMainEvent = true // 메인화면에서 이벤트팝업 더이상 보지않기
 
@@ -26,7 +27,9 @@ class AppDataPref {
             val packageName = activity.packageName
             val preferences = activity.getSharedPreferences(packageName, Context.MODE_PRIVATE)
 
-            AccessToken = preferences.getString("accessToken", null).toString()
+            AccessToken = preferences.getString("accessToken", "") ?: ""
+            userId = preferences.getString("userId", "") ?: ""
+
             isMainEvent = preferences.getBoolean("isMainEvent", true)
 
             isArGuideFirst = preferences.getBoolean("isArGuideFirst", true)
@@ -46,6 +49,8 @@ class AppDataPref {
 
             val editor = pref.edit()
             editor.putString("accessToken", AccessToken)
+            editor.putString("userId", userId)
+
             editor.putBoolean("isMainEvent", isMainEvent)
 
             editor.putBoolean("isArGuideFirst", isArGuideFirst)
@@ -70,6 +75,7 @@ class AppDataPref {
         fun show() {
             Log.i(TAG, "=================================================")
             Log.i(TAG, "accessToken = $AccessToken")
+            Log.i(TAG, "userId = $userId")
             Log.i(TAG, "=================================================")
         }
     }

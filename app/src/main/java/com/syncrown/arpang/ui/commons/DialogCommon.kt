@@ -25,6 +25,8 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var leftClickListener: OnClickListener? = null
     private var rightClickListener: OnClickListener? = null
 
+    private var isNetWorkError = false //TODO 네트워크 장애시 발생
+
     private var isPermission = false //TODO 권한 체크 팝업
     private var isUpdate = false //TODO 업데이트 안내
     private var isServerOff = false //TODO 점검공지
@@ -61,6 +63,23 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogNetworkError(
+        leftBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isNetWorkError = true
+        dialog.setLeftBtnListener(leftBtn)
+
+        return dialog
+    }
+
+    fun showNetworkError(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener
+    ) {
+        manager?.let { createDialogNetworkError(leftBtn) }
     }
 
     private fun createDialogCommentReport(
@@ -333,6 +352,20 @@ class DialogCommon : DialogFragment(), OnClickListener {
         dialog.setCanceledOnTouchOutside(false)
 
         when {
+            isNetWorkError -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = GONE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.network_connect_error_title)
+                }
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.network_connect_error_content)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+            }
+
             isPermission -> {
                 dialogNormalBinding.btnLeft.visibility = VISIBLE
                 dialogNormalBinding.btnRight.visibility = VISIBLE
@@ -345,7 +378,9 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnRight.text = context?.let {
                     getString(R.string.splash_alert_permission_btn)
                 }
-                dialogNormalBinding.btnLeft.text = "취소"
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.splash_alert_cancel)
+                }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)
@@ -383,7 +418,10 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 dialogNormalBinding.btnLeft.visibility = VISIBLE
                 dialogNormalBinding.btnRight.visibility = GONE
 
-                dialogNormalBinding.titleView.text = "알림"
+                dialogNormalBinding.titleView.text = context.let {
+                    getString(R.string.login_alert_already_sns_title)
+                }
+
                 dialogNormalBinding.bodyView.text = context.let {
                     getString(R.string.login_alert_already_sns, snsPlatform)
                 }
@@ -500,7 +538,9 @@ class DialogCommon : DialogFragment(), OnClickListener {
                     getString(R.string.edit_video_print_alert_title)
                 }
 
-                dialogNormalBinding.bodyView.text = "삭제한 컨텐츠는 다시 복구할 수 없습니다.\n삭제하시겠습니까?"
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_delete_content)
+                }
 
                 dialogNormalBinding.btnLeft.text = context?.let {
                     getString(R.string.tag_popup_left_btn)
@@ -522,13 +562,17 @@ class DialogCommon : DialogFragment(), OnClickListener {
                     getString(R.string.edit_video_print_alert_title)
                 }
 
-                dialogNormalBinding.bodyView.text = "게시글을 신고하시겠습니까?\n신고가 누적된 게시글은 게시가 취소됩니다."
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.share_detail_alert_comment_warning)
+                }
 
                 dialogNormalBinding.btnLeft.text = context?.let {
                     getString(R.string.tag_popup_left_btn)
                 }
 
-                dialogNormalBinding.btnRight.text = "신고"
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.share_detail_alert_comment_warning_btn)
+                }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)
@@ -542,13 +586,17 @@ class DialogCommon : DialogFragment(), OnClickListener {
                     getString(R.string.edit_video_print_alert_title)
                 }
 
-                dialogNormalBinding.bodyView.text = "사용자를 신고하시겠습니까?\n신고가 누적된 사용자는 관리자 판단하에\n사용이 제한 될 수 있습니다."
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.share_detail_alert_comment_warning_user)
+                }
 
                 dialogNormalBinding.btnLeft.text = context?.let {
                     getString(R.string.tag_popup_left_btn)
                 }
 
-                dialogNormalBinding.btnRight.text = "신고"
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.share_detail_alert_comment_warning)
+                }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)
@@ -562,13 +610,17 @@ class DialogCommon : DialogFragment(), OnClickListener {
                     getString(R.string.edit_video_print_alert_title)
                 }
 
-                dialogNormalBinding.bodyView.text = "사용자를 차단하면 더이상 상대방의 컨텐츠를\n볼 수 없습니다.또한 구독중이면 구독이 취소됩니다.\n차단하시겠습니까?"
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.share_detail_alert_user_reject)
+                }
 
                 dialogNormalBinding.btnLeft.text = context?.let {
                     getString(R.string.tag_popup_left_btn)
                 }
 
-                dialogNormalBinding.btnRight.text = "차단"
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.share_detail_alert_user_reject_btn)
+                }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
                 dialogNormalBinding.btnRight.setOnClickListener(this)

@@ -6,12 +6,17 @@
 
     <string name="facebook_app_id">405879092532692</string>
 
+    <!-- 공통 -->
+    <string name="network_connect_error_title">네트워크 연결 실패</string>
+    <string name="network_connect_error_content">네트워크 연결에 실패하였습니다.\n확인 후 다시 시도해주세요.</string>
+
     <!--  스플래시  -->
     <string name="splash_title_bic">ARPANG</string>
     <string name="splash_title_small">AR 즐거움이 팡팡</string>
     <string name="splash_alert_permission_title">권한 필요</string>
     <string name="splash_alert_permission_message">앱의 기능을 사용하기 위해 필요한 권한이 거부되었습니다. 설정에서 권한을 허용해주세요.</string>
     <string name="splash_alert_permission_btn">설정으로 이동</string>
+    <string name="splash_alert_cancel">취소</string>
     <string name="splash_alert_update_title">업데이트 안내</string>
     <string name="splash_alert_update_message">원할한 서비스 이용을 위해\n새로운 버전을 설치해주세요</string>
     <string name="splash_alert_leftBtn_text">앱 종료</string>
@@ -33,6 +38,7 @@
     <string name="login_pw_login_btn">로그인</string>
     <string name="login_pw_find_desc">비밀번호를 잊어버리셨나요?</string>
     <string name="login_pw_find"><u>비밀번호 찾기</u></string>
+    <string name="login_alert_already_sns_title">알림</string>
     <string name="login_alert_already_sns">입력하신 이메일은\n%s 으로 가입되어 있습니다.\n소셜 버튼을 눌러 로그인해주세요.</string>
 
     <!-- 회원가입  -->
@@ -77,7 +83,7 @@
     <string name="welcome_btn">시작하기</string>
 
     <!-- 이용약관, 개인정보 -->
-    <string name="polish_term_title">이용약관</string>
+    <string name="polish_term_title">이용 약관</string>
     <string name="polish_term_btn">이용약관에 동의합니다.</string>
     <string name="polish_privacy_title">개인정보 처리방침</string>
     <string name="polish_privacy_btn">개인정보 처리방침에 동의합니다.</string>
@@ -101,6 +107,36 @@
     <string name="home_connect_print_message">프린터가 연결되어 있지 않습니다.\n아래 버튼을 눌러 토스티 프린터를 연결해주세요.</string>
     <string name="home_connect_print_btn"><u>프린트 연결</u></string>
     <string name="home_guide_paper"><u>장착 가이드</u></string>
+    <string name="home_desc_1">프린터가 연결되어 있지 않아요</string>
+    <string name="home_desc_2">토스티로 할 수 있는 작업들이에요</string>
+    <string name="home_desc_3">이렇게 활용해 볼까요?</string>
+    <string name="home_desc_4">서비스 이용 가이드</string>
+    <string name="home_desc_5">서비스 이용방법을 확인해보세요.</string>
+
+    <!--  디바이스 연결  -->
+    <string name="device_connect_title">디바이스 연결</string>
+    <string name="device_connect_sub_title">연결 가능한 디바이스가 검색되었습니다.</string>
+    <string name="device_connect_re_search">다시 검색하기</string>
+    <string name="device_connect_guide_title">프린터 연결이 어려우신가요?</string>
+    <string name="device_connect_desc_1">1.토스티 전원을 켜 주세요.</string>
+    <string name="device_connect_desc_2">2.연결 관련한 머신 제어 방법 가이드</string>
+    <string name="device_connect_desc_3">3.블루투스 설정 체크는 앱 실행시 체크하며, 이때 활성화 안되었으면, 해당 페이지에서 다시 체크하여 블루투스 설정 시스템 모달 표시</string>
+
+    <!--  용지 장착  -->
+    <string name="paper_connect_title">용지 장착</string>
+    <string name="paper_connect_banner_title">용지가 없으신가요?</string>
+    <string name="paper_connect_banner_sub_title">스토어 연결</string>
+
+    <!--  서비스 이용 가이드  -->
+    <string name="manual_guide_1">장치 연결</string>
+    <string name="manual_guide_2">장치 구매</string>
+    <string name="manual_guide_3">인쇄하기</string>
+    <string name="manual_guide_4">기본 가이드</string>
+    <string name="manual_guide_5">AR 영상</string>
+    <string name="manual_guide_6">인생두컷</string>
+    <string name="manual_guide_7">자유편집</string>
+    <string name="manual_guide_8">라벨 스티커</string>
+    <string name="manual_guide_9">행사 스티커</string>
 
     <!-- 용지부족화면 -->
     <string name="cartridge_empty_action_text_1">AR 영상 인쇄</string>
@@ -116,6 +152,7 @@
 
     <!-- 인쇄편집 -->
     <string name="edit_video_print_alert_title">알림</string>
+    <string name="edit_video_print_alert_delete_content">삭제한 컨텐츠는 다시 복구할 수 없습니다.\n삭제하시겠습니까?</string>
     <string name="edit_video_print_alert_msg">편집중인 내용을 취소하고\n돌아가시겠습니까?</string>
     <string name="edit_video_print_alert_left_btn">계속 편집하기</string>
     <string name="edit_video_print_alert_right_btn">편집 취소</string>
@@ -124,14 +161,62 @@
     <string name="edit_text_style_b"><u>B</u></string>
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
 
+    <!--  공유공간 상세  -->
+    <string name="share_detail_title">공유공간</string>
+    <string name="share_detail_alert_comment_warning">게시글을 신고하시겠습니까?\n신고가 누적된 게시글은 게시가 취소됩니다.</string>
+    <string name="share_detail_alert_comment_warning_btn">신고</string>
+    <string name="share_detail_alert_comment_warning_user">사용자를 신고하시겠습니까?\n신고가 누적된 사용자는 관리자 판단하에\n사용이 제한 될 수 있습니다.</string>
+    <string name="share_detail_alert_user_reject">사용자를 차단하면 더이상 상대방의 컨텐츠를\n볼 수 없습니다.또한 구독중이면 구독이 취소됩니다.\n차단하시겠습니까?</string>
+    <string name="share_detail_alert_user_reject_btn">차단</string>
+
     <!--  더보기  -->
     <string name="more_logout_popup_message">로그아웃 하시겠습니까?</string>
     <string name="more_logout_popup_cancel">취소</string>
     <string name="more_logout_popup_ok">로그아웃</string>
-    <string name="more_account_withdrawal"><u>회원탈퇴</u></string>
+
+    <string name="alert_title">알림</string>
+    <string name="alert_list_divider_today">오늘</string>
+    <string name="alert_list_divider_week">최근 일주일</string>
+
+    <string name="scrap_title">스크랩</string>
+
+    <string name="subscribe_title">구독</string>
+    <string name="subscribe_i">내가 구독</string>
+    <string name="subscribe_me">나를 구독</string>
+
+    <string name="event_all_title">이벤트 모두보기</string>
+    <string name="manage_reject_title">차단 관리</string>
+
+    <string name="alert_setting_title">알림 설정</string>
+    <string name="alert_setting_all_accept">모든 알림 받기</string>
+    <string name="alert_setting_event_notice">이벤트/공지사항</string>
+    <string name="alert_setting_subscribe">구독설정</string>
+    <string name="alert_setting_like">좋아요</string>
+    <string name="alert_setting_comment">댓글</string>
+
+    <string name="cutoff_title">차단관리</string>
+
+    <string name="all_event_title">전체 이벤트</string>
+
+    <string name="notice_title">공지사항</string>
+
+    <string name="version_title">버전</string>
+    <string name="version_update">업데이트</string>
+
+    <string name="more_account_withdrawal_u"><u>회원탈퇴</u></string>
+    <string name="more_account_withdrawal">회원탈퇴</string>
+    <string name="account_title">계정 관리</string>
     <string name="account_withdrawal_polish">회원탈퇴를 진행하시겠습니까?\n회원탈퇴시 정책에 따라 어떤 불이익이 있을 수 있습니다.\n\n1. 모든 게시글이 삭제되며, 이벤트 참여 게시글도 삭제가 됩니다. 수령하지 못한 이벤트 상품은 탈퇴 후 수령하실 수 없습니다.\n2. 스토어 구매등으로 적립한 포인트에 대해서 더이상 이용하실 수 없습니다.\n3. 기타 회원탈퇴 관련한 정책 및 이에 따른 가이드가 주어져야 합니다.</string>
     <string name="account_withdrawal_checkbox">주의사항을 모두 읽고 회원탈퇴에 동의합니다.</string>
+    <string name="account_change_name">이름 변경</string>
+    <string name="account_change_name_desc_1">이름</string>
+    <string name="account_change_name_desc_2">* 이름은 한달에 한번만 변경할 수 있습니다.</string>
+
+    <string name="customer_center_title">고객센터</string>
+
     <string name="subscribe_popup_delete_message">나를 구독한 사람을 삭제하시겠습니까?\n상대방의 구독 리스트에서 내가 삭제됩니다.</string>
+
+
 
     <!--  태그입력  -->
     <string name="tag_popup_content_message">해당 태그를 삭제하시겠습니까?</string>

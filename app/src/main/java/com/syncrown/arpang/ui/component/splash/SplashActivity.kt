@@ -153,8 +153,12 @@ class SplashActivity : BaseActivity() {
                 showUpdateVersion()
             }
 
-            // 임시로 로그인 화면으로 이동
-            goLogin()
+            // userid가 널이면 로그인화면으로 널이 아니면 로그인
+            if (AppDataPref.userId.isEmpty()) {
+                goLogin()
+            } else {
+                goMain()
+            }
         }
     }
 

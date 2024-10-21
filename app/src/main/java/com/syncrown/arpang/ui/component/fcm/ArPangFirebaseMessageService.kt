@@ -21,14 +21,18 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         // FCM 메시지 처리 로직
-        remoteMessage.notification?.let {
-            sendNotification(it.title, it.body)
+        remoteMessage.data.let { data ->
+            val title = data["title"]
+            val body = data["body"]
+
+            if (title != null && body != null) {
+                sendNotification(title, body)
+            }
         }
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // 새 토큰을 서버에 전송하는 로직 추가
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -44,7 +48,7 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_MUTABLE)
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)  // 알림 아이콘 설정
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -68,6 +72,7 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
 
                 return
             }
+            val notificationId = System.currentTimeMillis().toInt() // 쌓이도록 하려면 이걸 id로 변경
             notify(0, notificationBuilder.build())
         }
     }

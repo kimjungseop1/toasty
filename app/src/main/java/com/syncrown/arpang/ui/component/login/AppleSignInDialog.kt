@@ -1,6 +1,7 @@
 package com.syncrown.arpang.ui.component.login
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Rect
@@ -10,18 +11,19 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import com.syncrown.arpang.AppDataPref
 import java.util.*
 
 class AppleSignInDialog(context: Context, val interaction: Interaction? = null) : Dialog(context) {
     interface Interaction {
-        fun onAppleEmailSuccess(sub: String)
+        fun onAppleIdSuccess(sub: String)
     }
 
     companion object {
         const val APPLE_CLIENT_ID = "com.syncrown.arpang3" // 사이트의 Certificates, Identifiers & Profiles 의 IDENTIFIER 값
         const val APPLE_REDIRECT_URI = "https://www.zalson.co.kr/API/naver/login_exec.php" // 잘쓴앱꺼 일단 가져옴
         const val APPLE_SCOPE = "name%20email"
-        const val APPLE_AUTHURL = "https://appleid.apple.com/auth/authorize"
+        const val APPLE_AUTH_URL = "https://appleid.apple.com/auth/authorize"
     }
 
     private lateinit var webView: WebView
@@ -37,7 +39,7 @@ class AppleSignInDialog(context: Context, val interaction: Interaction? = null) 
         webSettings.javaScriptEnabled = true
         webView.webViewClient = AppleWebViewClient()
         webView.loadUrl(
-            APPLE_AUTHURL
+            APPLE_AUTH_URL
                     + "?response_type=code&v=1.1.6&response_mode=form_post&client_id="
                     + APPLE_CLIENT_ID + "&scope="
                     + APPLE_SCOPE + "&state="
@@ -57,12 +59,10 @@ class AppleSignInDialog(context: Context, val interaction: Interaction? = null) 
             return true
         }
 
-        // For API 19 and below
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             view.loadUrl(url)
             return true
         }
-
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
@@ -75,8 +75,8 @@ class AppleSignInDialog(context: Context, val interaction: Interaction? = null) 
                             .show()
                         dismiss()
                     } else if (status == "success") {
-                        uri.getQueryParameter("email")?.let { email ->
-                            interaction?.onAppleEmailSuccess(email) //sub rather than email
+                        uri.getQueryParameter("sub")?.let { sub ->
+                            interaction?.onAppleIdSuccess(sub)
                             dismiss()
                         }
                     }

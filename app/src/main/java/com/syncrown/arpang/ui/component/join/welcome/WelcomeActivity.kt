@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.join.welcome
 
 import android.content.Intent
 import android.os.Bundle
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivityWelcomeBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.MainActivity

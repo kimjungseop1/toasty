@@ -2,10 +2,13 @@ package com.syncrown.arpang.ui.component.home.tab1_home.connect_device
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.LeadingMarginSpan
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityConnectDeviceBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -41,14 +44,14 @@ class ConnectDeviceActivity : BaseActivity() {
         }
 
         //사용방법
-        setUsePager()
     }
 
     private fun setDeviceList() {
         //임시 data
         val arrayList = ArrayList<String>()
-//        arrayList.add("TOASTY MK1 (N1501152)")
-//        arrayList.add("OVENY MK1 (N1501152)")
+        arrayList.add("TOASTY MK1 (N1501152)")
+        arrayList.add("TOASTY MK1 (N1501152)")
+        arrayList.add("OVENY MK1 (N1501152)")
 
         if (arrayList.size > 0) {
             binding.recyclerDevice.visibility = View.VISIBLE
@@ -77,19 +80,19 @@ class ConnectDeviceActivity : BaseActivity() {
 
     }
 
-    private fun setUsePager() {
-        binding.viewPagerView.adapter = UsePagerAdapter(this)
-        binding.viewPagerView.isUserInputEnabled = false
-        TabLayoutMediator(binding.customTabView, binding.viewPagerView) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = "토스티"
-                }
-
-                1 -> {
-                    tab.text = "오브니"
-                }
-            }
-        }.attach()
-    }
+//    private fun setUsePager() {
+//        binding.viewPagerView.adapter = UsePagerAdapter(this)
+//        binding.viewPagerView.isUserInputEnabled = false
+//        TabLayoutMediator(binding.customTabView, binding.viewPagerView) { tab, position ->
+//            when (position) {
+//                0 -> {
+//                    tab.text = "토스티"
+//                }
+//
+//                1 -> {
+//                    tab.text = "오브니"
+//                }
+//            }
+//        }.attach()
+//    }
 }

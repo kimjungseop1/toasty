@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.notice
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityNoticeBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.adapter.NoticeListAdapter
@@ -26,7 +27,7 @@ class NoticeActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "공지사항"
+        binding.actionbar.actionTitle.text = getString(R.string.notice_title)
 
         setNoticeList()
     }

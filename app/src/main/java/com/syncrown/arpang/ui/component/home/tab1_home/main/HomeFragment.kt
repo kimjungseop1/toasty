@@ -98,15 +98,15 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(binding.customTabView, binding.viewPagerView) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "AR 영상 인쇄"
+                    tab.text = getString(R.string.cartridge_empty_action_text_1)
                 }
 
                 1 -> {
-                    tab.text = "인생네컷"
+                    tab.text = getString(R.string.cartridge_empty_action_text_2)
                 }
 
                 2 -> {
-                    tab.text = "라벨 스티커"
+                    tab.text = getString(R.string.cartridge_empty_action_text_4)
                 }
             }
         }.attach()

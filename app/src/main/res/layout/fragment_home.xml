@@ -86,12 +86,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                app:layout_goneMarginTop="12dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/connectPrintView" />
+                app:layout_constraintTop_toBottomOf="@id/connectPrintView"
+                app:layout_goneMarginTop="12dp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardCntView"
@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="32dp"
-                    android:text="프린터가 연결되어 있지 않아요"
+                    android:text="@string/home_desc_1"
                     android:textColor="@color/color_black"
                     android:textSize="24dp"
                     android:textStyle="bold"
@@ -181,7 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="토스티로 할 수 있는 작업들이에요"
+                    android:text="@string/home_desc_2"
                     android:textColor="@color/color_black"
                     android:textSize="16dp"
                     app:layout_constraintStart_toStartOf="@id/desc_1"
@@ -229,7 +229,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:text="AR 영상 인쇄"
+                            android:text="@string/cartridge_empty_action_text_1"
                             android:textColor="@color/color_black"
                             android:textSize="14dp"
                             android:textStyle="bold"
@@ -270,7 +270,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:text="인생 두컷"
+                            android:text="@string/cartridge_empty_action_text_2"
                             android:textColor="@color/color_black"
                             android:textSize="14dp"
                             android:textStyle="bold"
@@ -311,7 +311,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:text="라벨 스티커"
+                            android:text="@string/cartridge_empty_action_text_4"
                             android:textColor="@color/color_black"
                             android:textSize="14dp"
                             android:textStyle="bold"
@@ -352,7 +352,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:text="행사 스티커"
+                            android:text="@string/cartridge_empty_action_text_5"
                             android:textColor="@color/color_black"
                             android:textSize="14dp"
                             android:textStyle="bold"
@@ -391,7 +391,7 @@
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:text="자유 인쇄"
+                            android:text="@string/cartridge_empty_action_text_3"
                             android:textColor="@color/color_black"
                             android:textSize="14dp"
                             android:textStyle="bold"
@@ -403,18 +403,66 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--     서비스 이용 가이드       -->
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/serviceGuideView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/bg_home_guide_banner"
+                app:cardBackgroundColor="@color/color_f7f3e2"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clView_1" />
+                app:layout_constraintTop_toBottomOf="@id/clView_1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/desc_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="27dp"
+                        android:layout_marginTop="23dp"
+                        android:text="@string/home_desc_4"
+                        android:textColor="@color/color_black"
+                        android:textSize="24dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/desc_5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/desc_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="23dp"
+                        android:text="@string/home_desc_5"
+                        android:textColor="@color/color_424242"
+                        android:textSize="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/desc_4"
+                        app:layout_constraintTop_toBottomOf="@id/desc_4" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="85dp"
+                        android:layout_height="60dp"
+                        android:layout_marginEnd="24dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/bg_home_guide_banner"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias=".3" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <!--    이렇게 활용해 볼까요     -->
             <androidx.appcompat.widget.AppCompatTextView
@@ -422,7 +470,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
-                android:text="이렇게 활용해 볼까요?"
+                android:text="@string/home_desc_3"
                 android:textColor="@color/color_8e5d4b"
                 android:textSize="24dp"
                 android:textStyle="bold"

@@ -41,9 +41,9 @@ class ShareDetailActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "공유공간"
+        binding.actionbar.actionTitle.text = getString(R.string.share_detail_title)
 
-        binding.actionbar.actionEtc1.text = "인쇄"
+        binding.actionbar.actionEtc1.text = getString(R.string.edit_video_print_print)
         binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
                 this,
@@ -54,7 +54,7 @@ class ShareDetailActivity : BaseActivity() {
 
         }
 
-        binding.actionbar.actionEtc2.text = "스크랩"
+        binding.actionbar.actionEtc2.text = getString(R.string.scrap_title)
         binding.actionbar.actionEtc2.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
                 this,

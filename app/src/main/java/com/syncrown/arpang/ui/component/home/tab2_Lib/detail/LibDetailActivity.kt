@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityLibDetailBinding
 import com.syncrown.arpang.databinding.PopupMenuDetailBinding
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -28,7 +29,7 @@ class LibDetailActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "보관함"
+        binding.actionbar.actionTitle.text = getString(R.string.home_nav_title_2)
 
         binding.actionbar.actionPrint.setOnClickListener {
 

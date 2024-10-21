@@ -54,7 +54,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             finish()
         }
         binding.actionbar.actionTitle.text = "이름.."
-        binding.actionbar.actionEtc1.text = "구독"
+        binding.actionbar.actionEtc1.text = getString(R.string.subscribe_title)
         binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
                 this,

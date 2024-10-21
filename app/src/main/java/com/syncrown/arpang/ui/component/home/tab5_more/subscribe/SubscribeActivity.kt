@@ -36,7 +36,7 @@ class SubscribeActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "구독"
+        binding.actionbar.actionTitle.text = getString(R.string.subscribe_title)
 
         binding.clMyView.setOnClickListener {
             binding.clMyView.isSelected = true

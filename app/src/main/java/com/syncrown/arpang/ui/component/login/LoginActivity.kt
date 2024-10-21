@@ -3,11 +3,11 @@ package com.syncrown.arpang.ui.component.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.facebook.CallbackManager
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivtyLoginBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -29,44 +29,14 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
                     result.data?.let { data ->
                         when (data.msgCode) {
                             "SUCCESS" -> {
-                                Log.e(TAG, "성공")
+                                goMain()
                             }
 
                             "FAIL" -> {
-                                Log.e(TAG, "실패")
+                                Log.e(TAG, "오류")
                             }
 
                             "NONE_ID" -> {
-                                Log.e(TAG, "아이디가 없음 회원가입으로")
-
-                            }
-
-                            else -> {
-                                Log.e(TAG, "알수없는 메시지 코드 : ${data.msgCode} ")
-                            }
-                        }
-
-                    }
-                }
-
-                is NetworkResult.Error -> {
-                    Log.e(TAG, "네트워크 오류")
-                }
-            }
-        }
-
-        //TODO 가입신청 옵져브
-        loginViewModel.joinMemberResponseLiveData().observe(this) { result ->
-            when (result) {
-                is NetworkResult.Success -> {
-                    result.data?.let { data ->
-                        when (data.msgCode) {
-                            "DUPPLE" -> {
-                                Log.e(TAG, "아이디 중복")
-                            }
-
-                            "SUCCESS" -> {
-                                Log.e(TAG, "성공")
                                 goJoinConsent()
                             }
 
@@ -88,8 +58,12 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.signInResult.observe(this, Observer { result ->
             result.fold(
                 onSuccess = { credential ->
-                    val email = credential.id
-                    Log.e(TAG, "Signed in as $email")
+                    val userId = credential.id
+                    AppDataPref.userId = userId.toString()
+                    AppDataPref.save(this)
+
+                    Log.e(TAG, "Signed in as $userId")
+                    loginViewModel.checkMember(userId.toString())
                 },
                 onFailure = { exception ->
                     Log.e(TAG, "Sign-in failed: ${exception.message}")
@@ -140,12 +114,23 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
             loginViewModel.handleSignInResult(result.data)
         }
 
-    override fun onAppleEmailSuccess(email: String) {
-        Toast.makeText(this, "Apple 로그인 성공! 이메일: $email", Toast.LENGTH_SHORT).show()
+    override fun onAppleIdSuccess(sub: String) {
+        val userId = "a $sub"
+
+        AppDataPref.userId = userId
+        AppDataPref.save(this)
+
+        loginViewModel.checkMember(userId)
     }
 
     private fun goJoinConsent() {
         val intent = Intent(this, JoinConsentActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun goMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }
