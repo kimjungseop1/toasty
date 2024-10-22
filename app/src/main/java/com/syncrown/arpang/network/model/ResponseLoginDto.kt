@@ -6,41 +6,41 @@ import com.google.gson.annotations.SerializedName
 class ResponseLoginDto {
     @SerializedName("msgCode")
     @Expose
-    val msgCode: String = ""
+    var msgCode: String = ""
 
     @SerializedName("mobl_no")
     @Expose
-    val mobl_no: String? = null
+    var mobl_no: String? = null
 
     @SerializedName("email")
     @Expose
-    val email: String? = null
+    var email: String? = null
 
     @SerializedName("nick_nm")
     @Expose
-    val nick_nm: String? = null
+    var nick_nm: String? = null
 
     @SerializedName("stt_msg")
     @Expose
-    val stt_msg: String? = null
+    var stt_msg: String? = null
 
     @SerializedName("profile_pic_path")
     @Expose
-    val profile_pic_path: String? = null
+    var profile_pic_path: String? = null
 
     @SerializedName("nation")
     @Expose
-    val nation: String? = null
+    var nation: String? = null
 
     @SerializedName("lang")
     @Expose
-    val lang: String? = null
+    var lang: String? = null
 
     @SerializedName("birth_day")
     @Expose
-    val birth_day: String? = null
+    var birth_day: String? = null
 
     @SerializedName("login_connt_accnt")
     @Expose
-    val login_connt_accnt: String? = null
+    var login_connt_accnt: String? = null
 }

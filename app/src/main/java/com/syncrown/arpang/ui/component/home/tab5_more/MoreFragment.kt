@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,9 @@ import com.syncrown.arpang.ui.component.home.tab5_more.event.EventAllActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.NoticeActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.scrap.ScrapActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
+import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeType
 import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
+import com.syncrown.arpang.ui.component.login.LoginActivity
 
 class MoreFragment : Fragment() {
     private lateinit var binding: FragmentMoreBinding
@@ -29,7 +32,7 @@ class MoreFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMoreBinding.inflate(layoutInflater)
 
         return binding.root
@@ -53,23 +56,23 @@ class MoreFragment : Fragment() {
 
         //TODO 내가 구독
         binding.subscribeI.setOnClickListener {
-            goSubscribe()
+            goSubscribe(SubscribeType.MY)
         }
 
         //TODO 나를 구독
         binding.subscribeMe.setOnClickListener {
-            goSubscribe()
+            goSubscribe(SubscribeType.ME)
         }
 
         //TODO 로그아웃
         binding.logoutBtn.setOnClickListener {
             val dialogCommon = DialogCommon()
             dialogCommon.showLogout(childFragmentManager, {
-                // cancel
+                // 취소
 
             }, {
-                // ok
-
+                // 로그아웃
+                goLogin()
             })
         }
 
@@ -118,8 +121,9 @@ class MoreFragment : Fragment() {
 
     }
 
-    private fun goSubscribe() {
+    private fun goSubscribe(subscribeType: SubscribeType) {
         val intent = Intent(requireContext(), SubscribeActivity::class.java)
+        intent.putExtra("SUBSCRIBE_TYPE", subscribeType.name)
         startActivity(intent)
     }
 
@@ -161,6 +165,12 @@ class MoreFragment : Fragment() {
     private fun goWebPolish(extra: String) {
         val intent = Intent(requireContext(), PolishWebActivity::class.java)
         intent.putExtra("CONSENT_EXTRA", extra)
+        startActivity(intent)
+    }
+
+    private fun goLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }

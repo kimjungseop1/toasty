@@ -62,13 +62,17 @@ class SubscribeActivity : BaseActivity() {
             arrayList.add("2")
             arrayList.add("2")
 
-            setSubscribeList(arrayList, SubscribeType.Me)
+            setSubscribeList(arrayList, SubscribeType.ME)
 
             setSelectedViewBackground()
         }
 
-        //진입시 초기상태
-        binding.clMyView.performClick()
+        val type = intent.getStringExtra("SUBSCRIBE_TYPE")
+        if (type.equals(SubscribeType.ME.name)) {
+            binding.clMeView.performClick()
+        } else {
+            binding.clMyView.performClick()
+        }
     }
 
     private fun setSubscribeList(arrayList: ArrayList<String>, subscribeType: SubscribeType) {

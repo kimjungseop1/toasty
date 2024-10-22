@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 class ResponseJoinDto {
     @SerializedName("msgCode")
     @Expose
-    val msgCode: String = ""
+    var msgCode: String = ""
 }

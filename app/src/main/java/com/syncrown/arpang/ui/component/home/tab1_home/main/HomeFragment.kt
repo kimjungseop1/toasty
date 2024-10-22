@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -29,6 +30,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAda
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -95,6 +97,12 @@ class HomeFragment : Fragment() {
         //TODO 이렇게 활용해 볼까요
         binding.viewPagerView.adapter = CasePagerAdapter(requireActivity())
         binding.viewPagerView.isUserInputEnabled = false
+
+        //TODO 이벤트
+        showBottomEventBanner()
+    }
+
+    private fun invalidateTab() {
         TabLayoutMediator(binding.customTabView, binding.viewPagerView) { tab, position ->
             when (position) {
                 0 -> {
@@ -111,9 +119,6 @@ class HomeFragment : Fragment() {
             }
         }.attach()
         setTabMargins(binding.customTabView)
-
-        //TODO 이벤트
-        showBottomEventBanner()
     }
 
     override fun onPause() {
@@ -124,6 +129,8 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         handler.postDelayed(slideRunnable, 3000)
+
+        invalidateTab()
     }
 
     private fun goConnectDevice() {
@@ -198,7 +205,6 @@ class HomeFragment : Fragment() {
 
     private fun showBottomEventBanner() {
         val arrayList = ArrayList<String>()
-        arrayList.add("1")
         arrayList.add("1")
 
         val eventAdapter = MainEventAdapter(requireContext(), arrayList)

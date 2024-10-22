@@ -43,9 +43,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:gravity="center"
-                android:text="유형"
+                android:text="@string/storage_print_setting_title"
                 android:textColor="@color/color_black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toTopOf="@id/divider_1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -70,15 +70,61 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCate"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clView_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="300dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clView_1" />
+            app:layout_constraintTop_toBottomOf="@id/clView_1">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/disconnect_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/printer_setting_disconnect"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/disconnect_desc1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/printer_setting_not_paper_desc1"
+                android:textColor="@color/color_black"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/disconnect_img" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="36dp"
+                android:gravity="center"
+                android:text="@string/printer_setting_not_paper_desc2"
+                android:textColor="@color/color_333333"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/disconnect_desc1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_CECECE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clView_2" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/submitBtn"
@@ -89,13 +135,13 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/custom_button_brown_round_5dp"
             android:gravity="center"
-            android:text="적용"
+            android:text="@string/printer_setting_disconnect_btn"
             android:textColor="@color/color_white"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/recyclerCate" />
+            app:layout_constraintTop_toBottomOf="@id/divider_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

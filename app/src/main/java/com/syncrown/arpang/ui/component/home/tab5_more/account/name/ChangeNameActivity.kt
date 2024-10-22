@@ -28,6 +28,8 @@ class ChangeNameActivity : BaseActivity() {
 
         binding.actionbar.actionTitle.text = getString(R.string.account_change_name)
 
+        binding.inputName.requestFocus()
+
         binding.changeBtn.setOnClickListener {
             val customToast = CustomToast(this)
             customToast.showToast("이름이 변경되었습니다.", CustomToastType.BLUE)

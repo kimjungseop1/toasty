@@ -31,7 +31,7 @@ class MainEventPagerAdapter(
                 .into(binding.bannerImg)
 
             binding.root.setOnClickListener {
-                listener.onItemClick(position)  // Pass the position to the listener
+                listener.onItemClick(position)
             }
         }
     }
@@ -43,7 +43,7 @@ class MainEventPagerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position], position)  // Pass the position here
+        holder.bind(items[position], position)
     }
 
     override fun getItemCount(): Int = items.size

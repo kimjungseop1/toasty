@@ -7,9 +7,11 @@ import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
+import com.syncrown.arpang.network.model.RequestNoticeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseNoticeListDto
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -66,7 +68,11 @@ class ArPangRepository {
     val loginLiveDataRepository: MutableLiveData<NetworkResult<ResponseLoginDto>> =
         MutableLiveData()
 
-    //TODO 004.
+    //TODO 00. 공지사항 갯수
+
+    //TODO 00. 공지사항 리스트
+    val noticeListLiveDataRepository: MutableLiveData<NetworkResult<ResponseNoticeListDto>> =
+        MutableLiveData()
 
     /***********************************************************************************************
      * API response를 라이브데이터에 추가
@@ -136,5 +142,28 @@ class ArPangRepository {
                 loginLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
+    }
+
+    //TODO 00. 공지사항 리스트
+    fun requestNoticeList(requestNoticeListDto: RequestNoticeListDto) {
+        arPangInterface.postNoticeList(requestNoticeListDto)
+            .enqueue(object : Callback<ResponseNoticeListDto> {
+                override fun onResponse(
+                    call: Call<ResponseNoticeListDto>,
+                    response: Response<ResponseNoticeListDto>
+                ) {
+                    if (response.code() == 200) {
+                        noticeListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    } else {
+                        noticeListLiveDataRepository.postValue(
+                            NetworkResult.Error(response.message().toString())
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseNoticeListDto>, t: Throwable) {
+                    noticeListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+                }
+            })
     }
 }

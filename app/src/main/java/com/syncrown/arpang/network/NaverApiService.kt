@@ -6,6 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 
+/**
+ * 사용안함
+ */
 interface NaverApiService {
     @GET("v1/nid/me")
     suspend fun getUserProfile(

@@ -200,7 +200,7 @@ class MainActivity : BaseActivity() {
         }
 
         // 네비게이션 뱃지가 필요할때 사용
-        showBottomNavigationViewBadge(this, binding.bottomNavigation, 2)
+        //showBottomNavigationViewBadge(this, binding.bottomNavigation, 2)
     }
 
     @SuppressLint("RestrictedApi")

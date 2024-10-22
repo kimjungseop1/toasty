@@ -2,18 +2,34 @@ package com.syncrown.arpang.ui.component.home.tab5_more.notice
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityNoticeBinding
+import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.adapter.NoticeListAdapter
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.detail.NoticeDetailActivity
 
 class NoticeActivity : BaseActivity() {
     private lateinit var binding: ActivityNoticeBinding
+    private val noticeViewModel: NoticeViewModel by viewModels()
 
     override fun observeViewModel() {
+        noticeViewModel.noticeListResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data?.let { data ->
 
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "네트워크 오류")
+                }
+            }
+        }
     }
 
     override fun initViewBinding() {
@@ -29,6 +45,7 @@ class NoticeActivity : BaseActivity() {
         }
         binding.actionbar.actionTitle.text = getString(R.string.notice_title)
 
+        noticeViewModel.getNoticeList("ko")
         setNoticeList()
     }
 

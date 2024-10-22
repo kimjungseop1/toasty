@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -122,9 +123,6 @@ class SplashActivity : BaseActivity() {
                     )
                 ) {
                     // "다시 묻지 않음"을 선택한 경우 설정으로 안내
-                    showPermissionDeniedDialog()
-                } else {
-                    // 단순 권한 거부
                     showPermissionDeniedDialog()
                 }
             }

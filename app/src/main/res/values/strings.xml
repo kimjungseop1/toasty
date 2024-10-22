@@ -9,6 +9,16 @@
     <!-- 공통 -->
     <string name="network_connect_error_title">네트워크 연결 실패</string>
     <string name="network_connect_error_content">네트워크 연결에 실패하였습니다.\n확인 후 다시 시도해주세요.</string>
+    <string name="printer_setting_disconnect_desc1">프린터가 연결되어 있지 않습니다.</string>
+    <string name="printer_setting_disconnect_desc2">제작한 사진은 보관함에서 확인할 수 있으며,\n프린터 연결 후 인쇄할 수 있습니다.</string>
+    <string name="printer_setting_disconnect_btn">저장 후 나중에 인쇄</string>
+    <string name="printer_setting_not_paper_desc1">용지가 장착되어 있지 않습니다.</string>
+    <string name="printer_setting_not_paper_desc2">다용도 용지 장착 후 인쇄해주세요.\n보관함에 저장 후 나중에 다시 인쇄할 수 있습니다.</string>
+    <string name="printer_setting_another_paper_desc1">[%s]로 제작된 컨텐츠입니다.\n장착된 [%s]로 인쇄할 경우\n아래와 같이 나올 수 있습니다.\n\n현재 상태로 인쇄하시거나, 보관함에 저장 후\n다시 인쇄할 수 있습니다.</string>
+    <string name="printer_setting_another_paper_btn">현재 용지로 인쇄</string>
+    <string name="printer_setting_another_paper_btn_next">저장 후 나중에 인쇄</string>
+    <string name="printer_setting_toasting_desc">용지를 구워내고 있습니다.</string>
+    <string name="loading_content">장착된 용지를 인식중입니다.</string>
 
     <!--  스플래시  -->
     <string name="splash_title_bic">ARPANG</string>
@@ -160,6 +170,18 @@
     <string name="edit_video_print_print">인쇄</string>
     <string name="edit_text_style_b"><u>B</u></string>
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
+
+    <!--  보관함  -->
+    <string name="storage_print_setting_title">인쇄 설정</string>
+    <string name="storage_print_setting_count_desc">인쇄 매수</string>
+    <string name="storage_print_setting_concentration_desc">인쇄 농도</string>
+    <string name="storage_print_setting_type_desc">인쇄 종류</string>
+    <string name="storage_print_setting_type_desc_text">텍스트 인쇄</string>
+    <string name="storage_print_setting_type_desc_picture">사진 인쇄</string>
+    <string name="storage_print_setting_print_method">인쇄 방식</string>
+    <string name="storage_print_setting_print_method_one">한장씩 인쇄</string>
+    <string name="storage_print_setting_print_method_two">연속으로 인쇄</string>
+    <string name="storage_print_setting_print_btn">인쇄</string>
 
     <!--  공유공간 상세  -->
     <string name="share_detail_title">공유공간</string>

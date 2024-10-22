@@ -3,12 +3,12 @@ package com.syncrown.arpang.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ResponseCheckMember {
-    @SerializedName("msgCode")
+class ResponseNoticeListDto {
+    @SerializedName("bbsid")
     @Expose
-    var msgCode: String? = null
+    var bbsid: Int? = null
 
-    @SerializedName("member_check")
+    @SerializedName("read_se")
     @Expose
-    var member_check: Int = -1
+    var read_se: String? = null
 }
