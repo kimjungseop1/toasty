@@ -28,7 +28,9 @@ class ArGuidePagerAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        Glide.with(context).load(images[position]).into(holder.binding.itemGuideImg)
+        Glide.with(context)
+            .load(images[position])
+            .into(holder.binding.itemGuideImg)
     }
 
     override fun getItemCount(): Int {

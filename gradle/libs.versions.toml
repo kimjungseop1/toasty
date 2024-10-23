@@ -6,6 +6,7 @@ dotsindicator = "5.0"
 facebookAndroidSdk = "17.0.1"
 firebaseAuth = "23.0.0"
 firebaseBom = "33.2.0"
+firebaseCrashlytics = "19.2.1"
 flexbox = "3.0.0"
 fragmentKtx = "1.8.2"
 glide = "4.15.1"
@@ -52,6 +53,7 @@ facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", v
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }

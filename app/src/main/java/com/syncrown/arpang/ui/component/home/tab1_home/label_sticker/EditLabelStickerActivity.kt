@@ -4,7 +4,6 @@ import BottomIconAdapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -98,6 +97,11 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
             setInput()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.inputText.isCursorVisible = true
     }
 
     private fun setInput() {
@@ -344,6 +348,7 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
     }
 
     private fun goPreview() {
+        binding.inputText.isCursorVisible = false
         resultBitmap = CommonFunc.getBitmapFromView(binding.contentView)
         LabelStickerImageStorage.bitmap = resultBitmap
 

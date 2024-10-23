@@ -53,8 +53,6 @@ class LibDetailActivity : BaseActivity() {
             } else {
                 // 스위치가 꺼졌을 때
             }
-
-            popupWindow.dismiss()
         }
 
         popBinding.menuItem2.setOnClickListener {

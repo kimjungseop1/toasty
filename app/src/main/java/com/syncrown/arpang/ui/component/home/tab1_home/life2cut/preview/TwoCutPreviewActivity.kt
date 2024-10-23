@@ -33,12 +33,9 @@ class TwoCutPreviewActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "미리보기"
-        binding.actionbar.actionEtc.text = "인쇄"
+        binding.actionbar.actionTitle.text = getString(R.string.actionbar_print_preview)
+        binding.actionbar.actionEtc.text = getString(R.string.actionbar_print_text)
         binding.actionbar.actionEtc.setOnClickListener {
-            AppDataPref.isTwoCutPreView = binding.previewBtn.isChecked
-            AppDataPref.save(this)
-
             //TODO 프린터 연결 + 용지 장착
             setPrinterAndPaper()
 
@@ -57,6 +54,11 @@ class TwoCutPreviewActivity : BaseActivity() {
             .into(binding.resultImg)
 
         binding.previewBtn.isChecked = AppDataPref.isTwoCutPreView
+
+        binding.previewBtn.setOnCheckedChangeListener { _, isChecked ->
+            AppDataPref.isTwoCutPreView = isChecked
+            AppDataPref.save(this)
+        }
     }
 
     private fun setPrinterAndPaper() {

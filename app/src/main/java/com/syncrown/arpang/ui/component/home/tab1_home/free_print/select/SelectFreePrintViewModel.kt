@@ -95,11 +95,14 @@ class SelectFreePrintViewModel : BaseViewModel() {
                 while (it.moveToNext()) {
                     val filePath = it.getString(dataColumn)
                     val file = File(filePath)
-                    val parentFolder = file.parentFile?.name
 
-                    // 폴더 이름이 맞거나 전체보기를 선택한 경우에만 이미지 추가
-                    if (folderName == null || parentFolder == folderName || folderName.contains("전체보기")) {
-                        imageList.add(ImageInfo(filePath))
+                    if (file.exists()) {
+                        val parentFolder = file.parentFile?.name
+
+                        // 폴더 이름이 맞거나 전체보기를 선택한 경우에만 이미지 추가
+                        if (folderName == null || parentFolder == folderName || folderName.contains("전체보기")) {
+                            imageList.add(ImageInfo(filePath))
+                        }
                     }
                 }
             }

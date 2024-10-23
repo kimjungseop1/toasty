@@ -60,9 +60,9 @@ class ArGuideActivity : BaseActivity() {
     private fun setGuideImagePager() {
         //임시 data
         val arrayList = ArrayList<Int>()
-        arrayList.add(1)
-        arrayList.add(1)
-        arrayList.add(1)
+        arrayList.add(R.drawable.sample_img_1)
+        arrayList.add(R.drawable.sample_img_1)
+        arrayList.add(R.drawable.sample_img_1)
 
         binding.pagerView.adapter = ArGuidePagerAdapter(
             this,

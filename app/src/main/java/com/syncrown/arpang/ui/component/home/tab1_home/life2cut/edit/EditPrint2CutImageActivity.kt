@@ -1,21 +1,14 @@
 package com.syncrown.arpang.ui.component.home.tab1_home.life2cut.edit
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,18 +27,13 @@ import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.Ima
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.preview.TwoCutPreviewActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
-import com.syncrown.arpang.ui.photoeditor.OnSaveBitmap
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
-import com.syncrown.arpang.ui.photoeditor.SaveFileResult
-import com.syncrown.arpang.ui.photoeditor.SaveSettings
 import com.syncrown.arpang.ui.photoeditor.ViewType
-import com.syncrown.arpang.ui.photoeditor.shape.ShapeBuilder
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 
 
 class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
@@ -112,13 +100,13 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
                 resultBitmap = CommonFunc.getBitmapFromView(binding.resultImg)
                 TwoCutImageStorage.bitmap = resultBitmap
 
-                val isSuccess = saveBitmapToDownloadFolder(resultBitmap)
-                if (isSuccess) {
-                    Log.e("jung","이미지가 다운로드 폴더에 저장되었습니다.")
-                    finish()
-                } else {
-                    Log.e("jung","이미지 저장에 실패했습니다.")
-                }
+//                val isSuccess = saveBitmapToDownloadFolder(resultBitmap)
+//                if (isSuccess) {
+//                    Log.e("jung","이미지가 다운로드 폴더에 저장되었습니다.")
+//                    finish()
+//                } else {
+//                    Log.e("jung","이미지 저장에 실패했습니다.")
+//                }
             }
         }
 

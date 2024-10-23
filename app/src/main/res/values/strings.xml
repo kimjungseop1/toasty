@@ -14,11 +14,13 @@
     <string name="printer_setting_disconnect_btn">저장 후 나중에 인쇄</string>
     <string name="printer_setting_not_paper_desc1">용지가 장착되어 있지 않습니다.</string>
     <string name="printer_setting_not_paper_desc2">다용도 용지 장착 후 인쇄해주세요.\n보관함에 저장 후 나중에 다시 인쇄할 수 있습니다.</string>
-    <string name="printer_setting_another_paper_desc1">[%s]로 제작된 컨텐츠입니다.\n장착된 [%s]로 인쇄할 경우\n아래와 같이 나올 수 있습니다.\n\n현재 상태로 인쇄하시거나, 보관함에 저장 후\n다시 인쇄할 수 있습니다.</string>
+    <string name="printer_setting_another_paper_desc1">[%1s]로 제작된 컨텐츠입니다.\n장착된 [%2s]로 인쇄할 경우\n아래와 같이 나올 수 있습니다.\n\n현재 상태로 인쇄하시거나, 보관함에 저장 후\n다시 인쇄할 수 있습니다.</string>
     <string name="printer_setting_another_paper_btn">현재 용지로 인쇄</string>
     <string name="printer_setting_another_paper_btn_next">저장 후 나중에 인쇄</string>
     <string name="printer_setting_toasting_desc">용지를 구워내고 있습니다.</string>
     <string name="loading_content">장착된 용지를 인식중입니다.</string>
+    <string name="actionbar_print_text">인쇄</string>
+    <string name="actionbar_print_preview">미리보기</string>
 
     <!--  스플래시  -->
     <string name="splash_title_bic">ARPANG</string>
@@ -182,6 +184,10 @@
     <string name="storage_print_setting_print_method_one">한장씩 인쇄</string>
     <string name="storage_print_setting_print_method_two">연속으로 인쇄</string>
     <string name="storage_print_setting_print_btn">인쇄</string>
+    <string name="storage_detail_popup_desc_1">공개설정</string>
+    <string name="storage_detail_popup_desc_2">태크 편집</string>
+    <string name="storage_detail_popup_desc_3">복사해서 재편집</string>
+    <string name="storage_detail_popup_desc_4">삭제하기</string>
 
     <!--  공유공간 상세  -->
     <string name="share_detail_title">공유공간</string>
