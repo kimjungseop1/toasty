@@ -7,6 +7,8 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
@@ -46,7 +48,9 @@ import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.util.LinkedList
 
@@ -66,13 +70,12 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                 //TODO 계속편집
             }, {
                 //TODO 편집 취소
-                goMain()
+                finish()
             })
         }
     }
 
     private lateinit var mPhotoEditor: PhotoEditor
-    private lateinit var mPhotoEditorView: PhotoEditorView
 
     private lateinit var thumbnails: List<Bitmap>
 
@@ -99,7 +102,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                 //TODO 계속편집
             }, {
                 //TODO 편집 취소
-                goMain()
+                finish()
             })
         }
         binding.actionbar.actionTitle.text =
@@ -119,15 +122,14 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         videoPath = intent.getStringExtra("CACHE_FILE_PATH").toString()
         // 진입시 썸네일의 첫번째 이미지 바로 표시
         lifecycleScope.launch {
-            thumbnails = getThumbnails(videoPath)
-            if (thumbnails.isNotEmpty()) {
-                binding.photoEditorImageView.source.setImageBitmap(thumbnails[0])
+            binding.photoEditorImageView.source.setImageBitmap(getFirstThumbnail(videoPath))
+            withContext(Dispatchers.IO) {
+                thumbnails = getThumbnails(videoPath)
             }
         }
 
         /** 에디터 초기화 **/
-        mPhotoEditorView = binding.photoEditorImageView
-        mPhotoEditor = PhotoEditor.Builder(this, mPhotoEditorView)
+        mPhotoEditor = PhotoEditor.Builder(this, binding.photoEditorImageView)
             .setPinchTextScalable(true)
             .build()
         mPhotoEditor.setOnPhotoEditorListener(this)
@@ -137,13 +139,55 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
     private fun setBottomMenuList() {
         val arrayList = ArrayList<NavBarItem>()
-        arrayList.add(NavBarItem(R.drawable.icon_change_video, R.drawable.icon_sel_change, "영상 변경"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_thumbnail, R.drawable.icon_sel_thumbnail, "썸네일"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_frame, R.drawable.icon_sel_frame, "영역"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_text, R.drawable.icon_sel_text, "텍스트"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_draw, R.drawable.icon_sel_draw, "드로잉"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_smail, R.drawable.icon_sel_smile, "스티커"))
-        arrayList.add(NavBarItem(R.drawable.icon_video_etc, R.drawable.icon_sel_etc, "기타"))
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_change_video,
+                R.drawable.icon_sel_change,
+                getString(R.string.editor_video_menu_1)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_thumbnail,
+                R.drawable.icon_sel_thumbnail,
+                getString(R.string.editor_video_menu_2)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_frame,
+                R.drawable.icon_sel_frame,
+                getString(R.string.editor_video_menu_3)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_text,
+                R.drawable.icon_sel_text,
+                getString(R.string.editor_video_menu_4)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_draw,
+                R.drawable.icon_sel_draw,
+                getString(R.string.editor_video_menu_5)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_smail,
+                R.drawable.icon_sel_smile,
+                getString(R.string.editor_video_menu_6)
+            )
+        )
+        arrayList.add(
+            NavBarItem(
+                R.drawable.icon_video_etc,
+                R.drawable.icon_sel_etc,
+                getString(R.string.editor_video_menu_7)
+            )
+        )
 
         binding.recyclerEdit.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -178,14 +222,37 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                             LinearLayoutManager.HORIZONTAL,
                             false
                         )
-                    binding.thumbLayout.thumbRecycler.adapter =
-                        ThumbnailAdapter(
-                            this@EditVideoPrintActivity,
-                            thumbnails
-                        ) { position: Int ->
-                            binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+
+                    if (::thumbnails.isInitialized) {
+                        binding.thumbLayout.thumbRecycler.adapter =
+                            ThumbnailAdapter(
+                                this@EditVideoPrintActivity,
+                                thumbnails
+                            ) { position: Int ->
+                                binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+                            }
+                        binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
+                    } else {
+                        // Handler를 사용해 주기적으로 초기화 상태를 확인
+                        val handler = Handler(Looper.getMainLooper())
+                        val checkInitialization = object : Runnable {
+                            override fun run() {
+                                if (::thumbnails.isInitialized) {
+                                    binding.thumbLayout.thumbRecycler.adapter =
+                                        ThumbnailAdapter(
+                                            this@EditVideoPrintActivity,
+                                            thumbnails
+                                        ) { position: Int ->
+                                            binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+                                        }
+                                    binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
+                                } else {
+                                    handler.postDelayed(this, 500)
+                                }
+                            }
                         }
-                    binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
+                        handler.post(checkInitialization)
+                    }
 
                 }
 
@@ -455,6 +522,16 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         return thumbnails
     }
 
+    private fun getFirstThumbnail(videoPath: String): Bitmap? {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(videoPath)
+
+        // 0초 시점의 프레임을 가져오기
+        val firstFrame = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST)
+
+        retriever.release()
+        return firstFrame
+    }
 
     /** 에디터 관련 리스너 start----- **/
     override fun onEditTextChangeListener(rootView: View, text: String, colorCode: Int) {

@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.flexbox.FlexboxLayout
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityInputTagBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
@@ -32,8 +33,8 @@ class InputTagActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "태그 입력"
-        binding.actionbar.actionEtc.text = "완료"
+        binding.actionbar.actionTitle.text = getString(R.string.tag_popup_input)
+        binding.actionbar.actionEtc.text = getString(R.string.tag_popup_submit)
         binding.actionbar.actionEtc.setOnClickListener {
             finish()
         }

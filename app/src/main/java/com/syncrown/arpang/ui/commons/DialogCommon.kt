@@ -42,6 +42,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isCommentReport = false //TODO 공유공간 상세 코멘트 신고
     private var isSubscribeReport = false //TODO 구독리스트 상세 신고
     private var isSubscribeReject = false //TODO 구독리스트 상세 차단
+    private var isLibARDelete = false //TODO AR영상을 보관함에서 삭제
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -63,6 +64,26 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogLibArDelete(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isLibARDelete = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showLibArDelete(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogLibArDelete(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogNetworkError(
@@ -540,6 +561,30 @@ class DialogCommon : DialogFragment(), OnClickListener {
 
                 dialogNormalBinding.bodyView.text = context?.let {
                     getString(R.string.edit_video_print_alert_delete_content)
+                }
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.tag_popup_right_btn)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isLibARDelete -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.lib_ar_video_popup_delete)
                 }
 
                 dialogNormalBinding.btnLeft.text = context?.let {

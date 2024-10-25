@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemCategoryMultiBinding
 
@@ -54,12 +55,10 @@ class MultiSelectAdapter(
 
             holder.binding.contentView.typeface = Typeface.DEFAULT_BOLD
 
-            holder.binding.root.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.color_f5f5f5
-                )
-            )
+            Glide.with(context)
+                .load(R.drawable.category_slected)
+                .into(holder.binding.contentImage)
+
         } else {
             holder.binding.contentView.setTextColor(
                 ContextCompat.getColor(
@@ -70,12 +69,10 @@ class MultiSelectAdapter(
 
             holder.binding.contentView.typeface = Typeface.DEFAULT
 
-            holder.binding.root.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.color_white
-                )
-            )
+            Glide.with(context)
+                .load(R.drawable.category_normal)
+                .into(holder.binding.contentImage)
+
         }
 
         if (position == 0) {

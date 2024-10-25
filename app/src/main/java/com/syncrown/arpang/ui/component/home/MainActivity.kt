@@ -47,16 +47,6 @@ class MainActivity : BaseActivity() {
 
     private var bottomSheetDialog: BottomSheetDialog? = null
 
-    private val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (binding.bottomNavigation.selectedItemId != R.id.nav_1) {
-                Log.e("jung","aaaaa")
-            } else {
-                Log.e("jung","bbbbb")
-            }
-        }
-    }
-
     override fun observeViewModel() {
         lifecycleScope.launch {
             mainViewModel.onPaperGuideActivityClosed.observe(this@MainActivity, Observer { value ->
@@ -189,7 +179,6 @@ class MainActivity : BaseActivity() {
 
         }
 
-        // update ui
         updateUi(data)
     }
 
@@ -199,8 +188,7 @@ class MainActivity : BaseActivity() {
             showEventBottomSheet()
         }
 
-        // 네비게이션 뱃지가 필요할때 사용
-        //showBottomNavigationViewBadge(this, binding.bottomNavigation, 2)
+
     }
 
     @SuppressLint("RestrictedApi")
@@ -239,11 +227,10 @@ class MainActivity : BaseActivity() {
         bottomSheetDialog?.setContentView(binding.root)
 
         val pageData = listOf("1", "2", "3")
-        val adapter = MainEventPagerAdapter(this, pageData, object : MainEventPagerAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-
-            }
-        })
+        val adapter = MainEventPagerAdapter(this, pageData
+        ) { position ->
+            Log.e("jung", "pos : $position")
+        }
         binding.eventViewPager.adapter = adapter
         binding.eventViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -303,7 +290,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun goCS() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pf.kakao.com/_umBxmxb/chat"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(""))
         startActivity(intent)
     }
 }

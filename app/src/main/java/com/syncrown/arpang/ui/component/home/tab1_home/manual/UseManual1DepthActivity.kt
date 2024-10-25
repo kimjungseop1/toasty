@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.manual
 
 import android.content.Intent
 import android.os.Bundle
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityManualDepth1Binding
 import com.syncrown.arpang.ui.base.BaseActivity
 
@@ -24,7 +25,7 @@ class UseManual1DepthActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "가이드"
+        binding.actionbar.actionTitle.text = getString(R.string.guide_title)
 
         //TODO 장치연결
         binding.menuItem1.setOnClickListener {

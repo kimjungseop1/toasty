@@ -221,10 +221,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.manual.ManualActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.component.home.tab5_more.notice.detail.NoticeDetailActivity"
             android:exported="true" />
 

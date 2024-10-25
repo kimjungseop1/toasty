@@ -79,8 +79,8 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
             })
         }
 
-        binding.actionbar.actionTitle.text = "인쇄 편집"
-        binding.actionbar.actionEtc.text = "인쇄"
+        binding.actionbar.actionTitle.text = getString(R.string.edit_video_print_title)
+        binding.actionbar.actionEtc.text = getString(R.string.edit_video_print_print)
         binding.actionbar.actionEtc.setOnClickListener {
             if (AppDataPref.isLabelPreView) {
                 goPreview()

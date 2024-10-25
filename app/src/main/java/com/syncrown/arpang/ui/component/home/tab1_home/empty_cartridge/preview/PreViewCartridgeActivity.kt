@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.preview
 
 import android.content.Intent
 import android.os.Bundle
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityPreviewCartridgeBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity
@@ -25,8 +26,8 @@ class PreViewCartridgeActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "용지 미리보기"
-        binding.actionbar.actionEtc.text = "시작하기"
+        binding.actionbar.actionTitle.text = getString(R.string.cartridge_preview_title)
+        binding.actionbar.actionEtc.text = getString(R.string.cartridge_preview_start)
         binding.actionbar.actionEtc.setOnClickListener {
             goStart()
         }

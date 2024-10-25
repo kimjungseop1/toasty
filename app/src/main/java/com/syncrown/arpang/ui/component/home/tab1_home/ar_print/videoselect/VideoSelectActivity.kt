@@ -99,6 +99,7 @@ class VideoSelectActivity : BaseActivity() {
         val intent = Intent(this, TrimVideoActivity::class.java)
         intent.putExtra("VIDEO_FILE_PATH", filePath)
         startActivity(intent)
+        finish()
     }
 
 

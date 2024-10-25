@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivitySelectFreeImageBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -43,7 +44,7 @@ class SelectFreePrintActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "자유인쇄"
+        binding.actionbar.actionTitle.text = getString(R.string.cartridge_empty_action_text_3)
 
         imageSelectViewModel.loadFolderNames(this)
         imageSelectViewModel.loadImageList(this)

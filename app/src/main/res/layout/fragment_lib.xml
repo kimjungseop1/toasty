@@ -52,10 +52,24 @@
             android:paddingBottom="8dp"
             android:textColor="@color/color_8e5d4b"
             android:textSize="14dp"
-            android:text="용지"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/filterBtn"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/selectCartridgeCnt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_content_type_cnt"
+            android:gravity="center"
+            android:textColor="@color/color_white"
+            android:textSize="13dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/paperBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".2" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/contentsBtn"

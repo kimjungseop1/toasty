@@ -19,6 +19,7 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ClippingMediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityTrimVideoBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ActivityFinishManager
@@ -70,8 +71,8 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
         binding = ActivityTrimVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.actionbar.actionTitle.text = "영상 조정"
-        binding.actionbar.actionEtc.text = "확인"
+        binding.actionbar.actionTitle.text = getString(R.string.edit_video_print_edit_title)
+        binding.actionbar.actionEtc.text = getString(R.string.edit_crop_image_ok)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,14 +90,14 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
                 )
 
                 if (isSave.first) {
-                    Toast.makeText(this, "영상 클립 완료", Toast.LENGTH_SHORT).show()
+                    Log.e("jung","영상 클립 완료")
                     // 인쇄 편집으로 이동
                     val filePath = isSave.second
                     Log.e("jung", "send file path : $filePath")
                     goEditVideoPrint(filePath)
 
                 } else {
-                    Toast.makeText(this, "영상 클립 실패!!!", Toast.LENGTH_SHORT).show()
+                    Log.e("jung","영상 클립 실패")
                 }
             }
         }
@@ -226,5 +227,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
         val intent = Intent(this, EditVideoPrintActivity::class.java)
         intent.putExtra("CACHE_FILE_PATH", filePath)
         startActivity(intent)
+        finish()
     }
 }

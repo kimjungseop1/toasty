@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/actionbar"
-        layout="@layout/actionbar_style_6" />
+        layout="@layout/actionbar_style_5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/menuView"

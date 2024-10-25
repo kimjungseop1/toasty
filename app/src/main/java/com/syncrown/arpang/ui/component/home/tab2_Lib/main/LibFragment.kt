@@ -16,12 +16,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.BottomSheetCartridgeBinding
+import com.syncrown.arpang.databinding.BottomSheetCartridgeSelectBinding
 import com.syncrown.arpang.databinding.BottomSheetFilterBinding
 import com.syncrown.arpang.databinding.BottomSheetTypeBinding
 import com.syncrown.arpang.databinding.FragmentLibBinding
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
+import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterChildAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterSelectAdapter
@@ -32,7 +34,7 @@ import java.io.IOException
 
 
 class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
-    MultiSelectAdapter.OnItemSelectedListener {
+    MultiSelectAdapter.OnItemSelectedListener, CartridgeMultiSelectAdapter.OnCartridgeItemSelectedListener {
     private lateinit var binding: FragmentLibBinding
 
     private lateinit var childAdapter: FilterChildAdapter
@@ -43,6 +45,8 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     private val selectedItemsMap = mutableMapOf<Int, MutableList<String>>()
     private val childAdapters = mutableMapOf<Int, FilterChildAdapter>()
 
+    private val cartridgeList = listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
+    private lateinit var cartridgeMultiSelectAdapter: CartridgeMultiSelectAdapter
 
     private val itemList = listOf("전체", "AR 영상", "인생네컷", "자유인쇄", "라벨 스티커", "행사 스티커")
     private lateinit var categoryAdapter: MultiSelectAdapter
@@ -70,6 +74,8 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             showFilterBottomSheet()
         }
 
+        cartridgeMultiSelectAdapter = CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
+        binding.paperBtn.text = cartridgeList[0]
         binding.paperBtn.setOnClickListener {
             // 용지팝업
             showCartridgeBottomSheet()
@@ -275,55 +281,23 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     }
 
     private fun showCartridgeBottomSheet() {
-        val binding = BottomSheetCartridgeBinding.inflate(layoutInflater)
+        val sheetBinding = BottomSheetCartridgeSelectBinding.inflate(layoutInflater)
         val bottomSheetDialog =
             BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialogTheme)
         bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.setContentView(sheetBinding.root)
 
-        binding.concentration1.isSelected = true
-        binding.printType1.isSelected = true
-        binding.onePaper.isSelected = true
-
-        binding.concentration1.setOnClickListener {
-            binding.concentration1.isSelected = true
-            binding.concentration2.isSelected = false
-            binding.concentration3.isSelected = false
+        sheetBinding.closeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
         }
 
-        binding.concentration2.setOnClickListener {
-            binding.concentration1.isSelected = false
-            binding.concentration2.isSelected = true
-            binding.concentration3.isSelected = false
-        }
+        sheetBinding.recyclerCate.layoutManager = LinearLayoutManager(requireContext())
+        sheetBinding.recyclerCate.adapter = cartridgeMultiSelectAdapter
 
-        binding.concentration3.setOnClickListener {
-            binding.concentration1.isSelected = false
-            binding.concentration2.isSelected = false
-            binding.concentration3.isSelected = true
-        }
+        sheetBinding.submitBtn.setOnClickListener {
+            val selectedCartridge = cartridgeMultiSelectAdapter.getSelectedItems()
+            updateSelectedCartridge(selectedCartridge)
 
-        binding.printType1.setOnClickListener {
-            binding.printType1.isSelected = true
-            binding.printType2.isSelected = false
-        }
-
-        binding.printType2.setOnClickListener {
-            binding.printType1.isSelected = false
-            binding.printType2.isSelected = true
-        }
-
-        binding.onePaper.setOnClickListener {
-            binding.onePaper.isSelected = true
-            binding.twoPaper.isSelected = false
-        }
-
-        binding.twoPaper.setOnClickListener {
-            binding.onePaper.isSelected = false
-            binding.twoPaper.isSelected = true
-        }
-
-        binding.closeBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
         }
 
@@ -346,7 +320,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
         sheetBinding.submitBtn.setOnClickListener {
             val selectedCategories = categoryAdapter.getSelectedItems()
-            Log.e("jung", "size : " + selectedCategories.size)
             updateSelectedCategories(selectedCategories)
 
             bottomSheetDialog.dismiss()
@@ -389,7 +362,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
     // 보관함 목록의 아이템을 선택
     override fun onItemClick(position: Int) {
-        Log.e("jung", "click pos : $position")
         goDetail()
     }
 
@@ -407,6 +379,22 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             binding.selectContentCnt.visibility = View.GONE
         }
         binding.selectContentCnt.text = categoryAdapter.getSelectedItemCount().toString()
+    }
+
+    // 용지 선택 팝업
+    override fun onCartridgeItemSelected(position: Int, isSelected: Boolean) {
+
+    }
+
+    private fun updateSelectedCartridge(selectedCartridge: List<Int>) {
+        binding.paperBtn.text = cartridgeList[selectedCartridge[0]]
+
+        if (cartridgeMultiSelectAdapter.getSelectedItemCount() > 1) {
+            binding.selectCartridgeCnt.visibility = View.VISIBLE
+        } else {
+            binding.selectCartridgeCnt.visibility = View.GONE
+        }
+        binding.selectCartridgeCnt.text = cartridgeMultiSelectAdapter.getSelectedItemCount().toString()
     }
 
     private fun goDetail() {

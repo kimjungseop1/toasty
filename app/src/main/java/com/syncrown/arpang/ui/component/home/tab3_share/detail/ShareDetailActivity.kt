@@ -1,20 +1,22 @@
 package com.syncrown.arpang.ui.component.home.tab3_share.detail
 
-import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.flexbox.FlexboxLayout
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityShareDetailBinding
 import com.syncrown.arpang.databinding.PopupSubscribeBinding
 import com.syncrown.arpang.ui.base.BaseActivity
+import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -71,6 +73,8 @@ class ShareDetailActivity : BaseActivity() {
 
         showEventView()
 
+        showFlexTagView()
+
         showContentView()
 
         showCommentView()
@@ -85,6 +89,25 @@ class ShareDetailActivity : BaseActivity() {
             .into(binding.eventProfile)
 
 
+    }
+
+    private fun showFlexTagView() {
+        val position = binding.flexTagView.childCount
+        val customDynamicTagView = CustomDynamicTagView(this).apply {
+            text = "# (get data)"
+
+            tag = position
+        }
+
+        val layoutParams = FlexboxLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(5, 5, 5, 5)
+        }
+
+        customDynamicTagView.layoutParams = layoutParams
+        binding.flexTagView.addView(customDynamicTagView)
     }
 
     private fun showContentView() {
@@ -180,7 +203,7 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 val customToast = CustomToast(this)
-                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.BLUE)
+                customToast.showToast(getString(R.string.lib_popup_report_comment), CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }
@@ -199,7 +222,7 @@ class ShareDetailActivity : BaseActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, true
         )
 
-        popBinding.menuItem1.text = "신고하기"
+        popBinding.menuItem1.text = getString(R.string.lib_popup_report)
         popBinding.menuItem1.setOnClickListener {
             val dialogCommon = DialogCommon()
             dialogCommon.showCommentReport(supportFragmentManager, {
@@ -207,7 +230,7 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 val customToast = CustomToast(this)
-                customToast.showToast("게시글을 신고하였습니다.", CustomToastType.BLUE)
+                customToast.showToast(getString(R.string.lib_popup_report_comment), CustomToastType.BLUE)
             })
             popupWindow.dismiss()
         }
@@ -226,7 +249,7 @@ class ShareDetailActivity : BaseActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, true
         )
 
-        popBinding.menuItem1.text = "삭제하기"
+        popBinding.menuItem1.text = getString(R.string.lib_popup_delete)
         popBinding.menuItem1.setTextColor(ContextCompat.getColor(this, R.color.color_black))
         popBinding.menuItem1.setOnClickListener {
             val dialogCommon = DialogCommon()

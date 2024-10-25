@@ -193,7 +193,7 @@ class LoginViewModel : BaseViewModel() {
                 UserApiClient.instance.loginWithKakaoTalk(activity) { token: OAuthToken?, error: Throwable? ->
                     if (token != null) {
                         val snsToken = token.accessToken
-                        Log.e(TAG, snsToken)
+                        Log.e("jung", snsToken)
                         getKaKaoProfile(activity, snsToken)
                     }
 

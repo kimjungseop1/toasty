@@ -54,6 +54,7 @@
                 android:text="다용도 용지"
                 android:textColor="@color/color_black"
                 android:textSize="16dp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/desc_1"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintTop_toTopOf="@id/desc_1" />
@@ -113,26 +114,24 @@
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/nameView" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tagView"
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexTagView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="108dp"
+                android:layout_marginTop="23dp"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/thumbnailView">
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@id/thumbnailView" />
 
             <View
                 android:id="@+id/divider_2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
+                android:layout_marginTop="18dp"
                 android:background="@color/color_CECECE"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/tagView" />
+                app:layout_constraintTop_toBottomOf="@id/flexTagView" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/likeBtn"
@@ -141,8 +140,8 @@
                 android:layout_marginTop="17dp"
                 android:scaleType="center"
                 android:src="@drawable/icon_like_unsel"
-                app:layout_constraintHorizontal_bias=".05"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintHorizontal_bias=".05"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/divider_2" />
 
@@ -164,9 +163,9 @@
                 android:layout_height="wrap_content"
                 android:scaleType="center"
                 android:src="@drawable/icon_comment"
-                app:layout_constraintHorizontal_bias=".2"
-                app:layout_constraintEnd_toStartOf="@id/guideline_right"
                 app:layout_constraintBottom_toBottomOf="@id/likeBtn"
+                app:layout_constraintEnd_toStartOf="@id/guideline_right"
+                app:layout_constraintHorizontal_bias=".2"
                 app:layout_constraintStart_toEndOf="@id/likeView"
                 app:layout_constraintTop_toTopOf="@id/likeBtn" />
 
@@ -188,7 +187,60 @@
                 android:layout_height="10dp"
                 android:layout_marginTop="21dp"
                 android:background="@color/color_f5f5f5"
-                app:layout_constraintTop_toBottomOf="@id/likeBtn"/>
+                app:layout_constraintTop_toBottomOf="@id/likeBtn" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="67dp"
+                android:background="@color/color_white"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_3"
+                app:layout_constraintVertical_bias="0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputComment"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        android:background="@drawable/custom_bottom_event_round_15dp"
+        android:elevation="5dp"
+        android:gravity="top"
+        android:hint="댓글을 남겨주세요"
+        android:imeOptions="actionDone"
+        android:paddingStart="15dp"
+        android:paddingTop="19dp"
+        android:paddingEnd="0dp"
+        android:textColor="@color/color_black"
+        android:textColorHint="@color/color_868686"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/custom_button_brown_round_5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp"
+        android:text="등록"
+        android:textColor="@color/color_white"
+        android:textSize="16dp"
+        android:translationZ="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/inputComment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inputComment"
+        app:layout_constraintVertical_bias=".9" />
 </androidx.constraintlayout.widget.ConstraintLayout>

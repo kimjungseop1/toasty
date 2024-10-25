@@ -49,9 +49,9 @@ class ConnectDeviceActivity : BaseActivity() {
     private fun setDeviceList() {
         //임시 data
         val arrayList = ArrayList<String>()
-        arrayList.add("TOASTY MK1 (N1501152)")
-        arrayList.add("TOASTY MK1 (N1501152)")
-        arrayList.add("OVENY MK1 (N1501152)")
+//        arrayList.add("TOASTY MK1 (N1501152)")
+//        arrayList.add("TOASTY MK1 (N1501152)")
+//        arrayList.add("OVENY MK1 (N1501152)")
 
         if (arrayList.size > 0) {
             binding.recyclerDevice.visibility = View.VISIBLE

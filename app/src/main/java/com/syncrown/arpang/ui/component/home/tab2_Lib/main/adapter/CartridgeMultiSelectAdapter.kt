@@ -1,5 +1,6 @@
-package com.syncrown.arpang.ui.component.home.tab3_share.main.adapter
+package com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -11,14 +12,14 @@ import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemCategoryMultiBinding
 
-class ShareMultiSelectAdapter(
+class CartridgeMultiSelectAdapter(
     private val context: Context,
     private val itemList: List<String>,
-    private val itemSelectedListener: OnItemSelectedListener
-) : RecyclerView.Adapter<ShareMultiSelectAdapter.ViewHolder>() {
+    private val itemSelectedListener: OnCartridgeItemSelectedListener
+) : RecyclerView.Adapter<CartridgeMultiSelectAdapter.ViewHolder>() {
 
-    interface OnItemSelectedListener {
-        fun onItemSelected(position: Int, isSelected: Boolean)
+    interface OnCartridgeItemSelectedListener {
+        fun onCartridgeItemSelected(position: Int, isSelected: Boolean)
     }
 
     // 첫 번째 아이템을 기본으로 선택된 상태로 추가
@@ -28,7 +29,7 @@ class ShareMultiSelectAdapter(
 
     init {
         // 어댑터가 초기화될 때 첫 번째 아이템이 선택된 상태임을 알림
-        itemSelectedListener.onItemSelected(0, true)
+        itemSelectedListener.onCartridgeItemSelected(0, true)
     }
 
     class ViewHolder(val binding: ItemCategoryMultiBinding) : RecyclerView.ViewHolder(binding.root)
@@ -39,6 +40,7 @@ class ShareMultiSelectAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemList[position]
         holder.binding.contentView.text = item
@@ -56,6 +58,7 @@ class ShareMultiSelectAdapter(
             Glide.with(context)
                 .load(R.drawable.category_slected)
                 .into(holder.binding.contentImage)
+
         } else {
             holder.binding.contentView.setTextColor(
                 ContextCompat.getColor(
@@ -97,7 +100,7 @@ class ShareMultiSelectAdapter(
                 }
             }
             notifyDataSetChanged()
-            itemSelectedListener.onItemSelected(position, selectedItems.contains(position))
+            itemSelectedListener.onCartridgeItemSelected(position, selectedItems.contains(position))
         }
     }
 
@@ -105,7 +108,7 @@ class ShareMultiSelectAdapter(
         return itemList.size
     }
 
-    fun getSelectedItemCount() : Int {
+    fun getSelectedItemCount(): Int {
         return selectedItems.size
     }
 

@@ -21,6 +21,10 @@
     <string name="loading_content">장착된 용지를 인식중입니다.</string>
     <string name="actionbar_print_text">인쇄</string>
     <string name="actionbar_print_preview">미리보기</string>
+    <string name="lib_popup_report">신고하기</string>
+    <string name="lib_popup_report_comment">게시글을 신고하였습니다.</string>
+    <string name="lib_popup_delete">삭제하기</string>
+    <string name="lib_ar_video_popup_delete">AR 영상을 보관함에서 삭제하실 경우\n기존 인쇄한 사진의 재생이 불가능합니다.\n삭제하시겠습니까?</string>
 
     <!--  스플래시  -->
     <string name="splash_title_bic">ARPANG</string>
@@ -161,6 +165,8 @@
 
     <!-- 용지 장착 -->
     <string name="cartridge_add_proto_type"><u>프로토타입용 링크 : 용지 장착 인식</u></string>
+    <string name="cartridge_preview_title">용지 미리보기</string>
+    <string name="cartridge_preview_start">시작하기</string>
 
     <!-- 인쇄편집 -->
     <string name="edit_video_print_alert_title">알림</string>
@@ -172,6 +178,18 @@
     <string name="edit_video_print_print">인쇄</string>
     <string name="edit_text_style_b"><u>B</u></string>
     <string name="edit_thumbnail_desc">인쇄할 이미지를 선택해주세요.</string>
+    <string name="edit_crop_image">이미지 조정</string>
+    <string name="edit_crop_image_ok">확인</string>
+    <string name="edit_create_result">만들기</string>
+    <string name="edit_video_print_edit_title">영상 조정</string>
+
+    <string name="editor_video_menu_1">영상 변경</string>
+    <string name="editor_video_menu_2">썸네일</string>
+    <string name="editor_video_menu_3">영역</string>
+    <string name="editor_video_menu_4">텍스트</string>
+    <string name="editor_video_menu_5">드로잉</string>
+    <string name="editor_video_menu_6">스티커</string>
+    <string name="editor_video_menu_7">기타</string>
 
     <!--  보관함  -->
     <string name="storage_print_setting_title">인쇄 설정</string>
@@ -244,13 +262,15 @@
 
     <string name="subscribe_popup_delete_message">나를 구독한 사람을 삭제하시겠습니까?\n상대방의 구독 리스트에서 내가 삭제됩니다.</string>
 
-
+    <!-- 가이드 -->
+    <string name="guide_title">가이드</string>
 
     <!--  태그입력  -->
     <string name="tag_popup_content_message">해당 태그를 삭제하시겠습니까?</string>
     <string name="tag_popup_left_btn">닫기</string>
     <string name="tag_popup_right_btn">삭제</string>
-
+    <string name="tag_popup_input">태그 입력</string>
+    <string name="tag_popup_submit">완료</string>
 
 
     <!-- 에디터  -->

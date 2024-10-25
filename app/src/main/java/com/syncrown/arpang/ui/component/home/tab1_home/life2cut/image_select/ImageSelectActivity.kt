@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityImageSelectBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -52,8 +53,8 @@ class ImageSelectActivity : BaseActivity() {
             finish()
         }
 
-        binding.actionbar.actionTitle.text = "인생 두컷"
-        binding.actionbar.actionEtc.text = "만들기"
+        binding.actionbar.actionTitle.text = getString(R.string.cartridge_empty_action_text_2)
+        binding.actionbar.actionEtc.text = getString(R.string.edit_create_result)
         binding.actionbar.actionEtc.setOnClickListener {
             if (selectedImg.size != 2) {
                 val customToast = CustomToast(this)

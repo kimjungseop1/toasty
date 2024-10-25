@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.manual
 
 import android.content.Intent
 import android.os.Bundle
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityManualDepth2Binding
 import com.syncrown.arpang.ui.base.BaseActivity
 
@@ -22,7 +23,7 @@ class UseManual2DepthActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "인쇄하기"
+        binding.actionbar.actionTitle.text = getString(R.string.manual_guide_3)
 
         //TODO 기본가이드
         binding.menuItem1.setOnClickListener {
