@@ -206,6 +206,8 @@
     <string name="storage_detail_popup_desc_2">태크 편집</string>
     <string name="storage_detail_popup_desc_3">복사해서 재편집</string>
     <string name="storage_detail_popup_desc_4">삭제하기</string>
+    <string name="storage_detail_input_hint">댓글을 남겨주세요</string>
+    <string name="storage_detail_input_hint_disable">댓글은 공개한 컨텐츠에만 달 수 있습니다.</string>
 
     <!--  공유공간 상세  -->
     <string name="share_detail_title">공유공간</string>

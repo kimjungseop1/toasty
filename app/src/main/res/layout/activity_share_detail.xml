@@ -225,9 +225,10 @@
                 android:nestedScrollingEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clContentView"
-                app:layout_constraintVertical_bias="0" />
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -239,7 +240,7 @@
         android:background="@drawable/custom_bottom_event_round_15dp"
         android:elevation="5dp"
         android:gravity="top"
-        android:hint="댓글을 남겨주세요"
+        android:hint="@string/storage_detail_input_hint"
         android:imeOptions="actionDone"
         android:paddingStart="15dp"
         android:paddingTop="19dp"

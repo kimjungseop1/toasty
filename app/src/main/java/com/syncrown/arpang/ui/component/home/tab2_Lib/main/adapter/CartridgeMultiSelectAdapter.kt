@@ -53,6 +53,13 @@ class CartridgeMultiSelectAdapter(
                 )
             )
 
+            holder.binding.root.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.color_f5f5f5
+                )
+            )
+
             holder.binding.contentView.typeface = Typeface.DEFAULT_BOLD
 
             Glide.with(context)
@@ -64,6 +71,13 @@ class CartridgeMultiSelectAdapter(
                 ContextCompat.getColor(
                     context,
                     R.color.color_black
+                )
+            )
+
+            holder.binding.root.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.color_white
                 )
             )
 

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemDetailCommentBinding
-import com.syncrown.arpang.databinding.ItemSubscribeBinding
 
 class DetailCommentListAdapter(
     private val context: Context,
@@ -40,11 +39,9 @@ class DetailCommentListAdapter(
         return items.size
     }
 
-    inner class SubscribeHolder(binding: ItemDetailCommentBinding) :
+    inner class SubscribeHolder(private val binding: ItemDetailCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val binding: ItemDetailCommentBinding = binding
         fun onBind(context: Context?, position: Int) {
-            // 데이터 바인딩 로직
             binding.moreView.setOnClickListener {
                 mlistener.onClick(position, binding.moreView)
             }

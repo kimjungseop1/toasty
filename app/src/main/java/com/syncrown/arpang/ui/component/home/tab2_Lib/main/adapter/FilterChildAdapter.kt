@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemCategoryChildBinding
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.Child
@@ -62,6 +63,11 @@ class FilterChildAdapter(
                 )
 
                 binding.childTitle.typeface = Typeface.DEFAULT_BOLD
+
+                Glide.with(context)
+                    .load(R.drawable.category_slected)
+                    .into(binding.contentImage)
+
             } else {
                 binding.childTitle.setTextColor(
                     ContextCompat.getColor(
@@ -78,6 +84,11 @@ class FilterChildAdapter(
                 )
 
                 binding.childTitle.typeface = Typeface.DEFAULT
+
+                Glide.with(context)
+                    .load(R.drawable.category_normal)
+                    .into(binding.contentImage)
+
             }
 
             binding.root.setOnClickListener {

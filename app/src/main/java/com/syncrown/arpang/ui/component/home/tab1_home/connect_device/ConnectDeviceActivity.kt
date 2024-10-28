@@ -1,20 +1,14 @@
 package com.syncrown.arpang.ui.component.home.tab1_home.connect_device
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.LeadingMarginSpan
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayoutMediator
-import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityConnectDeviceBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.VerticalSpaceItemDecoration
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter.DeviceListAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter.UsePagerAdapter
 
 class ConnectDeviceActivity : BaseActivity() {
     private lateinit var binding: ActivityConnectDeviceBinding
