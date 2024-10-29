@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityScrapMainBinding
@@ -68,7 +69,14 @@ class ScrapActivity : BaseActivity(), ShareGridItemAdapter.OnItemClickListener,
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setContentView(binding.root)
 
+        val bottomSheet =
+            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+        behavior.isDraggable = false
+        behavior.isHideable = false
+
         binding.closeBtn.setOnClickListener {
+            categoryAdapter.restoreLastSubmittedSelection()
             bottomSheetDialog.dismiss()
         }
 
@@ -78,7 +86,7 @@ class ScrapActivity : BaseActivity(), ShareGridItemAdapter.OnItemClickListener,
         binding.submitBtn.setOnClickListener {
             // 적용
             val selectedCategories = categoryAdapter.getSelectedItems()
-            Log.e("jung", "size : " + selectedCategories.size)
+            categoryAdapter.saveCurrentSelection()
             updateSelectedCategories(selectedCategories)
 
             bottomSheetDialog.dismiss()

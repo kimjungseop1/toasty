@@ -218,15 +218,17 @@ class ShareDetailActivity : BaseActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, true
         )
 
-        popBinding.menuItem1.text = "신고하기"
+        popBinding.menuItem1.text = getString(R.string.lib_popup_report)
         popBinding.menuItem1.setOnClickListener {
             val dialogCommon = DialogCommon()
             dialogCommon.showCommentReport(supportFragmentManager, {
                 //닫기
             }, {
                 //신고
-                val customToast = CustomToast(this)
-                customToast.showToast(getString(R.string.lib_popup_report_comment), CustomToastType.BLUE)
+                var customToast = CustomToast()
+                customToast.showToastMessage(supportFragmentManager, getString(R.string.lib_popup_report_comment), CustomToastType.BLUE) {
+                    //close
+                }
             })
             popupWindow.dismiss()
         }
@@ -252,8 +254,10 @@ class ShareDetailActivity : BaseActivity() {
                 //닫기
             }, {
                 //신고
-                val customToast = CustomToast(this)
-                customToast.showToast(getString(R.string.lib_popup_report_comment), CustomToastType.BLUE)
+                var customToast = CustomToast()
+                customToast.showToastMessage(supportFragmentManager, getString(R.string.lib_popup_report_comment), CustomToastType.BLUE) {
+                    //close
+                }
             })
             popupWindow.dismiss()
         }
@@ -427,9 +431,7 @@ class ShareDetailActivity : BaseActivity() {
             bottomSheetDialog.dismiss()
         }
 
-        binding.nextBtn.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
+        binding.nextBtn.visibility = View.GONE
 
         binding.submitBtn.setOnClickListener {
             bottomSheetDialog.dismiss()

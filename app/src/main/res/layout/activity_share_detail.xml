@@ -222,7 +222,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="67dp"
                 android:background="@color/color_white"
-                android:nestedScrollingEnabled="true"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

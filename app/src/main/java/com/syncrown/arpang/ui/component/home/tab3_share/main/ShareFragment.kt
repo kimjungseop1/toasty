@@ -12,6 +12,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.BottomSheetShareBinding
@@ -79,7 +80,14 @@ class ShareFragment : Fragment(), ShareGridItemAdapter.OnItemClickListener,
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setContentView(binding.root)
 
+        val bottomSheet =
+            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+        behavior.isDraggable = false
+        behavior.isHideable = false
+
         binding.closeBtn.setOnClickListener {
+            categoryAdapter.restoreLastSubmittedSelection()
             bottomSheetDialog.dismiss()
         }
 
@@ -87,9 +95,8 @@ class ShareFragment : Fragment(), ShareGridItemAdapter.OnItemClickListener,
         binding.recyclerCate.adapter = categoryAdapter
 
         binding.submitBtn.setOnClickListener {
-            // 적용
             val selectedCategories = categoryAdapter.getSelectedItems()
-            Log.e("jung", "size : " + selectedCategories.size)
+            categoryAdapter.saveCurrentSelection()
             updateSelectedCategories(selectedCategories)
 
             bottomSheetDialog.dismiss()

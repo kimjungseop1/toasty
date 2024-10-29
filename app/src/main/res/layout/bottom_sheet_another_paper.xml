@@ -29,12 +29,12 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="20dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".5" />
+        <!--        <androidx.constraintlayout.widget.Guideline-->
+        <!--            android:id="@+id/guideline_center"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical"-->
+        <!--            app:layout_constraintGuide_percent=".5" />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clView_1"
@@ -81,8 +81,8 @@
             android:id="@+id/clView_2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent=".75"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".75"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clView_1">
 
@@ -172,7 +172,7 @@
             android:textColor="@color/color_black"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guideline_center"
+            app:layout_constraintEnd_toStartOf="@id/submitBtn"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/divider_2" />
 
@@ -181,6 +181,8 @@
             android:layout_width="0dp"
             android:layout_height="49dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/custom_button_brown_round_5dp"
             android:gravity="center"
             android:text="@string/printer_setting_another_paper_btn"
@@ -188,8 +190,9 @@
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            app:layout_constraintStart_toEndOf="@id/guideline_center"
-            app:layout_constraintTop_toBottomOf="@id/divider_2" />
+            app:layout_constraintStart_toEndOf="@id/nextBtn"
+            app:layout_constraintTop_toBottomOf="@id/divider_2"
+            app:layout_goneMarginStart="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

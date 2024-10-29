@@ -31,8 +31,10 @@ class ChangeNameActivity : BaseActivity() {
         binding.inputName.requestFocus()
 
         binding.changeBtn.setOnClickListener {
-            val customToast = CustomToast(this)
-            customToast.showToast("이름이 변경되었습니다.", CustomToastType.BLUE)
+            val customToast = CustomToast()
+            customToast.showToastMessage(supportFragmentManager,"이름이 변경되었습니다.", CustomToastType.BLUE) {
+                //close
+            }
         }
     }
 }

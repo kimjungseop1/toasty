@@ -200,8 +200,10 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                 //닫기
             }, {
                 //신고
-                val customToast = CustomToast(this)
-                customToast.showToast("사용자를 신고하였습니다.", CustomToastType.BLUE)
+                val customToast = CustomToast()
+                customToast.showToastMessage(supportFragmentManager,"사용자를 신고하였습니다.", CustomToastType.BLUE) {
+                    //close
+                }
             })
             popupWindow.dismiss()
         }
@@ -213,8 +215,10 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                 //닫기
             }, {
                 //차단
-                val customToast = CustomToast(this)
-                customToast.showToast("사용자를 차단하였습니다.", CustomToastType.BLUE)
+                val customToast = CustomToast()
+                customToast.showToastMessage(supportFragmentManager,"사용자를 차단하였습니다.", CustomToastType.BLUE) {
+                    //close
+                }
             })
             popupWindow.dismiss()
         }

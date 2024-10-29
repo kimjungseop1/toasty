@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArPangRepository {
     companion object {
         private const val BASE_URL_DEV = "http://192.168.0.4:8090"
-        private const val BASE_URL_REAL = ""
+        private const val BASE_URL_REAL = "http://www.pagee.net"
     }
 
     private var arPangInterface: ArPangInterface

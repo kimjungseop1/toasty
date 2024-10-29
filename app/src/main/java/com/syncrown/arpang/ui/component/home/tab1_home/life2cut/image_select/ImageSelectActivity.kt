@@ -57,8 +57,10 @@ class ImageSelectActivity : BaseActivity() {
         binding.actionbar.actionEtc.text = getString(R.string.edit_create_result)
         binding.actionbar.actionEtc.setOnClickListener {
             if (selectedImg.size != 2) {
-                val customToast = CustomToast(this)
-                customToast.showToast("이미지를 선택해주세요", CustomToastType.BLACK)
+                val customToast = CustomToast()
+                customToast.showToastMessage(supportFragmentManager,"이미지를 선택해주세요", CustomToastType.BLACK) {
+                    //close
+                }
             } else {
                 goEditImagePrint()
             }

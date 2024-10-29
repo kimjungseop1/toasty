@@ -3,7 +3,6 @@ package com.syncrown.arpang.ui.component.home.tab2_Lib.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.syncrown.arpang.R
-import com.syncrown.arpang.databinding.BottomSheetCartridgeBinding
 import com.syncrown.arpang.databinding.BottomSheetCartridgeSelectBinding
 import com.syncrown.arpang.databinding.BottomSheetFilterBinding
 import com.syncrown.arpang.databinding.BottomSheetTypeBinding
@@ -32,20 +31,23 @@ import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.LibGridItemAd
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.MultiSelectAdapter
 import java.io.IOException
 
-
 class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
-    MultiSelectAdapter.OnItemSelectedListener, CartridgeMultiSelectAdapter.OnCartridgeItemSelectedListener {
-    private lateinit var binding: FragmentLibBinding
+    MultiSelectAdapter.OnItemSelectedListener,
+    CartridgeMultiSelectAdapter.OnCartridgeItemSelectedListener {
 
+    private lateinit var binding: FragmentLibBinding
     private lateinit var childAdapter: FilterChildAdapter
 
-    // 선택된 아이템들을 저장하는 리스트
     private val selectedItemsList = mutableListOf<String>()
     private lateinit var selectedItemsAdapter: FilterSelectAdapter
+    private lateinit var categories: List<Category>
+
     private val selectedItemsMap = mutableMapOf<Int, MutableList<String>>()
     private val childAdapters = mutableMapOf<Int, FilterChildAdapter>()
+    private val selectedChildPositions = mutableMapOf<Int, Set<Int>>() // 선택 위치 저장용 맵
 
-    private val cartridgeList = listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
+    private val cartridgeList =
+        listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
     private lateinit var cartridgeMultiSelectAdapter: CartridgeMultiSelectAdapter
 
     private val itemList = listOf("전체", "AR 영상", "인생네컷", "자유인쇄", "라벨 스티커", "행사 스티커")
@@ -63,30 +65,20 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLibBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.filterBtn.setOnClickListener {
-            // 필터팝업
-            showFilterBottomSheet()
-        }
 
-        cartridgeMultiSelectAdapter = CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
+        binding.filterBtn.setOnClickListener { showFilterBottomSheet() }
+        cartridgeMultiSelectAdapter =
+            CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
         binding.paperBtn.text = cartridgeList[0]
-        binding.paperBtn.setOnClickListener {
-            // 용지팝업
-            showCartridgeBottomSheet()
-        }
-
+        binding.paperBtn.setOnClickListener { showCartridgeBottomSheet() }
         categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
         binding.contentsBtn.text = itemList[0]
-        binding.contentsBtn.setOnClickListener {
-            // 컨텐츠팝업
-            showTypeBottomSheet()
-        }
+        binding.contentsBtn.setOnClickListener { showTypeBottomSheet() }
 
         showGridStyle(GRID_SPAN_COUNT, SPACE)
         binding.gridBtn.isSelected = true
@@ -118,13 +110,19 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         behavior.isDraggable = false
         behavior.isHideable = false
 
-        val categories = loadJsonFromAssets(requireContext(), "filter_list.json")
-        //공개설정, 태그
+        categories = loadJsonFromAssets(requireContext(), "filter_list.json")
         binding.recyclerParent.layoutManager = LinearLayoutManager(requireContext())
+
+        val allSelectedItems = selectedItemsMap.values.flatten()
+        selectedItemsAdapter = FilterSelectAdapter(requireContext(), allSelectedItems) { item ->
+            removeItemFromSelectedItems(item)
+        }
+        binding.recyclerSelect.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerSelect.adapter = selectedItemsAdapter
+
         val categoryAdapter =
             FilterCategoryAdapter(requireContext(), categories) { categoryIndex, childAdapter ->
                 this.childAdapter = childAdapter
-
                 childAdapters[categoryIndex] = childAdapter
 
                 this.childAdapter.setOnSelectionChangedListener { selectedPositions ->
@@ -136,6 +134,13 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
                     )
                     updateSelectedItemsList()
                 }
+
+                // 선택된 항목 복원
+                val savedSelections = selectedItemsMap[categoryIndex]?.mapNotNull { item ->
+                    childAdapter.getPositionOfChild(item.split(" > ")[1])
+                }?.toSet() ?: emptySet()
+
+                childAdapter.restoreSelections(savedSelections) // 선택 상태 복원
                 setChildAdapterSelectionListener(
                     categoryIndex,
                     this.childAdapter,
@@ -145,44 +150,43 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             }
         binding.recyclerParent.adapter = categoryAdapter
 
-        //자식 뷰
-        binding.recyclerChild.layoutManager = LinearLayoutManager(requireContext())
-        this.childAdapter = categoryAdapter.getChildAdapter(0)
-        childAdapters[0] = this.childAdapter
+        // 기본적으로 첫 번째 카테고리의 child 데이터를 recyclerChild에 설정
+        if (categories.isNotEmpty()) {
+            val initialChildAdapter = FilterChildAdapter(requireContext(), categories[0].child)
+            this.childAdapter = initialChildAdapter
 
-        // 초기 선택 리스너 설정 및 강제 호출
-        setChildAdapterSelectionListener(0, this.childAdapter, categories[0].parentName)
-        binding.recyclerChild.adapter = this.childAdapter
+            initialChildAdapter.setOnSelectionChangedListener { selectedPositions ->
+                updateSelectedItemsMap(
+                    categories[0].parentName,
+                    0,
+                    selectedPositions,
+                    initialChildAdapter
+                )
+                updateSelectedItemsList()
+            }
 
-        //선택된 항목
-        binding.recyclerSelect.layoutManager = LinearLayoutManager(requireContext())
-        selectedItemsAdapter = FilterSelectAdapter(requireContext(), emptyList()) { item ->
-            removeItemFromSelectedItems(item)
+            val savedSelections = selectedItemsMap[0]?.mapNotNull {
+                initialChildAdapter.getPositionOfChild(it.split(" > ")[1])
+            }?.toSet() ?: emptySet()
+            initialChildAdapter.restoreSelections(savedSelections)
+
+            binding.recyclerChild.layoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerChild.adapter = initialChildAdapter
         }
 
-        binding.recyclerSelect.adapter = selectedItemsAdapter
-
-        // 처음 로드된 카테고리의 선택 항목도 업데이트
-        updateSelectedItemsMap(
-            categories[0].parentName,
-            0,
-            this.childAdapter.getSelectedPositions(),
-            this.childAdapter
-        )
-        updateSelectedItemsList()
-
         binding.resetBtn.setOnClickListener {
+            selectFilterCnt()
             clearAllSelectedItems()
         }
 
         binding.submitBtn.setOnClickListener {
+            saveCurrentSelections()
             selectFilterCnt()
             bottomSheetDialog.dismiss()
         }
 
         binding.closeBtn.setOnClickListener {
-            clearAllSelectedItems()
-
+            selectFilterCnt()
             bottomSheetDialog.dismiss()
         }
 
@@ -192,16 +196,11 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     private fun clearAllSelectedItems() {
         selectedItemsList.clear()
         selectedItemsMap.clear()
+        selectedChildPositions.clear()
 
-        // 모든 childAdapter에서 선택된 항목을 해제
-        childAdapters.values.forEach { adapter ->
-            adapter.clearSelections()
-        }
-
-        // FilterSelectAdapter에 빈 리스트를 전달하여 업데이트
+        childAdapters.values.forEach { it.clearSelections() }
         selectedItemsAdapter.updateItems(emptyList())
     }
-
 
     private fun removeItemFromSelectedItems(item: String) {
         val parts = item.split(" > ")
@@ -210,22 +209,18 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         val parentName = parts[0]
         val childName = parts[1]
 
-        val categoryIndex = selectedItemsMap.entries.find { entry ->
-            entry.value.any { it.contains(parentName) }
-        }?.key
+        val categoryIndex = categories.indexOfFirst { it.parentName == parentName }
+        if (categoryIndex == -1) return
 
-        if (categoryIndex != null) {
-            selectedItemsMap[categoryIndex]?.remove("$parentName > $childName")
+        selectedItemsMap[categoryIndex]?.remove(item)
 
-            childAdapters[categoryIndex]?.let { childAdapter ->
-                val position = childAdapter.getPositionOfChild(childName)
-                if (position != -1) {
-                    childAdapter.deselectPosition(position) // 선택 해제
-                }
+        childAdapters[categoryIndex]?.let { childAdapter ->
+            val position = childAdapter.getPositionOfChild(childName)
+            if (position != -1) {
+                childAdapter.deselectPosition(position)
             }
-
-            updateSelectedItemsList()
         }
+        updateSelectedItemsList()
     }
 
     private fun setChildAdapterSelectionListener(
@@ -259,16 +254,17 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     }
 
     private fun loadJsonFromAssets(context: Context, fileName: String): List<Category> {
-        val json: String
-        try {
-            json = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        return try {
+            val json = context.assets.open(fileName).bufferedReader().use { it.readText() }
+            val wrapper = Gson().fromJson(json, CategoryWrapper::class.java)
+            wrapper.category
         } catch (ex: IOException) {
             ex.printStackTrace()
-            return emptyList()
+            emptyList()
+        } catch (ex: JsonSyntaxException) {
+            ex.printStackTrace()
+            emptyList()
         }
-
-        val wrapper = Gson().fromJson(json, CategoryWrapper::class.java)
-        return wrapper.category
     }
 
     private fun selectFilterCnt() {
@@ -280,6 +276,19 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         }
     }
 
+    private fun saveCurrentSelections() {
+        selectedChildPositions.clear()
+        childAdapters.forEach { (categoryIndex, adapter) ->
+            val selectedPositions = adapter.getSelectedPositions()
+            val categoryName = categories[categoryIndex].parentName
+            val selectedItemsForCategory = selectedPositions.map { position ->
+                "$categoryName > ${adapter.getChildName(position)}"
+            }.toMutableList()
+            selectedItemsMap[categoryIndex] = selectedItemsForCategory
+        }
+
+    }
+
     private fun showCartridgeBottomSheet() {
         val sheetBinding = BottomSheetCartridgeSelectBinding.inflate(layoutInflater)
         val bottomSheetDialog =
@@ -287,20 +296,25 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setContentView(sheetBinding.root)
 
+        val bottomSheet =
+            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+        behavior.isDraggable = false
+        behavior.isHideable = false
+
         sheetBinding.closeBtn.setOnClickListener {
+            cartridgeMultiSelectAdapter.restoreLastSubmittedSelection()
             bottomSheetDialog.dismiss()
         }
-
         sheetBinding.recyclerCate.layoutManager = LinearLayoutManager(requireContext())
         sheetBinding.recyclerCate.adapter = cartridgeMultiSelectAdapter
 
         sheetBinding.submitBtn.setOnClickListener {
             val selectedCartridge = cartridgeMultiSelectAdapter.getSelectedItems()
+            cartridgeMultiSelectAdapter.saveCurrentSelection()
             updateSelectedCartridge(selectedCartridge)
-
             bottomSheetDialog.dismiss()
         }
-
         bottomSheetDialog.show()
     }
 
@@ -311,20 +325,25 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         bottomSheetDialog.window?.setDimAmount(0.7f)
         bottomSheetDialog.setContentView(sheetBinding.root)
 
+        val bottomSheet =
+            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+        behavior.isDraggable = false
+        behavior.isHideable = false
+
         sheetBinding.closeBtn.setOnClickListener {
+            categoryAdapter.restoreLastSubmittedSelection()
             bottomSheetDialog.dismiss()
         }
-
         sheetBinding.recyclerCate.layoutManager = LinearLayoutManager(requireContext())
         sheetBinding.recyclerCate.adapter = categoryAdapter
 
         sheetBinding.submitBtn.setOnClickListener {
             val selectedCategories = categoryAdapter.getSelectedItems()
+            categoryAdapter.saveCurrentSelection()
             updateSelectedCategories(selectedCategories)
-
             bottomSheetDialog.dismiss()
         }
-
         bottomSheetDialog.show()
     }
 
@@ -337,10 +356,9 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             GridItem(R.drawable.sample_img_1, "00:00"),
             GridItem(R.drawable.sample_img_1, "00:00"),
             GridItem(R.drawable.sample_img_1, "00:00"),
+            // Sample data
         )
-
         clearItemDecorations(binding.recyclerLib)
-
         binding.recyclerLib.layoutManager = GridLayoutManager(requireContext(), spanCount)
         binding.recyclerLib.addItemDecoration(
             GridSpacingItemDecoration(
@@ -349,7 +367,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
                 false
             )
         )
-
         binding.recyclerLib.adapter = LibGridItemAdapter(items, spanCount, this)
     }
 
@@ -360,41 +377,27 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         }
     }
 
-    // 보관함 목록의 아이템을 선택
     override fun onItemClick(position: Int) {
         goDetail()
     }
 
-    // 전체 컨텐츠 팝업화면의 리스트 아이템 선택
-    override fun onItemSelected(position: Int, isSelected: Boolean) {
-
-    }
+    override fun onItemSelected(position: Int, isSelected: Boolean) {}
 
     private fun updateSelectedCategories(selectedCategories: List<Int>) {
         binding.contentsBtn.text = itemList[selectedCategories[0]]
-
-        if (categoryAdapter.getSelectedItemCount() > 1) {
-            binding.selectContentCnt.visibility = View.VISIBLE
-        } else {
-            binding.selectContentCnt.visibility = View.GONE
-        }
+        binding.selectContentCnt.visibility =
+            if (categoryAdapter.getSelectedItemCount() > 1) View.VISIBLE else View.GONE
         binding.selectContentCnt.text = categoryAdapter.getSelectedItemCount().toString()
     }
 
-    // 용지 선택 팝업
-    override fun onCartridgeItemSelected(position: Int, isSelected: Boolean) {
-
-    }
+    override fun onCartridgeItemSelected(position: Int, isSelected: Boolean) {}
 
     private fun updateSelectedCartridge(selectedCartridge: List<Int>) {
         binding.paperBtn.text = cartridgeList[selectedCartridge[0]]
-
-        if (cartridgeMultiSelectAdapter.getSelectedItemCount() > 1) {
-            binding.selectCartridgeCnt.visibility = View.VISIBLE
-        } else {
-            binding.selectCartridgeCnt.visibility = View.GONE
-        }
-        binding.selectCartridgeCnt.text = cartridgeMultiSelectAdapter.getSelectedItemCount().toString()
+        binding.selectCartridgeCnt.visibility =
+            if (cartridgeMultiSelectAdapter.getSelectedItemCount() > 1) View.VISIBLE else View.GONE
+        binding.selectCartridgeCnt.text =
+            cartridgeMultiSelectAdapter.getSelectedItemCount().toString()
     }
 
     private fun goDetail() {

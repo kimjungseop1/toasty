@@ -38,7 +38,6 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
                 (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) ||
                         appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE))
             ) {
-
                 // 업데이트가 가능할 경우 알림 콜백 호출
                 onUpdateAvailableListener?.invoke()
             }

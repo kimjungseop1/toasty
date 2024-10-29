@@ -1,53 +1,121 @@
 package com.syncrown.arpang.ui.commons
 
-import android.content.Context
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.View.OnClickListener
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.CustomToastBinding
 
-class CustomToast(private val context: Context) {
-    private var toast: Toast? = null
+class CustomToast : DialogFragment(), OnClickListener {
+    private lateinit var dialog: Dialog
+    private lateinit var customToast: CustomToastBinding
 
-    fun showToast(message: String, type: CustomToastType) {
-        val binding = CustomToastBinding.inflate(LayoutInflater.from(context))
+    private var closeListener: OnClickListener? = null
 
-        // 레이아웃 내의 이미지와 텍스트를 설정합니다.
-        binding.toastMsg.text = message
-        when (type) {
+    private var messageTxt:String?=null
+    private var toastType: CustomToastType? = null
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.closeBtn -> closeListener?.onClick(v)
+        }
+
+        dismiss()
+    }
+
+    private fun setCloseBtnListener(onClickListener: OnClickListener) {
+        closeListener = onClickListener
+    }
+
+    private fun createNormal(): CustomToast {
+        val dialog = CustomToast()
+        return dialog
+    }
+
+    private fun createDialogToast(
+        message: String,
+        type: CustomToastType,
+        closeBtn: OnClickListener,
+    ): CustomToast {
+        val dialog: CustomToast = createNormal()
+        dialog.toastType = type
+        dialog.messageTxt = message
+        dialog.setCloseBtnListener(closeBtn)
+
+        return dialog
+    }
+
+    fun showToastMessage(
+        manager: FragmentManager?,
+        message:String,
+        type: CustomToastType,
+        closeBtn: OnClickListener
+    ) {
+        manager?.let { createDialogToast(message, type, closeBtn).show(it, "") }
+    }
+
+    override fun dismiss() {
+        if (dialog.isShowing) {
+            dialog.dismiss()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog.window
+            ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialog = Dialog(requireActivity())
+        dialog.window?.apply {
+            requestFeature(Window.FEATURE_NO_TITLE)
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            )
+            setDimAmount(0f)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        customToast = CustomToastBinding.inflate(layoutInflater)
+        dialog.setContentView(customToast.root)
+        dialog.setCanceledOnTouchOutside(false)
+
+        customToast.toastMsg.text = messageTxt
+
+        when(toastType) {
             CustomToastType.BLACK -> {
-                binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_1)
-                true
+                customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_1)
             }
 
             CustomToastType.BLUE -> {
-                binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_2)
-                true
+                customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_2)
             }
 
             CustomToastType.RED -> {
-                binding.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_3)
-                true
+                customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_3)
             }
+
+            CustomToastType.WHITE -> {
+                customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_4)
+            }
+
+            else -> {}
         }
+        customToast.closeBtn.setOnClickListener(this)
 
-        // 토스트 생성 및 설정
-        toast = Toast(context).apply {
-            duration = Toast.LENGTH_SHORT
-            view = binding.root
+        dialog.show()
 
-            // 그라비티와 레이아웃 파라미터 설정
-            setGravity(Gravity.BOTTOM, 0, 100)  // 위치를 필요에 따라 조정
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            binding.root.layoutParams = layoutParams
-
-            show()
-        }
-
+        return dialog
     }
 }

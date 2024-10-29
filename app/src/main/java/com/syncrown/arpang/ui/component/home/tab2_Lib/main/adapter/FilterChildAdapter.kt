@@ -16,8 +16,7 @@ import com.syncrown.arpang.ui.component.home.tab2_Lib.main.Child
 class FilterChildAdapter(
     private val context: Context,
     private var children: List<Child>
-) :
-    RecyclerView.Adapter<FilterChildAdapter.ChildViewHolder>() {
+) : RecyclerView.Adapter<FilterChildAdapter.ChildViewHolder>() {
 
     private val selectedPositions = mutableSetOf<Int>()
     private var selectionChangedListener: ((Set<Int>) -> Unit)? = null
@@ -40,11 +39,7 @@ class FilterChildAdapter(
         fun bind(child: Child, position: Int) {
             binding.childTitle.text = child.childName
 
-            if (position == 0) {
-                binding.divider.visibility = View.VISIBLE
-            } else {
-                binding.divider.visibility = View.GONE
-            }
+            binding.divider.visibility = if (position == 0) View.VISIBLE else View.GONE
 
             val isSelected = selectedPositions.contains(bindingAdapterPosition)
             if (isSelected) {
@@ -54,20 +49,14 @@ class FilterChildAdapter(
                         R.color.color_8e5d4b
                     )
                 )
-
                 binding.root.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
                         R.color.color_f5f5f5
                     )
                 )
-
                 binding.childTitle.typeface = Typeface.DEFAULT_BOLD
-
-                Glide.with(context)
-                    .load(R.drawable.category_slected)
-                    .into(binding.contentImage)
-
+                Glide.with(context).load(R.drawable.category_slected).into(binding.contentImage)
             } else {
                 binding.childTitle.setTextColor(
                     ContextCompat.getColor(
@@ -75,20 +64,14 @@ class FilterChildAdapter(
                         R.color.color_black
                     )
                 )
-
                 binding.root.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
                         R.color.color_white
                     )
                 )
-
                 binding.childTitle.typeface = Typeface.DEFAULT
-
-                Glide.with(context)
-                    .load(R.drawable.category_normal)
-                    .into(binding.contentImage)
-
+                Glide.with(context).load(R.drawable.category_normal).into(binding.contentImage)
             }
 
             binding.root.setOnClickListener {
@@ -109,7 +92,6 @@ class FilterChildAdapter(
                     selectionChangedListener?.invoke(selectedPositions)
                 }
             }
-
         }
     }
 
@@ -121,7 +103,7 @@ class FilterChildAdapter(
     fun deselectPosition(position: Int) {
         selectedPositions.remove(position)
         notifyDataSetChanged()
-        selectionChangedListener?.invoke(selectedPositions) // 상태 업데이트
+        selectionChangedListener?.invoke(selectedPositions)
     }
 
     fun setOnSelectionChangedListener(listener: (Set<Int>) -> Unit) {
@@ -136,20 +118,15 @@ class FilterChildAdapter(
         return selectedPositions.toSet()
     }
 
-    fun getSelectedCount(): Int {
-        return selectedPositions.size
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateChildren(newChildren: List<Child>) {
-        children = newChildren
-        selectedPositions.clear()
-        notifyDataSetChanged()
-    }
-
     fun clearSelections() {
         selectedPositions.clear()
         notifyDataSetChanged()
-        selectionChangedListener?.invoke(selectedPositions) // 선택 해제된 상태를 반영
+        selectionChangedListener?.invoke(selectedPositions)
+    }
+
+    fun restoreSelections(savedPositions: Set<Int>) {
+        selectedPositions.clear()
+        selectedPositions.addAll(savedPositions)
+        notifyDataSetChanged()
     }
 }

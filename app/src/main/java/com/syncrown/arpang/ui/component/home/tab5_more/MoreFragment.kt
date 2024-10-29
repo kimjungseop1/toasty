@@ -43,11 +43,15 @@ class MoreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //TODO 사용자 이름
+        binding.nameTxt.text = "홍길동"
 
         //TODO 알림함
         binding.alertView.setOnClickListener {
             goAlert()
         }
+
+        //TODO 알림 갯수
+        binding.alertCnt.text = "0"
 
         //TODO 스크랩
         binding.scrapBtn.setOnClickListener {
@@ -69,7 +73,6 @@ class MoreFragment : Fragment() {
             val dialogCommon = DialogCommon()
             dialogCommon.showLogout(childFragmentManager, {
                 // 취소
-
             }, {
                 // 로그아웃
                 goLogin()

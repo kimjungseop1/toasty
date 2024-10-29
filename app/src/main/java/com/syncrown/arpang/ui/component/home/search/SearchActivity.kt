@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.search
+package com.syncrown.arpang.ui.component.home.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle

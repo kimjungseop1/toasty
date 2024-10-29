@@ -345,9 +345,9 @@ class LibDetailActivity : BaseActivity() {
             bottomSheetDialog.dismiss()
         }
 
+        binding.submitBtn.text = getString(R.string.tag_popup_left_btn)
         binding.submitBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showToasting()
         }
 
         bottomSheetDialog.show()
@@ -370,9 +370,9 @@ class LibDetailActivity : BaseActivity() {
             bottomSheetDialog.dismiss()
         }
 
+        binding.submitBtn.text = getString(R.string.tag_popup_left_btn)
         binding.submitBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
-            showToasting()
         }
 
         bottomSheetDialog.show()
@@ -399,6 +399,7 @@ class LibDetailActivity : BaseActivity() {
             bottomSheetDialog.dismiss()
         }
 
+        binding.nextBtn.text = getString(R.string.tag_popup_left_btn_1)
         binding.nextBtn.setOnClickListener {
             bottomSheetDialog.dismiss()
         }

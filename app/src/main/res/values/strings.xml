@@ -124,6 +124,7 @@
     <string name="home_connect_print_btn"><u>프린트 연결</u></string>
     <string name="home_guide_paper"><u>장착 가이드</u></string>
     <string name="home_desc_1">프린터가 연결되어 있지 않아요</string>
+    <string name="home_desc_1_1">용지를 장착해보세요</string>
     <string name="home_desc_2">토스티로 할 수 있는 작업들이에요</string>
     <string name="home_desc_3">이렇게 활용해 볼까요?</string>
     <string name="home_desc_4">서비스 이용 가이드</string>
@@ -270,6 +271,7 @@
     <!--  태그입력  -->
     <string name="tag_popup_content_message">해당 태그를 삭제하시겠습니까?</string>
     <string name="tag_popup_left_btn">닫기</string>
+    <string name="tag_popup_left_btn_1">현재 용지로 재편집</string>
     <string name="tag_popup_right_btn">삭제</string>
     <string name="tag_popup_input">태그 입력</string>
     <string name="tag_popup_submit">완료</string>

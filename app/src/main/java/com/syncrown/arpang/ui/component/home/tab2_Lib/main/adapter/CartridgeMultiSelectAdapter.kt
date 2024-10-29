@@ -23,9 +23,8 @@ class CartridgeMultiSelectAdapter(
     }
 
     // 첫 번째 아이템을 기본으로 선택된 상태로 추가
-    private val selectedItems = ArrayList<Int>().apply {
-        add(0)  // 첫 번째 아이템 선택
-    }
+    private val selectedItems = ArrayList<Int>().apply { add(0) }
+    private var lastSubmittedItems = ArrayList(selectedItems)
 
     init {
         // 어댑터가 초기화될 때 첫 번째 아이템이 선택된 상태임을 알림
@@ -129,4 +128,16 @@ class CartridgeMultiSelectAdapter(
     fun getSelectedItems(): List<Int> {
         return selectedItems
     }
+
+    fun saveCurrentSelection() {
+        lastSubmittedItems.clear()
+        lastSubmittedItems.addAll(selectedItems)
+    }
+
+    fun restoreLastSubmittedSelection() {
+        selectedItems.clear()
+        selectedItems.addAll(lastSubmittedItems)
+        notifyDataSetChanged()
+    }
+
 }

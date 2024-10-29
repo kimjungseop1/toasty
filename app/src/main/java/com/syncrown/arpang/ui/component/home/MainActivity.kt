@@ -30,7 +30,7 @@ import com.syncrown.arpang.ui.commons.BackPressCloseHandler
 import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
 import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.HomeFragment
-import com.syncrown.arpang.ui.component.home.tab1_home.search.SearchActivity
+import com.syncrown.arpang.ui.component.home.search.SearchActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment
 import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
