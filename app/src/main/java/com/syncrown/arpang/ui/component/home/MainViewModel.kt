@@ -21,7 +21,12 @@ class MainViewModel : BaseViewModel() {
     /***********************************************************************************************
      * 홈
      **********************************************************************************************/
+    private val _updatePrintStatus = MutableLiveData<String>()
+    val onUpdatePrinterStatus: LiveData<String> get() = _updatePrintStatus
 
+    fun updatePrinterStatus(newData: String) {
+        _updatePrintStatus.postValue(newData)
+    }
 
     /***********************************************************************************************
      * 보관함

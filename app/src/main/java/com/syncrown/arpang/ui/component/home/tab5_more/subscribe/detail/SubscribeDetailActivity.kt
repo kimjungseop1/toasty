@@ -53,7 +53,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "이름.."
+        binding.actionbar.actionTitle.text = "홍길동"
         binding.actionbar.actionEtc1.text = getString(R.string.subscribe_title)
         binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
@@ -201,7 +201,11 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             }, {
                 //신고
                 val customToast = CustomToast()
-                customToast.showToastMessage(supportFragmentManager,"사용자를 신고하였습니다.", CustomToastType.BLUE) {
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.subscribe_toast_desc_1),
+                    CustomToastType.BLUE
+                ) {
                     //close
                 }
             })
@@ -216,7 +220,11 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             }, {
                 //차단
                 val customToast = CustomToast()
-                customToast.showToastMessage(supportFragmentManager,"사용자를 차단하였습니다.", CustomToastType.BLUE) {
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.subscribe_toast_desc_2),
+                    CustomToastType.BLUE
+                ) {
                     //close
                 }
             })

@@ -226,7 +226,11 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 var customToast = CustomToast()
-                customToast.showToastMessage(supportFragmentManager, getString(R.string.lib_popup_report_comment), CustomToastType.BLUE) {
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.lib_popup_report_comment),
+                    CustomToastType.BLUE
+                ) {
                     //close
                 }
             })
@@ -255,7 +259,11 @@ class ShareDetailActivity : BaseActivity() {
             }, {
                 //신고
                 var customToast = CustomToast()
-                customToast.showToastMessage(supportFragmentManager, getString(R.string.lib_popup_report_comment), CustomToastType.BLUE) {
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.lib_popup_report_comment),
+                    CustomToastType.BLUE
+                ) {
                     //close
                 }
             })

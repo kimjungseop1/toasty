@@ -3,7 +3,6 @@ package com.syncrown.arpang.ui.component.home.tab5_more
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab5_more.account.AccountManageActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.alert.AlertActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.alert_setting.AlertSettingActivity
-import com.syncrown.arpang.ui.component.home.tab5_more.cutoff.CutOffActivity
+import com.syncrown.arpang.ui.component.home.tab5_more.block.BlockUserActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.event.EventAllActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.notice.NoticeActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.scrap.ScrapActivity
@@ -146,7 +145,7 @@ class MoreFragment : Fragment() {
     }
 
     private fun goCutOff() {
-        val intent = Intent(requireContext(), CutOffActivity::class.java)
+        val intent = Intent(requireContext(), BlockUserActivity::class.java)
         startActivity(intent)
     }
 

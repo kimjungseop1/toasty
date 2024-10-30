@@ -31,10 +31,29 @@ class UseManual2DepthActivity : BaseActivity() {
         }
 
         //TODO AR영상
+        binding.menuItem2.setOnClickListener {
+
+        }
+
         //TODO 인생두컷
+        binding.menuItem3.setOnClickListener {
+
+        }
+
         //TODO 자유편집
+        binding.menuItem4.setOnClickListener {
+
+        }
+
         //TODO 라벨스티커
+        binding.menuItem5.setOnClickListener {
+
+        }
+
         //TODO 행사스티커
+        binding.menuItem6.setOnClickListener {
+
+        }
     }
 
     private fun goWebDetail() {

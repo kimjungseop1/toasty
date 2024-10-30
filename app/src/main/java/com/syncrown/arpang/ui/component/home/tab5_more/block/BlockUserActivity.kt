@@ -1,21 +1,22 @@
-package com.syncrown.arpang.ui.component.home.tab5_more.cutoff
+package com.syncrown.arpang.ui.component.home.tab5_more.block
 
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.arpang.R
-import com.syncrown.arpang.databinding.ActivityCutoffMainBinding
+import com.syncrown.arpang.databinding.ActivityBlockUserBinding
 import com.syncrown.arpang.ui.base.BaseActivity
+import com.syncrown.arpang.ui.component.home.tab5_more.block.adapter.BlockUserAdapter
 
-class CutOffActivity:BaseActivity() {
-    private lateinit var binding: ActivityCutoffMainBinding
+class BlockUserActivity:BaseActivity() {
+    private lateinit var binding: ActivityBlockUserBinding
 
     override fun observeViewModel() {
 
     }
 
     override fun initViewBinding() {
-        binding = ActivityCutoffMainBinding.inflate(layoutInflater)
+        binding = ActivityBlockUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
@@ -32,9 +33,12 @@ class CutOffActivity:BaseActivity() {
         arrayList.add("1")
         arrayList.add("1")
         arrayList.add("1")
+        arrayList.add("1")
+        arrayList.add("1")
+        arrayList.add("1")
 
         binding.recyclerCut.layoutManager = LinearLayoutManager(this)
-        binding.recyclerCut.adapter = CutOffAdapter(arrayList) { position ->
+        binding.recyclerCut.adapter = BlockUserAdapter(arrayList) { position ->
             Log.e("jung","position : $position")
         }
         binding.recyclerCut.setHasFixedSize(true)

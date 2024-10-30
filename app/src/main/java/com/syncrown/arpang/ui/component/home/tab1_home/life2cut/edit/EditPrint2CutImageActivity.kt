@@ -24,7 +24,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.TwoCutImageStora
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.crop.CropImageActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.crop.ImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag.InputTagActivity
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.preview.TwoCutPreviewActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor

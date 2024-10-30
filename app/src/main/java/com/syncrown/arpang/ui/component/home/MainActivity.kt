@@ -62,6 +62,15 @@ class MainActivity : BaseActivity() {
                 fetchDataFromNetwork()
             }
         }
+
+        lifecycleScope.launch {
+            mainViewModel.onUpdatePrinterStatus.observe(this@MainActivity, Observer { data ->
+                //프린터 배터리 상태 업데이트
+                Log.e("jung", "main update print state : $data")
+                binding.actionbar.actionBattery.visibility = View.VISIBLE
+                binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_4)
+            })
+        }
     }
 
     override fun initViewBinding() {

@@ -167,6 +167,7 @@ class EmptyCartridgeActivity : BaseActivity() {
 
     private fun goPreviewCartridge() {
         val intent = Intent(this, PreViewCartridgeActivity::class.java)
+        intent.putExtra("FROM_HOME_CATEGORY", actionTitle)
         startActivity(intent)
     }
 

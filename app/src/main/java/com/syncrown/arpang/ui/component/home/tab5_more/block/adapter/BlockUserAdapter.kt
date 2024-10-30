@@ -1,19 +1,20 @@
-package com.syncrown.arpang.ui.component.home.tab5_more.cutoff
+package com.syncrown.arpang.ui.component.home.tab5_more.block.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemCutOffBinding
 
-class CutOffAdapter(
+class BlockUserAdapter(
     private val items: ArrayList<String>,
     private val listener: OnItemClickListener
 ) :
-    RecyclerView.Adapter<CutOffAdapter.CutOffViewHolder>() {
+    RecyclerView.Adapter<BlockUserAdapter.CutOffViewHolder>() {
 
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
+    private val selectedPositions: MutableSet<Int> = mutableSetOf()
 
     fun interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -24,28 +25,27 @@ class CutOffAdapter(
         private val context: Context,
         private val binding: ItemCutOffBinding,
         private val listener: OnItemClickListener,
-        private val adapter: CutOffAdapter
+        private val adapter: BlockUserAdapter
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.unblockingBtn.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    if (adapter.selectedPosition == position) {
-                        // Deselect item
-                        adapter.selectedPosition = RecyclerView.NO_POSITION
+                    if (adapter.selectedPositions.contains(position)) {
+                        adapter.selectedPositions.remove(position)
                     } else {
-                        // Select new item
-                        adapter.selectedPosition = position
+                        adapter.selectedPositions.add(position)
                     }
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemChanged(position)
                     listener.onItemClick(position)
                 }
             }
         }
 
         fun bind(item: String, isSelected: Boolean) {
-
+            binding.blockingTxt.visibility = if (isSelected) View.VISIBLE else View.GONE
+            binding.unblockingBtn.visibility = if (isSelected) View.GONE else View.VISIBLE
         }
     }
 
@@ -57,7 +57,7 @@ class CutOffAdapter(
     }
 
     override fun onBindViewHolder(holder: CutOffViewHolder, position: Int) {
-        val isSelected = position == selectedPosition
+        val isSelected = selectedPositions.contains(position)
         holder.bind(items[position], isSelected)
     }
 

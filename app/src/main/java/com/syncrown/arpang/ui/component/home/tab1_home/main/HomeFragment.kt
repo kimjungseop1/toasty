@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAda
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.FreeImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
 import kotlinx.coroutines.launch
 
@@ -135,8 +137,17 @@ class HomeFragment : Fragment() {
 
     private fun goConnectDevice() {
         val intent = Intent(requireContext(), ConnectDeviceActivity::class.java)
-        startActivity(intent)
+        connectDeviceLauncher.launch(intent)
     }
+
+    private val connectDeviceLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                Log.e("jung","fragment update print status ui")
+                //프린트 연결 뷰 gone, desc1 텍스트 변경
+                homeViewModel.updatePrinterStatus("connectDevice")
+            }
+        }
 
     private val slideRunnable = Runnable { binding.bannerView.currentItem += 1 }
 

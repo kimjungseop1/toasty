@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.connect_device
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.arpang.databinding.ActivityConnectDeviceBinding
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -12,6 +13,12 @@ import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.adapter.De
 
 class ConnectDeviceActivity : BaseActivity() {
     private lateinit var binding: ActivityConnectDeviceBinding
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            finish()
+        }
+    }
 
     override fun observeViewModel() {
 
@@ -24,6 +31,8 @@ class ConnectDeviceActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        onBackPressedDispatcher.addCallback(callback)
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
@@ -43,6 +52,9 @@ class ConnectDeviceActivity : BaseActivity() {
     private fun setDeviceList() {
         //임시 data
         val arrayList = ArrayList<String>()
+        arrayList.add("TOASTY MK1 (N1501152)")
+//        arrayList.add("TOASTY MK1 (N1501152)")
+//        arrayList.add("TOASTY MK1 (N1501152)")
 //        arrayList.add("TOASTY MK1 (N1501152)")
 //        arrayList.add("TOASTY MK1 (N1501152)")
 //        arrayList.add("OVENY MK1 (N1501152)")
@@ -56,6 +68,8 @@ class ConnectDeviceActivity : BaseActivity() {
             adapter.setOnItemClickListener(object : DeviceListAdapter.OnItemClickListener {
                 override fun onClick(position: Int) {
                     Log.e("jung", "click : $position")
+                    setResult(RESULT_OK)
+                    finish()
                 }
             })
             binding.recyclerDevice.adapter = adapter

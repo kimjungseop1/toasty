@@ -157,7 +157,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab5_more.cutoff.CutOffActivity"
+            android:name=".ui.component.home.tab5_more.block.BlockUserActivity"
             android:exported="true" />
 
         <activity
@@ -209,7 +209,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.component.home.tab1_home.life2cut.input_tag.InputTagActivity"
+            android:name=".ui.component.home.input_tag.InputTagActivity"
             android:exported="true" />
 
         <activity

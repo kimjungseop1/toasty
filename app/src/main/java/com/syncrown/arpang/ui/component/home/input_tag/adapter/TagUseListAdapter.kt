@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag.adapter
+package com.syncrown.arpang.ui.component.home.input_tag.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

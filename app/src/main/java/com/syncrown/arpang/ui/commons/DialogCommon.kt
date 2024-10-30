@@ -43,6 +43,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private var isSubscribeReport = false //TODO 구독리스트 상세 신고
     private var isSubscribeReject = false //TODO 구독리스트 상세 차단
     private var isLibARDelete = false //TODO AR영상을 보관함에서 삭제
+    private var isEventCancel = false //TODO 보관함 상세 -> 공개설정을 비공개전환시
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -64,6 +65,26 @@ class DialogCommon : DialogFragment(), OnClickListener {
     private fun createNormal(): DialogCommon {
         val dialog = DialogCommon()
         return dialog
+    }
+
+    private fun createDialogNondisclosure(
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ): DialogCommon {
+        val dialog: DialogCommon = createNormal()
+        dialog.isEventCancel = true
+        dialog.setLeftBtnListener(leftBtn)
+        dialog.setRightBtnListener(rightBtn)
+
+        return dialog
+    }
+
+    fun showLibDetailNondisclosure(
+        manager: FragmentManager?,
+        leftBtn: OnClickListener,
+        rightBtn: OnClickListener
+    ) {
+        manager?.let { createDialogNondisclosure(leftBtn, rightBtn).show(it, "") }
     }
 
     private fun createDialogLibArDelete(
@@ -640,7 +661,7 @@ class DialogCommon : DialogFragment(), OnClickListener {
                 }
 
                 dialogNormalBinding.btnRight.text = context?.let {
-                    getString(R.string.share_detail_alert_comment_warning)
+                    getString(R.string.share_detail_alert_comment_warning_btn)
                 }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)
@@ -665,6 +686,30 @@ class DialogCommon : DialogFragment(), OnClickListener {
 
                 dialogNormalBinding.btnRight.text = context?.let {
                     getString(R.string.share_detail_alert_user_reject_btn)
+                }
+
+                dialogNormalBinding.btnLeft.setOnClickListener(this)
+                dialogNormalBinding.btnRight.setOnClickListener(this)
+            }
+
+            isEventCancel -> {
+                dialogNormalBinding.btnLeft.visibility = VISIBLE
+                dialogNormalBinding.btnRight.visibility = VISIBLE
+
+                dialogNormalBinding.titleView.text = context?.let {
+                    getString(R.string.edit_video_print_alert_title)
+                }
+
+                dialogNormalBinding.bodyView.text = context?.let {
+                    getString(R.string.storage_detail_more_tab_nondisclosure)
+                }
+
+                dialogNormalBinding.btnLeft.text = context?.let {
+                    getString(R.string.tag_popup_left_btn)
+                }
+
+                dialogNormalBinding.btnRight.text = context?.let {
+                    getString(R.string.storage_detail_more_tab_nondisclosure_btn)
                 }
 
                 dialogNormalBinding.btnLeft.setOnClickListener(this)

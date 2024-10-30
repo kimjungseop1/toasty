@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag
+package com.syncrown.arpang.ui.component.home.input_tag
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,10 +12,11 @@ import com.syncrown.arpang.databinding.ActivityInputTagBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.DialogCommon
-import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.input_tag.adapter.TagUseListAdapter
+import com.syncrown.arpang.ui.component.home.input_tag.adapter.TagUseListAdapter
 
 class InputTagActivity : BaseActivity() {
     private lateinit var binding: ActivityInputTagBinding
+    private val resultTagList : ArrayList<String> = ArrayList()
 
     override fun observeViewModel() {
 
@@ -36,6 +37,8 @@ class InputTagActivity : BaseActivity() {
         binding.actionbar.actionTitle.text = getString(R.string.tag_popup_input)
         binding.actionbar.actionEtc.text = getString(R.string.tag_popup_submit)
         binding.actionbar.actionEtc.setOnClickListener {
+            TagResultListStorage.tagArrayList = resultTagList
+            setResult(RESULT_OK)
             finish()
         }
 
@@ -63,6 +66,8 @@ class InputTagActivity : BaseActivity() {
                     text = "# " + binding.inputTagView.text.toString()
 
                     tag = position
+
+                    resultTagList.add(text.toString())
 
                     setOnClickListener {
                         val clickedView = it

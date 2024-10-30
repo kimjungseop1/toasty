@@ -10,8 +10,10 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.CustomToastBinding
 
@@ -21,7 +23,7 @@ class CustomToast : DialogFragment(), OnClickListener {
 
     private var closeListener: OnClickListener? = null
 
-    private var messageTxt:String?=null
+    private var messageTxt: String? = null
     private var toastType: CustomToastType? = null
 
     override fun onClick(v: View?) {
@@ -56,7 +58,7 @@ class CustomToast : DialogFragment(), OnClickListener {
 
     fun showToastMessage(
         manager: FragmentManager?,
-        message:String,
+        message: String,
         type: CustomToastType,
         closeBtn: OnClickListener
     ) {
@@ -93,7 +95,7 @@ class CustomToast : DialogFragment(), OnClickListener {
 
         customToast.toastMsg.text = messageTxt
 
-        when(toastType) {
+        when (toastType) {
             CustomToastType.BLACK -> {
                 customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_1)
             }
@@ -108,6 +110,16 @@ class CustomToast : DialogFragment(), OnClickListener {
 
             CustomToastType.WHITE -> {
                 customToast.toastBg.setBackgroundResource(R.drawable.bg_custom_toast_4)
+                customToast.toastMsg.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.color_black
+                    )
+                )
+
+                Glide.with(requireContext())
+                    .load(R.drawable.icon_popup_close_black)
+                    .into(customToast.closeBtn)
             }
 
             else -> {}

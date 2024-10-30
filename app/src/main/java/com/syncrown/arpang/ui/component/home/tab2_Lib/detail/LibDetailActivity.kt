@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab2_Lib.detail
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -18,15 +20,18 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityLibDetailBinding
 import com.syncrown.arpang.databinding.BottomSheetAnotherPaperBinding
 import com.syncrown.arpang.databinding.BottomSheetCartridgeBinding
-import com.syncrown.arpang.databinding.BottomSheetPaperDisconnectBinding
 import com.syncrown.arpang.databinding.BottomSheetPrinterDisconnectBinding
 import com.syncrown.arpang.databinding.PopupLibDeleteBinding
 import com.syncrown.arpang.databinding.PopupLibReportBinding
 import com.syncrown.arpang.databinding.PopupMenuDetailBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
+import com.syncrown.arpang.ui.commons.CustomToast
+import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.DialogToastingCommon
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
+import com.syncrown.arpang.ui.component.home.input_tag.TagResultListStorage
 import com.syncrown.arpang.ui.component.home.tab3_share.detail.adapter.DetailCommentListAdapter
 
 class LibDetailActivity : BaseActivity() {
@@ -63,20 +68,22 @@ class LibDetailActivity : BaseActivity() {
             setPrinterAndPaper()
 
             //TODO 프린터 연결 + 용지 불일치
-            setPrinterAndAnotherPaper()
+            setPrinterAndNotPaper()
 
             //TODO 프린터 미연동
             setDisconnectPrinter()
 
             //TODO 프린터 연결 + 용지 미장착
-            setPrinterAndNotPaper()
+            setPrinterAndAnotherPaper()
         }
 
         binding.actionbar.actionMore.setOnClickListener {
             showPopupWindow(binding.actionbar.actionMore)
         }
 
-        showFlexTagView()
+        TagResultListStorage.tagArrayList?.let {
+            showFlexTagView(it)
+        }
 
         showCommentView()
 
@@ -89,23 +96,28 @@ class LibDetailActivity : BaseActivity() {
         showEditView()
     }
 
-    private fun showFlexTagView() {
-        val position = binding.flexTagView.childCount
-        val customDynamicTagView = CustomDynamicTagView(this).apply {
-            text = "# (get data)"
+    override fun onDestroy() {
+        super.onDestroy()
+        TagResultListStorage.tagArrayList = null
+    }
 
-            tag = position
+    private fun showFlexTagView(data : ArrayList<String>) {
+        for (i in 0 until data.size) {
+            val customDynamicTagView = CustomDynamicTagView(this).apply {
+                text = data[i]
+                tag = i
+            }
+
+            val layoutParams = FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(5, 5, 5, 5)
+            }
+
+            customDynamicTagView.layoutParams = layoutParams
+            binding.flexTagView.addView(customDynamicTagView)
         }
-
-        val layoutParams = FlexboxLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            setMargins(5, 5, 5, 5)
-        }
-
-        customDynamicTagView.layoutParams = layoutParams
-        binding.flexTagView.addView(customDynamicTagView)
     }
 
     private fun showPopupWindow(anchor: View) {
@@ -120,13 +132,31 @@ class LibDetailActivity : BaseActivity() {
         popBinding.switchMenu1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 // 스위치가 켜졌을 때
+
+                // 공개글로 설정할수없을때 메시지
+                val customToast = CustomToast()
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.storage_detail_more_tab_nondisclosure_error_toast),
+                    CustomToastType.RED
+                ) {
+                    //닫기
+                }
             } else {
                 // 스위치가 꺼졌을 때
+                val dialogCommon = DialogCommon()
+                dialogCommon.showLibDetailNondisclosure(supportFragmentManager, {
+                    //닫기
+                }, {
+                    //비공개
+
+                })
             }
         }
 
         popBinding.menuItem2.setOnClickListener {
             popupWindow.dismiss()
+            goInputTag()
         }
 
         popBinding.menuItem3.setOnClickListener {
@@ -135,6 +165,12 @@ class LibDetailActivity : BaseActivity() {
 
         popBinding.menuItem4.setOnClickListener {
             popupWindow.dismiss()
+            val dialogCommon = DialogCommon()
+            dialogCommon.showCommentDelete(supportFragmentManager, {
+                //닫기
+            }, {
+                //삭제
+            })
         }
 
         popupWindow.elevation = 10.0f
@@ -205,6 +241,14 @@ class LibDetailActivity : BaseActivity() {
             }, {
                 //신고
                 //detailCommentListAdapter.removeItem(position)
+                val customToast = CustomToast()
+                customToast.showToastMessage(
+                    supportFragmentManager,
+                    getString(R.string.lib_popup_report_comment),
+                    CustomToastType.WHITE
+                ) {
+                    //close
+                }
             })
             popupWindow.dismiss()
         }
@@ -329,28 +373,36 @@ class LibDetailActivity : BaseActivity() {
     }
 
     private fun setPrinterAndAnotherPaper() {
-        val binding = BottomSheetPaperDisconnectBinding.inflate(layoutInflater)
-        val bottomSheetDialog =
-            BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
-        bottomSheetDialog.window?.setDimAmount(0.7f)
-        bottomSheetDialog.setContentView(binding.root)
-
-        val bottomSheet =
-            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        val behavior = BottomSheetBehavior.from(bottomSheet!!)
-        behavior.isDraggable = false
-        behavior.isHideable = false
-
-        binding.closeBtn.setOnClickListener {
-            bottomSheetDialog.dismiss()
+        val customToast = CustomToast()
+        customToast.showToastMessage(
+            supportFragmentManager,
+            getString(R.string.lib_detail_popup_paper_not),
+            CustomToastType.WHITE
+        ) {
+            //close
         }
-
-        binding.submitBtn.text = getString(R.string.tag_popup_left_btn)
-        binding.submitBtn.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-
-        bottomSheetDialog.show()
+//        val binding = BottomSheetPaperDisconnectBinding.inflate(layoutInflater)
+//        val bottomSheetDialog =
+//            BottomSheetDialog(this, R.style.CustomBottomSheetDialogTheme)
+//        bottomSheetDialog.window?.setDimAmount(0.7f)
+//        bottomSheetDialog.setContentView(binding.root)
+//
+//        val bottomSheet =
+//            bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+//        behavior.isDraggable = false
+//        behavior.isHideable = false
+//
+//        binding.closeBtn.setOnClickListener {
+//            bottomSheetDialog.dismiss()
+//        }
+//
+//        binding.submitBtn.text = getString(R.string.tag_popup_left_btn)
+//        binding.submitBtn.setOnClickListener {
+//            bottomSheetDialog.dismiss()
+//        }
+//
+//        bottomSheetDialog.show()
     }
 
     private fun setDisconnectPrinter() {
@@ -416,4 +468,18 @@ class LibDetailActivity : BaseActivity() {
         val dialogToast = DialogToastingCommon()
         dialogToast.showLoading(supportFragmentManager)
     }
+
+    private fun goInputTag() {
+        val intent = Intent(this, InputTagActivity::class.java)
+        tagEditLauncher.launch(intent)
+    }
+
+    private val tagEditLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                TagResultListStorage.tagArrayList?.let {
+                    showFlexTagView(it)
+                }
+            }
+        }
 }
