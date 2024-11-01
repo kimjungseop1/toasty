@@ -28,7 +28,8 @@ class JoinConsentActivity : BaseActivity() {
                             }
 
                             "SUCCESS" -> {
-                                Log.e(TAG, "성공")
+                                Log.e(TAG, "성공 id : " + AppDataPref.userId)
+                                AppDataPref.save(this)
                                 goWelcome()
                             }
 

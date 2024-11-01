@@ -65,6 +65,8 @@ class LoginViewModel : BaseViewModel() {
             val requestCheckMember = RequestCheckMember()
             requestCheckMember.apply {
                 user_id = memberId
+
+                AppDataPref.userId = user_id
             }
 
             arPangRepository.requestCheckMember(requestCheckMember)
@@ -164,9 +166,6 @@ class LoginViewModel : BaseViewModel() {
                 // Log the results
                 Log.e("Facebook User ID : ", uniqueId)
 
-                AppDataPref.userId = uniqueId
-                AppDataPref.save(activity)
-
                 val userId = "f $uniqueId"
 
                 checkMember(userId)
@@ -218,8 +217,6 @@ class LoginViewModel : BaseViewModel() {
                 //TODO
                 val id = user.id
                 var userId = "k $id"
-                AppDataPref.userId = userId
-                AppDataPref.save(activity)
 
                 checkMember(userId)
             } else {
@@ -283,8 +280,6 @@ class LoginViewModel : BaseViewModel() {
             val uniqueId = result.profile?.id
             Log.e("jung", "uniqueid : $uniqueId")
             val userId = "n $uniqueId"
-            AppDataPref.userId = userId
-            AppDataPref.save(activity)
 
             withContext(Dispatchers.Main) {
                 checkMember(userId)

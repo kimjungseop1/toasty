@@ -7,12 +7,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.messaging.FirebaseMessaging
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivitySplashBinding
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -38,6 +40,7 @@ class SplashActivity : BaseActivity() {
 
     private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS,
             Manifest.permission.READ_MEDIA_IMAGES,
             Manifest.permission.READ_MEDIA_VIDEO,
             Manifest.permission.READ_MEDIA_AUDIO,
@@ -82,6 +85,12 @@ class SplashActivity : BaseActivity() {
 
         if (checkAndRequestPermissions()) {
             proceedToNextStep()
+        }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.e("jung","fcm token : ${task.result}")
+            }
         }
     }
 

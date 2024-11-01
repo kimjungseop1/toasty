@@ -1,12 +1,7 @@
 package com.syncrown.arpang.ui.photoeditor
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import com.syncrown.arpang.R
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.PhotoEditorClient

@@ -58,12 +58,10 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.signInResult.observe(this, Observer { result ->
             result.fold(
                 onSuccess = { credential ->
-                    val userId = credential.id
-                    AppDataPref.userId = userId.toString()
-                    AppDataPref.save(this)
+                    val userId = credential.id.toString()
 
                     Log.e(TAG, "Signed in as $userId")
-                    loginViewModel.checkMember(userId.toString())
+                    loginViewModel.checkMember(userId)
                 },
                 onFailure = { exception ->
                     Log.e(TAG, "Sign-in failed: ${exception.message}")
@@ -116,10 +114,6 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
     override fun onAppleIdSuccess(sub: String) {
         val userId = "a $sub"
-
-        AppDataPref.userId = userId
-        AppDataPref.save(this)
-
         loginViewModel.checkMember(userId)
     }
 

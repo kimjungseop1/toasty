@@ -45,7 +45,6 @@ import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videotrimmer.Tri
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.adapter.FontAdapter
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
-import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
 import kotlinx.coroutines.Dispatchers
@@ -110,6 +109,8 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         binding.actionbar.actionEtc.text =
             ContextCompat.getString(this, R.string.edit_video_print_print)
         binding.actionbar.actionEtc.setOnClickListener {
+            mPhotoEditor.clearHelperBox()
+
             //TODO 인쇄
             if (AppDataPref.isArPrintPreView) {
                 goPreview()
@@ -189,6 +190,8 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
             )
         )
 
+        var lastSelectedPosition = -1
+
         binding.recyclerEdit.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerEdit.adapter = VideoEditAdapter(arrayList) { position: Int ->
@@ -200,114 +203,103 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
             mPhotoEditor.setBrushDrawingMode(false)
             hideKeyBoard()
 
-            when (position) {
-                0 -> {
-                    //TODO 영상변경 1.캐시에 저장된 비디오 제거, 현재페이지 종료, 이전페이지 종료
-                    CommonFunc.clearAppCache(this)
-                    finish()
-                    ActivityFinishManager.finishActivityEvent.postValue(TrimVideoActivity::class.java)
-                }
+            if (lastSelectedPosition == position) {
+                lastSelectedPosition = -1
+            } else {
+                lastSelectedPosition = position
 
-                1 -> {
-                    //TODO 썸네일
-                    if (binding.thumbLayout.root.visibility == View.VISIBLE) {
-                        binding.thumbLayout.root.visibility = View.GONE
-                    } else {
-                        binding.thumbLayout.root.visibility = View.VISIBLE
+                when (position) {
+                    0 -> {
+                        //TODO 영상변경 1.캐시에 저장된 비디오 제거, 현재페이지 종료, 이전페이지 종료
+                        CommonFunc.clearAppCache(this)
+                        finish()
+                        ActivityFinishManager.finishActivityEvent.postValue(TrimVideoActivity::class.java)
                     }
 
-                    binding.thumbLayout.thumbRecycler.layoutManager =
-                        LinearLayoutManager(
-                            this@EditVideoPrintActivity,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                        )
+                    1 -> {
+                        //TODO 썸네일
+                        binding.thumbLayout.root.visibility = View.VISIBLE
 
-                    if (::thumbnails.isInitialized) {
-                        binding.thumbLayout.thumbRecycler.adapter =
-                            ThumbnailAdapter(
+                        binding.thumbLayout.thumbRecycler.layoutManager =
+                            LinearLayoutManager(
                                 this@EditVideoPrintActivity,
-                                thumbnails
-                            ) { position: Int ->
-                                binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
-                            }
-                        binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
-                    } else {
-                        // Handler를 사용해 주기적으로 초기화 상태를 확인
-                        val handler = Handler(Looper.getMainLooper())
-                        val checkInitialization = object : Runnable {
-                            override fun run() {
-                                if (::thumbnails.isInitialized) {
-                                    binding.thumbLayout.thumbRecycler.adapter =
-                                        ThumbnailAdapter(
-                                            this@EditVideoPrintActivity,
-                                            thumbnails
-                                        ) { position: Int ->
-                                            binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
-                                        }
-                                    binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
-                                } else {
-                                    handler.postDelayed(this, 500)
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+
+                        if (::thumbnails.isInitialized) {
+                            binding.thumbLayout.thumbRecycler.adapter =
+                                ThumbnailAdapter(
+                                    this@EditVideoPrintActivity,
+                                    thumbnails
+                                ) { position: Int ->
+                                    binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+                                }
+                            binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
+                        } else {
+                            // Handler를 사용해 주기적으로 초기화 상태를 확인
+                            val handler = Handler(Looper.getMainLooper())
+                            val checkInitialization = object : Runnable {
+                                override fun run() {
+                                    if (::thumbnails.isInitialized) {
+                                        binding.thumbLayout.thumbRecycler.adapter =
+                                            ThumbnailAdapter(
+                                                this@EditVideoPrintActivity,
+                                                thumbnails
+                                            ) { position: Int ->
+                                                binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+                                            }
+                                        binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
+                                    } else {
+                                        handler.postDelayed(this, 500)
+                                    }
                                 }
                             }
+                            handler.post(checkInitialization)
                         }
-                        handler.post(checkInitialization)
+
                     }
 
-                }
+                    2 -> {
+                        //TODO  영역
+                        Toast.makeText(this, "영역...", Toast.LENGTH_SHORT).show()
+                    }
 
-                2 -> {
-                    //TODO  영역
-                    Toast.makeText(this, "영역...", Toast.LENGTH_SHORT).show()
-                }
-
-                3 -> {
-                    //TODO  텍스트
-                    if (binding.textEditView.root.visibility == View.VISIBLE) {
-                        binding.textEditView.root.visibility = View.GONE
-                    } else {
+                    3 -> {
+                        //TODO  텍스트
                         binding.textEditView.root.visibility = View.VISIBLE
-                    }
 
-                    val styleBuilder = TextStyleBuilder()
-                    styleBuilder.withTextColor(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.color_white
+                        val styleBuilder = TextStyleBuilder()
+                        styleBuilder.withTextColor(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.color_white
+                            )
                         )
-                    )
 
-                    mPhotoEditor.addEditText(styleBuilder)
+                        mPhotoEditor.addEditText(styleBuilder)
 
-                    setEditFont()
-                    setEditText()
-                }
+                        setEditFont()
+                        setEditText()
+                    }
 
-                4 -> {
-                    //TODO  드로잉
-                    mPhotoEditor.addDrawing()
-                }
+                    4 -> {
+                        //TODO  드로잉
+                        mPhotoEditor.addDrawing()
+                    }
 
-                5 -> {
-                    //TODO 스티커
-                    if (binding.iconView.root.visibility == View.VISIBLE) {
-                        binding.iconView.root.visibility = View.GONE
-                    } else {
+                    5 -> {
+                        //TODO 스티커
                         binding.iconView.root.visibility = View.VISIBLE
+                        setStickerIcon()
                     }
 
-                    setStickerIcon()
-                }
-
-                6 -> {
-                    //TODO 기타
-                    if (binding.etcSettingView.root.visibility == View.VISIBLE) {
-                        binding.etcSettingView.root.visibility = View.GONE
-                    } else {
+                    6 -> {
+                        //TODO 기타
                         binding.etcSettingView.root.visibility = View.VISIBLE
-                    }
 
-                    setEtcSetting()
+                        setEtcSetting()
+                    }
                 }
             }
         }
@@ -570,6 +562,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     /** ----- 스티커 관련 리스너 end **/
 
     private fun goPreview() {
+        mPhotoEditor.clearHelperBox()
         resultBitmap = CommonFunc.getBitmapFromView(binding.printAreaView)
         ArImageStorage.bitmap = resultBitmap
 

@@ -51,8 +51,6 @@
         <include
             android:id="@+id/thumbLayout"
             layout="@layout/add_layout_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!--   영역   -->
@@ -61,24 +59,18 @@
         <include
             android:id="@+id/textEditView"
             layout="@layout/bottom_festival_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!--   스티커   -->
         <include
             android:id="@+id/iconView"
             layout="@layout/popup_sticker_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <!--   기타   -->
         <include
             android:id="@+id/etcSettingView"
             layout="@layout/bottom_festival_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:visibility="gone" />
 
     </FrameLayout>

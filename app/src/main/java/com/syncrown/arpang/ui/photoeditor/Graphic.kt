@@ -63,9 +63,9 @@ internal abstract class Graphic(
         if (imgCrop != null) {
             imgCrop.visibility = View.VISIBLE
         }
-        if (draws != null) {
-            PhotoEditorClient.photoEditor?.setBrushDrawingMode(true)
-        }
+//        if (draws != null) {
+//            PhotoEditorClient.photoEditor?.setBrushDrawingMode(true)
+//        }
 
         editText?.requestFocus()
         editText?.isEnabled = true

@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -19,7 +20,10 @@ import com.syncrown.arpang.ui.component.splash.SplashActivity
 class ArPangFirebaseMessageService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-
+        Log.e("jung","fcm notification title : ${remoteMessage.notification?.title}")
+        Log.e("jung","fcm notification body : ${remoteMessage.notification?.body}")
+        Log.e("jung","fcm data title : ${remoteMessage.data["title"]}")
+        Log.e("jung","fcm data body : ${remoteMessage.data["body"]}")
         // FCM 메시지 처리 로직
         remoteMessage.data.let { data ->
             val title = data["title"]
@@ -35,7 +39,6 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
         super.onNewToken(token)
     }
 
-    @SuppressLint("ObsoleteSdkInt")
     private fun sendNotification(title: String?, message: String?) {
         val channelId = "arpang_channel_id"
         val channelName = "ArPang Channel"
@@ -55,13 +58,10 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        // 알림 채널 설정 (Android 8.0 이상)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel =
-                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
+        val channel =
+            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
 
         with(NotificationManagerCompat.from(this)) {
             if (ActivityCompat.checkSelfPermission(
