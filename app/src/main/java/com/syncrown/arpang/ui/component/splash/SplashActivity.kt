@@ -90,6 +90,7 @@ class SplashActivity : BaseActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.e("jung","fcm token : ${task.result}")
+                AppDataPref.fcmToken = task.result
             }
         }
     }
@@ -185,7 +186,7 @@ class SplashActivity : BaseActivity() {
             //TODO cancel
         }, {
             //TODO  ok
-            splashViewModel.checkForUpdateAndStart(this, REQUEST_UPDATE_CODE)
+            splashViewModel.checkForUpdateAndStart(this)
         })
     }
 

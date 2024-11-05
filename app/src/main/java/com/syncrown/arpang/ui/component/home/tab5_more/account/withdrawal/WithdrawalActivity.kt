@@ -37,12 +37,6 @@ class WithdrawalActivity : BaseActivity() {
 
         binding.withdrawalCheckView.setOnCheckedChangeListener { _, isChecked ->
             binding.withdrawalBtn.isSelected = isChecked
-
-            if (isChecked) {
-
-            } else {
-
-            }
         }
 
         binding.withdrawalBtn.isSelected = false

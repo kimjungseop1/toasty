@@ -39,11 +39,9 @@ class EventDetailActivity : BaseActivity() {
         arrayList.add("1")
         arrayList.add("1")
 
-        val horizontalEventListAdapter = HorizontalEventListAdapter(arrayList, object : HorizontalEventListAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                Log.e("jung","position : $position")
-            }
-        })
+        val horizontalEventListAdapter = HorizontalEventListAdapter(arrayList) { position ->
+            Log.e("jung", "position : $position")
+        }
         binding.recyclerEventList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerEventList.adapter = horizontalEventListAdapter
     }

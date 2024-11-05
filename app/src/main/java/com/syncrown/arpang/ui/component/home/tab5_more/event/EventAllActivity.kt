@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.event
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,7 @@ import com.syncrown.arpang.databinding.ActivityEventAllBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.VerticalSpaceItemDecoration
+import com.syncrown.arpang.ui.component.home.tab1_home.event.EventDetailActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.event.adapter.EventAllListAdapter
 
 class EventAllActivity : BaseActivity() {
@@ -52,7 +54,7 @@ class EventAllActivity : BaseActivity() {
         eventAllListAdapter.setOnItemClickListener(object :
             EventAllListAdapter.OnItemClickListener {
             override fun onClick(position: Int) {
-
+                goAllEvent(position)
             }
         })
 
@@ -71,5 +73,11 @@ class EventAllActivity : BaseActivity() {
         for (i in decorationCount - 1 downTo 0) {
             recyclerView.removeItemDecorationAt(i)
         }
+    }
+
+    private fun goAllEvent(position: Int) {
+        val intent = Intent(this, EventDetailActivity::class.java)
+        intent.putExtra("EVENT_SELECT_POSITION", position)
+        startActivity(intent)
     }
 }

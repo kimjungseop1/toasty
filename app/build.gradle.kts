@@ -108,13 +108,11 @@ dependencies {
     // dot indicator
     implementation(libs.dotsindicator)
 
-    // noinspection RiskyLibrary
-    implementation(libs.play.core)
+    // version update
+    implementation(libs.app.update.ktx)
 
     // crop image
     implementation(libs.android.image.cropper)
-    implementation("com.github.yalantis:ucrop:2.2.6")
-
 
     // dynamically add view
     implementation(libs.flexbox)

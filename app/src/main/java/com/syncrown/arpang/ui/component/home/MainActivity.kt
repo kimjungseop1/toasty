@@ -299,7 +299,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun goCS() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(""))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
         startActivity(intent)
     }
 }

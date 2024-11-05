@@ -32,7 +32,11 @@ class ChangeNameActivity : BaseActivity() {
 
         binding.changeBtn.setOnClickListener {
             val customToast = CustomToast()
-            customToast.showToastMessage(supportFragmentManager,"이름이 변경되었습니다.", CustomToastType.BLUE) {
+            customToast.showToastMessage(
+                supportFragmentManager,
+                getString(R.string.account_change_name_desc_3),
+                CustomToastType.BLUE
+            ) {
                 //close
             }
         }

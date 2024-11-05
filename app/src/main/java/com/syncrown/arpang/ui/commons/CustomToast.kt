@@ -13,9 +13,12 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.CustomToastBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CustomToast : DialogFragment(), OnClickListener {
     private lateinit var dialog: Dialog
@@ -125,6 +128,11 @@ class CustomToast : DialogFragment(), OnClickListener {
             else -> {}
         }
         customToast.closeBtn.setOnClickListener(this)
+
+        lifecycleScope.launch {
+            delay(3000)
+            dismiss()
+        }
 
         dialog.show()
 

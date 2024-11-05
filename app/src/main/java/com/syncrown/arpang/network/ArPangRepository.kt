@@ -69,7 +69,7 @@ class ArPangRepository {
     val loginLiveDataRepository: MutableLiveData<NetworkResult<ResponseLoginDto>> =
         MutableLiveData()
 
-    //TODO 00. 공지사항 갯수
+    //TODO 00. 알림 갯수
 
     //TODO 00. 공지사항 리스트
     val noticeListLiveDataRepository: MutableLiveData<NetworkResult<ResponseNoticeListDto>> =
@@ -99,7 +99,6 @@ class ArPangRepository {
     fun requestJoin(requestJoinDto: RequestJoinDto) {
         arPangInterface.postJoin(requestJoinDto).enqueue(object :
             Callback<ResponseJoinDto> {
-
             override fun onResponse(
                 call: Call<ResponseJoinDto>,
                 response: Response<ResponseJoinDto>
