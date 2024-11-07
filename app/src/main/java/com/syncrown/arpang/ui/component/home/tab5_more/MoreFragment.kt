@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.FragmentMoreBinding
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.component.home.MainViewModel
@@ -74,6 +75,7 @@ class MoreFragment : Fragment() {
                 // 취소
             }, {
                 // 로그아웃
+                AppDataPref.clear(requireActivity())
                 goLogin()
             })
         }

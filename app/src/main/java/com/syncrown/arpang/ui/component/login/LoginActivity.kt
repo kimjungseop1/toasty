@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.facebook.CallbackManager
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivtyLoginBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.ui.base.BaseActivity
@@ -56,12 +57,9 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.initialize(this)
         loginViewModel.googleAccount.observe(this, Observer { account ->
             if (account != null) {
-                Log.e("jung","${account.id}")
-                val userId = account.id.toString()
+                val userId = "g " + account.id.toString()
 
                 loginViewModel.checkMember(userId)
-            } else {
-                Log.e("jung","login fail")
             }
         })
     }
@@ -109,7 +107,6 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         if (result.resultCode == RESULT_OK) {
             loginViewModel.handleSignInResult(result.data)
         } else {
-            Log.w("jung", "Google sign in failed")
             loginViewModel.handleSignInResult(null)
         }
     }

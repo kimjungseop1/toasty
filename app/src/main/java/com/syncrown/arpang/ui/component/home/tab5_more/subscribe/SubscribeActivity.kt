@@ -88,7 +88,9 @@ class SubscribeActivity : BaseActivity() {
             },
             object : SubscribeListAdapter.OnItemClickListener {
                 override fun onClick(position: Int) {
-                    goDetail()
+                    if (subscribeType == SubscribeType.MY) {
+                        goDetail()
+                    }
                 }
             })
         binding.recyclerSubscribe.adapter = subscribeListAdapter
