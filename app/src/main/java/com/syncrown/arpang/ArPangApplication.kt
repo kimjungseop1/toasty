@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
@@ -37,12 +38,14 @@ class ArPangApplication : Application() {
 
         NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
 
-        FacebookSdk.fullyInitialize()
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         FontManager.init(this)
 
         FirebaseApp.initializeApp(this)
+
+        FacebookSdk.setClientToken(getString(R.string.facebook_token))
+        FacebookSdk.sdkInitialize(applicationContext)
+        FacebookSdk.fullyInitialize()
     }
 }

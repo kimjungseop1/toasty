@@ -54,18 +54,15 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
         //TODO 구글 로그인 관련
         loginViewModel.initialize(this)
-        loginViewModel.signInResult.observe(this, Observer { result ->
-            result.fold(
-                onSuccess = { credential ->
-                    val userId = credential.id.toString()
+        loginViewModel.googleAccount.observe(this, Observer { account ->
+            if (account != null) {
+                Log.e("jung","${account.id}")
+                val userId = account.id.toString()
 
-                    Log.e(TAG, "Signed in as $userId")
-                    loginViewModel.checkMember(userId)
-                },
-                onFailure = { exception ->
-                    Log.e(TAG, "Sign-in failed: ${exception.message}")
-                }
-            )
+                loginViewModel.checkMember(userId)
+            } else {
+                Log.e("jung","login fail")
+            }
         })
     }
 
@@ -78,7 +75,9 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         super.onCreate(savedInstanceState)
 
         binding.googleBtn.setOnClickListener {
-            loginViewModel.initiateSignIn(this, signInLauncher)
+            loginViewModel.signOut()
+            val signInIntent = loginViewModel.getGoogleSignInClient().signInIntent
+            signInLauncher.launch(signInIntent)
         }
 
         binding.facebookBtn.setOnClickListener {
@@ -104,10 +103,21 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
     }
 
-    private val signInLauncher =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+    private val signInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
             loginViewModel.handleSignInResult(result.data)
+        } else {
+            Log.w("jung", "Google sign in failed")
+            loginViewModel.handleSignInResult(null)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
 
     override fun onAppleIdSuccess(sub: String) {
         val userId = "a $sub"

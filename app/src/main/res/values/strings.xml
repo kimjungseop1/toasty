@@ -2,9 +2,11 @@
     <string name="app_name">알팡</string>
     <string name="kakao_app_key">80fe788ee827bf52b012dfb4c6b78a3a</string>
     <string name="kakao_scheme">kakao80fe788ee827bf52b012dfb4c6b78a3a</string>
-    <string name="google_client_id">593219985516–804hlbe1iv3vi5epgkfa826i24lt3r4v.apps.googleusercontent.com</string>
+    <string name="google_client_id">228227154329-gks0vtpv63g4jshsuo39q7gdbo1o0ots.apps.googleusercontent.com</string>
+    <string name="google_web_client_id">228227154329-druh62o37igd3lv9ipbjq2ndh85r09dj</string>
 
     <string name="facebook_app_id">405879092532692</string>
+    <string name="facebook_token">79a72a38a00dbbdf01ee383c8e966a5e</string>
 
     <!-- 공통 -->
     <string name="network_connect_error_title">네트워크 연결 실패</string>
@@ -61,6 +63,11 @@
     <string name="login_pw_find"><u>비밀번호 찾기</u></string>
     <string name="login_alert_already_sns_title">알림</string>
     <string name="login_alert_already_sns">입력하신 이메일은\n%s 으로 가입되어 있습니다.\n소셜 버튼을 눌러 로그인해주세요.</string>
+    <string name="login_google">구글 로그인</string>
+    <string name="login_facebook">페이스북 로그인</string>
+    <string name="login_kakao">카카오 로그인</string>
+    <string name="login_naver">네이버 로그인</string>
+    <string name="login_apple">Apple 로그인</string>
 
     <!-- 회원가입  -->
     <string name="join_email_title">회원가입 하고\n토스티와 추억을 인쇄해보세요.</string>

@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.play.services.auth)
 
     // facebook
-    implementation(libs.facebook.android.sdk)
+    implementation(libs.facebook.login)
 
     // retrofit2 네트워크 api
     implementation(libs.retrofit)

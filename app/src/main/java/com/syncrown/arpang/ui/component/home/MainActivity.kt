@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,8 +28,8 @@ import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.BackPressCloseHandler
 import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
 import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.main.HomeFragment
 import com.syncrown.arpang.ui.component.home.search.SearchActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.main.HomeFragment
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment
 import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
@@ -236,12 +235,14 @@ class MainActivity : BaseActivity() {
         bottomSheetDialog?.setContentView(binding.root)
 
         val pageData = listOf("1", "2", "3")
-        val adapter = MainEventPagerAdapter(this, pageData
+        val adapter = MainEventPagerAdapter(
+            this, pageData
         ) { position ->
             Log.e("jung", "pos : $position")
         }
         binding.eventViewPager.adapter = adapter
-        binding.eventViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.eventViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 adapter.updateCurrentPage(position)

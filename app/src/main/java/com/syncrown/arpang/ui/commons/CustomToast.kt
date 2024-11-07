@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
@@ -77,7 +78,7 @@ class CustomToast : DialogFragment(), OnClickListener {
     override fun onStart() {
         super.onStart()
         dialog.window
-            ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -86,15 +87,20 @@ class CustomToast : DialogFragment(), OnClickListener {
             requestFeature(Window.FEATURE_NO_TITLE)
             setLayout(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT
+                WindowManager.LayoutParams.WRAP_CONTENT
             )
             setDimAmount(0f)
+            setGravity(Gravity.BOTTOM)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            attributes = attributes?.apply {
+                y = (30 * resources.displayMetrics.density).toInt()
+            }
         }
 
         customToast = CustomToastBinding.inflate(layoutInflater)
         dialog.setContentView(customToast.root)
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
 
         customToast.toastMsg.text = messageTxt
 

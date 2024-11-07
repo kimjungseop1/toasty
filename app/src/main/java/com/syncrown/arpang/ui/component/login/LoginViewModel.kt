@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,11 +16,10 @@ import com.facebook.FacebookException
 import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -35,7 +32,6 @@ import com.navercorp.nid.profile.data.NidProfileResponse
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.network.ArPangRepository
-import com.syncrown.arpang.network.NaverClient
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckMember
@@ -44,7 +40,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import kotlin.coroutines.resumeWithException
@@ -82,52 +77,38 @@ class LoginViewModel : BaseViewModel() {
      * 구글
      * =============================================================================================
      */
-    private val _signInResult = MutableLiveData<Result<GoogleSignInAccount>>()
-    val signInResult: LiveData<Result<GoogleSignInAccount>> = _signInResult
+    private lateinit var _googleSignInClient: GoogleSignInClient
 
-    private lateinit var signInClient: SignInClient
+    private val _googleAccount = MutableLiveData<GoogleSignInAccount?>()
+    val googleAccount: LiveData<GoogleSignInAccount?> = _googleAccount
 
     fun initialize(context: Context) {
-        signInClient = Identity.getSignInClient(context)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.google_web_client_id))
+            .requestEmail()
+            .build()
+
+        _googleSignInClient = GoogleSignIn.getClient(context, gso)
     }
 
-    fun initiateSignIn(context: Context, launcher: ActivityResultLauncher<IntentSenderRequest>) {
-        viewModelScope.launch {
-            try {
-                val signInRequest = GetSignInIntentRequest.builder()
-                    .setServerClientId(context.getString(R.string.google_client_id))
-                    .build()
-
-                val pendingIntent = signInClient.getSignInIntent(signInRequest).await()
-                launcher.launch(IntentSenderRequest.Builder(pendingIntent).build())
-            } catch (e: Exception) {
-                _signInResult.value = Result.failure(e)
-            }
-        }
+    fun getGoogleSignInClient(): GoogleSignInClient {
+        return _googleSignInClient
     }
 
     fun handleSignInResult(data: Intent?) {
-        viewModelScope.launch {
-            try {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                val account = task.await()
-                _signInResult.value = Result.success(account)
-            } catch (e: ApiException) {
-                _signInResult.value = Result.failure(e)
-            }
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            _googleAccount.value = account
+        } catch (e: ApiException) {
+            _googleAccount.value = null
         }
     }
 
-    fun signOut(context: Context) {
-        viewModelScope.launch {
-            try {
-                val signOutRequest = Identity.getSignInClient(context).signOut().await()
-                // Sign-out succeeded, handle accordingly
-            } catch (e: Exception) {
-                // Handle exception during sign-out
-            }
+    fun signOut() {
+        _googleSignInClient.signOut().addOnCompleteListener {
+            _googleAccount.value = null
         }
-
     }
 
     /**
@@ -143,16 +124,16 @@ class LoginViewModel : BaseViewModel() {
         LoginManager.getInstance()
             .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
                 override fun onSuccess(loginResult: LoginResult) {
-                    Log.e("Callback :: ", "onSuccess")
+                    Log.e("jung", "onSuccess")
                     requestMe(activity, loginResult.accessToken)
                 }
 
                 override fun onCancel() {
-                    Log.e("Callback :: ", "onCancel")
+                    Log.e("jung", "onCancel")
                 }
 
                 override fun onError(error: FacebookException) {
-                    Log.e("Callback :: ", "onError : ${error.message}")
+                    Log.e("jung", "onError : ${error.message}")
                 }
             })
 
@@ -164,14 +145,14 @@ class LoginViewModel : BaseViewModel() {
                 val uniqueId = `object`?.optString("id", null) ?: ""
 
                 // Log the results
-                Log.e("Facebook User ID : ", uniqueId)
+                Log.e("jung", uniqueId)
 
                 val userId = "f $uniqueId"
 
                 checkMember(userId)
             } catch (e: JSONException) {
                 e.printStackTrace()
-                Log.e("Error", "Failed to parse user data: ${e.message}")
+                Log.e("jung", "Failed to parse user data: ${e.message}")
             }
         }
 

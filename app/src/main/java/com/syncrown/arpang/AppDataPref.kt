@@ -65,6 +65,27 @@ class AppDataPref {
             editor.apply()
         }
 
+        fun remove(activity: Activity, key: String) {
+            val packageName = activity.packageName
+            val pref = activity.getSharedPreferences(packageName, Context.MODE_PRIVATE)
+            val editor = pref.edit()
+            editor.remove(key)
+            editor.apply()
+
+            // 메모리에 있는 해당 변수도 초기화합니다 (필요한 경우)
+            when (key) {
+                "accessToken" -> AccessToken = ""
+                "userId" -> userId = ""
+                "isMainEvent" -> isMainEvent = true
+                "isArGuideFirst" -> isArGuideFirst = true
+                "isArPrintPreView" -> isArPrintPreView = true
+                "isTwoCutPreView" -> isTwoCutPreView = true
+                "isFreePreView" -> isFreePreView = true
+                "isLabelPreView" -> isLabelPreView = true
+                "isFestivalPreView" -> isFestivalPreView = true
+            }
+        }
+
         fun clear(activity: Activity) {
             val packageName = activity.packageName
             val pref = activity.getSharedPreferences(packageName, Context.MODE_PRIVATE)

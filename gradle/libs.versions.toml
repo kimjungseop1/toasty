@@ -4,6 +4,7 @@ androidImageCropper = "4.6.0"
 appUpdateKtx = "2.1.0"
 dotsindicator = "5.0"
 facebookAndroidSdk = "17.0.1"
+facebookLogin = "latest.release"
 firebaseAuth = "23.0.0"
 firebaseBom = "33.2.0"
 firebaseCrashlytics = "19.2.1"
@@ -51,6 +52,7 @@ app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.re
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

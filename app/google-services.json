@@ -12,7 +12,16 @@
           "package_name": "com.syncrown.arpang"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "228227154329-gks0vtpv63g4jshsuo39q7gdbo1o0ots.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.syncrown.arpang",
+            "certificate_hash": "88f025243fe926301b63561d72a670603acc1e36"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAVauq91yB1pBN1r2xZY8framjNEhmXwVY"

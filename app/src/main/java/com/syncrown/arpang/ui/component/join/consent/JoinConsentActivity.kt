@@ -108,6 +108,7 @@ class JoinConsentActivity : BaseActivity() {
 
     private fun goWelcome() {
         val intent = Intent(this, WelcomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 
