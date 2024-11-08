@@ -8,10 +8,12 @@ import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestNoticeListDto
+import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseNoticeListDto
+import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -22,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ArPangRepository {
     companion object {
-        private const val BASE_URL_DEV = "http://192.168.0.4:8090"
+        private const val BASE_URL_DEV = "http://192.168.0.13:8090"
         private const val BASE_URL_REAL = "http://www.pagee.net"
     }
 
@@ -58,6 +60,13 @@ class ArPangRepository {
     /***********************************************************************************************
      * 각 뷰모델에서 사용하기 위한 라이브데이터
      **********************************************************************************************/
+    //TODO 사용자 토큰 등록
+    val userTokenRegisterLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserTokenRegDto>> =
+        MutableLiveData()
+
+    //TODO 사용자 토큰 삭제 - 나중에 필요하면
+
+
     //TODO 001. 회원여부 확인
     val checkMemberLiveDataRepository: MutableLiveData<NetworkResult<ResponseCheckMember>> =
         MutableLiveData()
@@ -78,6 +87,35 @@ class ArPangRepository {
     /***********************************************************************************************
      * API response를 라이브데이터에 추가
      **********************************************************************************************/
+    //TODO 사용자 토큰 등록
+    fun requestUserTokenRegister(requestUserTokenRegDto: RequestUserTokenRegDto) {
+        arPangInterface.postInsertUserToken(
+            requestUserTokenRegDto.user_token.toString(),
+            requestUserTokenRegDto.app_id.toString(),
+            requestUserTokenRegDto.device_id.toString(), requestUserTokenRegDto.user_id
+        )
+            .enqueue(object : Callback<ResponseUserTokenRegDto> {
+                override fun onResponse(
+                    call: Call<ResponseUserTokenRegDto>,
+                    response: Response<ResponseUserTokenRegDto>
+                ) {
+                    if (response.body()?.msgCode.equals("SUCCESS")) {
+                        userTokenRegisterLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    } else {
+                        userTokenRegisterLiveDataRepository.postValue(
+                            NetworkResult.Error(
+                                response.body()?.msgCode
+                            )
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseUserTokenRegDto>, t: Throwable) {
+                    userTokenRegisterLiveDataRepository.postValue(NetworkResult.Error(t.message))
+                }
+            })
+    }
+
     //TODO 001. 회원여부 확인
     fun requestCheckMember(requestCheckMember: RequestCheckMember) {
         arPangInterface.postCheckMember(requestCheckMember)
@@ -86,7 +124,13 @@ class ArPangRepository {
                     call: Call<ResponseCheckMember>,
                     response: Response<ResponseCheckMember>
                 ) {
-                    checkMemberLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    if (response.body()?.msgCode.equals("SUCCESS")) {
+                        checkMemberLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    } else {
+                        checkMemberLiveDataRepository.postValue(
+                            NetworkResult.Error(response.body()?.msgCode)
+                        )
+                    }
                 }
 
                 override fun onFailure(call: Call<ResponseCheckMember>, t: Throwable) {

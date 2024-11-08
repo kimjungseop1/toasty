@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -12,8 +14,26 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.syncrown.arpang.AppDataPref
+import com.syncrown.arpang.network.ArPangRepository
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestCheckMember
+import com.syncrown.arpang.network.model.RequestUserTokenRegDto
+import com.syncrown.arpang.network.model.ResponseCheckMember
+import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
+import com.syncrown.arpang.ui.commons.CommonFunc
+import kotlinx.coroutines.launch
 
 class SplashViewModel(application: Application) : AndroidViewModel(application) {
+    private val arPangRepository: ArPangRepository = ArPangRepository()
+    private val insertUserTokenResponseLiveData: LiveData<NetworkResult<ResponseUserTokenRegDto>> =
+        arPangRepository.userTokenRegisterLiveDataRepository
+
+    /**
+     * =============================================================================================
+     * 앱 업데이트 체크
+     * =============================================================================================
+     */
     private val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(application)
     var onUpdateAvailableListener: (() -> Unit)? = null
 
@@ -86,4 +106,34 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    /**
+     * =============================================================================================
+     * 사용자 토큰 등록
+     * =============================================================================================
+     */
+    fun insertUserToken(
+        context: Context,
+        userToken: String
+    ) {
+        viewModelScope.launch {
+            val requestUserTokenRegDto = RequestUserTokenRegDto()
+            requestUserTokenRegDto.apply {
+                user_token = userToken
+
+                app_id = "APP_ARPANG"
+
+                device_id = CommonFunc.getDeviceUuid(context)
+
+                if (AppDataPref.userId.isNotEmpty()) {
+                    user_id = AppDataPref.userId
+                }
+            }
+
+            arPangRepository.requestUserTokenRegister(requestUserTokenRegDto)
+        }
+    }
+
+    fun insertUserTokenResponseLiveData(): LiveData<NetworkResult<ResponseUserTokenRegDto>> {
+        return insertUserTokenResponseLiveData
+    }
 }

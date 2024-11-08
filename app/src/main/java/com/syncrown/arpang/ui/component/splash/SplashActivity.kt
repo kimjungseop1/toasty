@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -17,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivitySplashBinding
+import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.SplashViewModelFactory
@@ -29,7 +31,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
-    private lateinit var splashViewModel: SplashViewModel
+    private val splashViewModel: SplashViewModel by viewModels()
 
     companion object {
         private const val REQUEST_UPDATE_CODE = 100
@@ -67,6 +69,18 @@ class SplashActivity : BaseActivity() {
                 binding.versionTxt.text = "v" + splashViewModel.appVersion(this@SplashActivity)
             }
         }
+
+        splashViewModel.insertUserTokenResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    Log.e(TAG, "토큰 전송 완료")
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "오류 : $result")
+                }
+            }
+        }
     }
 
     override fun initViewBinding() {
@@ -80,17 +94,14 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = SplashViewModelFactory(application)
-        splashViewModel = ViewModelProvider(this, factory)[SplashViewModel::class.java]
-
         if (checkAndRequestPermissions()) {
             proceedToNextStep()
         }
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.e("jung","fcm token : ${task.result}")
-                AppDataPref.fcmToken = task.result
+                Log.e("jung", "fcm token : ${task.result}")
+                splashViewModel.insertUserToken(this, task.result)
             }
         }
     }

@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Base64
 import android.view.View
 import java.io.ByteArrayOutputStream
@@ -14,6 +15,16 @@ import java.io.File
 
 class CommonFunc {
     companion object {
+        /**
+         * 디바이스 아이디 가져오기
+         */
+        @SuppressLint("HardwareIds")
+        fun getDeviceUuid(context: Context): String? {
+            return Settings.Secure.getString(
+                context.contentResolver, Settings.Secure.ANDROID_ID
+            )
+        }
+
         /**
          * dp단위로 변경하는 함수
          */
@@ -100,7 +111,10 @@ class CommonFunc {
             cursor!!.moveToNext()
             val id = cursor.getInt(cursor.getColumnIndex("_id"))
             val uri =
-                ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id.toLong())
+                ContentUris.withAppendedId(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    id.toLong()
+                )
 
             return uri
         }
