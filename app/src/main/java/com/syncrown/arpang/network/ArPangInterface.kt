@@ -4,21 +4,20 @@ import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestNoticeListDto
-import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseNoticeListDto
+import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface ArPangInterface {
-    //TODO 사용자 토큰 등록
+    //TODO 001. 사용자 토큰 등록
     @FormUrlEncoded
     @POST("/ntv/insert/user/token")
     fun postInsertUserToken(
@@ -28,19 +27,27 @@ interface ArPangInterface {
         @Field("user_id") user_id: String?
     ): Call<ResponseUserTokenRegDto>
 
-    //TODO 001. 회원여부 확인
+    //TODO 002. 사용자 토큰 삭제
+    @FormUrlEncoded
+    @POST("/ntv/delete/user/token")
+    fun postDeleteUserToken(
+        @Field("app_id") app_id: String,
+        @Field("device_id") device_id: String
+    ): Call<ResponseUserTokenDelDto>
+
+    //TODO 003. 회원여부 확인
     @POST("/ntv/member/check")
     fun postCheckMember(
         @Body requestCheckMember: RequestCheckMember
     ): Call<ResponseCheckMember>
 
-    //TODO 002. 가입신청
+    //TODO 004. 가입신청
     @POST("/ntv/join/req")
     fun postJoin(
         @Body requestJoinDto: RequestJoinDto
     ): Call<ResponseJoinDto>
 
-    //TODO 003. 로그인
+    //TODO 005. 로그인
     @POST("/ntv/login")
     fun postLogin(
         @Body requestLoginDto: RequestLoginDto

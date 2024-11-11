@@ -8,11 +8,13 @@ import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestNoticeListDto
+import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseNoticeListDto
+import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArPangRepository {
     companion object {
         private const val BASE_URL_DEV = "http://192.168.0.13:8090"
-        private const val BASE_URL_REAL = "http://www.pagee.net"
+        private const val BASE_URL_REAL = ""
     }
 
     private var arPangInterface: ArPangInterface
@@ -60,21 +62,22 @@ class ArPangRepository {
     /***********************************************************************************************
      * 각 뷰모델에서 사용하기 위한 라이브데이터
      **********************************************************************************************/
-    //TODO 사용자 토큰 등록
+    //TODO 001. 사용자 토큰 등록
     val userTokenRegisterLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserTokenRegDto>> =
         MutableLiveData()
 
-    //TODO 사용자 토큰 삭제 - 나중에 필요하면
+    //TODO 002. 사용자 토큰 삭제
+    val userTokenDeleteLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserTokenDelDto>> =
+        MutableLiveData()
 
-
-    //TODO 001. 회원여부 확인
+    //TODO 003. 회원여부 확인
     val checkMemberLiveDataRepository: MutableLiveData<NetworkResult<ResponseCheckMember>> =
         MutableLiveData()
 
-    //TODO 002. 가입신청
+    //TODO 004. 가입신청
     val joinLiveDataRepository: MutableLiveData<NetworkResult<ResponseJoinDto>> = MutableLiveData()
 
-    //TODO 003. 로그인
+    //TODO 005. 로그인
     val loginLiveDataRepository: MutableLiveData<NetworkResult<ResponseLoginDto>> =
         MutableLiveData()
 
@@ -87,36 +90,59 @@ class ArPangRepository {
     /***********************************************************************************************
      * API response를 라이브데이터에 추가
      **********************************************************************************************/
-    //TODO 사용자 토큰 등록
+    //TODO 001. 사용자 토큰 등록
     fun requestUserTokenRegister(requestUserTokenRegDto: RequestUserTokenRegDto) {
         arPangInterface.postInsertUserToken(
             requestUserTokenRegDto.user_token.toString(),
             requestUserTokenRegDto.app_id.toString(),
-            requestUserTokenRegDto.device_id.toString(), requestUserTokenRegDto.user_id
-        )
-            .enqueue(object : Callback<ResponseUserTokenRegDto> {
-                override fun onResponse(
-                    call: Call<ResponseUserTokenRegDto>,
-                    response: Response<ResponseUserTokenRegDto>
-                ) {
-                    if (response.body()?.msgCode.equals("SUCCESS")) {
-                        userTokenRegisterLiveDataRepository.postValue(NetworkResult.Success(response.body()))
-                    } else {
-                        userTokenRegisterLiveDataRepository.postValue(
-                            NetworkResult.Error(
-                                response.body()?.msgCode
-                            )
+            requestUserTokenRegDto.device_id.toString(),
+            requestUserTokenRegDto.user_id
+        ).enqueue(object : Callback<ResponseUserTokenRegDto> {
+            override fun onResponse(
+                call: Call<ResponseUserTokenRegDto>,
+                response: Response<ResponseUserTokenRegDto>
+            ) {
+                if (response.body()?.msgCode.equals("SUCCESS")) {
+                    userTokenRegisterLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    userTokenRegisterLiveDataRepository.postValue(
+                        NetworkResult.Error(
+                            response.body()?.msgCode
                         )
-                    }
+                    )
                 }
+            }
 
-                override fun onFailure(call: Call<ResponseUserTokenRegDto>, t: Throwable) {
-                    userTokenRegisterLiveDataRepository.postValue(NetworkResult.Error(t.message))
-                }
-            })
+            override fun onFailure(call: Call<ResponseUserTokenRegDto>, t: Throwable) {
+                userTokenRegisterLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
     }
 
-    //TODO 001. 회원여부 확인
+    //TODO 002. 사용자 토큰 삭제
+    fun requestUserTokenDelete(requestUserTokenDelDto: RequestUserTokenDelDto) {
+        arPangInterface.postDeleteUserToken(
+            requestUserTokenDelDto.app_id.toString(),
+            requestUserTokenDelDto.device_id.toString()
+        ).enqueue(object : Callback<ResponseUserTokenDelDto> {
+            override fun onResponse(
+                call: Call<ResponseUserTokenDelDto>,
+                response: Response<ResponseUserTokenDelDto>
+            ) {
+                if (response.body()?.msgCode.equals("SUCCESS")) {
+                    userTokenDeleteLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    userTokenDeleteLiveDataRepository.postValue(NetworkResult.Error(response.body()?.msgCode))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseUserTokenDelDto>, t: Throwable) {
+                userTokenDeleteLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 003. 회원여부 확인
     fun requestCheckMember(requestCheckMember: RequestCheckMember) {
         arPangInterface.postCheckMember(requestCheckMember)
             .enqueue(object : Callback<ResponseCheckMember> {
@@ -139,7 +165,7 @@ class ArPangRepository {
             })
     }
 
-    //TODO 002. 가입신청
+    //TODO 004. 가입신청
     fun requestJoin(requestJoinDto: RequestJoinDto) {
         arPangInterface.postJoin(requestJoinDto).enqueue(object :
             Callback<ResponseJoinDto> {
@@ -147,13 +173,11 @@ class ArPangRepository {
                 call: Call<ResponseJoinDto>,
                 response: Response<ResponseJoinDto>
             ) {
-                if (response.code() == 200) {
+                if (response.body()?.msgCode.equals("SUCCESS")) {
                     joinLiveDataRepository.postValue(NetworkResult.Success(response.body()))
                 } else {
                     joinLiveDataRepository.postValue(
-                        NetworkResult.Error(
-                            response.message().toString()
-                        )
+                        NetworkResult.Error(response.body()?.msgCode)
                     )
                 }
             }
@@ -164,20 +188,18 @@ class ArPangRepository {
         })
     }
 
-    //TODO 003. 로그인
+    //TODO 005. 로그인
     fun requestLogin(requestLoginDto: RequestLoginDto) {
         arPangInterface.postLogin(requestLoginDto).enqueue(object : Callback<ResponseLoginDto> {
             override fun onResponse(
                 call: Call<ResponseLoginDto>,
                 response: Response<ResponseLoginDto>
             ) {
-                if (response.code() == 200) {
+                if (response.body()?.msgCode.equals("SUCCESS")) {
                     loginLiveDataRepository.postValue(NetworkResult.Success(response.body()))
                 } else {
                     loginLiveDataRepository.postValue(
-                        NetworkResult.Error(
-                            response.message().toString()
-                        )
+                        NetworkResult.Error(response.body()?.msgCode)
                     )
                 }
             }

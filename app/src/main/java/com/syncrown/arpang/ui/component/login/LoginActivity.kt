@@ -26,29 +26,23 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.checkMemberResponseLiveData().observe(this) { result ->
             when (result) {
                 is NetworkResult.Success -> {
+                    goMain()
+                }
+
+                is NetworkResult.Error -> {
                     result.data?.let { data ->
                         when (data.msgCode) {
-                            "SUCCESS" -> {
-                                goMain()
+                            "NONE_ID" -> {
+                                goJoinConsent()
                             }
 
                             "FAIL" -> {
                                 Log.e(TAG, "오류")
                             }
 
-                            "NONE_ID" -> {
-                                goJoinConsent()
-                            }
-
-                            else -> {
-                                Log.e(TAG, "알수없는 메시지 코드 : ${data.msgCode} ")
-                            }
+                            else -> {}
                         }
                     }
-                }
-
-                is NetworkResult.Error -> {
-                    Log.e(TAG, "네트워크 오류")
                 }
             }
         }
@@ -57,7 +51,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.initialize(this)
         loginViewModel.googleAccount.observe(this, Observer { account ->
             if (account != null) {
-                val userId = "g " + account.id.toString()
+                val userId = "g-" + account.id.toString()
 
                 loginViewModel.checkMember(userId)
             }
@@ -117,7 +111,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
     }
 
     override fun onAppleIdSuccess(sub: String) {
-        val userId = "a $sub"
+        val userId = "a-$sub"
         loginViewModel.checkMember(userId)
     }
 

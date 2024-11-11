@@ -65,22 +65,23 @@ class SplashActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     override fun observeViewModel() {
         lifecycleScope.launch {
+            splashViewModel.insertUserTokenResponseLiveData().observe(this@SplashActivity) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        Log.e(TAG, "토큰 전송 완료")
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e(TAG, "오류 : $result")
+                    }
+                }
+            }
+
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.versionTxt.text = "v" + splashViewModel.appVersion(this@SplashActivity)
             }
         }
 
-        splashViewModel.insertUserTokenResponseLiveData().observe(this) { result ->
-            when (result) {
-                is NetworkResult.Success -> {
-                    Log.e(TAG, "토큰 전송 완료")
-                }
-
-                is NetworkResult.Error -> {
-                    Log.e(TAG, "오류 : $result")
-                }
-            }
-        }
     }
 
     override fun initViewBinding() {

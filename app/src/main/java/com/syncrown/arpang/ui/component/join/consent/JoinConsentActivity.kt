@@ -21,27 +21,13 @@ class JoinConsentActivity : BaseActivity() {
         joinConsentViewModel.joinMemberResponseLiveData().observe(this) { result ->
             when (result) {
                 is NetworkResult.Success -> {
-                    result.data?.let { data ->
-                        when (data.msgCode) {
-                            "DUPPLE" -> {
-                                Log.e(TAG, "아이디 중복")
-                            }
-
-                            "SUCCESS" -> {
-                                Log.e(TAG, "성공 id : " + AppDataPref.userId)
-                                AppDataPref.save(this)
-                                goWelcome()
-                            }
-
-                            else -> {
-                                Log.e(TAG, "알수없는 메시지 코드 : ${data.msgCode} ")
-                            }
-                        }
-                    }
+                    Log.e(TAG, "성공 id : " + AppDataPref.userId)
+                    AppDataPref.save(this)
+                    goWelcome()
                 }
 
                 is NetworkResult.Error -> {
-                    Log.e(TAG, "네트워크 오류")
+                    Log.e(TAG, "오류 : $result")
                 }
             }
         }

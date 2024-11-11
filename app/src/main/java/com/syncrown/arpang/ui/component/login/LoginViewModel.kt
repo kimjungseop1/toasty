@@ -147,7 +147,7 @@ class LoginViewModel : BaseViewModel() {
                 // Log the results
                 Log.e("jung", uniqueId)
 
-                val userId = "f $uniqueId"
+                val userId = "f-$uniqueId"
 
                 checkMember(userId)
             } catch (e: JSONException) {
@@ -197,7 +197,7 @@ class LoginViewModel : BaseViewModel() {
             if (user != null) {
                 //TODO
                 val id = user.id
-                var userId = "k $id"
+                var userId = "k-$id"
 
                 checkMember(userId)
             } else {
@@ -260,7 +260,7 @@ class LoginViewModel : BaseViewModel() {
 
             val uniqueId = result.profile?.id
             Log.e("jung", "uniqueid : $uniqueId")
-            val userId = "n $uniqueId"
+            val userId = "n-$uniqueId"
 
             withContext(Dispatchers.Main) {
                 checkMember(userId)

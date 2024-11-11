@@ -23,26 +23,38 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="20dp" />
 
-    <View
-        android:id="@+id/divider_1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_CECECE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupState_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="desc_1, deleteAllBtn, flexSearchView, divider_2, desc_2, flexRecommendView" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupState_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="searchingView" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupState_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="desc_6, customTabView, pagerView" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/desc_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:text="최근 검색어"
+        android:text="@string/search_step_first_desc_1"
         android:textColor="@color/color_black"
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/divider_1" />
+        app:layout_constraintTop_toBottomOf="@id/actionbar" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/deleteAllBtn"
@@ -50,7 +62,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:text="전체삭제"
+        android:text="@string/search_step_first_desc_2"
         android:textColor="@color/color_868686"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@id/desc_1"
@@ -73,15 +85,15 @@
         android:id="@+id/emptySearchView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="최근 검색어가 없습니다."
+        android:paddingTop="35dp"
+        android:paddingBottom="45dp"
+        android:text="@string/search_step_first_desc_4"
         android:textColor="@color/color_CECECE"
         android:textSize="12dp"
-        android:paddingBottom="45dp"
-        android:paddingTop="35dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/desc_1"/>
+        app:layout_constraintTop_toBottomOf="@id/desc_1" />
 
     <View
         android:id="@+id/divider_2"
@@ -98,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:text="추천 검색어"
+        android:text="@string/search_step_first_desc_3"
         android:textColor="@color/color_black"
         android:textSize="16dp"
         android:textStyle="bold"
@@ -116,4 +128,149 @@
         app:layout_constraintEnd_toStartOf="@id/guideline_right"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/desc_2" />
+
+    <ScrollView
+        android:id="@+id/searchingView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/search_step_second_desc_1"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desc_3" />
+
+            <View
+                android:id="@+id/divider_3"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="22dp"
+                android:background="@color/color_f5f5f5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerUser" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/search_step_second_desc_2"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desc_4" />
+
+            <View
+                android:id="@+id/divider_4"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="22dp"
+                android:background="@color/color_f5f5f5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerShare" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/desc_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/search_step_second_desc_3"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_4" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerStorage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desc_5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="21dp"
+        android:bufferType="spannable"
+        android:text="@string/search_step_third_desc_1"
+        android:textColor="@color/color_black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionbar" />
+
+    <com.syncrown.arpang.ui.commons.CustomTabLayout3
+        android:id="@+id/customTabView"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_marginTop="23dp"
+        android:clipToPadding="false"
+        android:paddingStart="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/desc_6"
+        app:tabIndicator="@null"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/color_white"
+        app:tabTextAppearance="@style/tabTextSizeStyle"
+        app:tabTextColor="@color/color_5B5B5B" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pagerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customTabView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
