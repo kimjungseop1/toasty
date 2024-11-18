@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,22 +22,24 @@ import com.syncrown.arpang.databinding.FragmentHomeBinding
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.guide.ArGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.event.EventDetailActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.free_print.FreeImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
-import kotlinx.coroutines.launch
+import com.syncrown.arpang.ui.util.PaperStatusEnum
+import com.syncrown.arpang.ui.util.PrintUtil
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: MainViewModel by activityViewModels()
 
     private val handler = Handler(Looper.getMainLooper())
+
+    val printUtil = PrintUtil.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,6 +103,8 @@ class HomeFragment : Fragment() {
 
         //TODO 이벤트
         showBottomEventBanner()
+
+        updateView()
     }
 
     private fun invalidateTab() {
@@ -135,6 +138,36 @@ class HomeFragment : Fragment() {
         invalidateTab()
     }
 
+    private fun updateView() {
+        homeViewModel.connectStateShare.observe(viewLifecycleOwner) { connectState ->
+            if (connectState) {
+                binding.connectPrintView.visibility = View.GONE
+            } else {
+                binding.connectPrintView.visibility = View.VISIBLE
+            }
+        }
+
+        printUtil.status.observe(requireActivity()) { status ->
+            binding.guidePaperBtn.visibility = View.GONE
+
+            when (status) {
+                PaperStatusEnum.PAPER_OUT -> {
+                    binding.desc1.text = getString(R.string.home_desc_1_1)
+                    binding.guidePaperBtn.visibility = View.VISIBLE
+                }
+
+                PaperStatusEnum.PRINTING -> {}
+                PaperStatusEnum.PAPER_HATCH_COVER_OPEN -> {}
+                PaperStatusEnum.LOW_BATTERY_VOLTAGE -> {}
+                PaperStatusEnum.PRINT_HEAD_OVERHEATING -> {}
+                PaperStatusEnum.OK -> {
+                    binding.desc1.text = "용지 : aaa"
+                    binding.guidePaperBtn.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     private fun goConnectDevice() {
         val intent = Intent(requireContext(), ConnectDeviceActivity::class.java)
         connectDeviceLauncher.launch(intent)
@@ -143,9 +176,8 @@ class HomeFragment : Fragment() {
     private val connectDeviceLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                Log.e("jung","fragment update print status ui")
                 //프린트 연결 뷰 gone, desc1 텍스트 변경
-                homeViewModel.updatePrinterStatus("connectDevice")
+
             }
         }
 

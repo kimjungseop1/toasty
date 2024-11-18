@@ -12,6 +12,7 @@ import android.util.Base64
 import android.view.View
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.Locale
 
 class CommonFunc {
     companion object {
@@ -133,6 +134,20 @@ class CommonFunc {
             view.draw(canvas)
 
             return bitmap
+        }
+
+        fun byteArrToHex(inBytArr: ByteArray): String {
+            val strBuilder = StringBuilder()
+            val j = inBytArr.size
+            for (i in 0 until j) {
+                strBuilder.append(byte2Hex(inBytArr[i]))
+                strBuilder.append(":")
+            }
+            return strBuilder.toString()
+        }
+
+        private fun byte2Hex(inByte: Byte): String {
+            return String.format("%02x", inByte).uppercase(Locale.getDefault())
         }
     }
 }

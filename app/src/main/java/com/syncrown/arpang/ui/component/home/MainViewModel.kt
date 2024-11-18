@@ -10,7 +10,8 @@ class MainViewModel : BaseViewModel() {
     /***********************************************************************************************
      * 메인
      **********************************************************************************************/
-    private val _onPaperGuideActivityClosed : MutableLiveData<String> = MutableLiveData("")
+    //TODO 용지연결페이지에서 배너를 눌러 메인의 탭4번으로 바로 이동할떄 체킹
+    private val _onPaperGuideActivityClosed: MutableLiveData<String> = MutableLiveData("")
     val onPaperGuideActivityClosed: LiveData<String> get() = _onPaperGuideActivityClosed
 
     fun paperGuideActivityClosed(newMessage: String) {
@@ -21,11 +22,12 @@ class MainViewModel : BaseViewModel() {
     /***********************************************************************************************
      * 홈
      **********************************************************************************************/
-    private val _updatePrintStatus = MutableLiveData<String>()
-    val onUpdatePrinterStatus: LiveData<String> get() = _updatePrintStatus
+    //TODO 프린트가 연결되어있는지 여부 (메인액티비티, 홈프레그먼트 둘다 사용)
+    private val _connectState = MutableLiveData<Boolean>()
+    val connectStateShare: LiveData<Boolean> get() = _connectState
 
-    fun updatePrinterStatus(newData: String) {
-        _updatePrintStatus.postValue(newData)
+    fun updateConnectedState(newState: Boolean) {
+        _connectState.value = newState
     }
 
     /***********************************************************************************************

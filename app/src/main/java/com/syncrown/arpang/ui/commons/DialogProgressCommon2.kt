@@ -9,20 +9,21 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.syncrown.arpang.databinding.DialogLoading1Binding
 import com.syncrown.arpang.databinding.DialogLoadingBinding
 
 
-class DialogProgressCommon : DialogFragment() {
+class DialogProgressCommon2 : DialogFragment() {
     private lateinit var dialog: Dialog
-    private lateinit var dialogLoadingBinding: DialogLoadingBinding
+    private lateinit var dialogLoadingBinding: DialogLoading1Binding
 
-    private fun createNormal(): DialogProgressCommon {
-        val dialog = DialogProgressCommon()
+    private fun createNormal(): DialogProgressCommon2 {
+        val dialog = DialogProgressCommon2()
         return dialog
     }
 
-    private fun createDialog(): DialogProgressCommon {
-        val dialog: DialogProgressCommon = createNormal()
+    private fun createDialog(): DialogProgressCommon2 {
+        val dialog: DialogProgressCommon2 = createNormal()
 
         return dialog
     }
@@ -53,13 +54,22 @@ class DialogProgressCommon : DialogFragment() {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT
             )
-            setDimAmount(0f)
+            setDimAmount(0.7f)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        dialogLoadingBinding = DialogLoadingBinding.inflate(layoutInflater)
+        dialogLoadingBinding = DialogLoading1Binding.inflate(layoutInflater)
         dialog.setContentView(dialogLoadingBinding.root)
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
+        dialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                // Back 키 입력 무시
+                true
+            } else {
+                false
+            }
+        }
+
 
         dialog.show()
 

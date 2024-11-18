@@ -212,9 +212,10 @@ class SearchActivity : BaseActivity() {
 
                 tag = position
 
-                setOnClickListener {
-                    val clickedView = it
-
+                setOnClickListener { _ ->
+                    binding.actionbar.actionSearch.setText(text)
+                    binding.actionbar.actionSearch.setSelection(text.length)
+                    binding.actionbar.actionSearch.requestFocus()
                 }
             }
 

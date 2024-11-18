@@ -26,6 +26,7 @@ import com.syncrown.arpang.databinding.ActivityMainBinding
 import com.syncrown.arpang.databinding.BottomSheetEventBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.BackPressCloseHandler
+import com.syncrown.arpang.ui.commons.DialogProgressCommon2
 import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
 import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.arpang.ui.component.home.search.SearchActivity
@@ -35,7 +36,10 @@ import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.MoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
+import com.syncrown.arpang.ui.util.PrintUtil
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -45,6 +49,10 @@ class MainActivity : BaseActivity() {
     private lateinit var backPressCloseHandler: BackPressCloseHandler
 
     private var bottomSheetDialog: BottomSheetDialog? = null
+
+    private val printUtil = PrintUtil.getInstance()
+    private var batteryCheckJob: Job? = null
+    private var printerStatusJob: Job? = null
 
     override fun observeViewModel() {
         lifecycleScope.launch {
@@ -63,12 +71,33 @@ class MainActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            mainViewModel.onUpdatePrinterStatus.observe(this@MainActivity, Observer { data ->
-                //프린터 배터리 상태 업데이트
-                Log.e("jung", "main update print state : $data")
+            printUtil.connectionState.observe(this@MainActivity) { isConnect ->
+                Log.e("jung", "main isConnect : $isConnect")
+                mainViewModel.updateConnectedState(isConnect)
+
+                if (isConnect) {
+                    startBatteryCheckJob()
+
+                    startPrinterStatusJob()
+                } else {
+                    batteryCheckJob?.cancel()
+                    printerStatusJob?.cancel()
+
+                    binding.actionbar.actionBattery.visibility = View.GONE
+                }
+            }
+
+            printUtil.batteryVol.observe(this@MainActivity) { batteryLevel ->
+                Log.e("jung", "main batteryLevel : $batteryLevel")
                 binding.actionbar.actionBattery.visibility = View.VISIBLE
-                binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_4)
-            })
+                when {
+                    batteryLevel == 100 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_4)
+                    batteryLevel in 75..99 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_3)
+                    batteryLevel in 50..74 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_2)
+                    batteryLevel in 25..50 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_1)
+                    batteryLevel < 25 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_charge)
+                }
+            }
         }
     }
 
@@ -81,6 +110,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         backPressCloseHandler = BackPressCloseHandler(this, binding.bottomNavigation)
         onBackPressedDispatcher.addCallback(this, backPressCloseHandler)
+
+        printUtil.init(this)
 
         //TODO default Fragment
         changeFragment(HomeFragment())
@@ -173,6 +204,36 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private fun startBatteryCheckJob() {
+        batteryCheckJob?.cancel()
+
+        batteryCheckJob = lifecycleScope.launch {
+            while (true) {
+                printUtil.sendBatteryVol()
+                delay(2000)
+            }
+        }
+    }
+
+    private fun startPrinterStatusJob() {
+        printerStatusJob?.cancel()
+
+        printerStatusJob = lifecycleScope.launch {
+            while (true) {
+                printUtil.sendPrinterStatus()
+                delay(1500)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        batteryCheckJob?.cancel()
+        printerStatusJob?.cancel()
+
+        printUtil.disConnect()
+    }
+
     private fun changeFragment(fragment: Fragment): Fragment {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, fragment)
@@ -195,7 +256,6 @@ class MainActivity : BaseActivity() {
         if (AppDataPref.isMainEvent) {
             showEventBottomSheet()
         }
-
 
     }
 

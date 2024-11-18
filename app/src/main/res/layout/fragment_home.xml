@@ -195,6 +195,7 @@
                     android:textColor="@color/color_8e5d4b"
                     android:textSize="16dp"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/desc_2"
                     app:layout_constraintEnd_toEndOf="@id/labelCardView"
                     app:layout_constraintTop_toTopOf="@id/desc_2" />
