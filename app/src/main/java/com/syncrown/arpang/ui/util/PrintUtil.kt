@@ -66,16 +66,16 @@ class PrintUtil private constructor() {
         printPP = object : PrintPort(context, onPrinterStatusListener) {
             override fun onConnected() {
                 val deviceStatus = printPP.printerStatus()
+                Log.e("jung", "onConnected : $deviceStatus")
                 if (deviceStatus) {
-                    Log.e("jung", "onConnected")
                     _connectionState.value = true
                 }
             }
 
             override fun ondisConnected() {
                 val deviceStatus = printPP.printerStatus()
-                if (deviceStatus) {
-                    Log.e("jung", "ondisConnected")
+                Log.e("jung", "ondisConnected : $deviceStatus")
+                if (!deviceStatus) {
                     _connectionState.value = false
                 }
             }

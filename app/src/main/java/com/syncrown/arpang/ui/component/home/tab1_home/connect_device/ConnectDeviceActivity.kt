@@ -68,11 +68,9 @@ class ConnectDeviceActivity : BaseActivity() {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         mBtAdapter = bluetoothManager.adapter
 
-        // Register for broadcasts when a device is discovered
         var filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         this.registerReceiver(mReceiver, filter)
 
-        // Register for broadcasts when discovery has finished
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         this.registerReceiver(mReceiver, filter)
 
@@ -85,6 +83,11 @@ class ConnectDeviceActivity : BaseActivity() {
 
             doDiscovery()
         }
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            binding.searchBtn.performClick()
+        }, 500)
     }
 
     @SuppressLint("MissingPermission")
