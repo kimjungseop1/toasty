@@ -3,8 +3,8 @@ package com.syncrown.arpang.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class RequestNoticeListDto {
-    @SerializedName("lang_code")
+class ResponseCheckNickNameDto {
+    @SerializedName("msgCode")
     @Expose
-    var lang_code: String? = null
+    var msgCode: String = ""
 }

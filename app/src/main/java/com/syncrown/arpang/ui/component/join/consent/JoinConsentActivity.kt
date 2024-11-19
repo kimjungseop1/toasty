@@ -1,6 +1,7 @@
 package com.syncrown.arpang.ui.component.join.consent
 
 import android.content.Intent
+import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -8,6 +9,7 @@ import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivityConsentBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestJoinDto
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.component.join.welcome.WelcomeActivity
@@ -21,9 +23,45 @@ class JoinConsentActivity : BaseActivity() {
         joinConsentViewModel.joinMemberResponseLiveData().observe(this) { result ->
             when (result) {
                 is NetworkResult.Success -> {
-                    Log.e(TAG, "성공 id : " + AppDataPref.userId)
-                    AppDataPref.save(this)
-                    goWelcome()
+                    result.data.let { data ->
+                        when (data?.msgCode) {
+                            "SUCCESS" -> {
+                                Log.e(TAG, "성공 id : " + AppDataPref.userId)
+                                AppDataPref.save(this)
+
+                                val requestLoginDto = RequestLoginDto()
+                                requestLoginDto.user_id = AppDataPref.userId
+                                joinConsentViewModel.login(requestLoginDto)
+                            }
+
+                            "DUPPLE" -> {}
+
+                            else -> {}
+                        }
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "오류 : $result")
+                }
+            }
+        }
+
+        joinConsentViewModel.loginResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data.let { data ->
+                        when (data?.msgCode) {
+                            "SUCCESS" -> {
+                                AppDataPref.save(this)
+                                goWelcome()
+                            }
+
+                            "FAIL" -> { Log.e("jung","Consent FAIL") }
+                            "NONE_ID" -> { Log.e("jung","Consent NONE_ID") }
+                            else -> {}
+                        }
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -74,6 +112,11 @@ class JoinConsentActivity : BaseActivity() {
         binding.joinBtn.setOnClickListener {
             val requestJoinDto = RequestJoinDto()
             requestJoinDto.user_id = AppDataPref.userId
+            requestJoinDto.login_connt_accnt = AppDataPref.login_connect_site
+            requestJoinDto.userid_se = 0
+            requestJoinDto.use_se = 1
+            requestJoinDto.markt_recptn_agre = 1
+            requestJoinDto.app_id = "APP_ARPANG"
 
             joinConsentViewModel.joinMember(requestJoinDto)
         }

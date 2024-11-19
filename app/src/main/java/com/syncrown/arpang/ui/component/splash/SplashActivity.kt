@@ -19,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivitySplashBinding
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.SplashViewModelFactory
@@ -85,6 +86,29 @@ class SplashActivity : BaseActivity() {
 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.versionTxt.text = "v" + splashViewModel.appVersion(this@SplashActivity)
+            }
+        }
+
+        splashViewModel.loginResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data.let { data ->
+                        when (data?.msgCode) {
+                            "SUCCESS" -> {
+                                AppDataPref.save(this)
+                                goMain()
+                            }
+
+                            "FAIL" -> { Log.e("jung","Consent FAIL") }
+                            "NONE_ID" -> { Log.e("jung","Consent NONE_ID") }
+                            else -> {}
+                        }
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "오류 : $result")
+                }
             }
         }
 
@@ -182,7 +206,9 @@ class SplashActivity : BaseActivity() {
             if (AppDataPref.userId.isEmpty()) {
                 goLogin()
             } else {
-                goMain()
+                val requestLoginDto = RequestLoginDto()
+                requestLoginDto.user_id = AppDataPref.userId
+                splashViewModel.login(requestLoginDto)
             }
         }
     }

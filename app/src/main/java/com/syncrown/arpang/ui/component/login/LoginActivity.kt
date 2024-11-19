@@ -10,6 +10,7 @@ import com.facebook.CallbackManager
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.ActivtyLoginBinding
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.join.consent.JoinConsentActivity
@@ -26,23 +27,54 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.checkMemberResponseLiveData().observe(this) { result ->
             when (result) {
                 is NetworkResult.Success -> {
-                    goMain()
+                    result.data?.let { data ->
+                        when (data.msgCode) {
+                            "SUCCESS" -> {
+                                AppDataPref.save(this)
+
+                                if (result.data.member_check == 1) {
+                                    //로그인
+                                    val requestLoginDto = RequestLoginDto()
+                                    requestLoginDto.user_id = AppDataPref.userId
+
+                                    loginViewModel.login(requestLoginDto)
+                                } else {
+                                    goJoinConsent()
+                                }
+                            }
+
+                            "FAIL" -> {}
+
+                            "NONE_ID" -> {}
+                        }
+                    }
                 }
 
                 is NetworkResult.Error -> {
-                    result.data?.let { data ->
-                        when (data.msgCode) {
-                            "NONE_ID" -> {
-                                goJoinConsent()
+
+                }
+            }
+        }
+
+        loginViewModel.loginResponseLiveData().observe(this) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data.let { data ->
+                        when (data?.msgCode) {
+                            "SUCCESS" -> {
+                                AppDataPref.save(this)
+                                goMain()
                             }
 
-                            "FAIL" -> {
-                                Log.e(TAG, "오류")
-                            }
-
+                            "FAIL" -> { Log.e("jung","login FAIL") }
+                            "NONE_ID" -> { Log.e("jung","login NONE_ID") }
                             else -> {}
                         }
                     }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e(TAG, "오류 : $result")
                 }
             }
         }
@@ -52,7 +84,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.googleAccount.observe(this, Observer { account ->
             if (account != null) {
                 val userId = "g-" + account.id.toString()
-
+                AppDataPref.login_connect_site = "g"
                 loginViewModel.checkMember(userId)
             }
         })
@@ -112,6 +144,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
 
     override fun onAppleIdSuccess(sub: String) {
         val userId = "a-$sub"
+        AppDataPref.login_connect_site = "a"
         loginViewModel.checkMember(userId)
     }
 

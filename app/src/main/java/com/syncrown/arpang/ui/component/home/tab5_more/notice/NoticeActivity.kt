@@ -17,19 +17,7 @@ class NoticeActivity : BaseActivity() {
     private val noticeViewModel: NoticeViewModel by viewModels()
 
     override fun observeViewModel() {
-        noticeViewModel.noticeListResponseLiveData().observe(this) { result ->
-            when (result) {
-                is NetworkResult.Success -> {
-                    result.data?.let { data ->
 
-                    }
-                }
-
-                is NetworkResult.Error -> {
-                    Log.e(TAG, "네트워크 오류")
-                }
-            }
-        }
     }
 
     override fun initViewBinding() {
@@ -45,7 +33,7 @@ class NoticeActivity : BaseActivity() {
         }
         binding.actionbar.actionTitle.text = getString(R.string.notice_title)
 
-        noticeViewModel.getNoticeList("ko")
+
         setNoticeList()
     }
 

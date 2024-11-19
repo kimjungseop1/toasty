@@ -10,8 +10,11 @@ class AppDataPref {
         private var TAG: String = "jung"
 
         var AccessToken = "" // 로그인 토큰
+        var reAuthorization = "" //리프레시 토큰
+
         var fcmToken = "" // fcm 토큰 -> 프리퍼런스 저장할필요없음
         var userId = "" // 사용자 id
+        var login_connect_site = "" // 로그인 접속 사이트
 
         var isMainEvent = true // 메인화면에서 이벤트팝업 더이상 보지않기
 

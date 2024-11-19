@@ -34,7 +34,9 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
+import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,14 +49,15 @@ import kotlin.coroutines.resumeWithException
 
 class LoginViewModel : BaseViewModel() {
     private val arPangRepository: ArPangRepository = ArPangRepository()
-    private val checkMemberResponseLiveData: LiveData<NetworkResult<ResponseCheckMember>> =
-        arPangRepository.checkMemberLiveDataRepository
 
     /**
      * =============================================================================================
      * 회원여부 체크
      * =============================================================================================
      */
+    private val checkMemberResponseLiveData: LiveData<NetworkResult<ResponseCheckMember>> =
+        arPangRepository.checkMemberLiveDataRepository
+
     fun checkMember(memberId: String) {
         viewModelScope.launch {
             val requestCheckMember = RequestCheckMember()
@@ -70,6 +73,24 @@ class LoginViewModel : BaseViewModel() {
 
     fun checkMemberResponseLiveData(): LiveData<NetworkResult<ResponseCheckMember>> {
         return checkMemberResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 로그인
+     * =============================================================================================
+     */
+    private val loginResponseLiveData: LiveData<NetworkResult<ResponseLoginDto>> =
+        arPangRepository.loginLiveDataRepository
+
+    fun login(requestLoginDto: RequestLoginDto) {
+        viewModelScope.launch {
+            arPangRepository.requestLogin(requestLoginDto)
+        }
+    }
+
+    fun loginResponseLiveData(): LiveData<NetworkResult<ResponseLoginDto>> {
+        return loginResponseLiveData
     }
 
     /**
@@ -149,6 +170,8 @@ class LoginViewModel : BaseViewModel() {
 
                 val userId = "f-$uniqueId"
 
+                AppDataPref.login_connect_site = "f"
+
                 checkMember(userId)
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -198,6 +221,8 @@ class LoginViewModel : BaseViewModel() {
                 //TODO
                 val id = user.id
                 var userId = "k-$id"
+
+                AppDataPref.login_connect_site = "k"
 
                 checkMember(userId)
             } else {
@@ -261,6 +286,7 @@ class LoginViewModel : BaseViewModel() {
             val uniqueId = result.profile?.id
             Log.e("jung", "uniqueid : $uniqueId")
             val userId = "n-$uniqueId"
+            AppDataPref.login_connect_site = "n"
 
             withContext(Dispatchers.Main) {
                 checkMember(userId)

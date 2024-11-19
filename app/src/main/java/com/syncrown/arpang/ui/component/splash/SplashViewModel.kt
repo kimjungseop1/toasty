@@ -18,8 +18,10 @@ import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember
+import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
+import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import com.syncrown.arpang.ui.commons.CommonFunc
 import kotlinx.coroutines.launch
@@ -135,5 +137,23 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
 
     fun insertUserTokenResponseLiveData(): LiveData<NetworkResult<ResponseUserTokenRegDto>> {
         return insertUserTokenResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 로그인 - 자동로그인
+     * =============================================================================================
+     */
+    private val loginResponseLiveData: LiveData<NetworkResult<ResponseLoginDto>> =
+        arPangRepository.loginLiveDataRepository
+
+    fun login(requestLoginDto: RequestLoginDto) {
+        viewModelScope.launch {
+            arPangRepository.requestLogin(requestLoginDto)
+        }
+    }
+
+    fun loginResponseLiveData(): LiveData<NetworkResult<ResponseLoginDto>> {
+        return loginResponseLiveData
     }
 }

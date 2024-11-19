@@ -16,9 +16,8 @@ import java.util.Locale
 
 class PrintUtil private constructor() {
     lateinit var printPP: PrintPort
-    private var num: Int = 0
-    private var printerType: Int = 0
-    private var isLabel: Boolean = false
+
+    private var isReceiverEnabled = false
 
     //TODO 연결상태 체크
     private val _connectionState = MutableLiveData<Boolean>()
@@ -65,19 +64,19 @@ class PrintUtil private constructor() {
     fun init(context: Activity) {
         printPP = object : PrintPort(context, onPrinterStatusListener) {
             override fun onConnected() {
-                val deviceStatus = printPP.printerStatus()
-                Log.e("jung", "onConnected : $deviceStatus")
-                if (deviceStatus) {
+                if (isReceiverEnabled) {
+                    Log.e("jung", "onConnected")
                     _connectionState.value = true
                 }
+                isReceiverEnabled = false
             }
 
             override fun ondisConnected() {
-                val deviceStatus = printPP.printerStatus()
-                Log.e("jung", "ondisConnected : $deviceStatus")
-                if (!deviceStatus) {
+                if (isReceiverEnabled) {
+                    Log.e("jung", "ondisConnected")
                     _connectionState.value = false
                 }
+                isReceiverEnabled = false
             }
 
             override fun onsateOFF() {
@@ -177,6 +176,8 @@ class PrintUtil private constructor() {
     }
 
     fun connect(name: String, address: String?) {
+        isReceiverEnabled = true
+
         if (printPP.isConnected) {
             printPP.disconnect()
         }
@@ -185,6 +186,8 @@ class PrintUtil private constructor() {
     }
 
     fun disConnect() {
+        isReceiverEnabled = true
+
         if (printPP.isConnected) {
             printPP.disconnect()
         }

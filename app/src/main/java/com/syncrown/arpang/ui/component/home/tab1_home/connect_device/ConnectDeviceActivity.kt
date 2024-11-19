@@ -69,10 +69,10 @@ class ConnectDeviceActivity : BaseActivity() {
         mBtAdapter = bluetoothManager.adapter
 
         var filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        this.registerReceiver(mReceiver, filter)
+        registerReceiver(mReceiver, filter)
 
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        this.registerReceiver(mReceiver, filter)
+        registerReceiver(mReceiver, filter)
 
         //디바이스 목록
         setDeviceList()
