@@ -32,6 +32,7 @@ import com.navercorp.nid.profile.data.NidProfileResponse
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.network.ArPangRepository
+import com.syncrown.arpang.network.NaverClient
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestLoginDto
@@ -164,6 +165,7 @@ class LoginViewModel : BaseViewModel() {
         val graphRequest = GraphRequest.newMeRequest(token) { `object`, _ ->
             try {
                 val uniqueId = `object`?.optString("id", null) ?: ""
+                val email = `object`?.optString("email", null) ?: ""
 
                 // Log the results
                 Log.e("jung", uniqueId)
@@ -171,6 +173,7 @@ class LoginViewModel : BaseViewModel() {
                 val userId = "f-$uniqueId"
 
                 AppDataPref.login_connect_site = "f"
+                AppDataPref.userEmail = email
 
                 checkMember(userId)
             } catch (e: JSONException) {
@@ -219,10 +222,12 @@ class LoginViewModel : BaseViewModel() {
         UserApiClient.instance.me { user: User?, throwable: Throwable? ->
             if (user != null) {
                 //TODO
+                val email = user.kakaoAccount?.email
                 val id = user.id
                 var userId = "k-$id"
 
                 AppDataPref.login_connect_site = "k"
+                AppDataPref.userEmail = email.toString()
 
                 checkMember(userId)
             } else {
@@ -246,6 +251,8 @@ class LoginViewModel : BaseViewModel() {
                 if (accessToken != null) {
                     CoroutineScope(Dispatchers.IO).launch {
                         fetchNaverUserProfile(activity)
+
+                        fetchNaverUserEmail(accessToken)
                     }
                 }
             }
@@ -297,28 +304,27 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
-//    private suspend fun fetchNaverUserProfile(accessToken: String?) {
-//        try {
-//            val naverApiService = NaverClient.instance
-//            val response = naverApiService.getUserProfile("Bearer $accessToken")
-//
-//            withContext(Dispatchers.Main) {
-//                // 가져온 이메일 및 사용자 정보 처리
-//                val email = response.response.email
-//                val name = response.response.name
-//
-//                Log.d("jung", "User email: $email")
-//                Log.d("jung", "User name: $name")
-//
-//                // 회원여부체크
-//                checkMember("n $email")
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
+    private suspend fun fetchNaverUserEmail(accessToken: String?) {
+        try {
+            val naverApiService = NaverClient.instance
+            val response = naverApiService.getUserProfile("Bearer $accessToken")
+
+            withContext(Dispatchers.Main) {
+                // 가져온 이메일 및 사용자 정보 처리
+                val email = response.response.email
+                val name = response.response.name
+
+                Log.d("jung", "User email: $email")
+                Log.d("jung", "User name: $name")
+
+                AppDataPref.userEmail = email
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                e.printStackTrace()
+            }
+        }
+    }
 
 
     /**

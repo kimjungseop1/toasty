@@ -1,5 +1,6 @@
 package com.syncrown.arpang.network
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,6 +13,7 @@ import com.syncrown.arpang.network.model.RequestUpdateProfileDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
+import com.syncrown.arpang.network.model.RequestWithdrawalDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
@@ -20,6 +22,7 @@ import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
+import com.syncrown.arpang.network.model.ResponseWithdrawalDto
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -97,6 +100,10 @@ class ArPangRepository {
 
     //TODO 007. 별명 중복체크
     val checkNickLiveDataRepository: MutableLiveData<NetworkResult<ResponseCheckNickNameDto>> =
+        MutableLiveData()
+
+    //TODO 008. 회원 탈퇴
+    val withdrawalLiveDataRepository: MutableLiveData<NetworkResult<ResponseWithdrawalDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -270,7 +277,7 @@ class ArPangRepository {
                 if (response.code() == 200) {
                     userprofileLiveDataRepository.postValue(NetworkResult.Success(response.body()))
                 } else {
-                    updateProfileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                    userprofileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
                 }
             }
 
@@ -283,6 +290,7 @@ class ArPangRepository {
     //TODO 007. 별명 중복 체크
     fun requestCheckNickName(requestCheckNickNameDto: RequestCheckNickNameDto) {
         arPangInterface.postCheckNickName(
+            requestCheckNickNameDto.user_id,
             requestCheckNickNameDto.nick_nm
         ).enqueue(object : Callback<ResponseCheckNickNameDto> {
             override fun onResponse(
@@ -292,12 +300,34 @@ class ArPangRepository {
                 if (response.code() == 200) {
                     checkNickLiveDataRepository.postValue(NetworkResult.Success(response.body()))
                 } else {
-                    updateProfileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                    checkNickLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
                 }
             }
 
             override fun onFailure(call: Call<ResponseCheckNickNameDto>, t: Throwable) {
                 checkNickLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 008. 회원 탈퇴
+    fun requestWithdrawal(requestWithdrawalDto: RequestWithdrawalDto) {
+        arPangInterface.postWithdrawal(
+            requestWithdrawalDto.user_id
+        ).enqueue(object : Callback<ResponseWithdrawalDto> {
+            override fun onResponse(
+                call: Call<ResponseWithdrawalDto>,
+                response: Response<ResponseWithdrawalDto>
+            ) {
+                if (response.code() == 200) {
+                    withdrawalLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    withdrawalLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseWithdrawalDto>, t: Throwable) {
+                withdrawalLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

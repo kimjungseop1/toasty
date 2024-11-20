@@ -91,8 +91,12 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         loginViewModel.initialize(this)
         loginViewModel.googleAccount.observe(this, Observer { account ->
             if (account != null) {
+                val email = account.email
                 val userId = "g-" + account.id.toString()
+
                 AppDataPref.login_connect_site = "g"
+                AppDataPref.userEmail = email.toString()
+
                 loginViewModel.checkMember(userId)
             }
         })

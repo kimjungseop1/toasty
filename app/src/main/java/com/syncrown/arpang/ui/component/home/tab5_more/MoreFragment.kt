@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.FragmentMoreBinding
 import com.syncrown.arpang.network.NetworkResult
@@ -28,7 +27,6 @@ import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivi
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeType
 import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.component.login.LoginActivity
-import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment() {
     private lateinit var binding: FragmentMoreBinding

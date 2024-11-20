@@ -117,6 +117,7 @@ class ChangeNameActivity : BaseActivity() {
         binding.changeBtn.setOnClickListener {
             if (binding.inputName.text?.isNotEmpty() == true) {
                 val requestCheckNickNameDto = RequestCheckNickNameDto()
+                requestCheckNickNameDto.user_id = AppDataPref.userId
                 requestCheckNickNameDto.nick_nm = binding.inputName.text.toString()
 
                 changeNameViewModel.checkNickName(requestCheckNickNameDto)

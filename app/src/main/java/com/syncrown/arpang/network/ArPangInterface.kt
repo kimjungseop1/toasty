@@ -1,9 +1,5 @@
 package com.syncrown.arpang.network
 
-import com.syncrown.arpang.AppDataPref
-import com.syncrown.arpang.network.model.RequestCheckMember
-import com.syncrown.arpang.network.model.RequestJoinDto
-import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
@@ -12,11 +8,10 @@ import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
+import com.syncrown.arpang.network.model.ResponseWithdrawalDto
 import retrofit2.Call
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ArPangInterface {
@@ -95,6 +90,14 @@ interface ArPangInterface {
     @FormUrlEncoded
     @POST("/ntv/atp/nick/duple")
     fun postCheckNickName(
+        @Field("user_id") user_id: String,
         @Field("nick_nm") nick_nm: String
     ): Call<ResponseCheckNickNameDto>
+
+    //TODO 008. 회원탈퇴
+    @FormUrlEncoded
+    @POST("/ntv/atp/member/break")
+    fun postWithdrawal(
+        @Field("user_id") user_id: String,
+    ): Call<ResponseWithdrawalDto>
 }
