@@ -129,8 +129,7 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
         }
 
         binding.appleBtn.setOnClickListener {
-            val dialog = AppleSignInDialog(this, this)
-            dialog.show()
+            loginViewModel.appleLogin(this)
         }
 
         binding.goMainBtn.setOnClickListener {

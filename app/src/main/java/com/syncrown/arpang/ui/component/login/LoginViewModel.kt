@@ -21,6 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.OAuthCredential
+import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
@@ -329,7 +334,44 @@ class LoginViewModel : BaseViewModel() {
 
     /**
      * =============================================================================================
-     * 애플 - AppleSignInDialog.kt 로 변경
+     * 애플
      * =============================================================================================
      */
+    fun appleLogin(activity: Activity, ) {
+        val provider = OAuthProvider.newBuilder("apple.com")
+
+        provider.setScopes(listOf("email", "name"))
+        provider.addCustomParameter("locale", "ko_KR")
+
+        val auth = Firebase.auth
+        val pending = auth.pendingAuthResult
+
+        pending?.addOnSuccessListener { authResult ->
+            handleAppleLoginSuccess(authResult)
+        }?.addOnFailureListener { e ->
+            Log.e("AppleLogin", "Error: ${e.localizedMessage}")
+        }
+
+        auth.startActivityForSignInWithProvider(activity, provider.build())
+            .addOnSuccessListener { authResult ->
+                handleAppleLoginSuccess(authResult)
+            }
+            .addOnFailureListener { e ->
+                Log.e("AppleLogin", "Error: ${e.localizedMessage}")
+            }
+    }
+
+    private fun handleAppleLoginSuccess(authResult: AuthResult) {
+        val uniqueId = authResult.user?.uid
+
+        val oauthCredential: OAuthCredential = authResult.credential as OAuthCredential
+        val token = oauthCredential.accessToken
+
+        Log.e("jung", "apple uniqueid : $uniqueId")
+        Log.e("jung", "apple credential : $token")
+        val userId = "a-$uniqueId"
+        AppDataPref.login_connect_site = "a"
+
+        checkMember(userId)
+    }
 }
