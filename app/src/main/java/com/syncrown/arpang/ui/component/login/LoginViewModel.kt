@@ -254,7 +254,7 @@ class LoginViewModel : BaseViewModel() {
                 // 로그인 성공 처리
                 val accessToken = NaverIdLoginSDK.getAccessToken()
                 if (accessToken != null) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    viewModelScope.launch(Dispatchers.IO) {
                         fetchNaverUserProfile(activity)
 
                         fetchNaverUserEmail(accessToken)
@@ -371,6 +371,7 @@ class LoginViewModel : BaseViewModel() {
         Log.e("jung", "apple credential : $token")
         val userId = "a-$uniqueId"
         AppDataPref.login_connect_site = "a"
+        AppDataPref.userEmail = authResult.user?.email.toString()
 
         checkMember(userId)
     }

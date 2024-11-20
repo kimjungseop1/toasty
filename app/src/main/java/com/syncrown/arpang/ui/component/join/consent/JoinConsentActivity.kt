@@ -18,6 +18,8 @@ class JoinConsentActivity : BaseActivity() {
     private lateinit var binding: ActivityConsentBinding
     private val joinConsentViewModel: JoinConsentViewModel by viewModels()
 
+    private var isCanceled = false
+
     override fun observeViewModel() {
         //TODO 가입신청 옵져브
         joinConsentViewModel.joinMemberResponseLiveData().observe(this) { result ->
@@ -28,6 +30,7 @@ class JoinConsentActivity : BaseActivity() {
                             "SUCCESS" -> {
                                 Log.e(TAG, "성공 id : " + AppDataPref.userId)
                                 AppDataPref.save(this)
+                                isCanceled = false
 
                                 val requestLoginDto = RequestLoginDto()
                                 requestLoginDto.user_id = AppDataPref.userId
@@ -89,6 +92,7 @@ class JoinConsentActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding.actionbar.actionBack.setOnClickListener {
+            isCanceled = true
             finish()
         }
 
@@ -120,6 +124,7 @@ class JoinConsentActivity : BaseActivity() {
         binding.joinBtn.setOnClickListener {
             val requestJoinDto = RequestJoinDto()
             requestJoinDto.user_id = AppDataPref.userId
+            requestJoinDto.email = AppDataPref.userEmail
             requestJoinDto.login_connt_accnt = AppDataPref.login_connect_site
             requestJoinDto.userid_se = 0
             requestJoinDto.use_se = 1
@@ -129,6 +134,13 @@ class JoinConsentActivity : BaseActivity() {
             joinConsentViewModel.joinMember(requestJoinDto)
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing || isCanceled) {
+            AppDataPref.clear(this)
+        }
     }
 
     private fun isValid(): Boolean {

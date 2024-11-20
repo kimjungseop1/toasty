@@ -102,6 +102,8 @@ class AppDataPref {
             Log.i(TAG, "=================================================")
             Log.i(TAG, "accessToken = $AccessToken")
             Log.i(TAG, "userId = $userId")
+            Log.i(TAG, "login_connect_site = $login_connect_site")
+            Log.i(TAG, "userEmail = $userEmail")
             Log.i(TAG, "=================================================")
         }
     }
