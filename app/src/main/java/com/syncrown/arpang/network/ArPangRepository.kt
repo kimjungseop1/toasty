@@ -9,6 +9,7 @@ import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
+import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
@@ -16,6 +17,7 @@ import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
+import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import okhttp3.Interceptor
@@ -40,7 +42,9 @@ class ArPangRepository {
 
         val interceptorAuth = Interceptor { chain: Interceptor.Chain ->
             val request = chain.request().newBuilder()
-                .addHeader("authorization", AppDataPref.AccessToken).build()
+                .addHeader("authorization", AppDataPref.AccessToken)
+                .addHeader("re-authorization", AppDataPref.reAuthorization)
+                .build()
             chain.proceed(request)
         }
 
@@ -85,6 +89,10 @@ class ArPangRepository {
 
     //TODO 006. 프로필 수정
     val updateProfileLiveDataRepository: MutableLiveData<NetworkResult<ResponseUpdateProfileDto>> =
+        MutableLiveData()
+
+    //TODO 006-1 프로필 정보 조회
+    val userprofileLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserProfileDto>> =
         MutableLiveData()
 
     //TODO 007. 별명 중복체크
@@ -239,11 +247,35 @@ class ArPangRepository {
             ) {
                 if (response.code() == 200) {
                     updateProfileLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    updateProfileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
                 }
             }
 
             override fun onFailure(call: Call<ResponseUpdateProfileDto>, t: Throwable) {
                 updateProfileLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 006-1. 사용자 정보 조회
+    fun requestUserProfile(requestUserProfileDto: RequestUserProfileDto) {
+        arPangInterface.postUserProfile(
+            requestUserProfileDto.user_id
+        ).enqueue(object : Callback<ResponseUserProfileDto> {
+            override fun onResponse(
+                call: Call<ResponseUserProfileDto>,
+                response: Response<ResponseUserProfileDto>
+            ) {
+                if (response.code() == 200) {
+                    userprofileLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    updateProfileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseUserProfileDto>, t: Throwable) {
+                userprofileLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }
@@ -259,6 +291,8 @@ class ArPangRepository {
             ) {
                 if (response.code() == 200) {
                     checkNickLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    updateProfileLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
                 }
             }
 

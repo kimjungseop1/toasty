@@ -9,6 +9,7 @@ import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
+import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
 import retrofit2.Call
@@ -82,6 +83,13 @@ interface ArPangInterface {
         @Field("lang") lang: String?,
         @Field("profile") profile: String?
     ): Call<ResponseUpdateProfileDto>
+
+    //TODO 006-1. 사용자 정보 조회
+    @FormUrlEncoded
+    @POST("/ntv/atp/user/get")
+    fun postUserProfile(
+        @Field("user_id") user_id: String
+    ): Call<ResponseUserProfileDto>
 
     //TODO 007. 별명 중복 체크
     @FormUrlEncoded

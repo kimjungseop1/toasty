@@ -50,6 +50,10 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
                     }
                 }
 
+                is NetworkResult.NetCode -> {
+                    Log.e("jung","실패 : ${result.message}")
+                }
+
                 is NetworkResult.Error -> {
 
                 }
@@ -73,8 +77,12 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
                     }
                 }
 
+                is NetworkResult.NetCode -> {
+                    Log.e("jung","실패 : ${result.message}")
+                }
+
                 is NetworkResult.Error -> {
-                    Log.e(TAG, "오류 : $result")
+                    Log.e(TAG, "오류 : ${result.message}")
                 }
             }
         }

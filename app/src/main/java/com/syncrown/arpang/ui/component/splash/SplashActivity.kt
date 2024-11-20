@@ -78,8 +78,12 @@ class SplashActivity : BaseActivity() {
                         Log.e(TAG, "토큰 전송 완료")
                     }
 
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung","실패 : ${result.message}")
+                    }
+
                     is NetworkResult.Error -> {
-                        Log.e(TAG, "오류 : $result")
+                        Log.e(TAG, "오류 : ${result.message}")
                     }
                 }
             }
@@ -106,8 +110,12 @@ class SplashActivity : BaseActivity() {
                     }
                 }
 
+                is NetworkResult.NetCode -> {
+                    Log.e("jung","실패 : ${result.message}")
+                }
+
                 is NetworkResult.Error -> {
-                    Log.e(TAG, "오류 : $result")
+                    Log.e(TAG, "오류 : ${result.message}")
                 }
             }
         }
@@ -217,12 +225,6 @@ class SplashActivity : BaseActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
-    }
-
-    private fun goLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun showUpdateVersion() {

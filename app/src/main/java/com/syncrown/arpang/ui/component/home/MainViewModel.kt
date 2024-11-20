@@ -4,9 +4,17 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.syncrown.arpang.network.ArPangRepository
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestUserProfileDto
+import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 class MainViewModel : BaseViewModel() {
+    private val arPangRepository: ArPangRepository = ArPangRepository()
+
     /***********************************************************************************************
      * 메인
      **********************************************************************************************/
@@ -55,5 +63,18 @@ class MainViewModel : BaseViewModel() {
         }
 
         return ""
+    }
+
+    private val getUserProfileResponseLiveData: LiveData<NetworkResult<ResponseUserProfileDto>> =
+        arPangRepository.userprofileLiveDataRepository
+
+    fun getUserProfile(requestUserProfileDto: RequestUserProfileDto) {
+        viewModelScope.launch {
+            arPangRepository.requestUserProfile(requestUserProfileDto)
+        }
+    }
+
+    fun getUserProfileResponseLiveData(): LiveData<NetworkResult<ResponseUserProfileDto>> {
+        return getUserProfileResponseLiveData
     }
 }

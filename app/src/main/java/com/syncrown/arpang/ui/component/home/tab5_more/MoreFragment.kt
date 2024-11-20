@@ -3,13 +3,18 @@ package com.syncrown.arpang.ui.component.home.tab5_more
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.FragmentMoreBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestUserProfileDto
+import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab5_more.account.AccountManageActivity
@@ -23,6 +28,7 @@ import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivi
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeType
 import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.component.login.LoginActivity
+import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment() {
     private lateinit var binding: FragmentMoreBinding
@@ -42,8 +48,48 @@ class MoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getUserProfile()
+
+        moreViewModel.getUserProfileResponseLiveData().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    result.data.let { data ->
+                        when (data?.msgCode) {
+                            "SUCCESS" -> {
+                                updateUi(data)
+                            }
+                        }
+                    }
+                }
+
+                is NetworkResult.NetCode -> {
+                    Log.e("jung","실패 : ${result.message}")
+                    if (result.message.equals("403")) {
+                        goLogin()
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e("jung", "오류 : ${result.message}")
+                }
+            }
+        }
+    }
+
+    private fun getUserProfile() {
+        val requestUserProfileDto = RequestUserProfileDto()
+        requestUserProfileDto.user_id = AppDataPref.userId
+
+        moreViewModel.getUserProfile(requestUserProfileDto)
+    }
+
+    private fun updateUi(data: ResponseUserProfileDto) {
         //TODO 사용자 이름
-        binding.nameTxt.text = "홍길동"
+        if (data.nick_nm == null || data.nick_nm.toString().isEmpty()) {
+            binding.nameTxt.text = data.user_id
+        } else {
+            binding.nameTxt.text = data.nick_nm
+        }
 
         //TODO 알림함
         binding.alertView.setOnClickListener {
@@ -122,7 +168,6 @@ class MoreFragment : Fragment() {
         binding.csView.setOnClickListener {
 
         }
-
     }
 
     private fun goSubscribe(subscribeType: SubscribeType) {

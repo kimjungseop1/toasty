@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.account.name
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -13,6 +14,8 @@ import com.syncrown.arpang.network.model.RequestUpdateProfileDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
+import com.syncrown.arpang.ui.component.home.MainActivity
+import com.syncrown.arpang.ui.component.login.LoginActivity
 import kotlinx.coroutines.launch
 
 class ChangeNameActivity : BaseActivity() {
@@ -27,11 +30,11 @@ class ChangeNameActivity : BaseActivity() {
                         result.data.let { data ->
                             when (data?.msgCode) {
                                 "SUCCESS" -> {
-//                                    val requestUpdateProfileDto = RequestUpdateProfileDto()
-//                                    requestUpdateProfileDto.user_id = AppDataPref.userId
-//                                    requestUpdateProfileDto.nick_nm = binding.inputName.text.toString()
-//
-//                                    changeNameViewModel.updateProfile(requestUpdateProfileDto)
+                                    val requestUpdateProfileDto = RequestUpdateProfileDto()
+                                    requestUpdateProfileDto.user_id = AppDataPref.userId
+                                    requestUpdateProfileDto.nick_nm = binding.inputName.text.toString()
+
+                                    changeNameViewModel.updateProfile(requestUpdateProfileDto)
                                     Log.e("jung","닉네임 중복 안됨")
                                 }
 
@@ -44,8 +47,15 @@ class ChangeNameActivity : BaseActivity() {
                         }
                     }
 
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung","실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
                     is NetworkResult.Error -> {
-                        Log.e(TAG, "오류 : $result")
+                        Log.e(TAG, "오류 : ${result.message}")
                     }
                 }
             }
@@ -73,8 +83,15 @@ class ChangeNameActivity : BaseActivity() {
                         }
                     }
 
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung","실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
                     is NetworkResult.Error -> {
-                        Log.e(TAG, "오류 : $result")
+                        Log.e(TAG, "오류 : ${result.message}")
                     }
                 }
             }

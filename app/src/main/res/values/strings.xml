@@ -33,6 +33,12 @@
     <string name="subscribe_toast_desc_2">사용자를 차단하였습니다.</string>
     <string name="block_user_manage_desc_1">해제됨</string>
     <string name="block_user_manage_desc_2">차단 해제</string>
+    <string name="from_kakao_login_account">카카오로 로그인</string>
+    <string name="from_google_login_account">구글로 로그인</string>
+    <string name="from_naver_login_account">네이버로 로그인</string>
+    <string name="from_facebook_login_account">페이스북으로 로그인</string>
+    <string name="from_apple_login_account">애플로 로그인</string>
+    <string name="from_empty_email_account">등록된 이메일이 없습니다.</string>
 
     <!-- 검색  -->
     <string name="search_actionbar_hint">검색어를 입력해주세요</string>
