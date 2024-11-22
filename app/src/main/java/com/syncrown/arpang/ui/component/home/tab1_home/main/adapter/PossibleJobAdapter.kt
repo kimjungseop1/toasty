@@ -43,7 +43,7 @@ class PossibleJobAdapter(
     inner class ViewHolder(val binding: ItemPossibleJobBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(context: Context, position: Int) {
-            val code = arrayList[position].code
+            val code = arrayList[position].menu_code
             when (code) {
                 "AR_MENU01" -> handleMenu01(context, position)
                 "AR_MENU02" -> handleMenu02(context, position)
@@ -58,31 +58,31 @@ class PossibleJobAdapter(
         }
 
         private fun handleMenu01(context: Context, position: Int) {
-            binding.codeName.text = arrayList[position].code_nm
+            binding.codeName.text = arrayList[position].menu_nm
 
             Glide.with(context).load(R.drawable.bg_ar_home).into(binding.codeImg)
         }
 
         private fun handleMenu02(context: Context, position: Int) {
-            binding.codeName.text = arrayList[position].code_nm
+            binding.codeName.text = arrayList[position].menu_nm
 
             Glide.with(context).load(R.drawable.bg_4cut_home).into(binding.codeImg)
         }
 
         private fun handleMenu03(context: Context, position: Int) {
-            binding.codeName.text = arrayList[position].code_nm
+            binding.codeName.text = arrayList[position].menu_nm
 
             Glide.with(context).load(R.drawable.bg_sticker_home).into(binding.codeImg)
         }
 
         private fun handleMenu04(context: Context, position: Int) {
-            binding.codeName.text = arrayList[position].code_nm
+            binding.codeName.text = arrayList[position].menu_nm
 
             Glide.with(context).load(R.drawable.bg_festival_home).into(binding.codeImg)
         }
 
         private fun handleMenu05(context: Context, position: Int) {
-            binding.codeName.text = arrayList[position].code_nm
+            binding.codeName.text = arrayList[position].menu_nm
 
             Glide.with(context).load(R.drawable.bg_free_home).into(binding.codeImg)
         }

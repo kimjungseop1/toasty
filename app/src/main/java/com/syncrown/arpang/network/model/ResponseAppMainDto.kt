@@ -9,20 +9,12 @@ class ResponseAppMainDto {
     var root: ArrayList<Root>? = null
 
     class Root {
-        @SerializedName("code")
+        @SerializedName("menu_code")
         @Expose
-        var code: String? = null
+        var menu_code: String? = null
 
-        @SerializedName("code_nm")
+        @SerializedName("menu_nm")
         @Expose
-        var code_nm: String? = null
-
-        @SerializedName("order_by")
-        @Expose
-        var order_by: Int? = null
-
-        @SerializedName("app_id")
-        @Expose
-        var app_id: String? = null
+        var menu_nm: String? = null
     }
 }
