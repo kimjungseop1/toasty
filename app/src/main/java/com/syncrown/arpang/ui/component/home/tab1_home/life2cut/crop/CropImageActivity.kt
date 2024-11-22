@@ -13,6 +13,7 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityCropImageBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
+import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ArImageStorage
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
@@ -39,7 +40,9 @@ class CropImageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        filePath = intent.getStringExtra("CROP_IMAGE_FILE_PATH").toString()
+        filePath = intent.getStringExtra("CROP_IMAGE_FILE_PATH") ?: ""
+        Log.e("jung","filepath : $filePath")
+        val bitmap = ArImageStorage.bitmap
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
@@ -56,7 +59,14 @@ class CropImageActivity : BaseActivity() {
             }
         }
 
-        setImage()
+        if (filePath.isNotBlank() && filePath != "null") {
+            setImage()
+        }
+
+        if (bitmap != null) {
+            setImage(bitmap)
+        }
+
 
         setCropView()
     }
@@ -64,6 +74,12 @@ class CropImageActivity : BaseActivity() {
     private fun setImage() {
         Glide.with(this)
             .load(CommonFunc.path2uri(this, filePath))
+            .into(binding.cropImageView)
+    }
+
+    private fun setImage(bitmap: Bitmap) {
+        Glide.with(this)
+            .load(bitmap)
             .into(binding.cropImageView)
     }
 
@@ -222,7 +238,11 @@ class CropImageActivity : BaseActivity() {
         val croppedBitmap = Bitmap.createBitmap(bitmap, cropX, cropY, cropWidth, cropHeight)
 
         // 잘라낸 이미지를 외부 저장소에 저장
-        ImageStorage.bitmap = croppedBitmap
+        if (bitmap != null) {
+            ArImageStorage.bitmap = croppedBitmap
+        } else {
+            ImageStorage.bitmap = croppedBitmap
+        }
         Log.e("jung", "이미지 저장됨")
     }
 }

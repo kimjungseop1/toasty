@@ -1,9 +1,14 @@
 package com.syncrown.arpang.network
 
+import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
@@ -99,5 +104,54 @@ interface ArPangInterface {
     @POST("/ntv/atp/member/break")
     fun postWithdrawal(
         @Field("user_id") user_id: String,
+        @Field("break_reson") break_reson: String?,
+        @Field("etc_reson") etc_reson: String?
     ): Call<ResponseWithdrawalDto>
+
+    //TODO 009.
+
+
+    //TODO 010. 앱메인메뉴 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/appmenu")
+    fun postAppMain(
+        @Field("app_id") app_id: String
+    ): Call<ResponseAppMainDto>
+
+    //TODO 011. 카트리지 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/cartridge/list")
+    fun postCartridgeList(
+        @Field("app_id") app_id: String,
+        @Field("device_os") device_os: String,
+        @Field("ctge_no") ctge_no: Int?,
+        @Field("ctge_nm") ctge_nm: String?,
+        @Field("ctge_model") ctge_model: String?,
+        @Field("ctge_model_abbr") ctge_model_abbr: String?,
+        @Field("character_brand") character_brand: String?
+    ): Call<ResponseCartridgeListDto>
+
+    //TODO 012. 카트리지별 앱메뉴 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/cartridge/appmenu/list")
+    fun postAppMenuByCartridge(
+        @Field("ctge_no") ctge_no: Int,
+        @Field("app_id") app_id: String
+    ): Call<ResponseAppMenuByCartridgeDto>
+
+    //TODO 013. 앱메뉴별 카트리지 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/appmenu/cartridge/list")
+    fun postCartridgeByAppMenu(
+        @Field("menu_code") menu_code: String,
+        @Field("app_id") app_id: String
+    ): Call<ResponseCartridgeByAppMenuDto>
+
+    //TODO 014. 카트리지별 추천태그 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/cartridge/tag/recommend/list")
+    fun postTagsByCartridge(
+        @Field("ctge_no") ctge_no: Int,
+        @Field("app_id") app_id: String
+    ): Call<ResponseTagsByCartridgeDto>
 }

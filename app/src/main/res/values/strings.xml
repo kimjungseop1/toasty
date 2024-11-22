@@ -158,7 +158,9 @@
     <string name="home_guide_paper"><u>장착 가이드</u></string>
     <string name="home_desc_1">프린터가 연결되어 있지 않아요</string>
     <string name="home_desc_1_1">용지를 장착해보세요</string>
+    <string name="home_desc_1_2">용지 : %s</string>
     <string name="home_desc_2">토스티로 할 수 있는 작업들이에요</string>
+    <string name="home_desc_2_2">토스티로 할 수 있는 작업들이에요</string>
     <string name="home_desc_3">이렇게 활용해 볼까요?</string>
     <string name="home_desc_4">서비스 이용 가이드</string>
     <string name="home_desc_5">서비스 이용방법을 확인해보세요.</string>
@@ -301,6 +303,15 @@
     <string name="account_title">계정 관리</string>
     <string name="account_withdrawal_polish">회원탈퇴를 진행하시겠습니까?\n회원탈퇴시 정책에 따라 어떤 불이익이 있을 수 있습니다.\n\n1. 모든 게시글이 삭제되며, 이벤트 참여 게시글도 삭제가 됩니다. 수령하지 못한 이벤트 상품은 탈퇴 후 수령하실 수 없습니다.\n2. 스토어 구매등으로 적립한 포인트에 대해서 더이상 이용하실 수 없습니다.\n3. 기타 회원탈퇴 관련한 정책 및 이에 따른 가이드가 주어져야 합니다.</string>
     <string name="account_withdrawal_checkbox">주의사항을 모두 읽고 회원탈퇴에 동의합니다.</string>
+
+    <string name="account_withdrawal_reason_title">탈퇴사유</string>
+    <string name="account_withdrawal_reason_sub">(필수)</string>
+    <string name="account_withdrawal_reason_1">사용빈도 낮음</string>
+    <string name="account_withdrawal_reason_2">서비스 불만</string>
+    <string name="account_withdrawal_reason_3">로그인 계정 변경</string>
+    <string name="account_withdrawal_reason_4">기타 사유</string>
+    <string name="account_withdrawal_etc_hint">기타 사유를 입력해 주세요</string>
+
     <string name="account_change_name">이름 변경</string>
     <string name="account_change_name_desc_1">이름</string>
     <string name="account_change_name_desc_2">* 이름은 한달에 한번만 변경할 수 있습니다.</string>

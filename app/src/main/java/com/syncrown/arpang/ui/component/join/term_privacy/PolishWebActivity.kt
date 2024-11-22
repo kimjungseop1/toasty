@@ -44,7 +44,7 @@ class PolishWebActivity : BaseActivity() {
                     ContextCompat.getString(this, R.string.polish_term_title)
                 binding.consentBtn.text = ContextCompat.getString(this, R.string.polish_term_btn)
 
-                baseUrl = "http://192.168.0.4:8090/ntv/mypagee/clauses"
+                baseUrl = "http://192.168.0.13:8090/ntv/mypagee/clauses"
 
             }
 
@@ -53,7 +53,7 @@ class PolishWebActivity : BaseActivity() {
                     ContextCompat.getString(this, R.string.polish_privacy_title)
                 binding.consentBtn.text = ContextCompat.getString(this, R.string.polish_privacy_btn)
 
-                baseUrl = "http://192.168.0.4:8090/ntv/mypagee/privacy"
+                baseUrl = "http://192.168.0.13:8090/ntv/mypagee/privacy"
             }
         }
 

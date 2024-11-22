@@ -191,14 +191,6 @@
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintTop_toBottomOf="@id/naverBtn" />
 
-            <Button
-                android:id="@+id/goMainBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="goMain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -1,23 +1,32 @@
 package com.syncrown.arpang.network
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.syncrown.arpang.AppDataPref
+import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.RequestAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.RequestCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.RequestCartridgeListDto
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
+import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.RequestWithdrawalDto
+import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
@@ -33,7 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ArPangRepository {
     companion object {
-        private const val BASE_URL_DEV = "http://192.168.0.13:8090"
+        private const val BASE_URL_DEV = "http://192.168.0.132:8090"
         private const val BASE_URL_REAL = ""
     }
 
@@ -104,6 +113,29 @@ class ArPangRepository {
 
     //TODO 008. 회원 탈퇴
     val withdrawalLiveDataRepository: MutableLiveData<NetworkResult<ResponseWithdrawalDto>> =
+        MutableLiveData()
+
+    //TODO 009. 공통코드 리스트
+    //TODO 009-1. 공통코드 리스트(코드값 복수개)
+
+    //TODO 010. 앱메인메뉴 리스트
+    val appMainMenuLiveDataRepository: MutableLiveData<NetworkResult<ResponseAppMainDto>> =
+        MutableLiveData()
+
+    //TODO 011. 카트리지 리스트
+    val cartridgeListLiveDataRepository: MutableLiveData<NetworkResult<ResponseCartridgeListDto>> =
+        MutableLiveData()
+
+    //TODO 012. 카트리지별 앱메뉴 리스트
+    val appMenuByCartridgeLiveDataRepository: MutableLiveData<NetworkResult<ResponseAppMenuByCartridgeDto>> =
+        MutableLiveData()
+
+    //TODO 013. 앱메뉴별 카트리지 리스트
+    val cartridgeByAppMenuLiveDataRepository: MutableLiveData<NetworkResult<ResponseCartridgeByAppMenuDto>> =
+        MutableLiveData()
+
+    //TODO 014. 카트리지별 추천태그 리스트
+    val tagsByCartridgeLiveDataRepository: MutableLiveData<NetworkResult<ResponseTagsByCartridgeDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -313,7 +345,9 @@ class ArPangRepository {
     //TODO 008. 회원 탈퇴
     fun requestWithdrawal(requestWithdrawalDto: RequestWithdrawalDto) {
         arPangInterface.postWithdrawal(
-            requestWithdrawalDto.user_id
+            requestWithdrawalDto.user_id,
+            requestWithdrawalDto.break_reson,
+            requestWithdrawalDto.etc_reson
         ).enqueue(object : Callback<ResponseWithdrawalDto> {
             override fun onResponse(
                 call: Call<ResponseWithdrawalDto>,
@@ -328,6 +362,128 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseWithdrawalDto>, t: Throwable) {
                 withdrawalLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 009.
+
+
+    //TODO 010. 앱메인메뉴 리스트
+    fun requestAppMain(requestAppMainDto: RequestAppMainDto) {
+        arPangInterface.postAppMain(
+            requestAppMainDto.app_id.toString()
+        ).enqueue(object : Callback<ResponseAppMainDto> {
+            override fun onResponse(
+                call: Call<ResponseAppMainDto>,
+                response: Response<ResponseAppMainDto>
+            ) {
+                if (response.code() == 200) {
+                    appMainMenuLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    appMainMenuLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseAppMainDto>, t: Throwable) {
+                appMainMenuLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 011. 카트리지 리스트
+    fun requestCartridgeList(requestCartridgeListDto: RequestCartridgeListDto) {
+        arPangInterface.postCartridgeList(
+            requestCartridgeListDto.app_id,
+            requestCartridgeListDto.device_os,
+            requestCartridgeListDto.ctge_no,
+            requestCartridgeListDto.ctge_nm,
+            requestCartridgeListDto.ctge_model,
+            requestCartridgeListDto.ctge_model_abbr,
+            requestCartridgeListDto.character_brand
+        ).enqueue(object : Callback<ResponseCartridgeListDto> {
+            override fun onResponse(
+                call: Call<ResponseCartridgeListDto>,
+                response: Response<ResponseCartridgeListDto>
+            ) {
+                if (response.code() == 200) {
+                    cartridgeListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    cartridgeListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCartridgeListDto>, t: Throwable) {
+                cartridgeListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 012. 카트리지별 앱메뉴 리스트
+    fun requestAppMenuByCartridge(requestAppMenuByCartridgeDto: RequestAppMenuByCartridgeDto) {
+        arPangInterface.postAppMenuByCartridge(
+            requestAppMenuByCartridgeDto.ctge_no,
+            requestAppMenuByCartridgeDto.app_id
+        ).enqueue(object : Callback<ResponseAppMenuByCartridgeDto> {
+            override fun onResponse(
+                call: Call<ResponseAppMenuByCartridgeDto>,
+                response: Response<ResponseAppMenuByCartridgeDto>
+            ) {
+                if (response.code() == 200) {
+                    appMenuByCartridgeLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    appMenuByCartridgeLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseAppMenuByCartridgeDto>, t: Throwable) {
+                appMenuByCartridgeLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 013. 앱메뉴별 카트리지 리스트
+    fun requestCartridgeByAppMenu(requestCartridgeByAppMenuDto: RequestCartridgeByAppMenuDto) {
+        arPangInterface.postCartridgeByAppMenu(
+            requestCartridgeByAppMenuDto.menu_code,
+            requestCartridgeByAppMenuDto.app_id
+        ).enqueue(object : Callback<ResponseCartridgeByAppMenuDto> {
+            override fun onResponse(
+                call: Call<ResponseCartridgeByAppMenuDto>,
+                response: Response<ResponseCartridgeByAppMenuDto>
+            ) {
+                if (response.code() == 200) {
+                    cartridgeByAppMenuLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    cartridgeByAppMenuLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCartridgeByAppMenuDto>, t: Throwable) {
+                cartridgeByAppMenuLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 014. 카트리지별 추천태그 리스트
+    fun requestTagsByCartridge(requestTagsByCartridgeDto: RequestTagsByCartridgeDto) {
+        arPangInterface.postTagsByCartridge(
+            requestTagsByCartridgeDto.ctge_no,
+            requestTagsByCartridgeDto.app_id
+        ).enqueue(object : Callback<ResponseTagsByCartridgeDto> {
+            override fun onResponse(
+                call: Call<ResponseTagsByCartridgeDto>,
+                response: Response<ResponseTagsByCartridgeDto>
+            ) {
+                if (response.code() == 200) {
+                    tagsByCartridgeLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    tagsByCartridgeLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseTagsByCartridgeDto>, t: Throwable) {
+                tagsByCartridgeLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

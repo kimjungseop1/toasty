@@ -13,12 +13,17 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentHomeBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.guide.ArGuideActivity
@@ -28,6 +33,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCart
 import com.syncrown.arpang.ui.component.home.tab1_home.event.EventDetailActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
+import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.PossibleJobAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
 import com.syncrown.arpang.ui.util.PaperStatusEnum
@@ -36,10 +42,12 @@ import com.syncrown.arpang.ui.util.PrintUtil
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: MainViewModel by activityViewModels()
+    private val possibleList = ArrayList<ResponseAppMainDto.Root>()
+    private val imPossibleList = ArrayList<ResponseAppMainDto.Root>()
 
     private val handler = Handler(Looper.getMainLooper())
 
-    val printUtil = PrintUtil.getInstance()
+    private val printUtil = PrintUtil.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,30 +75,11 @@ class HomeFragment : Fragment() {
             goPaperGuide()
         }
 
-        //TODO AR 영상 인쇄
-        binding.arPrintBtn.setOnClickListener {
-            goArPrint()
-        }
+        //TODO 장착된 용지로 사용 가능한 기능
+        setPossibleJobProcess()
 
-        //TODO 인생 네컷
-        binding.life4cutCardView.setOnClickListener {
-            goLife4Cut()
-        }
-
-        //TODO 행사 스트커
-        binding.festivalCardView.setOnClickListener {
-            goFestivalSticker()
-        }
-
-        //TODO 자유 인쇄
-        binding.freeCardView.setOnClickListener {
-            goFreePrint()
-        }
-
-        //TODO 라벨 스티커
-        binding.labelCardView.setOnClickListener {
-            goLabelSticker()
-        }
+        //TODO 장착된 용지로 사용하지 못하는 기능
+        setImPossibleJobProcess()
 
         //TODO 서비스 이용 가이드
         binding.serviceGuideView.setOnClickListener {
@@ -105,6 +94,90 @@ class HomeFragment : Fragment() {
         showBottomEventBanner()
 
         updateView()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateAppMainMenu() {
+        homeViewModel.appMainResponseLiveData().observe(requireActivity()) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    val data = result.data
+
+                    data?.root?.let {
+                        possibleList.clear()
+                        possibleList.addAll(it)
+                        binding.possibleJobRecycler.adapter?.notifyDataSetChanged()
+                    }
+                }
+
+                is NetworkResult.NetCode -> {
+                    Log.e("jung", "실패 : ${result.message}")
+                    if (result.message.equals("403")) {
+                        (activity as? BaseActivity)?.goLogin()
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e("jung", "오류 : ${result.message}")
+                }
+            }
+        }
+    }
+
+    // 연결전 앱메뉴 or 연결후 현재용지로 가능한 작업 메뉴
+    private fun setPossibleJobProcess() {
+        val requestAppMainDto = RequestAppMainDto()
+        requestAppMainDto.app_id = "APP_ARPANG"
+        homeViewModel.appMain(requestAppMainDto)
+
+        binding.possibleJobRecycler.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        val adapter = PossibleJobAdapter(requireContext(), possibleList)
+        binding.possibleJobRecycler.adapter = adapter
+        adapter.setJobListener(object : PossibleJobAdapter.JobListener {
+            override fun onJobClick(position: Int, code: String) {
+                when (code) {
+                    "AR_MENU01" -> goArPrint() //TODO AR 영상 인쇄
+                    "AR_MENU02" -> goLife4Cut() //TODO 인생 두컷
+                    "AR_MENU03" -> goLabelSticker() //TODO 라벨 스티커
+                    "AR_MENU04" -> goFestivalSticker() //TODO 행사 스트커
+                    "AR_MENU05" -> goFreePrint() //TODO 자유 인쇄
+                }
+            }
+        })
+
+        updateAppMainMenu()
+    }
+
+    // 현재 장착된 용지와 다른용지로 작업가능한 메뉴들 목록
+    private fun setImPossibleJobProcess() {
+        binding.impossibleJobRecycler.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        val adapter = PossibleJobAdapter(requireContext(), imPossibleList)
+        binding.impossibleJobRecycler.adapter = adapter
+        adapter.setJobListener(object : PossibleJobAdapter.JobListener {
+            override fun onJobClick(position: Int, code: String) {
+                when (code) {
+                    "AR_MENU01" -> goArPrint() //TODO AR 영상 인쇄
+                    "AR_MENU02" -> goLife4Cut() //TODO 인생 두컷
+                    "AR_MENU03" -> goLabelSticker() //TODO 라벨 스티커
+                    "AR_MENU04" -> goFestivalSticker() //TODO 행사 스트커
+                    "AR_MENU05" -> goFreePrint() //TODO 자유 인쇄
+                }
+            }
+        })
+
+        updateAppMainMenu()
+
+        Log.e("jung","imPossibleList.size : " + imPossibleList.size)
+
+        if (imPossibleList.size == 0) {
+            binding.desc2Sub.visibility = View.GONE
+            binding.impossibleJobRecycler.visibility = View.GONE
+        } else {
+            binding.desc2Sub.visibility = View.VISIBLE
+            binding.impossibleJobRecycler.visibility = View.VISIBLE
+        }
     }
 
     private fun invalidateTab() {
@@ -151,18 +224,21 @@ class HomeFragment : Fragment() {
             binding.guidePaperBtn.visibility = View.GONE
 
             when (status) {
+                PaperStatusEnum.NONE -> {}
                 PaperStatusEnum.PAPER_OUT -> {
                     binding.desc1.text = getString(R.string.home_desc_1_1)
                     binding.guidePaperBtn.visibility = View.VISIBLE
                 }
-
                 PaperStatusEnum.PRINTING -> {}
                 PaperStatusEnum.PAPER_HATCH_COVER_OPEN -> {}
                 PaperStatusEnum.LOW_BATTERY_VOLTAGE -> {}
                 PaperStatusEnum.PRINT_HEAD_OVERHEATING -> {}
                 PaperStatusEnum.OK -> {
-                    binding.desc1.text = "용지 : aaa"
+                    binding.desc1.text = getString(R.string.home_desc_1_2, "용지이름")
                     binding.guidePaperBtn.visibility = View.GONE
+
+                    binding.desc2Sub.visibility = View.VISIBLE
+                    binding.impossibleJobRecycler.visibility = View.VISIBLE
                 }
             }
         }

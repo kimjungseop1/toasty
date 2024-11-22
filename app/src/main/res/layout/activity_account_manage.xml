@@ -16,18 +16,22 @@
         android:layout_marginTop="10dp"
         android:background="@color/color_white"
         android:paddingStart="28dp"
+        android:paddingEnd="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionbar">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nameTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/color_black"
             android:textSize="24dp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

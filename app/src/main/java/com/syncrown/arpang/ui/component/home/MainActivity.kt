@@ -26,7 +26,6 @@ import com.syncrown.arpang.databinding.ActivityMainBinding
 import com.syncrown.arpang.databinding.BottomSheetEventBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.BackPressCloseHandler
-import com.syncrown.arpang.ui.commons.DialogProgressCommon2
 import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
 import com.syncrown.arpang.ui.component.home.ar_camera.ArCameraActivity
 import com.syncrown.arpang.ui.component.home.search.SearchActivity
@@ -79,6 +78,8 @@ class MainActivity : BaseActivity() {
                     startBatteryCheckJob()
 
                     startPrinterStatusJob()
+
+                    binding.actionbar.actionBattery.visibility = View.VISIBLE
                 } else {
                     batteryCheckJob?.cancel()
                     printerStatusJob?.cancel()
@@ -89,7 +90,6 @@ class MainActivity : BaseActivity() {
 
             printUtil.batteryVol.observe(this@MainActivity) { batteryLevel ->
                 Log.e("jung", "main batteryLevel : $batteryLevel")
-                binding.actionbar.actionBattery.visibility = View.VISIBLE
                 when {
                     batteryLevel == 100 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_4)
                     batteryLevel in 75..99 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_3)
@@ -202,6 +202,10 @@ class MainActivity : BaseActivity() {
         binding.actionbar.actionAr.setOnClickListener {
             goArPage()
         }
+
+        if (AppDataPref.isMainEvent) {
+            showEventBottomSheet()
+        }
     }
 
     private fun startBatteryCheckJob() {
@@ -210,7 +214,7 @@ class MainActivity : BaseActivity() {
         batteryCheckJob = lifecycleScope.launch {
             while (true) {
                 printUtil.sendBatteryVol()
-                delay(2000)
+                delay(1500)
             }
         }
     }
@@ -221,7 +225,7 @@ class MainActivity : BaseActivity() {
         printerStatusJob = lifecycleScope.launch {
             while (true) {
                 printUtil.sendPrinterStatus()
-                delay(1500)
+                delay(1000)
             }
         }
     }
@@ -253,9 +257,7 @@ class MainActivity : BaseActivity() {
 
     private fun updateUi(data: Unit) {
         Log.e("jung", "updateUi call .....")
-        if (AppDataPref.isMainEvent) {
-            showEventBottomSheet()
-        }
+
 
     }
 
@@ -305,10 +307,12 @@ class MainActivity : BaseActivity() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                adapter.updateCurrentPage(position)
+                binding.eventViewPager.post {
+                    adapter.updateCurrentPage(position)
 
-                val pageInfo = adapter.getPageInfo()
-                binding.pageView.text = pageInfo
+                    val pageInfo = adapter.getPageInfo()
+                    binding.pageView.text = pageInfo
+                }
             }
         })
 

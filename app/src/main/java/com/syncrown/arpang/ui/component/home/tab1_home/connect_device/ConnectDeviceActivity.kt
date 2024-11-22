@@ -38,12 +38,6 @@ class ConnectDeviceActivity : BaseActivity() {
 
     private lateinit var dialog: DialogProgressCommon2
 
-    private val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            finish()
-        }
-    }
-
     override fun observeViewModel() {
 
     }
@@ -55,8 +49,6 @@ class ConnectDeviceActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        onBackPressedDispatcher.addCallback(callback)
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()

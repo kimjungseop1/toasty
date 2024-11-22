@@ -16,7 +16,7 @@ import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.join.consent.JoinConsentActivity
 
 
-class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
+class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivtyLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
 
@@ -132,10 +132,6 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
             loginViewModel.appleLogin(this)
         }
 
-        binding.goMainBtn.setOnClickListener {
-            goMain()
-        }
-
     }
 
     private val signInLauncher = registerForActivityResult(
@@ -151,12 +147,6 @@ class LoginActivity : BaseActivity(), AppleSignInDialog.Interaction {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onAppleIdSuccess(sub: String) {
-        val userId = "a-$sub"
-        AppDataPref.login_connect_site = "a"
-        loginViewModel.checkMember(userId)
     }
 
     private fun goJoinConsent() {

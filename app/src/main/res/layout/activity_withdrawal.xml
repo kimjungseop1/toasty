@@ -9,76 +9,234 @@
         android:id="@+id/actionbar"
         layout="@layout/actionbar_style_1" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@id/actionbar">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/nameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="19dp"
-            android:textColor="@color/color_black"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/idView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/color_black"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/nameView"
-            app:layout_constraintTop_toBottomOf="@id/nameView" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/contentTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="33dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="30dp"
-            android:bufferType="spannable"
-            android:lineHeight="25dp"
-            android:textColor="@color/color_5B5B5B"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/idView"
-            app:layout_constraintTop_toBottomOf="@id/idView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/withdrawalCheckView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:button="@drawable/custom_checkbox_select_1"
-        android:paddingStart="10dp"
-        android:text="@string/account_withdrawal_checkbox"
-        android:textColor="@color/color_black"
-        android:textSize="16dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clView_1" />
+        app:layout_constraintTop_toBottomOf="@id/actionbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/nameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="19dp"
+                    android:textColor="@color/color_black"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/idView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/color_black"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/nameView"
+                    app:layout_constraintTop_toBottomOf="@id/nameView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/contentTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="33dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="30dp"
+                    android:bufferType="spannable"
+                    android:lineHeight="25dp"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/idView"
+                    app:layout_constraintTop_toBottomOf="@id/idView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clView_1">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/desc_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="26dp"
+                    android:includeFontPadding="false"
+                    android:text="@string/account_withdrawal_reason_title"
+                    android:textColor="@color/color_black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:includeFontPadding="false"
+                    android:text="@string/account_withdrawal_reason_sub"
+                    android:textColor="@color/color_424242"
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="@id/desc_1"
+                    app:layout_constraintStart_toEndOf="@id/desc_1" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="21dp"
+                    android:button="@drawable/custom_checkbox_select_1"
+                    android:paddingStart="8dp"
+                    android:text="@string/account_withdrawal_reason_1"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="@id/desc_1"
+                    app:layout_constraintTop_toBottomOf="@id/desc_1" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_checkbox_select_1"
+                    android:paddingStart="8dp"
+                    android:text="@string/account_withdrawal_reason_2"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/check_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/check_1"
+                    app:layout_constraintTop_toTopOf="@id/check_1" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="45dp"
+                    android:button="@drawable/custom_checkbox_select_1"
+                    android:paddingStart="8dp"
+                    android:text="@string/account_withdrawal_reason_3"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/check_1"
+                    app:layout_constraintTop_toBottomOf="@id/check_1" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/check_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_checkbox_select_1"
+                    android:paddingStart="8dp"
+                    android:text="@string/account_withdrawal_reason_4"
+                    android:textColor="@color/color_5B5B5B"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/check_3"
+                    app:layout_constraintStart_toStartOf="@id/check_2"
+                    app:layout_constraintTop_toTopOf="@id/check_3" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clView_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clView_2">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etcLengthCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="36dp"
+                    android:text="0/100"
+                    android:textColor="@color/color_CECECE"
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/inputEtc"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/border_lightgray_white_stroke"
+                    android:gravity="top"
+                    android:hint="@string/account_withdrawal_etc_hint"
+                    android:textColor="@color/color_black"
+                    android:textColorHint="@color/color_CECECE"
+                    android:textSize="16dp"
+                    app:layout_constraintDimensionRatio="2.5:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etcLengthCnt" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/withdrawalCheckView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="150dp"
+                android:button="@drawable/custom_checkbox_select_1"
+                android:paddingStart="10dp"
+                android:text="@string/account_withdrawal_checkbox"
+                android:textColor="@color/color_black"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clView_3"
+                app:layout_constraintVertical_bias="0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clView_2"
+        android:id="@+id/clView_b"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/color_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_CECECE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/withdrawalBtn"
@@ -96,4 +254,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

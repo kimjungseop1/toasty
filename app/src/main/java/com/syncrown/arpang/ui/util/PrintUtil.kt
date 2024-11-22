@@ -75,6 +75,8 @@ class PrintUtil private constructor() {
                 if (isReceiverEnabled) {
                     Log.e("jung", "ondisConnected")
                     _connectionState.value = false
+                    _printerStatus.value = PaperStatusEnum.NONE
+                    _batteryVolume.value = 0
                 }
                 isReceiverEnabled = false
             }
@@ -129,24 +131,40 @@ class PrintUtil private constructor() {
                          *Bit 7: default (default 0)
                          */
                         if (bytes.size == 1) {
-                            val types: PaperStatusEnum =
-                                if ((bytes[0].toInt() and 0x01) == 0x01) {
-                                    PaperStatusEnum.PRINTING
-                                } else if ((bytes[0].toInt() and 0x02) == 0x02) {
-                                    PaperStatusEnum.PAPER_HATCH_COVER_OPEN
-                                } else if ((bytes[0].toInt() and 0x04) == 0x04) {
-                                    PaperStatusEnum.PAPER_OUT
-                                } else if ((bytes[0].toInt() and 0x08) == 0x08) {
-                                    PaperStatusEnum.LOW_BATTERY_VOLTAGE
-                                } else if ((bytes[0].toInt() and 0x10) == 0x10) {
-                                    PaperStatusEnum.PRINT_HEAD_OVERHEATING
-                                } else {
-                                    PaperStatusEnum.OK
-                                }
+                            var isOk = true
+                            var type: PaperStatusEnum = PaperStatusEnum.NONE
+                            if ((bytes[0].toInt() and 0x01) == 0x01) {
+                                type = PaperStatusEnum.PRINTING
+                                isOk = false
+                            }
 
-                            Log.e("jung", "SEARCHTYPE_PRINTERSTATUS : " + types.name)
+                            if ((bytes[0].toInt() and 0x02) == 0x02) {
+                                type = PaperStatusEnum.PAPER_HATCH_COVER_OPEN
+                                isOk = false
+                            }
 
-                            _printerStatus.value = types
+                            if ((bytes[0].toInt() and 0x04) == 0x04) {
+                                type = PaperStatusEnum.PAPER_OUT
+                                isOk = false
+                            }
+
+                            if ((bytes[0].toInt() and 0x08) == 0x08) {
+                                type = PaperStatusEnum.LOW_BATTERY_VOLTAGE
+                                isOk = false
+                            }
+
+                            if ((bytes[0].toInt() and 0x10) == 0x10) {
+                                type = PaperStatusEnum.PRINT_HEAD_OVERHEATING
+                                isOk = false
+                            }
+
+                            if (isOk) {
+                                type = PaperStatusEnum.OK
+                            }
+
+                            Log.e("jung", "SEARCHTYPE_PRINTERSTATUS : " + type.name)
+
+                            _printerStatus.value = type
                         }
 
                     SEARCHTYPE_BATTERYVOL -> if (bytes.size == 2) {

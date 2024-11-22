@@ -14,8 +14,8 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
@@ -43,6 +43,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.preview.ArPrintP
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.tag.ArPrintTagSettingActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videotrimmer.TrimVideoActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.adapter.FontAdapter
+import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.crop.CropImageActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
@@ -124,7 +125,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         // 진입시 썸네일의 첫번째 이미지 바로 표시
         lifecycleScope.launch {
             binding.photoEditorImageView.source.setImageBitmap(getFirstThumbnail(videoPath))
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
                 thumbnails = getThumbnails(videoPath)
             }
         }
@@ -247,7 +248,9 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                                                 this@EditVideoPrintActivity,
                                                 thumbnails
                                             ) { position: Int ->
-                                                binding.photoEditorImageView.source.setImageBitmap(thumbnails[position])
+                                                binding.photoEditorImageView.source.setImageBitmap(
+                                                    thumbnails[position]
+                                                )
                                             }
                                         binding.thumbLayout.thumbRecycler.setHasFixedSize(true)
                                     } else {
@@ -262,7 +265,11 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
                     2 -> {
                         //TODO  영역
-                        Toast.makeText(this, "영역...", Toast.LENGTH_SHORT).show()
+                        if (::thumbnails.isInitialized) {
+                            ArImageStorage.bitmap = thumbnails[position]
+
+                            goCropImage(thumbnails[position])
+                        }
                     }
 
                     3 -> {
@@ -580,4 +587,20 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
+
+    private fun goCropImage(bitmap: Bitmap) {
+        ArImageStorage.bitmap = bitmap
+
+        val intent = Intent(this, CropImageActivity::class.java)
+        cropImageLauncher.launch(intent)
+    }
+
+    private val cropImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val cropBitmap = ArImageStorage.bitmap
+
+                binding.photoEditorImageView.source.setImageBitmap(cropBitmap)
+            }
+        }
 }

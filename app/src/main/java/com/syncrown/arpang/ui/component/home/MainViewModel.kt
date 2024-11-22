@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestAppMainDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
+import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -24,6 +26,19 @@ class MainViewModel : BaseViewModel() {
 
     fun paperGuideActivityClosed(newMessage: String) {
         _onPaperGuideActivityClosed.postValue(newMessage)
+    }
+
+    private val appMainResponseLiveData: LiveData<NetworkResult<ResponseAppMainDto>> =
+        arPangRepository.appMainMenuLiveDataRepository
+
+    fun appMain(requestAppMainDto: RequestAppMainDto) {
+        viewModelScope.launch {
+            arPangRepository.requestAppMain(requestAppMainDto)
+        }
+    }
+
+    fun appMainResponseLiveData(): LiveData<NetworkResult<ResponseAppMainDto>> {
+        return appMainResponseLiveData
     }
 
 

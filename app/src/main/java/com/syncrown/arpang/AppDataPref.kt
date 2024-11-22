@@ -32,7 +32,6 @@ class AppDataPref {
             val packageName = activity.packageName
             val preferences = activity.getSharedPreferences(packageName, Context.MODE_PRIVATE)
 
-            AccessToken = preferences.getString("accessToken", "") ?: ""
             userId = preferences.getString("userId", "") ?: ""
 
             isMainEvent = preferences.getBoolean("isMainEvent", true)
@@ -53,7 +52,6 @@ class AppDataPref {
             val pref = activity.getSharedPreferences(packageName, Context.MODE_PRIVATE)
 
             val editor = pref.edit()
-            editor.putString("accessToken", AccessToken)
             editor.putString("userId", userId)
 
             editor.putBoolean("isMainEvent", isMainEvent)
@@ -78,7 +76,6 @@ class AppDataPref {
 
             // 메모리에 있는 해당 변수도 초기화합니다 (필요한 경우)
             when (key) {
-                "accessToken" -> AccessToken = ""
                 "userId" -> userId = ""
                 "isMainEvent" -> isMainEvent = true
                 "isArGuideFirst" -> isArGuideFirst = true
@@ -100,7 +97,6 @@ class AppDataPref {
 
         fun show() {
             Log.i(TAG, "=================================================")
-            Log.i(TAG, "accessToken = $AccessToken")
             Log.i(TAG, "userId = $userId")
             Log.i(TAG, "login_connect_site = $login_connect_site")
             Log.i(TAG, "userEmail = $userEmail")

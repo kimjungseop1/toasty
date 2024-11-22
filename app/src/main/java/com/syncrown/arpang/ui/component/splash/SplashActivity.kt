@@ -43,6 +43,7 @@ class SplashActivity : BaseActivity() {
 
     private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BLUETOOTH_SCAN,
             Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.POST_NOTIFICATIONS,
@@ -53,6 +54,7 @@ class SplashActivity : BaseActivity() {
         )
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -61,6 +63,7 @@ class SplashActivity : BaseActivity() {
         )
     } else {
         arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -136,13 +139,6 @@ class SplashActivity : BaseActivity() {
         if (checkAndRequestPermissions()) {
             proceedToNextStep()
         }
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.e("jung", "fcm token : ${task.result}")
-                splashViewModel.insertUserToken(this, task.result)
-            }
-        }
     }
 
     private fun checkAndRequestPermissions(): Boolean {
@@ -202,6 +198,13 @@ class SplashActivity : BaseActivity() {
 
     private fun proceedToNextStep() {
         lifecycleScope.launch {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.e("jung", "fcm token : ${task.result}")
+                    splashViewModel.insertUserToken(this@SplashActivity, task.result)
+                }
+            }
+
             delay(1500)
 
             // 앱 업데이트 체크
