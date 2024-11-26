@@ -4,4 +4,8 @@ import android.graphics.Bitmap
 
 object ArImageStorage {
     var bitmap: Bitmap? = null
+
+    var resultVideoPath: String = ""
+
+    var resultImagePath: String = ""
 }

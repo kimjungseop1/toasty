@@ -7,13 +7,18 @@ import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.network.model.RequestAppMainDto
 import com.syncrown.arpang.network.model.RequestAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.RequestCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.RequestCartridgeListByTagDto
 import com.syncrown.arpang.network.model.RequestCartridgeListDto
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestCheckNickNameDto
+import com.syncrown.arpang.network.model.RequestCommonListDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
+import com.syncrown.arpang.network.model.RequestMultiCommonListDto
 import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
+import com.syncrown.arpang.network.model.RequestUserAlertListDto
+import com.syncrown.arpang.network.model.RequestUserAlertSettingDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
@@ -21,13 +26,18 @@ import com.syncrown.arpang.network.model.RequestWithdrawalDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
+import com.syncrown.arpang.network.model.ResponseCommonListDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
+import com.syncrown.arpang.network.model.ResponseUserAlertListDto
+import com.syncrown.arpang.network.model.ResponseUserAlertSettingDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
@@ -116,7 +126,12 @@ class ArPangRepository {
         MutableLiveData()
 
     //TODO 009. 공통코드 리스트
+    val commonListLiveDataRepository: MutableLiveData<NetworkResult<ResponseCommonListDto>> =
+        MutableLiveData()
+
     //TODO 009-1. 공통코드 리스트(코드값 복수개)
+    val multiCommonListLiveDataRepository: MutableLiveData<NetworkResult<ResponseMultiCommonListDto>> =
+        MutableLiveData()
 
     //TODO 010. 앱메인메뉴 리스트
     val appMainMenuLiveDataRepository: MutableLiveData<NetworkResult<ResponseAppMainDto>> =
@@ -136,6 +151,18 @@ class ArPangRepository {
 
     //TODO 014. 카트리지별 추천태그 리스트
     val tagsByCartridgeLiveDataRepository: MutableLiveData<NetworkResult<ResponseTagsByCartridgeDto>> =
+        MutableLiveData()
+
+    //TODO 015. 추천태그별 카트리지 리스트를 가져온다
+    val cartridgeListByTagsLiveDataRepository: MutableLiveData<NetworkResult<ResponseCartridgeListByTagDto>> =
+        MutableLiveData()
+
+    //TODO 016. 사용자 알림 설정
+    val userAlertSettingLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserAlertSettingDto>> =
+        MutableLiveData()
+
+    //TODO 017. 사용자 알림 리스트
+    val userAlertListLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserAlertListDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -366,8 +393,50 @@ class ArPangRepository {
         })
     }
 
-    //TODO 009.
+    //TODO 009. 공통코드 리스트
+    fun requestCommonList(requestCommonListDto: RequestCommonListDto) {
+        arPangInterface.postCommonList(
+            requestCommonListDto.lcode
+        ).enqueue(object : Callback<ResponseCommonListDto> {
+            override fun onResponse(
+                call: Call<ResponseCommonListDto>,
+                response: Response<ResponseCommonListDto>
+            ) {
+                if (response.code() == 200) {
+                    commonListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    commonListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
 
+            override fun onFailure(call: Call<ResponseCommonListDto>, t: Throwable) {
+                commonListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 009-1. 공통코드 리스트(코드값 복수개)
+    fun requestMultiCommonList(requestMultiCommonListDto: RequestMultiCommonListDto) {
+        arPangInterface.postMultiCommonList(
+            requestMultiCommonListDto.lcode,
+            requestMultiCommonListDto.mcode
+        ).enqueue(object : Callback<ResponseMultiCommonListDto> {
+            override fun onResponse(
+                call: Call<ResponseMultiCommonListDto>,
+                response: Response<ResponseMultiCommonListDto>
+            ) {
+                if (response.code() == 200) {
+                    multiCommonListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    multiCommonListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseMultiCommonListDto>, t: Throwable) {
+                multiCommonListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
 
     //TODO 010. 앱메인메뉴 리스트
     fun requestAppMain(requestAppMainDto: RequestAppMainDto) {
@@ -485,6 +554,78 @@ class ArPangRepository {
             override fun onFailure(call: Call<ResponseTagsByCartridgeDto>, t: Throwable) {
                 tagsByCartridgeLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
+        })
+    }
+
+    //TODO 015. 추천태그별 카트리지 리스트를 가져온다
+    fun requestCartridgeListByTag(requestCartridgeListByTagDto: RequestCartridgeListByTagDto) {
+        arPangInterface.postCartridgeListByTags(
+            requestCartridgeListByTagDto.tag_seq_no,
+            requestCartridgeListByTagDto.app_id
+        ).enqueue(object : Callback<ResponseCartridgeListByTagDto> {
+            override fun onResponse(
+                call: Call<ResponseCartridgeListByTagDto>,
+                response: Response<ResponseCartridgeListByTagDto>
+            ) {
+                if (response.code() == 200) {
+                    cartridgeListByTagsLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    cartridgeListByTagsLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCartridgeListByTagDto>, t: Throwable) {
+                cartridgeListByTagsLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 016. 사용자 알림 설정
+    fun requestUserAlertSetting(requestUserAlertSettingDto: RequestUserAlertSettingDto) {
+        arPangInterface.postUserAlertSetting(
+            requestUserAlertSettingDto.user_id,
+            requestUserAlertSettingDto.noti_event_se,
+            requestUserAlertSettingDto.subscrip_se,
+            requestUserAlertSettingDto.favor_se,
+            requestUserAlertSettingDto.comment_se
+        ).enqueue(object : Callback<ResponseUserAlertSettingDto> {
+            override fun onResponse(
+                call: Call<ResponseUserAlertSettingDto>,
+                response: Response<ResponseUserAlertSettingDto>
+            ) {
+                if (response.code() == 200) {
+                    userAlertSettingLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    userAlertSettingLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseUserAlertSettingDto>, t: Throwable) {
+                userAlertSettingLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 017. 사용자 알림 리스트
+    fun requestUserAlertList(requestUserAlertListDto: RequestUserAlertListDto) {
+        arPangInterface.postUserAlertList(
+            requestUserAlertListDto.user_id
+        ).enqueue(object : Callback<ResponseUserAlertListDto> {
+            override fun onResponse(
+                call: Call<ResponseUserAlertListDto>,
+                response: Response<ResponseUserAlertListDto>
+            ) {
+                if (response.code() == 200) {
+                    userAlertListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    userAlertListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseUserAlertListDto>, t: Throwable) {
+                userAlertListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
         })
     }
 }

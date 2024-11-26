@@ -92,6 +92,25 @@ class CommonFunc {
             return dir?.delete() ?: false
         }
 
+        fun getFileFromUriWithCheck(context: Context, uri: Uri): File? {
+            return if (uri.toString().startsWith("content://")) {
+                val filePathColumn = arrayOf(MediaStore.Video.Media.DATA)
+                var filePath: String? = null
+
+                context.contentResolver.query(uri, filePathColumn, null, null, null)?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+                        filePath = cursor.getString(columnIndex)
+                    }
+                }
+
+                filePath?.let { File(it) }
+            } else {
+                // 만약 content://가 아닌 경우, 그대로 반환하거나 예외 처리
+                null
+            }
+        }
+
         /**
          * 비트맵 이미지를 서버에 전송하기전 Base64인코딩
          */

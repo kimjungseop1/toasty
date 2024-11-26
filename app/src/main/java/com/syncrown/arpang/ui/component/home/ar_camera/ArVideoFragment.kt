@@ -32,6 +32,7 @@ import com.google.ar.sceneform.rendering.ExternalTexture
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.syncrown.arpang.R
+import com.syncrown.arpang.db.ar_match.ArVideoImageDatabase
 import com.syncrown.arpang.ui.component.home.ar_camera.node.VideoAnchorNode
 import com.syncrown.arpang.ui.component.home.ar_camera.node.VideoScaleType
 import kotlinx.coroutines.Dispatchers
@@ -92,11 +93,17 @@ class ArVideoFragment : ArFragment() {
 
         fun setupAugmentedImageDatabase(config: Config, session: Session): Boolean = runBlocking {
             try {
+                // Room 데이터베이스에서 데이터 가져오기
+                val dao = ArVideoImageDatabase.getDatabase(requireContext()).arVideoImageDao()
+                val videoImageList = withContext(Dispatchers.IO) {
+                    dao.getAllVideoImageEntities() // 전체 데이터를 가져오는 DAO 메서드 호출
+                }
+
                 val augmentedImageDatabase = AugmentedImageDatabase(session)
-                val imageUrls =
-                    listOf(TEST_IMAGE_1_URL, TEST_IMAGE_2_URL, TEST_IMAGE_3_URL, TEST_IMAGE_4_URL)
-                val videoUrls =
-                    listOf(TEST_VIDEO_1_URL, TEST_VIDEO_2_URL, TEST_VIDEO_3_URL, TEST_VIDEO_4_URL)
+
+                // Room 데이터를 기반으로 imageUrls와 videoUrls 생성
+                val imageUrls = videoImageList.map { it.imagePath }
+                val videoUrls = videoImageList.map { it.videoPath }
 
                 for (i in imageUrls.indices) {
                     val bitmap = loadAugmentedImageBitmapFromUrl(imageUrls[i])
@@ -304,24 +311,6 @@ class ArVideoFragment : ArFragment() {
 
     companion object {
         private const val TAG = "jung"
-
-        private const val TEST_IMAGE_1_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-        private const val TEST_IMAGE_2_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-        private const val TEST_IMAGE_3_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-        private const val TEST_IMAGE_4_URL =
-            "https://media.istockphoto.com/id/607913622/ko/%EC%82%AC%EC%A7%84/%EC%83%81%EC%A7%95%EC%A0%81%EC%9D%B8-%EB%B8%8C%EB%A3%A8%ED%81%B4%EB%A6%B0-%EB%8B%A4%EB%A6%AC.jpg?s=2048x2048&w=is&k=20&c=rZHAR8T4z2MgewsN04AYB7KcSJJ7bwserIjCRbyDzjA="
-
-        private const val TEST_VIDEO_1_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        private const val TEST_VIDEO_2_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        private const val TEST_VIDEO_3_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        private const val TEST_VIDEO_4_URL =
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"
 
         private const val VIDEO_CROP_ENABLED = true
 

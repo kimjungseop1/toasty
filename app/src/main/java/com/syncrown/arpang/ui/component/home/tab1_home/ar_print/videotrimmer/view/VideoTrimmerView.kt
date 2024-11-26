@@ -276,6 +276,9 @@ class VideoTrimmerView @JvmOverloads constructor(
         presenter?.show()
     }
 
+    /**
+     * 외부저장소에 바로 저장하면 재생할수없는 영상으로 만들어져서 캐시에서 만들어서 외부저장소로 카피 -> 캐시영상은 제거
+     */
     @SuppressLint("WrongConstant")
     fun saveSelectedVideoRangeToCacheFolder(
         context: Context,
@@ -284,7 +287,7 @@ class VideoTrimmerView @JvmOverloads constructor(
         endMillis: Long
     ): Pair<Boolean, String?> {
         val cacheFolder = context.cacheDir
-        val outputFile = File(cacheFolder, "toasty_video_${System.currentTimeMillis()}.mp4")
+        val outputFile = File(cacheFolder, "arpang_video_${System.currentTimeMillis()}.mp4")
 
         val extractor = MediaExtractor()
         val muxer: MediaMuxer

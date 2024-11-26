@@ -3,13 +3,18 @@ package com.syncrown.arpang.network
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
+import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
+import com.syncrown.arpang.network.model.ResponseCommonListDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
+import com.syncrown.arpang.network.model.ResponseUserAlertListDto
+import com.syncrown.arpang.network.model.ResponseUserAlertSettingDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserTokenDelDto
 import com.syncrown.arpang.network.model.ResponseUserTokenRegDto
@@ -108,8 +113,20 @@ interface ArPangInterface {
         @Field("etc_reson") etc_reson: String?
     ): Call<ResponseWithdrawalDto>
 
-    //TODO 009.
+    //TODO 009. 공통코드 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/common/combo")
+    fun postCommonList(
+        @Field("lcode") lcode: Int
+    ): Call<ResponseCommonListDto>
 
+    //TODO 009-1. 공통코드 리스트(코드값 복수개)
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/common/combo/in")
+    fun postMultiCommonList(
+        @Field("lcode") lcode: Int,
+        @Field("mcode") mcode: String?
+    ): Call<ResponseMultiCommonListDto>
 
     //TODO 010. 앱메인메뉴 리스트
     @FormUrlEncoded
@@ -154,4 +171,30 @@ interface ArPangInterface {
         @Field("ctge_no") ctge_no: Int,
         @Field("app_id") app_id: String
     ): Call<ResponseTagsByCartridgeDto>
+
+    //TODO 015. 추천태그별 카트리지 리스트를 가져온다
+    @FormUrlEncoded
+    @POST("/ntv/atp/tag/recommend/cartridge/list")
+    fun postCartridgeListByTags(
+        @Field("tag_seq_no") tag_seq_no: Int,
+        @Field("app_id") app_id: String
+    ): Call<ResponseCartridgeListByTagDto>
+
+    //TODO 016. 사용자 알림 설정
+    @FormUrlEncoded
+    @POST("/ntv/atp/upate/user/notify")
+    fun postUserAlertSetting(
+        @Field("user_id") user_id: String,
+        @Field("noti_event_se") noti_event_se: Int?,
+        @Field("subscrip_se") subscrip_se: Int?,
+        @Field("favor_se") favor_se: Int?,
+        @Field("comment_se") comment_se: Int?
+    ): Call<ResponseUserAlertSettingDto>
+
+    //TODO 017. 사용자 알림 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/user/notify")
+    fun postUserAlertList(
+        @Field("user_id") user_id: String
+    ): Call<ResponseUserAlertListDto>
 }

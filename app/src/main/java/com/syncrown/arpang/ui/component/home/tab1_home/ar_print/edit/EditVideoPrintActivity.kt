@@ -6,7 +6,9 @@ import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -26,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditVideoPrintBinding
+import com.syncrown.arpang.db.ar_match.ArVideoImageDatabase
+import com.syncrown.arpang.db.ar_match.ArVideoImageEntity
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -48,10 +52,14 @@ import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.angmarch.views.OnSpinnerItemSelectedListener
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.LinkedList
 
 
@@ -62,7 +70,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
     private lateinit var dialogCommon: DialogCommon
 
-    private var videoPath: String = ""
+    private lateinit var videoPath: Uri
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -118,15 +126,31 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
             } else {
                 resultBitmap = CommonFunc.getBitmapFromView(binding.printAreaView)
                 ArImageStorage.bitmap = resultBitmap
+
+                //최종 만들어진 이미지 저장
+                saveBitmapToExternalStorage()
+
+                saveRoomDB()
+
+
             }
         }
 
-        videoPath = intent.getStringExtra("CACHE_FILE_PATH").toString()
+        val path = intent.getStringExtra("CACHE_FILE_PATH")
+        val uri = Uri.parse(path)
+        videoPath = uri
+        Log.e("jung", "oncreate : $path, ${videoPath.lastPathSegment}")
+
         // 진입시 썸네일의 첫번째 이미지 바로 표시
         lifecycleScope.launch {
-            binding.photoEditorImageView.source.setImageBitmap(getFirstThumbnail(videoPath))
+            binding.photoEditorImageView.source.setImageBitmap(
+                getFirstThumbnail(
+                    this@EditVideoPrintActivity,
+                    videoPath
+                )
+            )
             withContext(Dispatchers.Main) {
-                thumbnails = getThumbnails(videoPath)
+                thumbnails = getThumbnails(this@EditVideoPrintActivity, videoPath)
             }
         }
 
@@ -138,6 +162,82 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
         setBottomMenuList()
     }
+
+    private fun saveRoomDB() {
+        val database = ArVideoImageDatabase.getDatabase(this)
+        val dao = database.arVideoImageDao()
+
+        val entity = ArVideoImageEntity(
+            videoPath = ArImageStorage.resultVideoPath,
+            imagePath = ArImageStorage.resultImagePath
+        )
+
+        lifecycleScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    // 현재 데이터 개수 확인
+                    val currentCount = dao.getRowCount()
+
+                    // 데이터 개수가 1000개 이상이면 오래된 데이터 삭제
+                    if (currentCount >= 1000) {
+                        val excessCount = currentCount - 999 // 초과된 데이터 개수 계산
+                        dao.deleteOldestEntries(excessCount)
+                    }
+
+                    // 새로운 데이터 삽입
+                    dao.insertVideoImage(entity)
+                }
+                Log.d("EditVideoPrintActivity", "비디오와 이미지 경로 DB 저장 성공")
+            } catch (e: Exception) {
+                Log.e("EditVideoPrintActivity", "DB 저장 중 오류 발생: ${e.message}")
+            }
+        }
+
+    }
+
+    private fun saveBitmapToExternalStorage(): Pair<Boolean, String?> {
+        val bitmap = ArImageStorage.bitmap
+        var videoFilePath = ArImageStorage.resultVideoPath
+
+        // 비디오 파일 이름을 추출
+        val videoFile = File(videoFilePath)
+        val videoNameWithoutExtension = videoFile.nameWithoutExtension // 확장자를 제외한 파일명
+
+        // 이미지 저장 경로 설정
+        val externalMoviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val targetDir = File(externalMoviesDir, "ArPangVideo/Images")
+
+        // 디렉터리 생성 확인
+        if (!targetDir.exists() && !targetDir.mkdirs()) {
+            Log.e("saveBitmapToExternalStorage", "디렉터리 생성 실패: ${targetDir.absolutePath}")
+            return Pair(false, null)
+        }
+
+        // 저장할 이미지 파일 경로 설정
+        val imageFile = File(targetDir, "$videoNameWithoutExtension.png")
+
+        ArImageStorage.resultImagePath = imageFile.absolutePath
+
+        return try {
+            // 파일 출력 스트림 생성
+            if (bitmap != null) {
+                FileOutputStream(imageFile).use { fos ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                }
+            }
+            Log.d("saveBitmapToExternalStorage", "이미지 저장 성공: ${imageFile.absolutePath}")
+            Pair(true, imageFile.absolutePath)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("saveBitmapToExternalStorage", "IOException 발생: ${e.message}")
+            Pair(false, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("saveBitmapToExternalStorage", "예상치 못한 예외 발생: ${e.message}")
+            Pair(false, null)
+        }
+    }
+
 
     private fun setBottomMenuList() {
         val arrayList = ArrayList<NavBarItem>()
@@ -498,38 +598,50 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     }
 
     // 썸네일 추출 함수
-    private fun getThumbnails(videoPath: String): List<Bitmap> {
+    private fun getThumbnails(context: Context, videoUri: Uri): List<Bitmap> {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(videoPath)
-
-        val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        val durationMillis = durationString?.toLong() ?: 0L
         val thumbnails = mutableListOf<Bitmap>()
 
-        // 최대 1초마다 프레임을 가져오기 (0초, 1초, 2초, ...)
-        for (i in 0 until durationMillis step 1000) {
-            Log.e("jung", "load start : $i")
-            val frameTimeUs = i * 1000L
-            retriever.getFrameAtTime(frameTimeUs, MediaMetadataRetriever.OPTION_CLOSEST)
-                ?.let { frame ->
-                    thumbnails.add(frame)
-                }
+        try {
+            retriever.setDataSource(context, videoUri)
+
+            val durationString =
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            val durationMillis = durationString?.toLong() ?: 0L
+
+            // 최대 1초마다 프레임을 가져오기 (0초, 1초, 2초, ...)
+            for (i in 0 until durationMillis step 1000) {
+                val frameTimeUs = i * 1000L
+                retriever.getFrameAtTime(frameTimeUs, MediaMetadataRetriever.OPTION_CLOSEST)
+                    ?.let { frame ->
+                        thumbnails.add(frame)
+                    }
+            }
+        } catch (e: Exception) {
+            Log.e("jung", "Error retrieving thumbnails: ${e.message}")
+            e.printStackTrace()
+        } finally {
+            retriever.release()
         }
 
-        Log.e("jung", "load end")
-        retriever.release()
         return thumbnails
     }
 
-    private fun getFirstThumbnail(videoPath: String): Bitmap? {
+    private fun getFirstThumbnail(context: Context, videoUri: Uri): Bitmap? {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(videoPath)
 
-        // 0초 시점의 프레임을 가져오기
-        val firstFrame = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST)
-
-        retriever.release()
-        return firstFrame
+        try {
+            retriever.setDataSource(context, videoUri)
+            // 0초 시점의 프레임을 가져오기
+            val firstFrame = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST)
+            retriever.release()
+            return firstFrame
+        } catch (e: Exception) {
+            Log.e("jung", "Error retrieving first thumbnail: ${e.message}")
+            e.printStackTrace()
+            retriever.release()
+            return null
+        }
     }
 
     /** 에디터 관련 리스너 start----- **/

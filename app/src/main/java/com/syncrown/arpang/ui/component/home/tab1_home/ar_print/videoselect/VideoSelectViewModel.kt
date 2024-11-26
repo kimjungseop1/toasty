@@ -1,6 +1,7 @@
 package com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect
 
 import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
@@ -86,14 +87,32 @@ class VideoSelectViewModel : BaseViewModel() {
             )
 
             cursor?.use {
-                val idColumn = it.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
                 val dataColumn = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
                 val durationColumn = it.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
 
                 while (it.moveToNext()) {
                     val filePath = it.getString(dataColumn)
-                    val duration = it.getLong(durationColumn)
-                    videoList.add(VideoInfo(filePath, duration))
+                    var duration = it.getLong(durationColumn)
+
+                    // duration이 0이거나 null인 경우 MediaMetadataRetriever로 확인
+                    if (duration <= 0) {
+                        val retriever = MediaMetadataRetriever()
+                        try {
+                            retriever.setDataSource(filePath)
+                            val durationString =
+                                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                            duration = durationString?.toLongOrNull() ?: 0
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        } finally {
+                            retriever.release()
+                        }
+                    }
+
+                    // 파일이 실제로 존재하는 경우에만 추가
+                    if (File(filePath).exists() && duration > 0) {
+                        videoList.add(VideoInfo(filePath, duration))
+                    }
                 }
             }
 
