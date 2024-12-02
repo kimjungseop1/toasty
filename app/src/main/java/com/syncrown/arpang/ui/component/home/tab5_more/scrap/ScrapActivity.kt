@@ -14,7 +14,6 @@ import com.syncrown.arpang.databinding.BottomSheetShareBinding
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.GridItem
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
 
@@ -125,28 +124,28 @@ class ScrapActivity : BaseActivity(), ShareGridItemAdapter.OnItemClickListener,
     }
 
     private fun showGridStyle(spanCount: Int, spacing: Int) {
-        val items = listOf(
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-        )
-
-        clearItemDecorations(binding.recyclerScrap)
-
-        binding.recyclerScrap.layoutManager = GridLayoutManager(this, spanCount)
-        binding.recyclerScrap.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount,
-                CommonFunc.dpToPx(spacing, this),
-                false
-            )
-        )
-
-        binding.recyclerScrap.adapter = ShareGridItemAdapter(items, spanCount, this)
+//        val items = listOf(
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//        )
+//
+//        clearItemDecorations(binding.recyclerScrap)
+//
+//        binding.recyclerScrap.layoutManager = GridLayoutManager(this, spanCount)
+//        binding.recyclerScrap.addItemDecoration(
+//            GridSpacingItemDecoration(
+//                spanCount,
+//                CommonFunc.dpToPx(spacing, this),
+//                false
+//            )
+//        )
+//
+//        binding.recyclerScrap.adapter = ShareGridItemAdapter(items, spanCount, this)
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -156,7 +155,7 @@ class ScrapActivity : BaseActivity(), ShareGridItemAdapter.OnItemClickListener,
         }
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, cntntsNo: String) {
         //리사이클러뷰 아이템 클릭시
 
     }

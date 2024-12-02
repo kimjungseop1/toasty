@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentHomeBinding
 import com.syncrown.arpang.network.NetworkResult
@@ -26,17 +25,20 @@ import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.component.home.MainViewModel
-import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.guide.ArGuideActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_cartridge.ConnectPaperActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.connect_device.ConnectDeviceActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.EmptyCartridgeActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.event.EventDetailActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.free_print.EditFreePrintActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.EditLabelStickerActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.CasePagerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.MainEventAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.PossibleJobAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
-import com.syncrown.arpang.ui.util.PaperStatusEnum
 import com.syncrown.arpang.ui.util.PrintUtil
 
 class HomeFragment : Fragment() {
@@ -48,6 +50,7 @@ class HomeFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val printUtil = PrintUtil.getInstance()
+    private var currentPaperNM = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,11 +140,21 @@ class HomeFragment : Fragment() {
         adapter.setJobListener(object : PossibleJobAdapter.JobListener {
             override fun onJobClick(position: Int, code: String) {
                 when (code) {
-                    "AR_MENU01" -> goArPrint() //TODO AR 영상 인쇄
-                    "AR_MENU02" -> goLife4Cut() //TODO 인생 두컷
-                    "AR_MENU03" -> goLabelSticker() //TODO 라벨 스티커
-                    "AR_MENU04" -> goFestivalSticker() //TODO 행사 스트커
-                    "AR_MENU05" -> goFreePrint() //TODO 자유 인쇄
+                    "AR_MENU01" -> {
+                        goArPrint(code)
+                    } //TODO AR 영상 인쇄
+                    "AR_MENU02" -> {
+                        goLife4Cut()
+                    } //TODO 인생 두컷
+                    "AR_MENU03" -> {
+                        goLabelSticker()
+                    } //TODO 라벨 스티커
+                    "AR_MENU04" -> {
+                        goFestivalSticker()
+                    } //TODO 행사 스트커
+                    "AR_MENU05" -> {
+                        goFreePrint()
+                    } //TODO 자유 인쇄
                 }
             }
         })
@@ -158,7 +171,7 @@ class HomeFragment : Fragment() {
         adapter.setJobListener(object : PossibleJobAdapter.JobListener {
             override fun onJobClick(position: Int, code: String) {
                 when (code) {
-                    "AR_MENU01" -> goArPrint() //TODO AR 영상 인쇄
+                    "AR_MENU01" -> goArPrint(code) //TODO AR 영상 인쇄
                     "AR_MENU02" -> goLife4Cut() //TODO 인생 두컷
                     "AR_MENU03" -> goLabelSticker() //TODO 라벨 스티커
                     "AR_MENU04" -> goFestivalSticker() //TODO 행사 스트커
@@ -169,7 +182,7 @@ class HomeFragment : Fragment() {
 
         updateAppMainMenu()
 
-        Log.e("jung","imPossibleList.size : " + imPossibleList.size)
+        Log.e("jung", "imPossibleList.size : " + imPossibleList.size)
 
         if (imPossibleList.size == 0) {
             binding.desc2Sub.visibility = View.GONE
@@ -217,45 +230,31 @@ class HomeFragment : Fragment() {
                 binding.connectPrintView.visibility = View.GONE
             } else {
                 binding.connectPrintView.visibility = View.VISIBLE
+
+                binding.desc1.text = getString(R.string.home_desc_1)
+                binding.guidePaperBtn.visibility = View.GONE
             }
         }
 
-        printUtil.status.observe(requireActivity()) { status ->
-            binding.guidePaperBtn.visibility = View.GONE
+        printUtil.paperInfo.observe(requireActivity()) { paperInfo ->
+            if (paperInfo.trim().isNotEmpty()) {
+                currentPaperNM = paperInfo
 
-            when (status) {
-                PaperStatusEnum.NONE -> {}
-                PaperStatusEnum.PAPER_OUT -> {
-                    binding.desc1.text = getString(R.string.home_desc_1_1)
-                    binding.guidePaperBtn.visibility = View.VISIBLE
-                }
-                PaperStatusEnum.PRINTING -> {}
-                PaperStatusEnum.PAPER_HATCH_COVER_OPEN -> {}
-                PaperStatusEnum.LOW_BATTERY_VOLTAGE -> {}
-                PaperStatusEnum.PRINT_HEAD_OVERHEATING -> {}
-                PaperStatusEnum.OK -> {
-                    binding.desc1.text = getString(R.string.home_desc_1_2, "용지이름")
-                    binding.guidePaperBtn.visibility = View.GONE
+                binding.desc1.text = getString(R.string.home_desc_1_2, paperInfo)
+                binding.guidePaperBtn.visibility = View.GONE
+            } else {
+                currentPaperNM = ""
 
-                    binding.desc2Sub.visibility = View.VISIBLE
-                    binding.impossibleJobRecycler.visibility = View.VISIBLE
-                }
+                binding.desc1.text = getString(R.string.home_desc_1_1)
+                binding.guidePaperBtn.visibility = View.VISIBLE
             }
         }
     }
 
     private fun goConnectDevice() {
         val intent = Intent(requireContext(), ConnectDeviceActivity::class.java)
-        connectDeviceLauncher.launch(intent)
+        startActivity(intent)
     }
-
-    private val connectDeviceLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                //프린트 연결 뷰 gone, desc1 텍스트 변경
-
-            }
-        }
 
     private val slideRunnable = Runnable { binding.bannerView.currentItem += 1 }
 
@@ -337,52 +336,72 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun goArPrint() {
-        if (AppDataPref.isArGuideFirst) {
-            val intent = Intent(requireContext(), ArGuideActivity::class.java)
+    private fun goArPrint(code : String) {
+        if (currentPaperNM.isEmpty()) {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra("MAIN_MENU_CODE", code)
+            intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_1))
             startActivity(intent)
         } else {
-            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-            intent.putExtra(
-                "FROM_HOME_CATEGORY",
-                getString(R.string.cartridge_empty_action_text_1)
-            )
+            val intent = Intent(requireContext(), VideoSelectActivity::class.java)
+            intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_1))
+            intent.putExtra("CARTRIDGE_NAME", currentPaperNM)
             startActivity(intent)
         }
     }
 
     private fun goLife4Cut() {
-        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra(
-            "FROM_HOME_CATEGORY",
-            getString(R.string.cartridge_empty_action_text_2)
-        )
-        startActivity(intent)
+        if (currentPaperNM.isEmpty()) {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra(
+                "FROM_HOME_CATEGORY",
+                getString(R.string.cartridge_empty_action_text_2)
+            )
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireContext(), ImageSelectActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun goLabelSticker() {
-        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_4))
-        startActivity(intent)
+        if (currentPaperNM.isEmpty()) {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_4))
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireContext(), EditLabelStickerActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun goFreePrint() {
+        if (currentPaperNM.isEmpty()) {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_3))
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireContext(), EditFreePrintActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun goFestivalSticker() {
+        if (currentPaperNM.isEmpty()) {
+            val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
+            intent.putExtra(
+                "FROM_HOME_CATEGORY",
+                getString(R.string.cartridge_empty_action_text_5)
+            )
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireContext(), EditFestivalActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun goServiceManual() {
         val intent = Intent(requireContext(), UseManual1DepthActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun goFreePrint() {
-        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra("FROM_HOME_CATEGORY", getString(R.string.cartridge_empty_action_text_3))
-        startActivity(intent)
-    }
-
-    private fun goFestivalSticker() {
-        val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
-        intent.putExtra(
-            "FROM_HOME_CATEGORY",
-            getString(R.string.cartridge_empty_action_text_5)
-        )
         startActivity(intent)
     }
 

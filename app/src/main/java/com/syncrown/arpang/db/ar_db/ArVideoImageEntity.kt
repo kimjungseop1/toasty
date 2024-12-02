@@ -1,4 +1,4 @@
-package com.syncrown.arpang.db.ar_match
+package com.syncrown.arpang.db.ar_db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

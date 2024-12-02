@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityWebPolishBinding
+import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.ui.base.BaseActivity
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,7 @@ class PolishWebActivity : BaseActivity() {
                     ContextCompat.getString(this, R.string.polish_term_title)
                 binding.consentBtn.text = ContextCompat.getString(this, R.string.polish_term_btn)
 
-                baseUrl = "http://192.168.0.13:8090/ntv/mypagee/clauses"
+                baseUrl = ArPangRepository.BASE_URL_DEV + "/ntv/mypagee/clauses"
 
             }
 
@@ -53,7 +54,7 @@ class PolishWebActivity : BaseActivity() {
                     ContextCompat.getString(this, R.string.polish_privacy_title)
                 binding.consentBtn.text = ContextCompat.getString(this, R.string.polish_privacy_btn)
 
-                baseUrl = "http://192.168.0.13:8090/ntv/mypagee/privacy"
+                baseUrl = ArPangRepository.BASE_URL_DEV + "/ntv/mypagee/privacy"
             }
         }
 
@@ -81,16 +82,10 @@ class PolishWebActivity : BaseActivity() {
                     // 오류 발생 시 처리
                 }
 
-                // 특정 URL 요청을 가로채서 다른 동작을 수행할 때 사용
                 override fun shouldOverrideUrlLoading(
                     view: WebView?,
                     request: WebResourceRequest?
                 ): Boolean {
-                    // 필요한 경우 URL을 가로채서 처리
-                    if (request?.url?.host == "www.example.com") {
-                        // 특정 도메인에 대해 다른 작업 수행
-                        return false // WebView에서 URL을 처리하도록 허용
-                    }
                     return super.shouldOverrideUrlLoading(view, request)
                 }
             }

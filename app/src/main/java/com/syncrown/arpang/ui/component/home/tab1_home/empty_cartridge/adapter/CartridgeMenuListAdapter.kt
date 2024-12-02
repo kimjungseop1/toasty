@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemCartridgeMenuBinding
+import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 
 class CartridgeMenuListAdapter(
     private val context: Context,
-    private val items: ArrayList<String>
+    private val items: ResponseRecommendTagListDto
 ) : RecyclerView.Adapter<CartridgeMenuListAdapter.CartridgeMenuHolder>() {
 
     interface OnItemClickListener {
@@ -38,7 +39,7 @@ class CartridgeMenuListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return items.root.size
     }
 
     inner class CartridgeMenuHolder(private val binding: ItemCartridgeMenuBinding) :
@@ -53,13 +54,13 @@ class CartridgeMenuListAdapter(
                 binding.itemMenuView.setTextColor(context!!.getColor(R.color.color_5B5B5B))
             }
 
-            binding.itemMenuView.text = items[position]
+            binding.itemMenuView.text = items.root[position].tag_nm
 
             binding.root.setOnClickListener {
                 val previousPosition = selectedPosition
                 selectedPosition = position
-                notifyItemChanged(previousPosition)  // Refresh the previously selected item
-                notifyItemChanged(position)  // Refresh the newly selected item
+                notifyItemChanged(previousPosition)
+                notifyItemChanged(position)
                 mListener?.onClick(position)
             }
         }

@@ -28,15 +28,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditVideoPrintBinding
-import com.syncrown.arpang.db.ar_match.ArVideoImageDatabase
-import com.syncrown.arpang.db.ar_match.ArVideoImageEntity
+import com.syncrown.arpang.db.ar_db.ArVideoImageDatabase
+import com.syncrown.arpang.db.ar_db.ArVideoImageEntity
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.FontManager
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.commons.HorizontalSpaceItemDecoration
-import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ActivityFinishManager
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.ArImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.edit.adapter.NavBarItem
@@ -52,7 +51,6 @@ import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -691,12 +689,6 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
     private fun goTagSetting() {
         val intent = Intent(this, ArPrintTagSettingActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun goMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 

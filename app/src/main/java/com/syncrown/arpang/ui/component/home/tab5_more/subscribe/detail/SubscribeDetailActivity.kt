@@ -21,7 +21,6 @@ import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.GridItem
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
 
@@ -142,28 +141,28 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
     }
 
     private fun showGridStyle(spanCount: Int, spacing: Int) {
-        val items = listOf(
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-        )
-
-        clearItemDecorations(binding.recyclerShare)
-
-        binding.recyclerShare.layoutManager = GridLayoutManager(this, spanCount)
-        binding.recyclerShare.addItemDecoration(
-            GridSpacingItemDecoration(
-                spanCount,
-                CommonFunc.dpToPx(spacing, this),
-                false
-            )
-        )
-
-        binding.recyclerShare.adapter = ShareGridItemAdapter(items, spanCount, this)
+//        val items = listOf(
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//            GridItem(R.drawable.sample_img_1, "00:00"),
+//        )
+//
+//        clearItemDecorations(binding.recyclerShare)
+//
+//        binding.recyclerShare.layoutManager = GridLayoutManager(this, spanCount)
+//        binding.recyclerShare.addItemDecoration(
+//            GridSpacingItemDecoration(
+//                spanCount,
+//                CommonFunc.dpToPx(spacing, this),
+//                false
+//            )
+//        )
+//
+//        binding.recyclerShare.adapter = ShareGridItemAdapter(items, spanCount, this)
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -239,7 +238,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         Log.e("jung", "pos : $position, isSelected : $isSelected")
     }
 
-    override fun onItemClick(position: Int) {
+    override fun onItemClick(position: Int, cntntsNo: String) {
         //goDetail()
     }
 

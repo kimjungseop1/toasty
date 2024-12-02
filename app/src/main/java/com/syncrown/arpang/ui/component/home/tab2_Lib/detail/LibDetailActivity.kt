@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab2_Lib.detail
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,15 @@ import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityLibDetailBinding
 import com.syncrown.arpang.databinding.BottomSheetAnotherPaperBinding
@@ -24,6 +28,9 @@ import com.syncrown.arpang.databinding.BottomSheetPrinterDisconnectBinding
 import com.syncrown.arpang.databinding.PopupLibDeleteBinding
 import com.syncrown.arpang.databinding.PopupLibReportBinding
 import com.syncrown.arpang.databinding.PopupMenuDetailBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestStorageDetailDto
+import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.CustomToast
@@ -33,9 +40,14 @@ import com.syncrown.arpang.ui.commons.DialogToastingCommon
 import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.input_tag.TagResultListStorage
 import com.syncrown.arpang.ui.component.home.tab3_share.detail.adapter.DetailCommentListAdapter
+import kotlinx.coroutines.launch
 
 class LibDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityLibDetailBinding
+    private val libDetailViewModel: LibDetailViewModel by viewModels()
+
+    private var cntntsNo = ""
+
     private lateinit var detailCommentListAdapter: DetailCommentListAdapter
 
     override fun observeViewModel() {
@@ -49,6 +61,12 @@ class LibDetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        cntntsNo = intent.getStringExtra("CONTENT_DETAIL_NO").toString()
+
+        getDetailContent()
+
+        observeDetailContent()
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
@@ -80,7 +98,42 @@ class LibDetailActivity : BaseActivity() {
         binding.actionbar.actionMore.setOnClickListener {
             showPopupWindow(binding.actionbar.actionMore)
         }
+    }
 
+    private fun getDetailContent() {
+        val requestStorageDetailDto = RequestStorageDetailDto()
+        requestStorageDetailDto.cntnts_no = cntntsNo
+        requestStorageDetailDto.user_id = AppDataPref.userId
+
+        libDetailViewModel.libContentDetail(requestStorageDetailDto)
+    }
+
+    private fun observeDetailContent() {
+        lifecycleScope.launch {
+            libDetailViewModel.libContentDetailResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+                            setupUI(data)
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun setupUI(data: ResponseStorageDetailDto.Root?) {
         TagResultListStorage.tagArrayList?.let {
             showFlexTagView(it)
         }
@@ -101,7 +154,7 @@ class LibDetailActivity : BaseActivity() {
         TagResultListStorage.tagArrayList = null
     }
 
-    private fun showFlexTagView(data : ArrayList<String>) {
+    private fun showFlexTagView(data: ArrayList<String>) {
         for (i in 0 until data.size) {
             val customDynamicTagView = CustomDynamicTagView(this).apply {
                 text = data[i]

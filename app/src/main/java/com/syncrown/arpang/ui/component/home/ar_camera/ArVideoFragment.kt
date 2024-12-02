@@ -32,7 +32,7 @@ import com.google.ar.sceneform.rendering.ExternalTexture
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.syncrown.arpang.R
-import com.syncrown.arpang.db.ar_match.ArVideoImageDatabase
+import com.syncrown.arpang.db.ar_db.ArVideoImageDatabase
 import com.syncrown.arpang.ui.component.home.ar_camera.node.VideoAnchorNode
 import com.syncrown.arpang.ui.component.home.ar_camera.node.VideoScaleType
 import kotlinx.coroutines.Dispatchers

@@ -8,10 +8,19 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
+import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
+import com.syncrown.arpang.network.model.ResponseSaveEditorDto
+import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
+import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
+import com.syncrown.arpang.network.model.ResponseShareDetailDto
+import com.syncrown.arpang.network.model.ResponseStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserAlertListDto
 import com.syncrown.arpang.network.model.ResponseUserAlertSettingDto
@@ -140,13 +149,20 @@ interface ArPangInterface {
     @POST("/ntv/atp/cartridge/list")
     fun postCartridgeList(
         @Field("app_id") app_id: String,
-        @Field("device_os") device_os: String,
+        @Field("device_os") device_os: Int,
         @Field("ctge_no") ctge_no: Int?,
         @Field("ctge_nm") ctge_nm: String?,
         @Field("ctge_model") ctge_model: String?,
         @Field("ctge_model_abbr") ctge_model_abbr: String?,
         @Field("character_brand") character_brand: String?
     ): Call<ResponseCartridgeListDto>
+
+    //TODO 011-1 추천태그 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/tag/recommend/all")
+    fun postRecommendAllList(
+        @Field("app_id") app_id: String
+    ): Call<ResponseRecommendTagListDto>
 
     //TODO 012. 카트리지별 앱메뉴 리스트
     @FormUrlEncoded
@@ -176,8 +192,11 @@ interface ArPangInterface {
     @FormUrlEncoded
     @POST("/ntv/atp/tag/recommend/cartridge/list")
     fun postCartridgeListByTags(
-        @Field("tag_seq_no") tag_seq_no: Int,
-        @Field("app_id") app_id: String
+        @Field("tag_seq_no") tag_seq_no: String,
+        @Field("app_id") app_id: String,
+        @Field("menu_code") menu_code: String?,
+        @Field("currPage") currPage: Int?,
+        @Field("pageSize") pageSize: Int?
     ): Call<ResponseCartridgeListByTagDto>
 
     //TODO 016. 사용자 알림 설정
@@ -197,4 +216,87 @@ interface ArPangInterface {
     fun postUserAlertList(
         @Field("user_id") user_id: String
     ): Call<ResponseUserAlertListDto>
+
+    //TODO 018. 템플릿 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/templete/list")
+    fun postTemplateList(
+        @Field("ctgy_se") ctgy_se: String,
+        @Field("ctgy_code_step1") ctgy_code_step1: Int?,
+        @Field("version_no_start") version_no_start: Int?,
+        @Field("version_no_end") version_no_end: Int?,
+        @Field("character_brand") character_brand: String?,
+        @Field("currPage") currPage: Int?,
+        @Field("pageSize") pageSize: Int?
+    ): Call<ResponseTemplateListDto>
+
+    //TODO 019. 금지해시태그조회
+    @FormUrlEncoded
+    @POST("/ntv/atp/hashtag/isprohibit")
+    fun postIgnoreTagCheck(
+        @Field("share_hash_tag") share_hash_tag: String
+    ): Call<ResponseIgnoreTagCheckDto>
+
+    //TODO 020. 에디터 Object 저장(일괄)
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/editor/total")
+    fun postSaveEditor(
+        @Field("user_id") user_id: String,
+        @Field("ctge_no") ctge_no: Int,
+        @Field("main_image") main_image: String,
+        @Field("editor_data") editor_data: String?,
+        @Field("pixel_x") pixel_x: Double?,
+        @Field("share_hash_tag") share_hash_tag: String?,
+        @Field("share_se") share_se: Int,
+        @Field("menu_code") menu_code: Int,
+        @Field("parent_cntnts_no") parent_cntnts_no: String?
+    ): Call<ResponseSaveEditorDto>
+
+    //TODO 021. 보관함(사용자) 저장 컨텐츠 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/mysave")
+    fun postStorageContentList(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int,
+        @Field("hash_tag") hash_tag: String?,
+        @Field("menu_code") menu_code: String?
+    ): Call<ResponseStorageContentListDto>
+
+    //TODO 022. 보관함(사용자) 저장 컨텐츠 상세조회
+    @FormUrlEncoded
+    @POST("/ntv/atp/detail/contents/mysave")
+    fun postStorageContentDetail(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String
+    ): Call<ResponseStorageDetailDto>
+
+    //TODO 023. 사용자가 공유(공개)한 컨텐츠 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/share")
+    fun postShareContentUserOpenList(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int?,
+        @Field("pageSize") pageSize: Int?,
+        @Field("hash_tag") hash_tag: String?,
+        @Field("menu_code") menu_code: Int?
+    ): Call<ResponseShareContentUserOpenListDto>
+
+    //TODO 024. 전체 공유(공개) 컨텐츠 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/share/all")
+    fun postShareContentAllOpenList(
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int,
+        @Field("hash_tag") hash_tag: String?,
+        @Field("menu_code") menu_code: String?
+    ): Call<ResponseShareContentAllOpenListDto>
+
+    //TODO 025. 공개(공유)된 컨텐츠 상세조회
+    @FormUrlEncoded
+    @POST("/ntv/atp/detail/contents/share")
+    fun postShareDetailContent(
+        @Field("cntnts_no") cntnts_no: String
+    ): Call<ResponseShareDetailDto>
+
 }

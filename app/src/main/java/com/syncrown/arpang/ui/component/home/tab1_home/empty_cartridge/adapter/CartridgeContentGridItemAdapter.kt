@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemCatridgeContentBinding
+import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 
 class CartridgeContentGridItemAdapter(
-    private val items: List<String>,
+    private val items: ResponseCartridgeListByTagDto,
     private val clickListener: OnItemClickListener,
     private val scaleListener: OnScaleClickListener
 ) : RecyclerView.Adapter<CartridgeContentGridItemAdapter.MultiSpanViewHolder>() {
@@ -21,7 +22,7 @@ class CartridgeContentGridItemAdapter(
 
     inner class MultiSpanViewHolder(private val binding: ItemCatridgeContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: String, position: Int) {
+        fun bind(item: ResponseCartridgeListByTagDto.Root, position: Int) {
             binding.itemPaper.setOnClickListener {
                 clickListener.onItemClick(position)
             }
@@ -30,7 +31,7 @@ class CartridgeContentGridItemAdapter(
                 scaleListener.onScaleClick(position)
             }
 
-            binding.nameView.text = item
+            binding.nameView.text = item.ctge_nm
         }
     }
 
@@ -42,9 +43,9 @@ class CartridgeContentGridItemAdapter(
     }
 
     override fun onBindViewHolder(holder: MultiSpanViewHolder, position: Int) {
-        val item = items[position]
+        val item = items.root[position]
         holder.bind(item, position)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.root.size
 }

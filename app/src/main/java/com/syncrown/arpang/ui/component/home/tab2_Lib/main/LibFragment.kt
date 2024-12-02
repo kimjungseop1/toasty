@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab2_Lib.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,19 +16,22 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.BottomSheetCartridgeSelectBinding
 import com.syncrown.arpang.databinding.BottomSheetFilterBinding
 import com.syncrown.arpang.databinding.BottomSheetTypeBinding
 import com.syncrown.arpang.databinding.FragmentLibBinding
+import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterChildAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterSelectAdapter
-import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.GridItem
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.LibGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.MultiSelectAdapter
 import java.io.IOException
@@ -36,6 +41,13 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     CartridgeMultiSelectAdapter.OnCartridgeItemSelectedListener {
 
     private lateinit var binding: FragmentLibBinding
+    private val libViewModel: MainViewModel by activityViewModels()
+    private var currentPage = 1
+    private var isLoading = false
+    private var hasMoreData = true
+    private lateinit var adapter: LibGridItemAdapter
+    private var data: ArrayList<ResponseStorageContentListDto.ROOT> = ArrayList()
+
     private lateinit var childAdapter: FilterChildAdapter
 
     private val selectedItemsList = mutableListOf<String>()
@@ -50,8 +62,10 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
     private lateinit var cartridgeMultiSelectAdapter: CartridgeMultiSelectAdapter
 
-    private val itemList = listOf("전체", "AR 영상", "인생네컷", "자유인쇄", "라벨 스티커", "행사 스티커")
+    private val itemList = listOf("전체", "AR 영상", "인생두컷", "자유인쇄", "라벨 스티커", "행사 스티커")
     private lateinit var categoryAdapter: MultiSelectAdapter
+    private lateinit var menuCodeList: ArrayList<String>
+    private var currentSelectMode = -1
 
     companion object {
         private const val GRID_SPAN_COUNT = 3
@@ -71,30 +85,39 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
+        menuCodeList = ArrayList()
+        setupUI()
+
+        observeLibList()
+    }
+
+    private fun setupUI() {
         binding.filterBtn.setOnClickListener { showFilterBottomSheet() }
         cartridgeMultiSelectAdapter =
             CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
         binding.paperBtn.text = cartridgeList[0]
         binding.paperBtn.setOnClickListener { showCartridgeBottomSheet() }
-        categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
         binding.contentsBtn.text = itemList[0]
         binding.contentsBtn.setOnClickListener { showTypeBottomSheet() }
 
-        showGridStyle(GRID_SPAN_COUNT, SPACE)
-        binding.gridBtn.isSelected = true
-        binding.linearBtn.isSelected = false
-
         binding.gridBtn.setOnClickListener {
-            binding.gridBtn.isSelected = true
-            binding.linearBtn.isSelected = false
-            showGridStyle(GRID_SPAN_COUNT, SPACE)
+            setLayoutStyle(GRID_SPAN_COUNT, true)
         }
 
         binding.linearBtn.setOnClickListener {
-            binding.gridBtn.isSelected = false
-            binding.linearBtn.isSelected = true
-            showGridStyle(LINEAR_SPAN_COUNT, SPACE)
+            setLayoutStyle(LINEAR_SPAN_COUNT, false)
         }
+
+        binding.gridBtn.performClick()
+    }
+
+    private fun setLayoutStyle(spanCount: Int, isGridSelected: Boolean) {
+        binding.gridBtn.isSelected = isGridSelected
+        binding.linearBtn.isSelected = !isGridSelected
+
+        currentSelectMode = spanCount
+        showGridStyle(currentSelectMode, SPACE)
     }
 
     private fun showFilterBottomSheet() {
@@ -339,26 +362,38 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         sheetBinding.recyclerCate.adapter = categoryAdapter
 
         sheetBinding.submitBtn.setOnClickListener {
-            val selectedCategories = categoryAdapter.getSelectedItems()
-            categoryAdapter.saveCurrentSelection()
-            updateSelectedCategories(selectedCategories)
-            bottomSheetDialog.dismiss()
+            handleCategorySubmit(bottomSheetDialog)
         }
         bottomSheetDialog.show()
     }
 
+    private fun handleCategorySubmit(bottomSheetDialog: BottomSheetDialog) {
+        val selectedCategories = categoryAdapter.getSelectedItems()
+
+        if (selectedCategories.contains(0)) {
+            menuCodeList.add("")
+        } else if (selectedCategories.contains(1)) {
+            menuCodeList.add("AR_MENU01")
+        } else if (selectedCategories.contains(2)) {
+            menuCodeList.add("AR_MENU02")
+        } else if (selectedCategories.contains(3)) {
+            menuCodeList.add("AR_MENU05")
+        } else if (selectedCategories.contains(4)) {
+            menuCodeList.add("AR_MENU03")
+        } else if (selectedCategories.contains(5)) {
+            menuCodeList.add("AR_MENU04")
+        }
+
+        updateSelectedCategories(selectedCategories)
+        resetData()
+        fetchData()
+        bottomSheetDialog.dismiss()
+    }
+
     private fun showGridStyle(spanCount: Int, spacing: Int) {
-        val items = listOf(
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            GridItem(R.drawable.sample_img_1, "00:00"),
-            // Sample data
-        )
+        libViewModel.clearLibListData()
         clearItemDecorations(binding.recyclerLib)
+
         binding.recyclerLib.layoutManager = GridLayoutManager(requireContext(), spanCount)
         binding.recyclerLib.addItemDecoration(
             GridSpacingItemDecoration(
@@ -367,7 +402,67 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
                 false
             )
         )
-        binding.recyclerLib.adapter = LibGridItemAdapter(items, spanCount, this)
+
+        adapter = LibGridItemAdapter(requireContext(), data, spanCount, this)
+        binding.recyclerLib.adapter = adapter
+        setupRecyclerViewScrollListener()
+
+        fetchData()
+    }
+
+    private fun setupRecyclerViewScrollListener() {
+        binding.recyclerLib.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.recyclerLib.canScrollVertically(1)
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                    && !isLoading
+                    && hasMoreData
+                ) {
+                    fetchData()
+                }
+            }
+        })
+    }
+
+    private fun fetchData() {
+        if (isLoading) return
+        isLoading = true
+
+        val requestDto = RequestStorageContentListDto().apply {
+            user_id = AppDataPref.userId
+            currPage = currentPage
+            pageSize = 18
+            if (menuCodeList.isNotEmpty()) {
+                val menuCodeBuilder = StringBuilder()
+                for (menuCode in menuCodeList) {
+                    menuCodeBuilder.append(menuCode).append(",")
+                }
+                menu_code = menuCodeBuilder.toString()
+            }
+        }
+
+        libViewModel.getStorageList(requestDto)
+    }
+
+    private fun observeLibList() {
+        libViewModel.storageContentResponseLiveData()
+            .observe(viewLifecycleOwner) { result ->
+                isLoading = false
+
+                if (result == null) return@observe
+
+                val newData = result.data?.root ?: ArrayList()
+
+                if (newData.isEmpty()) {
+                    hasMoreData = false
+                    return@observe
+                }
+
+                // 데이터 추가 및 페이지 증가
+                adapter.addMoreData(newData)
+                currentPage++
+            }
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -377,11 +472,23 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         }
     }
 
-    override fun onItemClick(position: Int) {
-        goDetail()
+    @SuppressLint("NotifyDataSetChanged")
+    private fun resetData() {
+        data.clear()
+        adapter.notifyDataSetChanged()
+        currentPage = 1
+        hasMoreData = true
     }
 
-    override fun onItemSelected(position: Int, isSelected: Boolean) {}
+    override fun onItemClick(position: Int, cntntsNo: String) {
+        val intent = Intent(requireContext(), LibDetailActivity::class.java)
+        intent.putExtra("CONTENT_DETAIL_NO", cntntsNo)
+        startActivity(intent)
+    }
+
+    override fun onItemSelected(position: Int, isSelected: Boolean) {
+
+    }
 
     private fun updateSelectedCategories(selectedCategories: List<Int>) {
         binding.contentsBtn.text = itemList[selectedCategories[0]]
@@ -398,10 +505,5 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             if (cartridgeMultiSelectAdapter.getSelectedItemCount() > 1) View.VISIBLE else View.GONE
         binding.selectCartridgeCnt.text =
             cartridgeMultiSelectAdapter.getSelectedItemCount().toString()
-    }
-
-    private fun goDetail() {
-        val intent = Intent(requireContext(), LibDetailActivity::class.java)
-        startActivity(intent)
     }
 }

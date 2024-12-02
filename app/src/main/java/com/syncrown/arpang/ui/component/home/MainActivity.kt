@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -36,11 +35,11 @@ import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.MoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
 import com.syncrown.arpang.ui.util.PrintUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -52,50 +51,58 @@ class MainActivity : BaseActivity() {
     private val printUtil = PrintUtil.getInstance()
     private var batteryCheckJob: Job? = null
     private var printerStatusJob: Job? = null
+    private var paperStatusJob: Job? = null
 
     override fun observeViewModel() {
         lifecycleScope.launch {
-            mainViewModel.onPaperGuideActivityClosed.observe(this@MainActivity, Observer { value ->
+            mainViewModel.onPaperGuideActivityClosed.observe(this@MainActivity) { value ->
                 if (value.equals("GO_STORE")) {
                     onPaperGuideClosed()
                     mainViewModel.paperGuideActivityClosed("")
                 }
-            })
+            }
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                fetchDataFromNetwork()
+                printUtil.connectionState.observe(this@MainActivity) { isConnect ->
+                    Log.e("jung", "main isConnect : $isConnect")
+                    if (isConnect) {
+                        mainViewModel.updateConnectedState(true)
+                        startBatteryCheckJob()
+                        startPrinterStatusJob()
+                        startPaperStatusJob()
+                    } else {
+                        mainViewModel.updateConnectedState(false)
+                        binding.actionbar.actionBattery.visibility = View.GONE
+                        batteryCheckJob?.cancel()
+                        printerStatusJob?.cancel()
+                        paperStatusJob?.cancel()
+
+                        printUtil.disConnect()
+                    }
+                }
             }
         }
 
         lifecycleScope.launch {
-            printUtil.connectionState.observe(this@MainActivity) { isConnect ->
-                Log.e("jung", "main isConnect : $isConnect")
-                mainViewModel.updateConnectedState(isConnect)
-
-                if (isConnect) {
-                    startBatteryCheckJob()
-
-                    startPrinterStatusJob()
-
+            printUtil.batteryVol.observe(this@MainActivity) { batteryLevel ->
+                if (printUtil.printPP.isConnected) {
                     binding.actionbar.actionBattery.visibility = View.VISIBLE
                 } else {
-                    batteryCheckJob?.cancel()
-                    printerStatusJob?.cancel()
-
                     binding.actionbar.actionBattery.visibility = View.GONE
                 }
-            }
 
-            printUtil.batteryVol.observe(this@MainActivity) { batteryLevel ->
-                Log.e("jung", "main batteryLevel : $batteryLevel")
-                when {
-                    batteryLevel == 100 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_4)
-                    batteryLevel in 75..99 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_3)
-                    batteryLevel in 50..74 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_2)
-                    batteryLevel in 25..50 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_1)
-                    batteryLevel < 25 -> binding.actionbar.actionBattery.setImageResource(R.drawable.icon_battery_charge)
+                binding.actionbar.actionBattery.setImageResource(getBatteryIconResource(batteryLevel))
+            }
+        }
+
+        lifecycleScope.launch {
+            printUtil.paperInfo.observe(this@MainActivity) { result ->
+                if (result.isNotEmpty()) {
+                    paperStatusJob?.cancel()
+                } else {
+                    startPaperStatusJob()
                 }
             }
         }
@@ -210,21 +217,29 @@ class MainActivity : BaseActivity() {
 
     private fun startBatteryCheckJob() {
         batteryCheckJob?.cancel()
-
         batteryCheckJob = lifecycleScope.launch {
-            while (true) {
+            while (isActive) {
                 printUtil.sendBatteryVol()
-                delay(1500)
+                delay(1000)
             }
         }
     }
 
     private fun startPrinterStatusJob() {
         printerStatusJob?.cancel()
-
         printerStatusJob = lifecycleScope.launch {
-            while (true) {
+            while (isActive) {
                 printUtil.sendPrinterStatus()
+                delay(1000)
+            }
+        }
+    }
+
+    private fun startPaperStatusJob() {
+        paperStatusJob?.cancel()
+        paperStatusJob = lifecycleScope.launch {
+            while (isActive) {
+                printUtil.sendPaperInfo()
                 delay(1000)
             }
         }
@@ -234,6 +249,7 @@ class MainActivity : BaseActivity() {
         super.onDestroy()
         batteryCheckJob?.cancel()
         printerStatusJob?.cancel()
+        paperStatusJob?.cancel()
 
         printUtil.disConnect()
     }
@@ -244,21 +260,6 @@ class MainActivity : BaseActivity() {
             .commit()
 
         return fragment
-    }
-
-    private suspend fun fetchDataFromNetwork() {
-        val data = withContext(Dispatchers.IO) {
-            // 홈 데이터 호출
-
-        }
-
-        updateUi(data)
-    }
-
-    private fun updateUi(data: Unit) {
-        Log.e("jung", "updateUi call .....")
-
-
     }
 
     @SuppressLint("RestrictedApi")
@@ -342,6 +343,16 @@ class MainActivity : BaseActivity() {
         binding.closeView.setOnClickListener { bottomSheetDialog?.dismiss() }
 
         bottomSheetDialog?.show()
+    }
+
+    private fun getBatteryIconResource(batteryLevel: Int): Int {
+        return when (batteryLevel) {
+            100 -> R.drawable.icon_battery_4
+            in 75..99 -> R.drawable.icon_battery_3
+            in 50..74 -> R.drawable.icon_battery_2
+            in 25..49 -> R.drawable.icon_battery_1
+            else -> R.drawable.icon_battery_charge
+        }
     }
 
     private fun onPaperGuideClosed() {

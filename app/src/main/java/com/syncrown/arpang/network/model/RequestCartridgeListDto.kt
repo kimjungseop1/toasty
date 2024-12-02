@@ -10,7 +10,7 @@ class RequestCartridgeListDto {
 
     @SerializedName("device_os")
     @Expose
-    var device_os: String = ""
+    var device_os: Int = -1
 
     @SerializedName("ctge_no")
     @Expose

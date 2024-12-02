@@ -3,22 +3,22 @@ package com.syncrown.arpang.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ResponseCartridgeListByTagDto {
+class ResponseRecommendTagListDto {
     @SerializedName("root")
     @Expose
     var root: ArrayList<Root> = ArrayList()
 
     class Root {
-        @SerializedName("ctge_no")
+        @SerializedName("seq_no")
         @Expose
-        var ctge_no: Int? = null
+        var seq_no: String? = null
 
-        @SerializedName("ctge_nm")
+        @SerializedName("order_by")
         @Expose
-        var ctge_nm: String? = null
+        var order_by: Int? = null
 
-        @SerializedName("app_id")
+        @SerializedName("tag_nm")
         @Expose
-        var app_id: String? = null
+        var tag_nm: String? = null
     }
 }

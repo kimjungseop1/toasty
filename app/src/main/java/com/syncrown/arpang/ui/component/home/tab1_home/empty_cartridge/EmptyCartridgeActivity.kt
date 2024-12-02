@@ -3,10 +3,17 @@ package com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEmptyCartridgeBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestCartridgeListByTagDto
+import com.syncrown.arpang.network.model.RequestRecommendTagListDto
+import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
+import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
@@ -14,20 +21,72 @@ import com.syncrown.arpang.ui.commons.HorizontalSpaceItemDecoration
 import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videoselect.VideoSelectActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeContentGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.adapter.CartridgeMenuListAdapter
+import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.preview.PreViewCartridgeActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.EditFestivalActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.EditFreePrintActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.EditLabelStickerActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.empty_cartridge.preview.PreViewCartridgeActivity
+import kotlinx.coroutines.launch
 
 class EmptyCartridgeActivity : BaseActivity() {
     private lateinit var binding: ActivityEmptyCartridgeBinding
+    private val emptyCartridgeViewModel: EmptyCartridgeViewModel by viewModels()
+
     companion object {
         private var actionTitle: String = ""
+        private var mainMenuCode: String = ""
     }
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            emptyCartridgeViewModel.recommendTagListResponseLiveData()
+                .observe(this@EmptyCartridgeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data
+                            data?.let {
+                                setCartridgeMenuTab(it)
+                            }
+                        }
 
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            emptyCartridgeViewModel.cartridgeByTagListResponseLiveData()
+                .observe(this@EmptyCartridgeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data
+                            data?.let {
+                                setCartridgeContent(it)
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
     }
 
     override fun initViewBinding() {
@@ -39,38 +98,37 @@ class EmptyCartridgeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         actionTitle = intent.getStringExtra("FROM_HOME_CATEGORY").toString()
+        mainMenuCode = intent.getStringExtra("MAIN_MENU_CODE").toString()
+
         binding.actionbar.actionTitle.text = actionTitle
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
 
-        setCartridgeMenuTab()
-
+        getTagList()
     }
 
-    private fun setCartridgeMenuTab() {
-        val arrayList = ArrayList<String>()
-        arrayList.add("추천")
-        arrayList.add("봄에 어울리는")
-        arrayList.add("가족 앨범")
-        arrayList.add("AR 용지 분류1")
-        arrayList.add("AR 용지 분류2")
+    private fun getTagList() {
+        val requestRecommendTagListDto = RequestRecommendTagListDto()
+        requestRecommendTagListDto.app_id = "APP_ARPANG"
+        emptyCartridgeViewModel.responseRecommendTagList(requestRecommendTagListDto)
+    }
 
+    private fun setCartridgeMenuTab(data: ResponseRecommendTagListDto) {
         binding.recyclerCartridge.itemDecorationCount.let { count ->
             for (i in 0 until count) {
                 binding.recyclerCartridge.removeItemDecorationAt(0)
             }
         }
 
-        val menuListAdapter = CartridgeMenuListAdapter(this, arrayList)
+        val menuListAdapter = CartridgeMenuListAdapter(this, data)
         binding.recyclerCartridge.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerCartridge.adapter = menuListAdapter
         menuListAdapter.setOnItemClickListener(object :
             CartridgeMenuListAdapter.OnItemClickListener {
             override fun onClick(position: Int) {
-                Log.e("jung", "click $position")
-                setCartridgeContent()
+                getCartridgeByTag(data.root[position].seq_no.toString())
             }
         })
         binding.recyclerCartridge.addItemDecoration(
@@ -84,26 +142,25 @@ class EmptyCartridgeActivity : BaseActivity() {
 
     }
 
-    private fun setCartridgeContent() {
-        val arrayList = ArrayList<String>()
-        arrayList.add("비규격")
-        arrayList.add("스튜디오")
-        arrayList.add("폴라로이드")
-        arrayList.add("용지이름1")
-        arrayList.add("용지이름2")
+    private fun getCartridgeByTag(seqNo: String) {
+        val requestCartridgeListByTagDto = RequestCartridgeListByTagDto()
+        requestCartridgeListByTagDto.tag_seq_no = seqNo
+        requestCartridgeListByTagDto.app_id = "APP_ARPANG"
+        requestCartridgeListByTagDto.menu_code = mainMenuCode
+        emptyCartridgeViewModel.cartridgeByTag(requestCartridgeListByTagDto)
+    }
 
+    private fun setCartridgeContent(responseCartridgeListByTagDto: ResponseCartridgeListByTagDto) {
         val decorationCount = binding.recyclerGridView.itemDecorationCount
         for (i in decorationCount - 1 downTo 0) {
             binding.recyclerGridView.removeItemDecorationAt(i)
         }
 
         val contentListAdapter = CartridgeContentGridItemAdapter(
-            arrayList,
+            responseCartridgeListByTagDto,
             object : CartridgeContentGridItemAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
-                    Log.e("jung", "content click : $position")
-
-                    when(actionTitle) {
+                    when (actionTitle) {
                         getString(R.string.cartridge_empty_action_text_1) -> {
                             // ar 영상 인쇄
                             goSelectVideo()

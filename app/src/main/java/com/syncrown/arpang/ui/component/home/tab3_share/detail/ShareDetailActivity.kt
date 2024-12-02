@@ -2,13 +2,16 @@ package com.syncrown.arpang.ui.component.home.tab3_share.detail
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexboxLayout
@@ -21,6 +24,9 @@ import com.syncrown.arpang.databinding.BottomSheetCartridgeBinding
 import com.syncrown.arpang.databinding.BottomSheetPaperDisconnectBinding
 import com.syncrown.arpang.databinding.BottomSheetPrinterDisconnectBinding
 import com.syncrown.arpang.databinding.PopupSubscribeBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestShareDetailDto
+import com.syncrown.arpang.network.model.ResponseShareDetailDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.CustomToast
@@ -28,11 +34,15 @@ import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.DialogToastingCommon
 import com.syncrown.arpang.ui.component.home.tab3_share.detail.adapter.DetailCommentListAdapter
+import kotlinx.coroutines.launch
 
 
 class ShareDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityShareDetailBinding
+    private val shareDetailViewModel: ShareDetailViewModel by viewModels()
     private lateinit var detailCommentListAdapter: DetailCommentListAdapter
+
+    private var cntntsNo = ""
 
     override fun observeViewModel() {
 
@@ -45,6 +55,11 @@ class ShareDetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        cntntsNo = intent.getStringExtra("CONTENT_DETAIL_NO").toString()
+        getDetailContent()
+
+        observeDetailContent()
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
@@ -87,7 +102,40 @@ class ShareDetailActivity : BaseActivity() {
         binding.actionbar.actionMore.setOnClickListener {
             showActionPopupWindow(binding.actionbar.actionMore, 0)
         }
+    }
 
+    private fun getDetailContent() {
+        val requestShareDetailDto = RequestShareDetailDto()
+        requestShareDetailDto.cntnts_no = cntntsNo
+        shareDetailViewModel.shareContentDetail(requestShareDetailDto)
+    }
+
+    private fun observeDetailContent() {
+        lifecycleScope.launch {
+            shareDetailViewModel.shareContentDetailResponseLiveData()
+                .observe(this@ShareDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+                            setupUI(data)
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun setupUI(data: ResponseShareDetailDto.ROOT?) {
         showEventView()
 
         showFlexTagView()

@@ -34,6 +34,8 @@ class AlertSettingActivity : BaseActivity() {
                                     binding.likeSwitch.isChecked = false
                                     binding.commentSwitch.isChecked = false
 
+                                    hideSwitchAnimation()
+
                                 } else {
                                     binding.allAlertSwitch.isChecked = true
 
@@ -41,6 +43,8 @@ class AlertSettingActivity : BaseActivity() {
                                     binding.subscribeSwitch.isChecked = data.subscrip_se == 1
                                     binding.likeSwitch.isChecked = data.favor_se == 1
                                     binding.commentSwitch.isChecked = data.comment_se == 1
+
+                                    hideSwitchAnimation()
                                 }
                             }
                         }
@@ -179,5 +183,15 @@ class AlertSettingActivity : BaseActivity() {
         binding.subscribeView.isEnabled = isChecked
         binding.likeView.isEnabled = isChecked
         binding.commentView.isEnabled = isChecked
+
+        hideSwitchAnimation()
+    }
+
+    private fun hideSwitchAnimation() {
+        binding.allAlertSwitch.jumpDrawablesToCurrentState()
+        binding.eventSwitch.jumpDrawablesToCurrentState()
+        binding.subscribeSwitch.jumpDrawablesToCurrentState()
+        binding.likeSwitch.jumpDrawablesToCurrentState()
+        binding.commentSwitch.jumpDrawablesToCurrentState()
     }
 }

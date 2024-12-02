@@ -12,10 +12,19 @@ import com.syncrown.arpang.network.model.RequestCartridgeListDto
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestCommonListDto
+import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestMultiCommonListDto
+import com.syncrown.arpang.network.model.RequestRecommendTagListDto
+import com.syncrown.arpang.network.model.RequestSaveEditorDto
+import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
+import com.syncrown.arpang.network.model.RequestShareContentUserOpenListDto
+import com.syncrown.arpang.network.model.RequestShareDetailDto
+import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.RequestStorageDetailDto
 import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
+import com.syncrown.arpang.network.model.RequestTemplateListDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
 import com.syncrown.arpang.network.model.RequestUserAlertListDto
 import com.syncrown.arpang.network.model.RequestUserAlertSettingDto
@@ -31,10 +40,19 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
+import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
+import com.syncrown.arpang.network.model.ResponseSaveEditorDto
+import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
+import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
+import com.syncrown.arpang.network.model.ResponseShareDetailDto
+import com.syncrown.arpang.network.model.ResponseStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserAlertListDto
 import com.syncrown.arpang.network.model.ResponseUserAlertSettingDto
@@ -52,8 +70,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ArPangRepository {
     companion object {
-        private const val BASE_URL_DEV = "http://192.168.0.132:8090"
-        private const val BASE_URL_REAL = ""
+        const val BASE_URL_DEV = "http://192.168.0.132:8090"
+        const val BASE_URL_REAL = ""
     }
 
     private var arPangInterface: ArPangInterface
@@ -141,6 +159,10 @@ class ArPangRepository {
     val cartridgeListLiveDataRepository: MutableLiveData<NetworkResult<ResponseCartridgeListDto>> =
         MutableLiveData()
 
+    //TODO 011-1 추천태그 리스트
+    val recommendTagListLiveDataRepository: MutableLiveData<NetworkResult<ResponseRecommendTagListDto>> =
+        MutableLiveData()
+
     //TODO 012. 카트리지별 앱메뉴 리스트
     val appMenuByCartridgeLiveDataRepository: MutableLiveData<NetworkResult<ResponseAppMenuByCartridgeDto>> =
         MutableLiveData()
@@ -163,6 +185,38 @@ class ArPangRepository {
 
     //TODO 017. 사용자 알림 리스트
     val userAlertListLiveDataRepository: MutableLiveData<NetworkResult<ResponseUserAlertListDto>> =
+        MutableLiveData()
+
+    //TODO 018. 템플릿 리스트
+    val templateListLiveDataRepository: MutableLiveData<NetworkResult<ResponseTemplateListDto>> =
+        MutableLiveData()
+
+    //TODO 019. 금지해시태그조회
+    val ignoreTagCheckLiveDataRepository: MutableLiveData<NetworkResult<ResponseIgnoreTagCheckDto>> =
+        MutableLiveData()
+
+    //TODO 020. 에디터 Object 저장(일괄)
+    val saveEditorLiveDataRepository: MutableLiveData<NetworkResult<ResponseSaveEditorDto>> =
+        MutableLiveData()
+
+    //TODO 021. 보관함(사용자) 저장 컨텐츠 리스트
+    val storageContentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseStorageContentListDto>> =
+        MutableLiveData()
+
+    //TODO 022. 보관함(사용자) 저장 컨텐츠 상세조회
+    val storageContentDetailDataRepository: MutableLiveData<NetworkResult<ResponseStorageDetailDto>> =
+        MutableLiveData()
+
+    //TODO 023. 사용자가 공유(공개)한 컨텐츠 리스트
+    var shareContentUserOpenListLiveDataRepository: MutableLiveData<NetworkResult<ResponseShareContentUserOpenListDto>> =
+        MutableLiveData()
+
+    //TODO 024. 전체 공유(공개) 컨텐츠 리스트
+    var shareContentAllOpenListLiveDataRepository: MutableLiveData<NetworkResult<ResponseShareContentAllOpenListDto>> =
+        MutableLiveData()
+
+    //TODO 025. 공개(공유)된 컨텐츠 상세조회
+    var shareDetailLiveDataRepository: MutableLiveData<NetworkResult<ResponseShareDetailDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -488,6 +542,28 @@ class ArPangRepository {
         })
     }
 
+    //TODO 011-1 추천태그 리스트
+    fun requestRecommendTagList(requestRecommendTagListDto: RequestRecommendTagListDto) {
+        arPangInterface.postRecommendAllList(
+            requestRecommendTagListDto.app_id
+        ).enqueue(object : Callback<ResponseRecommendTagListDto> {
+            override fun onResponse(
+                call: Call<ResponseRecommendTagListDto>,
+                response: Response<ResponseRecommendTagListDto>
+            ) {
+                if (response.code() == 200) {
+                    recommendTagListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    recommendTagListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRecommendTagListDto>, t: Throwable) {
+                recommendTagListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
     //TODO 012. 카트리지별 앱메뉴 리스트
     fun requestAppMenuByCartridge(requestAppMenuByCartridgeDto: RequestAppMenuByCartridgeDto) {
         arPangInterface.postAppMenuByCartridge(
@@ -561,7 +637,10 @@ class ArPangRepository {
     fun requestCartridgeListByTag(requestCartridgeListByTagDto: RequestCartridgeListByTagDto) {
         arPangInterface.postCartridgeListByTags(
             requestCartridgeListByTagDto.tag_seq_no,
-            requestCartridgeListByTagDto.app_id
+            requestCartridgeListByTagDto.app_id,
+            requestCartridgeListByTagDto.menu_code,
+            requestCartridgeListByTagDto.currPage,
+            requestCartridgeListByTagDto.pageSize
         ).enqueue(object : Callback<ResponseCartridgeListByTagDto> {
             override fun onResponse(
                 call: Call<ResponseCartridgeListByTagDto>,
@@ -626,6 +705,216 @@ class ArPangRepository {
                 userAlertListLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
 
+        })
+    }
+
+    //TODO 018. 템플릿 리스트
+    fun requestTemplateList(requestTemplateListDto: RequestTemplateListDto) {
+        arPangInterface.postTemplateList(
+            requestTemplateListDto.ctgy_se,
+            requestTemplateListDto.ctgy_code_step1,
+            requestTemplateListDto.version_no_start,
+            requestTemplateListDto.version_no_end,
+            requestTemplateListDto.character_brand,
+            requestTemplateListDto.currPage,
+            requestTemplateListDto.pageSize
+        ).enqueue(object : Callback<ResponseTemplateListDto> {
+            override fun onResponse(
+                call: Call<ResponseTemplateListDto>,
+                response: Response<ResponseTemplateListDto>
+            ) {
+                if (response.code() == 200) {
+                    templateListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    templateListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseTemplateListDto>, t: Throwable) {
+                templateListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 019. 금지 해시태그조회
+    fun requestIgnoreTagCheck(requestIgnoreTagCheckDto: RequestIgnoreTagCheckDto) {
+        arPangInterface.postIgnoreTagCheck(
+            requestIgnoreTagCheckDto.share_hash_tag
+        ).enqueue(object : Callback<ResponseIgnoreTagCheckDto> {
+            override fun onResponse(
+                call: Call<ResponseIgnoreTagCheckDto>,
+                response: Response<ResponseIgnoreTagCheckDto>
+            ) {
+                if (response.code() == 200) {
+                    ignoreTagCheckLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    ignoreTagCheckLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseIgnoreTagCheckDto>, t: Throwable) {
+                ignoreTagCheckLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 020. 에디터 Object 저장(일괄)
+    fun requestSaveEditor(requestSaveEditorDto: RequestSaveEditorDto) {
+        arPangInterface.postSaveEditor(
+            requestSaveEditorDto.user_id,
+            requestSaveEditorDto.ctge_no,
+            requestSaveEditorDto.main_image,
+            requestSaveEditorDto.editor_data,
+            requestSaveEditorDto.pixel_x,
+            requestSaveEditorDto.share_hash_tag,
+            requestSaveEditorDto.share_se,
+            requestSaveEditorDto.menu_code,
+            requestSaveEditorDto.parent_cntnts_no
+        ).enqueue(object : Callback<ResponseSaveEditorDto> {
+            override fun onResponse(
+                call: Call<ResponseSaveEditorDto>,
+                response: Response<ResponseSaveEditorDto>
+            ) {
+                if (response.code() == 200) {
+                    saveEditorLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    saveEditorLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSaveEditorDto>, t: Throwable) {
+                saveEditorLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 021. 보관함(사용자) 저장 컨텐츠 리스트
+    fun requestStorageContentList(requestStorageContentListDto: RequestStorageContentListDto) {
+        arPangInterface.postStorageContentList(
+            requestStorageContentListDto.user_id,
+            requestStorageContentListDto.currPage,
+            requestStorageContentListDto.pageSize,
+            requestStorageContentListDto.hash_tag,
+            requestStorageContentListDto.menu_code
+        ).enqueue(object : Callback<ResponseStorageContentListDto> {
+            override fun onResponse(
+                call: Call<ResponseStorageContentListDto>,
+                response: Response<ResponseStorageContentListDto>
+            ) {
+                if (response.code() == 200) {
+                    storageContentListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    storageContentListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseStorageContentListDto>, t: Throwable) {
+                storageContentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 022. 보관함(사용자) 저장 컨텐츠 상세조회
+    fun requestStorageContentDetail(requestStorageDetailDto: RequestStorageDetailDto) {
+        arPangInterface.postStorageContentDetail(
+            requestStorageDetailDto.cntnts_no,
+            requestStorageDetailDto.user_id
+        ).enqueue(object : Callback<ResponseStorageDetailDto> {
+            override fun onResponse(
+                call: Call<ResponseStorageDetailDto>,
+                response: Response<ResponseStorageDetailDto>
+            ) {
+                if (response.code() == 200) {
+                    storageContentDetailDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    storageContentDetailDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseStorageDetailDto>, t: Throwable) {
+                storageContentDetailDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 023. 사용자가 공유(공개)한 컨텐츠 리스트
+    fun requestShareContentUserOpenList(requestShareContentUserOpenListDto: RequestShareContentUserOpenListDto) {
+        arPangInterface.postShareContentUserOpenList(
+            requestShareContentUserOpenListDto.user_id,
+            requestShareContentUserOpenListDto.currPage,
+            requestShareContentUserOpenListDto.pageSize,
+            requestShareContentUserOpenListDto.hash_tag,
+            requestShareContentUserOpenListDto.menu_code
+        ).enqueue(object : Callback<ResponseShareContentUserOpenListDto> {
+            override fun onResponse(
+                call: Call<ResponseShareContentUserOpenListDto>,
+                response: Response<ResponseShareContentUserOpenListDto>
+            ) {
+                if (response.code() == 200) {
+                    shareContentUserOpenListLiveDataRepository.postValue(
+                        NetworkResult.Success(
+                            response.body()
+                        )
+                    )
+                } else {
+                    shareContentUserOpenListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseShareContentUserOpenListDto>, t: Throwable) {
+                shareContentUserOpenListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 024. 전체 공유(공개) 컨텐츠 리스트
+    fun requestShareContentAllOpenList(requestShareContentAllOpenListDto: RequestShareContentAllOpenListDto) {
+        arPangInterface.postShareContentAllOpenList(
+            requestShareContentAllOpenListDto.currPage,
+            requestShareContentAllOpenListDto.pageSize,
+            requestShareContentAllOpenListDto.hash_tag,
+            requestShareContentAllOpenListDto.menu_code
+        ).enqueue(object : Callback<ResponseShareContentAllOpenListDto> {
+            override fun onResponse(
+                call: Call<ResponseShareContentAllOpenListDto>,
+                response: Response<ResponseShareContentAllOpenListDto>
+            ) {
+                if (response.code() == 200) {
+                    shareContentAllOpenListLiveDataRepository.postValue(
+                        NetworkResult.Success(
+                            response.body()
+                        )
+                    )
+                } else {
+                    shareContentAllOpenListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseShareContentAllOpenListDto>, t: Throwable) {
+                shareContentAllOpenListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 025. 공개(공유)된 컨텐츠 상세조회
+    fun requestShareContentDetail(requestShareDetailDto: RequestShareDetailDto) {
+        arPangInterface.postShareDetailContent(
+            requestShareDetailDto.cntnts_no
+        ).enqueue(object : Callback<ResponseShareDetailDto> {
+            override fun onResponse(
+                call: Call<ResponseShareDetailDto>,
+                response: Response<ResponseShareDetailDto>
+            ) {
+                if (response.code() == 200) {
+                    shareDetailLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    shareDetailLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseShareDetailDto>, t: Throwable) {
+                shareDetailLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
         })
     }
 }

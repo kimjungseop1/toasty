@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageInfo
 import androidx.lifecycle.LiveData
@@ -8,8 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
+import com.syncrown.arpang.network.model.RequestStorageContentListDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
+import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -28,6 +33,19 @@ class MainViewModel : BaseViewModel() {
         _onPaperGuideActivityClosed.postValue(newMessage)
     }
 
+
+    /***********************************************************************************************
+     * 홈
+     **********************************************************************************************/
+    //TODO 프린트가 연결되어있는지 여부 (메인액티비티, 홈프레그먼트 둘다 사용)
+    private val _connectState = MutableLiveData<Boolean>()
+    val connectStateShare: LiveData<Boolean> get() = _connectState
+
+    fun updateConnectedState(newState: Boolean) {
+        _connectState.value = newState
+    }
+
+    //TODO 메인 앱메뉴
     private val appMainResponseLiveData: LiveData<NetworkResult<ResponseAppMainDto>> =
         arPangRepository.appMainMenuLiveDataRepository
 
@@ -41,27 +59,49 @@ class MainViewModel : BaseViewModel() {
         return appMainResponseLiveData
     }
 
-
-    /***********************************************************************************************
-     * 홈
-     **********************************************************************************************/
-    //TODO 프린트가 연결되어있는지 여부 (메인액티비티, 홈프레그먼트 둘다 사용)
-    private val _connectState = MutableLiveData<Boolean>()
-    val connectStateShare: LiveData<Boolean> get() = _connectState
-
-    fun updateConnectedState(newState: Boolean) {
-        _connectState.value = newState
-    }
-
     /***********************************************************************************************
      * 보관함
      **********************************************************************************************/
+    //TODO 보관함 리스트
+    private val storageContentLiveData: MutableLiveData<NetworkResult<ResponseStorageContentListDto>> =
+        arPangRepository.storageContentListLiveDataRepository
 
+    fun getStorageList(requestStorageContentListDto: RequestStorageContentListDto) {
+        viewModelScope.launch {
+            arPangRepository.requestStorageContentList(requestStorageContentListDto)
+        }
+    }
+
+    fun storageContentResponseLiveData(): MutableLiveData<NetworkResult<ResponseStorageContentListDto>> {
+        return storageContentLiveData
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    fun clearLibListData() {
+        storageContentLiveData.value = null
+    }
 
     /***********************************************************************************************
      * 공유공간
      **********************************************************************************************/
+    //TODO 전체 공유 컨텐츠 리스트
+    private val shareAllContentLiveData: MutableLiveData<NetworkResult<ResponseShareContentAllOpenListDto>> =
+        arPangRepository.shareContentAllOpenListLiveDataRepository
 
+    fun getShareAllList(requestShareContentAllOpenListDto: RequestShareContentAllOpenListDto) {
+        viewModelScope.launch {
+            arPangRepository.requestShareContentAllOpenList(requestShareContentAllOpenListDto)
+        }
+    }
+
+    fun shareAllContentListResponseLiveData(): MutableLiveData<NetworkResult<ResponseShareContentAllOpenListDto>> {
+        return shareAllContentLiveData
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    fun clearShareListData() {
+        shareAllContentLiveData.value = null
+    }
 
     /***********************************************************************************************
      * 더보기
