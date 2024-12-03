@@ -4,18 +4,14 @@ import BottomTemplateAdapter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
@@ -30,10 +26,8 @@ import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.MainActivity
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.preview.FestivalPreviewActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.festival_sticker.tag.FestivalTagSettingActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.free_print.FreeImageStorage
 import kotlinx.coroutines.launch
 import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.util.LinkedList
@@ -343,7 +337,7 @@ class EditFestivalActivity : BaseActivity(), BottomTemplateAdapter.TemplateListe
     }
 
     private fun goTagSetting() {
-        val intent = Intent(this, FestivalTagSettingActivity::class.java)
+        val intent = Intent(this, InputTagActivity::class.java)
         startActivity(intent)
     }
 

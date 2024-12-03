@@ -23,7 +23,7 @@ class ResponseShareDetailDto {
 
         @SerializedName("pixel_x")
         @Expose
-        var pixel_x: String? = null
+        var pixel_x: Int? = null
 
         @SerializedName("save_ds")
         @Expose

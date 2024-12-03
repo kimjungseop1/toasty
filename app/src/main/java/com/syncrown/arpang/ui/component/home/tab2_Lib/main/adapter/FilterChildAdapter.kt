@@ -77,17 +77,20 @@ class FilterChildAdapter(
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    if (position == 0) {
-                        selectedPositions.clear()
-                        selectedPositions.add(0)
-                    } else {
-                        selectedPositions.remove(0)
-                        if (selectedPositions.contains(position)) {
-                            selectedPositions.remove(position)
-                        } else {
-                            selectedPositions.add(position)
-                        }
-                    }
+                    selectedPositions.clear()
+                    selectedPositions.add(position)
+
+//                    if (position == 0) {
+//                        selectedPositions.clear()
+//                        selectedPositions.add(0)
+//                    } else {
+//                        selectedPositions.remove(0)
+//                        if (selectedPositions.contains(position)) {
+//                            selectedPositions.remove(position)
+//                        } else {
+//                            selectedPositions.add(position)
+//                        }
+//                    }
                     notifyDataSetChanged()
                     selectionChangedListener?.invoke(selectedPositions)
                 }
@@ -100,6 +103,7 @@ class FilterChildAdapter(
     }
 
     // 특정 위치를 선택 해제하는 메서드 추가
+    @SuppressLint("NotifyDataSetChanged")
     fun deselectPosition(position: Int) {
         selectedPositions.remove(position)
         notifyDataSetChanged()
@@ -118,12 +122,14 @@ class FilterChildAdapter(
         return selectedPositions.toSet()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun clearSelections() {
         selectedPositions.clear()
         notifyDataSetChanged()
         selectionChangedListener?.invoke(selectedPositions)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun restoreSelections(savedPositions: Set<Int>) {
         selectedPositions.clear()
         selectedPositions.addAll(savedPositions)

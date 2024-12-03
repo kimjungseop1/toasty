@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.MainViewModel
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
@@ -57,6 +59,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     private val selectedItemsMap = mutableMapOf<Int, MutableList<String>>()
     private val childAdapters = mutableMapOf<Int, FilterChildAdapter>()
     private val selectedChildPositions = mutableMapOf<Int, Set<Int>>() // 선택 위치 저장용 맵
+    private var shareFilter = ""
 
     private val cartridgeList =
         listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
@@ -90,6 +93,11 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         setupUI()
 
         observeLibList()
+
+        binding.btnTest.setOnClickListener {
+            val intent = Intent(requireContext(), InputTagActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupUI() {
@@ -206,6 +214,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             saveCurrentSelections()
             selectFilterCnt()
             bottomSheetDialog.dismiss()
+
         }
 
         binding.closeBtn.setOnClickListener {
@@ -310,6 +319,20 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
             selectedItemsMap[categoryIndex] = selectedItemsForCategory
         }
 
+        if (childAdapter.getSelectedPositions().contains(0)) {
+            shareFilter = "all"
+        }
+
+        if (childAdapter.getSelectedPositions().contains(1)) {
+            shareFilter = "1"
+        }
+
+        if (childAdapter.getSelectedPositions().contains(2)) {
+            shareFilter = "0"
+        }
+
+        fetchData()
+
     }
 
     private fun showCartridgeBottomSheet() {
@@ -372,15 +395,20 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
         if (selectedCategories.contains(0)) {
             menuCodeList.add("")
-        } else if (selectedCategories.contains(1)) {
+        }
+        if (selectedCategories.contains(1)) {
             menuCodeList.add("AR_MENU01")
-        } else if (selectedCategories.contains(2)) {
+        }
+        if (selectedCategories.contains(2)) {
             menuCodeList.add("AR_MENU02")
-        } else if (selectedCategories.contains(3)) {
+        }
+        if (selectedCategories.contains(3)) {
             menuCodeList.add("AR_MENU05")
-        } else if (selectedCategories.contains(4)) {
+        }
+        if (selectedCategories.contains(4)) {
             menuCodeList.add("AR_MENU03")
-        } else if (selectedCategories.contains(5)) {
+        }
+        if (selectedCategories.contains(5)) {
             menuCodeList.add("AR_MENU04")
         }
 
@@ -438,7 +466,16 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
                 for (menuCode in menuCodeList) {
                     menuCodeBuilder.append(menuCode).append(",")
                 }
+
+                if (menuCodeBuilder.isNotEmpty()) {
+                    menuCodeBuilder.deleteCharAt(menuCodeBuilder.length - 1)
+                }
+
                 menu_code = menuCodeBuilder.toString()
+            }
+
+            if (shareFilter.isNotEmpty()) {
+                share_se = shareFilter
             }
         }
 

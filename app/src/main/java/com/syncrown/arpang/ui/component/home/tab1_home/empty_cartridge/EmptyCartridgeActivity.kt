@@ -150,14 +150,14 @@ class EmptyCartridgeActivity : BaseActivity() {
         emptyCartridgeViewModel.cartridgeByTag(requestCartridgeListByTagDto)
     }
 
-    private fun setCartridgeContent(responseCartridgeListByTagDto: ResponseCartridgeListByTagDto) {
+    private fun setCartridgeContent(data: ResponseCartridgeListByTagDto) {
         val decorationCount = binding.recyclerGridView.itemDecorationCount
         for (i in decorationCount - 1 downTo 0) {
             binding.recyclerGridView.removeItemDecorationAt(i)
         }
 
         val contentListAdapter = CartridgeContentGridItemAdapter(
-            responseCartridgeListByTagDto,
+            data,
             object : CartridgeContentGridItemAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     when (actionTitle) {

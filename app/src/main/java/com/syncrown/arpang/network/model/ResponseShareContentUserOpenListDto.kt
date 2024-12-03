@@ -23,7 +23,7 @@ class ResponseShareContentUserOpenListDto {
 
         @SerializedName("pixel_x")
         @Expose
-        var pixel_x: Double? = null
+        var pixel_x: Int? = null
 
         @SerializedName("save_ds")
         @Expose

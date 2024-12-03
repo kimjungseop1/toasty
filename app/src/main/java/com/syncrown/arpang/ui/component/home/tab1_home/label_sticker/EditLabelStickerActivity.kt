@@ -28,10 +28,9 @@ import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.FontManager
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.MainActivity
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.adapter.FontAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.preview.LabelStickerPreviewActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.label_sticker.tag.LabelStickerTagSettingActivity
 import kotlinx.coroutines.launch
 import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.util.LinkedList
@@ -357,7 +356,7 @@ class EditLabelStickerActivity : BaseActivity(), BottomIconAdapter.IconListener 
     }
 
     private fun goTagSetting() {
-        val intent = Intent(this, LabelStickerTagSettingActivity::class.java)
+        val intent = Intent(this, InputTagActivity::class.java)
         startActivity(intent)
     }
 }

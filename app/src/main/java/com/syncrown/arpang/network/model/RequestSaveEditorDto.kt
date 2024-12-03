@@ -22,7 +22,7 @@ class RequestSaveEditorDto {
 
     @SerializedName("pixel_x")
     @Expose
-    var pixel_x: Double? = null
+    var pixel_x: Int? = null
 
     @SerializedName("share_hash_tag")
     @Expose

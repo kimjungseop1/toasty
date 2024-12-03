@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -14,8 +13,6 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
@@ -29,16 +26,14 @@ import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.MainActivity
+import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.preview.FreePrintPreviewActivity
 import com.syncrown.arpang.ui.component.home.tab1_home.free_print.select.SelectFreePrintActivity
-import com.syncrown.arpang.ui.component.home.tab1_home.free_print.setting.FreePrintTagSettingActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
 import com.syncrown.arpang.ui.photoeditor.PhotoEditorView
 import com.syncrown.arpang.ui.photoeditor.TextStyleBuilder
 import com.syncrown.arpang.ui.photoeditor.ViewType
-import com.syncrown.arpang.ui.photoeditor.shape.ShapeBuilder
 import com.yalantis.ucrop.UCrop
 import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.util.LinkedList
@@ -407,7 +402,7 @@ class EditFreePrintActivity : BaseActivity(), FreeStickerAdapter.IconListener,
     }
 
     private fun goTagSetting() {
-        val intent = Intent(this, FreePrintTagSettingActivity::class.java)
+        val intent = Intent(this, InputTagActivity::class.java)
         startActivity(intent)
     }
 

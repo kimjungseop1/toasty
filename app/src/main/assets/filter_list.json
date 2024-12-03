@@ -13,29 +13,6 @@
           "childName": "비공개"
         }
       ]
-    },
-    {
-      "parentName": "태그",
-      "child": [
-        {
-          "childName": "전체"
-        },
-        {
-          "childName": "최근에 사용한 태그"
-        },
-        {
-          "childName": "가장 많이 사용한 태그"
-        },
-        {
-          "childName": "두번째로 많이 사용한 태그"
-        },
-        {
-          "childName": "많이 사용한 순서대로"
-        },
-        {
-          "childName": "테스트1"
-        }
-      ]
     }
   ]
 }

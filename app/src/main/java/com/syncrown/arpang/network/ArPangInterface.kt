@@ -1,5 +1,7 @@
 package com.syncrown.arpang.network
 
+import com.syncrown.arpang.network.model.ResponseAddCommentDto
+import com.syncrown.arpang.network.model.ResponseAllFavoriteDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
@@ -7,11 +9,14 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
+import com.syncrown.arpang.network.model.ResponseCommentListDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseDelCommentDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
+import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
@@ -245,7 +250,7 @@ interface ArPangInterface {
         @Field("ctge_no") ctge_no: Int,
         @Field("main_image") main_image: String,
         @Field("editor_data") editor_data: String?,
-        @Field("pixel_x") pixel_x: Double?,
+        @Field("pixel_x") pixel_x: Int?,
         @Field("share_hash_tag") share_hash_tag: String?,
         @Field("share_se") share_se: Int,
         @Field("menu_code") menu_code: Int,
@@ -260,7 +265,9 @@ interface ArPangInterface {
         @Field("currPage") currPage: Int,
         @Field("pageSize") pageSize: Int,
         @Field("hash_tag") hash_tag: String?,
-        @Field("menu_code") menu_code: String?
+        @Field("menu_code") menu_code: String?,
+        @Field("ctge_no") ctge_no: String?,
+        @Field("share_se") share_se: String?
     ): Call<ResponseStorageContentListDto>
 
     //TODO 022. 보관함(사용자) 저장 컨텐츠 상세조회
@@ -299,4 +306,42 @@ interface ArPangInterface {
         @Field("cntnts_no") cntnts_no: String
     ): Call<ResponseShareDetailDto>
 
+    //TODO 026. 전체 인기있는 해시태그 리스트(상위5건)
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/hashtag/all/favored")
+    fun postAllFavoriteHashTag(
+        @Field("search_nm") search_nm: String
+    ): Call<ResponseAllFavoriteDto>
+
+    //TODO 027. 내가등록한 해시태그 리스트 가져오기 (상위5건)
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/hashtag/my/favored")
+    fun postMyFavoriteHashTag(
+        @Field("search_nm") search_nm: String
+    ): Call<ResponseMyFavoriteDto>
+
+    //TODO 028. 댓글 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/comment")
+    fun postCommentList(
+        @Field("cntnts_no") cntnts_no: String
+    ): Call<ResponseCommentListDto>
+
+    //TODO 029. 댓글 작성
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/contents/comment")
+    fun postAddComment(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String,
+        @Field("comment") comment: String
+    ): Call<ResponseAddCommentDto>
+
+    //TODO 030. 댓글 삭제
+    @FormUrlEncoded
+    @POST("/ntv/atp/delete/contents/comment")
+    fun postDelComment(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String,
+        @Field("seq_no") seq_no: String
+    ):Call<ResponseDelCommentDto>
 }

@@ -23,4 +23,12 @@ class RequestStorageContentListDto {
     @SerializedName("menu_code")
     @Expose
     var menu_code: String? = null
+
+    @SerializedName("ctge_no")
+    @Expose
+    var ctge_no: String? = null
+
+    @SerializedName("share_se")
+    @Expose
+    var share_se: String? = null
 }

@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.syncrown.arpang.AppDataPref
+import com.syncrown.arpang.network.model.RequestAddCommentDto
+import com.syncrown.arpang.network.model.RequestAllFavoriteDto
 import com.syncrown.arpang.network.model.RequestAppMainDto
 import com.syncrown.arpang.network.model.RequestAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.RequestCartridgeByAppMenuDto
@@ -11,11 +13,14 @@ import com.syncrown.arpang.network.model.RequestCartridgeListByTagDto
 import com.syncrown.arpang.network.model.RequestCartridgeListDto
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestCheckNickNameDto
+import com.syncrown.arpang.network.model.RequestCommentListDto
 import com.syncrown.arpang.network.model.RequestCommonListDto
+import com.syncrown.arpang.network.model.RequestDelCommentDto
 import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestMultiCommonListDto
+import com.syncrown.arpang.network.model.RequestMyFavoriteDto
 import com.syncrown.arpang.network.model.RequestRecommendTagListDto
 import com.syncrown.arpang.network.model.RequestSaveEditorDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
@@ -32,6 +37,8 @@ import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.RequestUserTokenDelDto
 import com.syncrown.arpang.network.model.RequestUserTokenRegDto
 import com.syncrown.arpang.network.model.RequestWithdrawalDto
+import com.syncrown.arpang.network.model.ResponseAddCommentDto
+import com.syncrown.arpang.network.model.ResponseAllFavoriteDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
@@ -39,11 +46,14 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
+import com.syncrown.arpang.network.model.ResponseCommentListDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseDelCommentDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
+import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
@@ -217,6 +227,26 @@ class ArPangRepository {
 
     //TODO 025. 공개(공유)된 컨텐츠 상세조회
     var shareDetailLiveDataRepository: MutableLiveData<NetworkResult<ResponseShareDetailDto>> =
+        MutableLiveData()
+
+    //TODO 026. 전체 인기있는 해시태그 리스트(상위5건)
+    var allFavoriteHashTagLiveDataRepository: MutableLiveData<NetworkResult<ResponseAllFavoriteDto>> =
+        MutableLiveData()
+
+    //TODO 027. 내가등록한 해시태그 리스트 가져오기 (상위5건)
+    var myFavoriteHashTagLiveDataRepository: MutableLiveData<NetworkResult<ResponseMyFavoriteDto>> =
+        MutableLiveData()
+
+    //TODO 028. 댓글 리스트
+    val commentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseCommentListDto>> =
+        MutableLiveData()
+
+    //TODO 029. 댓글 작성
+    val addCommentLiveDataRepository: MutableLiveData<NetworkResult<ResponseAddCommentDto>> =
+        MutableLiveData()
+
+    //TODO 030. 댓글 삭제
+    val delCommentLiveDataRepository: MutableLiveData<NetworkResult<ResponseDelCommentDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -795,7 +825,9 @@ class ArPangRepository {
             requestStorageContentListDto.currPage,
             requestStorageContentListDto.pageSize,
             requestStorageContentListDto.hash_tag,
-            requestStorageContentListDto.menu_code
+            requestStorageContentListDto.menu_code,
+            requestStorageContentListDto.ctge_no,
+            requestStorageContentListDto.share_se
         ).enqueue(object : Callback<ResponseStorageContentListDto> {
             override fun onResponse(
                 call: Call<ResponseStorageContentListDto>,
@@ -915,6 +947,123 @@ class ArPangRepository {
             override fun onFailure(call: Call<ResponseShareDetailDto>, t: Throwable) {
                 shareDetailLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
+        })
+    }
+
+    //TODO 026. 전체 인기있는 해시태그 리스트(상위5건)
+    fun requestAllFavoriteHashTag(requestAllFavoriteDto: RequestAllFavoriteDto) {
+        arPangInterface.postAllFavoriteHashTag(
+            requestAllFavoriteDto.search_nm
+        ).enqueue(object : Callback<ResponseAllFavoriteDto> {
+            override fun onResponse(
+                call: Call<ResponseAllFavoriteDto>,
+                response: Response<ResponseAllFavoriteDto>
+            ) {
+                if (response.code() == 200) {
+                    allFavoriteHashTagLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    allFavoriteHashTagLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseAllFavoriteDto>, t: Throwable) {
+                allFavoriteHashTagLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 027. 내가등록한 해시태그 리스트 가져오기 (상위5건)
+    fun requestMyFavoriteHashTag(requestMyFavoriteDto: RequestMyFavoriteDto) {
+        arPangInterface.postMyFavoriteHashTag(
+            requestMyFavoriteDto.search_nm
+        ).enqueue(object : Callback<ResponseMyFavoriteDto> {
+            override fun onResponse(
+                call: Call<ResponseMyFavoriteDto>,
+                response: Response<ResponseMyFavoriteDto>
+            ) {
+                if (response.code() == 200) {
+                    myFavoriteHashTagLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    myFavoriteHashTagLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseMyFavoriteDto>, t: Throwable) {
+                myFavoriteHashTagLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 028. 댓글 리스트
+    fun requestCommentList(requestCommentListDto: RequestCommentListDto) {
+        arPangInterface.postCommentList(
+            requestCommentListDto.cntnts_no
+        ).enqueue(object : Callback<ResponseCommentListDto> {
+            override fun onResponse(
+                call: Call<ResponseCommentListDto>,
+                response: Response<ResponseCommentListDto>
+            ) {
+                if (response.code() == 200) {
+                    commentListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    commentListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCommentListDto>, t: Throwable) {
+                commentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 029. 댓글 작성
+    fun requestAddComment(requestAddCommentDto: RequestAddCommentDto) {
+        arPangInterface.postAddComment(
+            requestAddCommentDto.cntnts_no,
+            requestAddCommentDto.user_id,
+            requestAddCommentDto.comment
+        ).enqueue(object : Callback<ResponseAddCommentDto> {
+            override fun onResponse(
+                call: Call<ResponseAddCommentDto>,
+                response: Response<ResponseAddCommentDto>
+            ) {
+                if (response.code() == 200) {
+                    addCommentLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    addCommentLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseAddCommentDto>, t: Throwable) {
+                addCommentLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 030. 댓글 삭제
+    fun requestDelComment(requestDelCommentDto: RequestDelCommentDto) {
+        arPangInterface.postDelComment(
+            requestDelCommentDto.cntnts_no,
+            requestDelCommentDto.user_id,
+            requestDelCommentDto.seq_no
+        ).enqueue(object : Callback<ResponseDelCommentDto> {
+            override fun onResponse(
+                call: Call<ResponseDelCommentDto>,
+                response: Response<ResponseDelCommentDto>
+            ) {
+                if (response.code() == 200) {
+                    delCommentLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    delCommentLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseDelCommentDto>, t: Throwable) {
+                delCommentLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
         })
     }
 }
