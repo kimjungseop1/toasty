@@ -11,7 +11,7 @@ class ResponseStorageContentListDto {
     class ROOT {
         @SerializedName("cntnts_no")
         @Expose
-        var cntnts_no: Int? = null
+        var cntnts_no: String? = null
 
         @SerializedName("img_url")
         @Expose

@@ -252,7 +252,7 @@ interface ArPangInterface {
         @Field("editor_data") editor_data: String?,
         @Field("pixel_x") pixel_x: Int?,
         @Field("share_hash_tag") share_hash_tag: String?,
-        @Field("share_se") share_se: Int,
+        @Field("share_se") share_se: String?,
         @Field("menu_code") menu_code: Int,
         @Field("parent_cntnts_no") parent_cntnts_no: String?
     ): Call<ResponseSaveEditorDto>
@@ -324,7 +324,8 @@ interface ArPangInterface {
     @FormUrlEncoded
     @POST("/ntv/atp/list/contents/comment")
     fun postCommentList(
-        @Field("cntnts_no") cntnts_no: String
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String
     ): Call<ResponseCommentListDto>
 
     //TODO 029. 댓글 작성

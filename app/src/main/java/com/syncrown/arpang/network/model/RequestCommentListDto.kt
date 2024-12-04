@@ -7,4 +7,8 @@ class RequestCommentListDto {
     @SerializedName("cntnts_no")
     @Expose
     var cntnts_no: String = ""
+
+    @SerializedName("user_id")
+    @Expose
+    var user_id: String = ""
 }

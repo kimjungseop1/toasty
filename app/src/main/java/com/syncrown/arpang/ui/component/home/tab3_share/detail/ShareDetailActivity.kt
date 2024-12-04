@@ -241,19 +241,19 @@ class ShareDetailActivity : BaseActivity() {
         arrayList.add("1")
 
         binding.recyclerComment.layoutManager = LinearLayoutManager(this)
-        detailCommentListAdapter = DetailCommentListAdapter(
-            this,
-            arrayList,
-            object : DetailCommentListAdapter.OnItemClickListener {
-                override fun onClick(position: Int, view: View) {
-                    if (arrayList[position] == "0") {
-                        showDeletePopupWindow(view, position)
-                    } else {
-                        showReportPopupWindow(view, position)
-                    }
-                }
-            })
-        binding.recyclerComment.adapter = detailCommentListAdapter
+//        detailCommentListAdapter = DetailCommentListAdapter(
+//            this,
+//            arrayList,
+//            object : DetailCommentListAdapter.OnItemClickListener {
+//                override fun onClick(position: Int, view: View) {
+//                    if (arrayList[position] == "0") {
+//                        showDeletePopupWindow(view, position)
+//                    } else {
+//                        showReportPopupWindow(view, position)
+//                    }
+//                }
+//            })
+//        binding.recyclerComment.adapter = detailCommentListAdapter
     }
 
     //글 신고하기

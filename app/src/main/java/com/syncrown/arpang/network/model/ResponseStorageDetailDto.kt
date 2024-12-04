@@ -11,7 +11,7 @@ class ResponseStorageDetailDto {
     class Root {
         @SerializedName("cntnts_no")
         @Expose
-        var cntnts_no: Int? = null
+        var cntnts_no: String? = null
 
         @SerializedName("img_url")
         @Expose
@@ -48,5 +48,13 @@ class ResponseStorageDetailDto {
         @SerializedName("favorite_cnt")
         @Expose
         var favorite_cnt: Int? = null
+
+        @SerializedName("share_se")
+        @Expose
+        var share_se: String? = null
+
+        @SerializedName("menu_code")
+        @Expose
+        var menu_code: String? = null
     }
 }

@@ -219,9 +219,9 @@ class WithdrawalActivity : BaseActivity() {
         binding.withdrawalBtn.setOnClickListener {
             val requestWithdrawalDto = RequestWithdrawalDto()
             requestWithdrawalDto.user_id = AppDataPref.userId
-            requestWithdrawalDto.etc_reson = reasonType()
+            requestWithdrawalDto.break_reson = reasonType()
             if (binding.check4.isChecked) {
-                requestWithdrawalDto.break_reson = binding.inputEtc.text.toString()
+                requestWithdrawalDto.etc_reson = binding.inputEtc.text.toString()
             }
 
             withdrawalViewModel.setWithdrawal(requestWithdrawalDto)

@@ -125,6 +125,7 @@ class JoinConsentActivity : BaseActivity() {
             val requestJoinDto = RequestJoinDto()
             requestJoinDto.user_id = AppDataPref.userId
             requestJoinDto.email = AppDataPref.userEmail
+            requestJoinDto.nick_nm = AppDataPref.userId
             requestJoinDto.login_connt_accnt = AppDataPref.login_connect_site
             requestJoinDto.userid_se = 0
             requestJoinDto.use_se = 1

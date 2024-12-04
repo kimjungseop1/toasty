@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab2_Lib.detail
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -8,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -29,7 +32,11 @@ import com.syncrown.arpang.databinding.PopupLibDeleteBinding
 import com.syncrown.arpang.databinding.PopupLibReportBinding
 import com.syncrown.arpang.databinding.PopupMenuDetailBinding
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestAddCommentDto
+import com.syncrown.arpang.network.model.RequestCommentListDto
+import com.syncrown.arpang.network.model.RequestDelCommentDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
+import com.syncrown.arpang.network.model.ResponseCommentListDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
@@ -49,8 +56,93 @@ class LibDetailActivity : BaseActivity() {
     private var cntntsNo = ""
 
     private lateinit var detailCommentListAdapter: DetailCommentListAdapter
+    private var commentListObserver: Observer<NetworkResult<List<ResponseCommentListDto.Root>>>? = null
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            //TODO 코멘트 리스트 옵져브
+            libDetailViewModel.commentListResponseLiveData().observe(this@LibDetailActivity) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data: ArrayList<ResponseCommentListDto.Root>? = result.data?.root
+                        data?.let {
+                            showCommentView(it)
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            //TODO 코멘트 추가 옵져브
+            libDetailViewModel.addCommentResponseLiveData().observe(this@LibDetailActivity) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data?.msgCode
+                        if (data.equals("SUCCESS")) {
+                            binding.inputComment.text?.clear()
+                            hideKeyBoard()
+
+                            setCommentList(cntntsNo)
+                        } else {
+                            Log.e("jung","댓글 등록에 실패하였습니다.")
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            //TODO 코멘트 삭제 옵져브
+            libDetailViewModel.deleteCommentResponseLiveData().observe(this@LibDetailActivity) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data?.msgCode
+                        if (data.equals("SUCCESS")) {
+                            binding.inputComment.text?.clear()
+                            hideKeyBoard()
+
+                            setCommentList(cntntsNo)
+                        } else {
+                            Log.e("jung","댓글 삭제에 실패하였습니다.")
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
+                }
+            }
+        }
 
     }
 
@@ -116,6 +208,8 @@ class LibDetailActivity : BaseActivity() {
                         is NetworkResult.Success -> {
                             val data = result.data?.root
                             setupUI(data)
+
+                            setCommentList(data?.cntnts_no.toString())
                         }
 
                         is NetworkResult.NetCode -> {
@@ -134,18 +228,65 @@ class LibDetailActivity : BaseActivity() {
     }
 
     private fun setupUI(data: ResponseStorageDetailDto.Root?) {
+        //공개글 여부
+        if (data?.share_se.equals("0")) {
+            binding.desc1.text = getString(R.string.storage_detail_close_view)
+        } else {
+            binding.desc1.text = getString(R.string.storage_detail_open_view)
+        }
+
+        //용지이름
+        binding.paperTypeView.text = data?.ctge_nm
+
+        //작성 카테고리
+        var cateName = ""
+        if (data?.menu_code.equals("AR_MENU01")) {
+            cateName = getString(R.string.cartridge_empty_action_text_1)
+        } else if (data?.menu_code.equals("AR_MENU02")) {
+            cateName = getString(R.string.cartridge_empty_action_text_2)
+        } else if (data?.menu_code.equals("AR_MENU03")) {
+            cateName = getString(R.string.cartridge_empty_action_text_4)
+        } else if (data?.menu_code.equals("AR_MENU04")) {
+            cateName = getString(R.string.cartridge_empty_action_text_5)
+        } else if (data?.menu_code.equals("AR_MENU05")) {
+            cateName = getString(R.string.cartridge_empty_action_text_3)
+        }
+        binding.cateTypeView.text = cateName
+
+        //작성자
+        if (data?.nick_nm == null) {
+            binding.nameView.text = AppDataPref.userId
+        } else {
+            binding.nameView.text = data.nick_nm
+        }
+
+        //작성일
+        binding.dateView.text = data?.save_ds
+
+        //작성 이미지
+        Glide.with(this)
+            .load(data?.img_url)
+            .into(binding.thumbnailView)
+
+        //댓글수 카운트
+        binding.commentView.text = data?.comment_cnt.toString()
+
+        //좋아요 카운드
+        binding.likeView.text = data?.favorite_cnt.toString()
+
+        //태그 리스트
         TagResultListStorage.tagArrayList?.let {
             showFlexTagView(it)
         }
 
-        showCommentView()
-
-        binding.inputComment.isEnabled = false
-        if (binding.inputComment.isEnabled) {
-            binding.inputComment.hint = getString(R.string.storage_detail_input_hint)
-        } else {
+        if (data?.share_se.equals("0")) {
+            binding.inputComment.isEnabled = false
             binding.inputComment.hint = getString(R.string.storage_detail_input_hint_disable)
+        } else {
+            binding.inputComment.isEnabled = true
+            binding.inputComment.hint = getString(R.string.storage_detail_input_hint)
         }
+
         showEditView()
     }
 
@@ -230,21 +371,24 @@ class LibDetailActivity : BaseActivity() {
         popupWindow.showAsDropDown(anchor, 0, 0)
     }
 
-    private fun showCommentView() {
-        val arrayList = ArrayList<String>()
-        arrayList.add("0")
-        arrayList.add("1")
-        arrayList.add("1")
+    private fun setCommentList(cntntsNo: String) {
+        val requestCommentListDto = RequestCommentListDto()
+        requestCommentListDto.cntnts_no = cntntsNo
+        requestCommentListDto.user_id = AppDataPref.userId
 
+        libDetailViewModel.commentList(requestCommentListDto)
+    }
+
+    private fun showCommentView(data : ArrayList<ResponseCommentListDto.Root>) {
         binding.recyclerComment.layoutManager = LinearLayoutManager(this)
         detailCommentListAdapter = DetailCommentListAdapter(
             this,
-            arrayList,
+            data,
             object : DetailCommentListAdapter.OnItemClickListener {
                 override fun onClick(position: Int, view: View) {
-                    if (arrayList[position] == "0") {
+                    if (data[position].write_se == "1") {
                         //본인댓글 삭제하기
-                        showPopupDeleteMyComment(view, position)
+                        showPopupDeleteMyComment(view, position, data[position].seq_no)
                     } else {
                         //남의댓글 신고하기
                         showPopupReportOthers(view, position)
@@ -254,7 +398,16 @@ class LibDetailActivity : BaseActivity() {
         binding.recyclerComment.adapter = detailCommentListAdapter
     }
 
-    private fun showPopupDeleteMyComment(view: View, position: Int) {
+    private fun setDeleteComment(seqNo: String) {
+        val requestDelCommentDto = RequestDelCommentDto()
+        requestDelCommentDto.cntnts_no = cntntsNo
+        requestDelCommentDto.user_id = AppDataPref.userId
+        requestDelCommentDto.seq_no = seqNo
+
+        libDetailViewModel.deleteComment(requestDelCommentDto)
+    }
+
+    private fun showPopupDeleteMyComment(view: View, position: Int, seqNo: String?) {
         val popBinding = PopupLibDeleteBinding.inflate(LayoutInflater.from(this))
 
         val popupWindow = PopupWindow(
@@ -269,7 +422,7 @@ class LibDetailActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
-                detailCommentListAdapter.removeItem(position)
+                setDeleteComment(seqNo.toString())
             })
             popupWindow.dismiss()
         }
@@ -293,15 +446,17 @@ class LibDetailActivity : BaseActivity() {
                 //닫기
             }, {
                 //신고
-                //detailCommentListAdapter.removeItem(position)
-                val customToast = CustomToast()
-                customToast.showToastMessage(
-                    supportFragmentManager,
-                    getString(R.string.lib_popup_report_comment),
-                    CustomToastType.WHITE
-                ) {
-                    //close
-                }
+
+
+//                detailCommentListAdapter.removeItem(position)
+//                val customToast = CustomToast()
+//                customToast.showToastMessage(
+//                    supportFragmentManager,
+//                    getString(R.string.lib_popup_report_comment),
+//                    CustomToastType.WHITE
+//                ) {
+//                    //close
+//                }
             })
             popupWindow.dismiss()
         }
@@ -331,7 +486,26 @@ class LibDetailActivity : BaseActivity() {
         }
 
         binding.sendBtn.setOnClickListener {
+            // 댓글 쓰기
+            if (binding.inputComment.text?.isNotEmpty() == true) {
+                setAddComment()
+            }
+        }
+    }
 
+    private fun setAddComment() {
+        val requestAddCommentDto = RequestAddCommentDto()
+        requestAddCommentDto.cntnts_no = cntntsNo
+        requestAddCommentDto.user_id = AppDataPref.userId
+        requestAddCommentDto.comment = binding.inputComment.text.toString()
+
+        libDetailViewModel.addComment(requestAddCommentDto)
+    }
+
+    private fun hideKeyBoard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { view ->
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

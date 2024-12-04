@@ -1,15 +1,17 @@
 package com.syncrown.arpang.ui.component.home.tab3_share.detail.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemDetailCommentBinding
+import com.syncrown.arpang.network.model.ResponseCommentListDto
 
 class DetailCommentListAdapter(
     private val context: Context,
-    private val items: ArrayList<String>,
+    private val items: ArrayList<ResponseCommentListDto.Root>,
     private var mlistener: OnItemClickListener
 ) : RecyclerView.Adapter<DetailCommentListAdapter.SubscribeHolder>() {
 
@@ -45,6 +47,17 @@ class DetailCommentListAdapter(
             binding.moreView.setOnClickListener {
                 mlistener.onClick(position, binding.moreView)
             }
+
+            if (items[position].nick_nm != null) {
+                binding.nameView.text = items[position].nick_nm
+            } else {
+                binding.nameView.text = ""
+            }
+
+            binding.messageView.text = items[position].comment
+
+            binding.dateView.text = items[position].save_ds
+
         }
     }
 
@@ -52,5 +65,12 @@ class DetailCommentListAdapter(
         items.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, items.size)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newData: ArrayList<ResponseCommentListDto.Root>) {
+        items.clear()
+        items.addAll(newData)
+        notifyDataSetChanged()
     }
 }

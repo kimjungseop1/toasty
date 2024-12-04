@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.MainViewModel
-import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
@@ -59,7 +57,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     private val selectedItemsMap = mutableMapOf<Int, MutableList<String>>()
     private val childAdapters = mutableMapOf<Int, FilterChildAdapter>()
     private val selectedChildPositions = mutableMapOf<Int, Set<Int>>() // 선택 위치 저장용 맵
-    private var shareFilter = ""
+    private var shareFilter = "" // 필터값 저장 - 공개 비공개 전체
 
     private val cartridgeList =
         listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
@@ -94,10 +92,6 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
         observeLibList()
 
-        binding.btnTest.setOnClickListener {
-            val intent = Intent(requireContext(), InputTagActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun setupUI() {

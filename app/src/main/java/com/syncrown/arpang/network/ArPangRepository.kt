@@ -81,6 +81,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArPangRepository {
     companion object {
         const val BASE_URL_DEV = "http://192.168.0.132:8090"
+//        const val BASE_URL_DEV = "http://192.168.0.13:8090"
         const val BASE_URL_REAL = ""
     }
 
@@ -997,7 +998,8 @@ class ArPangRepository {
     //TODO 028. 댓글 리스트
     fun requestCommentList(requestCommentListDto: RequestCommentListDto) {
         arPangInterface.postCommentList(
-            requestCommentListDto.cntnts_no
+            requestCommentListDto.cntnts_no,
+            requestCommentListDto.user_id
         ).enqueue(object : Callback<ResponseCommentListDto> {
             override fun onResponse(
                 call: Call<ResponseCommentListDto>,

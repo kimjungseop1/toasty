@@ -247,6 +247,8 @@
     <string name="storage_detail_more_tab_nondisclosure">이벤트 참여작을 비공개로 전환할 시\n이벤트 참여가 취소됩니다.\n비공개로 전환하시겠습니까?</string>
     <string name="storage_detail_more_tab_nondisclosure_btn">비공개</string>
     <string name="storage_detail_more_tab_nondisclosure_error_toast">경고가 누적되어 게시글을 공개로 설정할 수 없습니다.</string>
+    <string name="storage_detail_open_view">공개된 게시글입니다.</string>
+    <string name="storage_detail_close_view">공개되지 않은 게시글입니다.</string>
 
     <!-- 태그 편집 -->
     <string name="tag_edit_desc_1">태그 입력</string>

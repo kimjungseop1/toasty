@@ -28,5 +28,9 @@ class ResponseCommentListDto {
         @SerializedName("save_ds")
         @Expose
         var save_ds: String? = null
+
+        @SerializedName("write_se")
+        @Expose
+        var write_se: String? = null
     }
 }
