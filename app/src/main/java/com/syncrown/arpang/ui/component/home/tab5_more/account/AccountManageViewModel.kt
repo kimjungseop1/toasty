@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab5_more
+package com.syncrown.arpang.ui.component.home.tab5_more.account
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope

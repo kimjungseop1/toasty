@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,6 +29,7 @@ import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.MainViewModel
+import com.syncrown.arpang.ui.component.home.input_tag.TagResultListStorage
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
@@ -514,8 +517,15 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     override fun onItemClick(position: Int, cntntsNo: String) {
         val intent = Intent(requireContext(), LibDetailActivity::class.java)
         intent.putExtra("CONTENT_DETAIL_NO", cntntsNo)
-        startActivity(intent)
+        detailLauncher.launch(intent)
     }
+
+    private val detailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                binding.gridBtn.performClick()
+            }
+        }
 
     override fun onItemSelected(position: Int, isSelected: Boolean) {
 

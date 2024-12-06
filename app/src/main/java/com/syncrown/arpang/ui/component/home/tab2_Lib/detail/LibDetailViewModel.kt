@@ -6,11 +6,21 @@ import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAddCommentDto
 import com.syncrown.arpang.network.model.RequestCommentListDto
+import com.syncrown.arpang.network.model.RequestCommentReportDto
 import com.syncrown.arpang.network.model.RequestDelCommentDto
+import com.syncrown.arpang.network.model.RequestDeleteStorageDto
+import com.syncrown.arpang.network.model.RequestDetailContentHashTagDto
+import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
+import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseAddCommentDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
+import com.syncrown.arpang.network.model.ResponseCommentReportDto
 import com.syncrown.arpang.network.model.ResponseDelCommentDto
+import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
+import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
+import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -32,6 +42,54 @@ class LibDetailViewModel : BaseViewModel() {
 
     fun libContentDetailResponseLiveData(): LiveData<NetworkResult<ResponseStorageDetailDto>> {
         return libContentDetailResponseLiveData
+    }
+
+    /***********************************************************************************************
+     * 상세페이지 해시태그 리스트
+     **********************************************************************************************/
+    private val hashTagListResponseLiveData: LiveData<NetworkResult<ResponseDetailContentHashTagDto>> =
+        arPangRepository.detailContentHashListRepository
+
+    fun getHashTagList(requestDetailContentHashTagDto: RequestDetailContentHashTagDto) {
+        viewModelScope.launch {
+            arPangRepository.requestDetailHashTagList(requestDetailContentHashTagDto)
+        }
+    }
+
+    fun hashTagListResponseLiveData(): LiveData<NetworkResult<ResponseDetailContentHashTagDto>> {
+        return hashTagListResponseLiveData
+    }
+
+    /***********************************************************************************************
+     * 상세페이지 해시태그 리스트 편집
+     **********************************************************************************************/
+    private val editHashTagResponseLiveData: LiveData<NetworkResult<ResponseEditContentHashTagDto>> =
+        arPangRepository.editContentHashTagLiveDataRepository
+
+    fun updateHashTag(requestEditContentHashTagDto: RequestEditContentHashTagDto) {
+        viewModelScope.launch {
+            arPangRepository.requestEditContentHashTag(requestEditContentHashTagDto)
+        }
+    }
+
+    fun editHashTagResponseLiveData(): LiveData<NetworkResult<ResponseEditContentHashTagDto>> {
+        return editHashTagResponseLiveData
+    }
+
+    /***********************************************************************************************
+     * 컨텐츠 공개 여부 설정하기
+     **********************************************************************************************/
+    private val publicContentSettingLiveData: LiveData<NetworkResult<ResponsePublicContentSettingDto>> =
+        arPangRepository.publicContentSettingLiveDataRepository
+
+    fun setPublicContentSetting(requestPublicContentSettingDto: RequestPublicContentSettingDto) {
+        viewModelScope.launch {
+            arPangRepository.requestPublicContentSetting(requestPublicContentSettingDto)
+        }
+    }
+
+    fun publicContentSettingLiveData(): LiveData<NetworkResult<ResponsePublicContentSettingDto>> {
+        return publicContentSettingLiveData
     }
 
     /***********************************************************************************************
@@ -80,5 +138,37 @@ class LibDetailViewModel : BaseViewModel() {
 
     fun deleteCommentResponseLiveData(): LiveData<NetworkResult<ResponseDelCommentDto>> {
         return delCommentResponseLiveData
+    }
+
+    /***********************************************************************************************
+     * 댓글 신고
+     **********************************************************************************************/
+    private val reportCommentResponseLiveData: LiveData<NetworkResult<ResponseCommentReportDto>> =
+        arPangRepository.commentReportLiveDataRepository
+
+    fun reportComment(requestCommentReportDto: RequestCommentReportDto) {
+        viewModelScope.launch {
+            arPangRepository.requestCommentReport(requestCommentReportDto)
+        }
+    }
+
+    fun reportCommentResponseLiveData(): LiveData<NetworkResult<ResponseCommentReportDto>> {
+        return reportCommentResponseLiveData
+    }
+
+    /***********************************************************************************************
+     * 컨텐츠 삭제
+     **********************************************************************************************/
+    private val deleteContentLiveData: LiveData<NetworkResult<ResponseDeleteStorageDto>> =
+        arPangRepository.storageContentDeleteLiveDataRepository
+
+    fun deleteLibContent(requestDeleteStorageDto: RequestDeleteStorageDto) {
+        viewModelScope.launch {
+            arPangRepository.requestDeleteStorageContent(requestDeleteStorageDto)
+        }
+    }
+
+    fun deleteLibContentResponseLiveData(): LiveData<NetworkResult<ResponseDeleteStorageDto>> {
+        return deleteContentLiveData
     }
 }

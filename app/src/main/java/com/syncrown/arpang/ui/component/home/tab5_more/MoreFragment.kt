@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.databinding.FragmentMoreBinding
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -27,6 +29,7 @@ import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivi
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeType
 import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.component.login.LoginActivity
+import kotlinx.coroutines.launch
 
 class MoreFragment : Fragment() {
     private lateinit var binding: FragmentMoreBinding
@@ -42,36 +45,77 @@ class MoreFragment : Fragment() {
         return binding.root
     }
 
+    private fun observeData() {
+        lifecycleScope.launch {
+            moreViewModel.getUserProfileResponseLiveData().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        result.data.let { data ->
+                            when (data?.msgCode) {
+                                "SUCCESS" -> {
+                                    updateUi(data)
+                                }
+                            }
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            moreViewModel.subscribeTotalCountResponseLiveData()
+                .observe(viewLifecycleOwner) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+                            if (data?.msgCode.equals("SUCCESS")) {
+                                binding.subscribeI.text = data?.my_subscription_cnt.toString()
+                                binding.subscribeMe.text = data?.me_subscription_cnt.toString()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getSubscribeCount()
+
         getUserProfile()
 
-        moreViewModel.getUserProfileResponseLiveData().observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is NetworkResult.Success -> {
-                    result.data.let { data ->
-                        when (data?.msgCode) {
-                            "SUCCESS" -> {
-                                updateUi(data)
-                            }
-                        }
-                    }
-                }
+        observeData()
+    }
 
-                is NetworkResult.NetCode -> {
-                    Log.e("jung","실패 : ${result.message}")
-                    if (result.message.equals("403")) {
-                        goLogin()
-                    }
-                }
+    private fun getSubscribeCount() {
+        val requestSubscribeTotalDto = RequestSubscribeTotalDto()
+        requestSubscribeTotalDto.user_id = AppDataPref.userId
 
-                is NetworkResult.Error -> {
-                    Log.e("jung", "오류 : ${result.message}")
-                }
-            }
-        }
+        moreViewModel.subscribeTotalCount(requestSubscribeTotalDto)
     }
 
     private fun getUserProfile() {

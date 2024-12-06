@@ -4,11 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.databinding.ItemAlertListBinding
+import com.syncrown.arpang.db.push_db.PushMessageEntity
 
 class AlertListAdapter(
     private val context: Context,
-    private val sliderItems: ArrayList<String>
+    private val items: List<PushMessageEntity>
 ) : RecyclerView.Adapter<AlertListAdapter.AlertHolder>() {
 
     interface OnItemClickListener {
@@ -34,17 +36,27 @@ class AlertListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return sliderItems.size
+        return items.size
     }
 
     inner class AlertHolder(binding: ItemAlertListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val alertBinding: ItemAlertListBinding = binding
-        fun onBind(context: Context?, position: Int) {
+        fun onBind(context: Context, position: Int) {
 
             alertBinding.root.setOnClickListener {
                 mListener?.onClick(position)
             }
+
+            alertBinding.titleView.text = items[position].title
+
+            alertBinding.contentView.text = items[position].body
+
+            alertBinding.dateView.text = items[position].receiveTime.toString()
+
+            Glide.with(context)
+                .load(items[position].imageUrl)
+                .into(alertBinding.contentImage)
         }
     }
 

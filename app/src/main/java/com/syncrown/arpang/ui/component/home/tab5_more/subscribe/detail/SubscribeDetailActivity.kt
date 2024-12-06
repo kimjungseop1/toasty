@@ -1,34 +1,60 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.subscribe.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivitySubscribeDetailBinding
 import com.syncrown.arpang.databinding.BottomSheetShareBinding
 import com.syncrown.arpang.databinding.PopupSubscribeActionDetailBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
+import com.syncrown.arpang.network.model.ResponseStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment
+import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment.Companion
+import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.LibGridItemAdapter
+import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
+import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.adapter.SubscribeUserGridItemAdapter
+import kotlinx.coroutines.launch
 
 class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSelectedListener,
-    ShareGridItemAdapter.OnItemClickListener {
+    SubscribeUserGridItemAdapter.OnItemClickListener {
     private lateinit var binding: ActivitySubscribeDetailBinding
+    private val subscribeDetailViewModel: SubscribeDetailViewModel by viewModels()
+
+    private var subUserId = ""
+
     private val itemList = listOf("전체", "인생 두컷", "자유 인쇄")
     private lateinit var categoryAdapter: ShareMultiSelectAdapter
+
+    private lateinit var adapter: SubscribeUserGridItemAdapter
+    private var data: ArrayList<ResponseSubscribeUserContentListDto.Root> = ArrayList()
+    private var menuCode = ""
+    private var curPage = 1
+    private var curPageSize = 18
+    private var currentSelectMode = -1
 
     companion object {
         private const val GRID_SPAN_COUNT = 3
@@ -36,10 +62,37 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         private const val SPACE = 3
     }
 
-    var isLike = false
+    private var isLike = false
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            subscribeDetailViewModel.subscribeUserContentListResponseLiveData()
+                .observe(this@SubscribeDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root ?: ArrayList()
 
+                            if (curPage > 1 && data.isEmpty()) {
+
+                            } else {
+                                adapter.addMoreData(data)
+                                curPage++
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
     }
 
     override fun initViewBinding() {
@@ -52,7 +105,9 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
-        binding.actionbar.actionTitle.text = "홍길동"
+
+        val titleName = intent.getStringExtra("SUB_USER_NAME")
+        binding.actionbar.actionTitle.text = titleName
         binding.actionbar.actionEtc1.text = getString(R.string.subscribe_title)
         binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
@@ -81,38 +136,37 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             showActionPopupWindow(binding.actionbar.actionMore)
         }
 
-        setMenuView()
+        subUserId = intent.getStringExtra("SUB_USER_ID").toString()
 
+        fetchData()
+
+        setContentList()
     }
 
-    private fun setMenuView() {
+    private fun setContentList() {
         categoryAdapter = ShareMultiSelectAdapter(this, itemList, this)
         binding.contentTypeView.text = itemList[0]
         binding.contentTypeView.setOnClickListener {
             showTypeBottomSheet()
         }
 
-        showGridStyle(GRID_SPAN_COUNT, SPACE)
-        binding.gridBtn.isSelected = true
-        binding.linearBtn.isSelected = false
-
         binding.gridBtn.setOnClickListener {
-            binding.gridBtn.isSelected = true
-            binding.linearBtn.isSelected = false
-            showGridStyle(
-                GRID_SPAN_COUNT,
-                SPACE
-            )
+            setLayoutStyle(GRID_SPAN_COUNT, true)
         }
 
         binding.linearBtn.setOnClickListener {
-            binding.gridBtn.isSelected = false
-            binding.linearBtn.isSelected = true
-            showGridStyle(
-                LINEAR_SPAN_COUNT,
-                SPACE
-            )
+            setLayoutStyle(LINEAR_SPAN_COUNT, false)
         }
+
+        binding.gridBtn.performClick()
+    }
+
+    private fun setLayoutStyle(spanCount: Int, isGridSelected: Boolean) {
+        binding.gridBtn.isSelected = isGridSelected
+        binding.linearBtn.isSelected = !isGridSelected
+
+        currentSelectMode = spanCount
+        showGridStyle(currentSelectMode, SPACE)
     }
 
     private fun showTypeBottomSheet() {
@@ -132,7 +186,17 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             // 적용
             val selectedCategories = categoryAdapter.getSelectedItems()
             Log.e("jung", "size : " + selectedCategories.size)
+            menuCode = when {
+                selectedCategories.contains(0) || selectedCategories.containsAll(listOf(1, 2)) -> ""
+                selectedCategories.contains(1) -> "AR_MENU02"
+                selectedCategories.contains(2) -> "AR_MENU05"
+                else -> ""
+            }
+
             updateSelectedCategories(selectedCategories)
+
+            resetData()
+            fetchData()
 
             bottomSheetDialog.dismiss()
         }
@@ -141,28 +205,46 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
     }
 
     private fun showGridStyle(spanCount: Int, spacing: Int) {
-//        val items = listOf(
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//            GridItem(R.drawable.sample_img_1, "00:00"),
-//        )
-//
-//        clearItemDecorations(binding.recyclerShare)
-//
-//        binding.recyclerShare.layoutManager = GridLayoutManager(this, spanCount)
-//        binding.recyclerShare.addItemDecoration(
-//            GridSpacingItemDecoration(
-//                spanCount,
-//                CommonFunc.dpToPx(spacing, this),
-//                false
-//            )
-//        )
-//
-//        binding.recyclerShare.adapter = ShareGridItemAdapter(items, spanCount, this)
+        clearItemDecorations(binding.recyclerShare)
+
+        binding.recyclerShare.layoutManager = GridLayoutManager(this, spanCount)
+        binding.recyclerShare.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount,
+                CommonFunc.dpToPx(spacing, this),
+                false
+            )
+        )
+
+        adapter = SubscribeUserGridItemAdapter(this, data, spanCount, this)
+        binding.recyclerShare.adapter = adapter
+        setupRecyclerViewScrollListener()
+
+
+    }
+
+    private fun setupRecyclerViewScrollListener() {
+        binding.recyclerShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.recyclerShare.canScrollVertically(1)
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                ) {
+                    fetchData()
+                }
+            }
+        })
+    }
+
+    private fun fetchData() {
+        val requestDto = RequestSubscribeUserContentListDto().apply {
+            if (subUserId.isNotEmpty()) sub_user_id = subUserId
+            currPage = curPage
+            pageSize = curPageSize
+            if (menuCode.isNotEmpty()) menu_code = menuCode
+        }
+
+        subscribeDetailViewModel.getSubscribeUserContentList(requestDto)
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -232,6 +314,13 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
 
         popupWindow.elevation = 10.0f
         popupWindow.showAsDropDown(anchor, 0, 0)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun resetData() {
+        data.clear()
+        adapter.notifyDataSetChanged()
+        curPage = 1
     }
 
     override fun onItemSelected(position: Int, isSelected: Boolean) {

@@ -3,14 +3,10 @@ package com.syncrown.arpang.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class RequestCommentListDto {
-    @SerializedName("cntnts_no")
+class RequestSubscribeUserContentListDto {
+    @SerializedName("sub_user_id")
     @Expose
-    var cntnts_no: String = ""
-
-    @SerializedName("user_id")
-    @Expose
-    var user_id: String = ""
+    var sub_user_id: String = ""
 
     @SerializedName("currPage")
     @Expose
@@ -19,4 +15,12 @@ class RequestCommentListDto {
     @SerializedName("pageSize")
     @Expose
     var pageSize: Int = -1
+
+    @SerializedName("hash_tag")
+    @Expose
+    var hash_tag: String? = null
+
+    @SerializedName("menu_code")
+    @Expose
+    var menu_code: String? = null
 }

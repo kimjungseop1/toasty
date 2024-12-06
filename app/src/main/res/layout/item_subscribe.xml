@@ -32,7 +32,7 @@
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/contentView"
-        app:layout_constraintEnd_toStartOf="@id/likeView"
+        app:layout_constraintEnd_toStartOf="@id/subscribeView"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,39 +47,48 @@
         android:textColor="@color/color_black"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/likeView"
+        app:layout_constraintEnd_toStartOf="@id/subscribeView"
         app:layout_constraintStart_toStartOf="@id/titleView"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/likeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_like_sel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/subscribeView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/subscribeView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="20dp"
-        android:text="구독"
-        android:textColor="@color/color_black"
-        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/moreView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/likeView"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_like_sel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/subscribeText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/subscribeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subscribe_title"
+            android:textColor="@color/color_black"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/moreView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="?attr/selectableItemBackground"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:src="@drawable/icon_list_more"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_right"

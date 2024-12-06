@@ -11,7 +11,6 @@ import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.base.BaseActivity
-import com.syncrown.arpang.ui.component.home.tab5_more.AccountManageViewModel
 import com.syncrown.arpang.ui.component.home.tab5_more.account.name.ChangeNameActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.account.withdrawal.WithdrawalActivity
 

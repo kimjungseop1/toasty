@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
@@ -22,9 +21,6 @@ import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogCommon
-import com.syncrown.arpang.ui.commons.SplashViewModelFactory
-import com.syncrown.arpang.ui.component.home.MainActivity
-import com.syncrown.arpang.ui.component.login.LoginActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

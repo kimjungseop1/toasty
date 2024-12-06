@@ -2,26 +2,145 @@ package com.syncrown.arpang.ui.component.home.tab5_more.subscribe
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivitySubscribeBinding
 import com.syncrown.arpang.databinding.PopupSubscribeBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestSubscribeByMeDto
+import com.syncrown.arpang.network.model.RequestSubscribeByMyDto
+import com.syncrown.arpang.network.model.RequestSubscribeReleaseDto
+import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
+import com.syncrown.arpang.network.model.ResponseSubscribeListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.adapter.SubscribeListAdapter
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.detail.SubscribeDetailActivity
+import kotlinx.coroutines.launch
 
 class SubscribeActivity : BaseActivity() {
     private lateinit var binding: ActivitySubscribeBinding
+    private val subscribeViewModel: SubscribeViewModel by viewModels()
+
+    private var type = ""
+
     private lateinit var subscribeListAdapter: SubscribeListAdapter
+    private var currentPage = 1
+    private var curPageSize = 15
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            subscribeViewModel.subscribeTotalCountResponseLiveData()
+                .observe(this@SubscribeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
 
+                            if (data?.msgCode.equals("SUCCESS")) {
+                                binding.subscribeI.text = data?.my_subscription_cnt.toString()
+                                binding.subscribeMe.text = data?.me_subscription_cnt.toString()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            subscribeViewModel.subscribeByMyResponseLiveData()
+                .observe(this@SubscribeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+
+                            data?.let {
+                                setSubscribeList(it, SubscribeType.MY)
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            subscribeViewModel.subscribeByMeResponseLiveData()
+                .observe(this@SubscribeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+
+                            data?.let {
+                                setSubscribeList(it, SubscribeType.ME)
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            subscribeViewModel.subscribeReleaseResponseLiveData()
+                .observe(this@SubscribeActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data
+                            if (data?.equals("SUCCESS") == true) {
+                                updateUI()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
     }
 
     override fun initViewBinding() {
@@ -38,17 +157,14 @@ class SubscribeActivity : BaseActivity() {
 
         binding.actionbar.actionTitle.text = getString(R.string.subscribe_title)
 
+        getTotalCount()
+
         binding.clMyView.setOnClickListener {
             binding.clMyView.isSelected = true
             binding.clMeView.isSelected = false
 
-            val arrayList = ArrayList<String>()
-            arrayList.add("1")
-            arrayList.add("1")
-            arrayList.add("1")
-            arrayList.add("1")
-
-            setSubscribeList(arrayList, SubscribeType.MY)
+            currentPage = 1
+            getSubscribeMyList()
 
             setSelectedViewBackground()
         }
@@ -57,46 +173,81 @@ class SubscribeActivity : BaseActivity() {
             binding.clMeView.isSelected = true
             binding.clMyView.isSelected = false
 
-            val arrayList = ArrayList<String>()
-            arrayList.add("2")
-            arrayList.add("2")
-            arrayList.add("2")
-
-            setSubscribeList(arrayList, SubscribeType.ME)
+            currentPage = 1
+            getSubscribeMeList()
 
             setSelectedViewBackground()
         }
 
-        val type = intent.getStringExtra("SUBSCRIBE_TYPE")
-        if (type.equals(SubscribeType.ME.name)) {
+        type = intent.getStringExtra("SUBSCRIBE_TYPE").toString()
+        updateUI()
+    }
+
+    private fun updateUI() {
+        if (type == SubscribeType.ME.name) {
             binding.clMeView.performClick()
+            getSubscribeMeList()
         } else {
             binding.clMyView.performClick()
+            getSubscribeMyList()
         }
     }
 
-    private fun setSubscribeList(arrayList: ArrayList<String>, subscribeType: SubscribeType) {
+    private fun getTotalCount() {
+        val requestSubscribeTotalDto = RequestSubscribeTotalDto()
+        requestSubscribeTotalDto.user_id = AppDataPref.userId
+
+        subscribeViewModel.subscribeTotalCount(requestSubscribeTotalDto)
+    }
+
+    private fun getSubscribeMyList() {
+        val requestSubscribeByMyDto = RequestSubscribeByMyDto()
+        requestSubscribeByMyDto.user_id = AppDataPref.userId
+        requestSubscribeByMyDto.currPage = currentPage
+        requestSubscribeByMyDto.pageSize = curPageSize
+
+        subscribeViewModel.subscribeByMyList(requestSubscribeByMyDto)
+    }
+
+    private fun getSubscribeMeList() {
+        val requestSubscribeByMeDto = RequestSubscribeByMeDto()
+        requestSubscribeByMeDto.user_id = AppDataPref.userId
+        requestSubscribeByMeDto.currPage = currentPage
+        requestSubscribeByMeDto.pageSize = curPageSize
+
+        subscribeViewModel.subscribeByMeList(requestSubscribeByMeDto)
+    }
+
+    private fun setSubscribeList(
+        data: ArrayList<ResponseSubscribeListDto.Root>,
+        subscribeType: SubscribeType
+    ) {
         binding.recyclerSubscribe.layoutManager = LinearLayoutManager(this)
         subscribeListAdapter = SubscribeListAdapter(
             this,
-            arrayList,
+            data,
             subscribeType,
             object : SubscribeListAdapter.OnItemDeleteListener {
                 override fun onDelete(position: Int, view: View) {
-                    showPopupWindow(view, position)
+                    showPopupWindow(view, position, data[position])
                 }
             },
             object : SubscribeListAdapter.OnItemClickListener {
-                override fun onClick(position: Int) {
+                override fun onClick(position: Int, positionData: ResponseSubscribeListDto.Root) {
                     if (subscribeType == SubscribeType.MY) {
-                        goDetail()
+                        goSubscribeDetail(positionData.sub_user_id.toString(), positionData.sub_nick_nm.toString())
                     }
+                }
+            },
+            object : SubscribeListAdapter.OnSubscribeListener {
+                override fun onSubscribe(position: Int, positionData: ResponseSubscribeListDto.Root) {
+
                 }
             })
         binding.recyclerSubscribe.adapter = subscribeListAdapter
     }
 
-    private fun showPopupWindow(anchor: View, position: Int) {
+    private fun showPopupWindow(anchor: View, position: Int, root: ResponseSubscribeListDto.Root) {
         val popBinding = PopupSubscribeBinding.inflate(LayoutInflater.from(this))
 
         val popupWindow = PopupWindow(
@@ -111,13 +262,21 @@ class SubscribeActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
-                subscribeListAdapter.removeItem(position)
+                setSubscribeRelease(root)
             })
             popupWindow.dismiss()
         }
 
         popupWindow.elevation = 10.0f
         popupWindow.showAsDropDown(anchor, 0, 0)
+    }
+
+    private fun setSubscribeRelease(root: ResponseSubscribeListDto.Root) {
+        val requestSubscribeReleaseDto = RequestSubscribeReleaseDto()
+        requestSubscribeReleaseDto.user_id = AppDataPref.userId
+        requestSubscribeReleaseDto.sub_user_id = root.sub_user_id.toString()
+
+        subscribeViewModel.subscribeRelease(requestSubscribeReleaseDto)
     }
 
     private fun setSelectedViewBackground() {
@@ -138,8 +297,10 @@ class SubscribeActivity : BaseActivity() {
         }
     }
 
-    private fun goDetail() {
+    private fun goSubscribeDetail(subUserId: String, subUserName: String) {
         val intent = Intent(this, SubscribeDetailActivity::class.java)
+        intent.putExtra("SUB_USER_ID", subUserId)
+        intent.putExtra("SUB_USER_NAME", subUserName)
         startActivity(intent)
     }
 }

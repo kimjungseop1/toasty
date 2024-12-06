@@ -73,4 +73,12 @@ class DetailCommentListAdapter(
         items.addAll(newData)
         notifyDataSetChanged()
     }
+
+    fun addMoreData(data: java.util.ArrayList<ResponseCommentListDto.Root>) {
+        if (data.size != 0) {
+            val startPosition = items?.size ?: 0
+            items?.addAll(data)
+            notifyItemRangeInserted(startPosition, data.size)
+        }
+    }
 }

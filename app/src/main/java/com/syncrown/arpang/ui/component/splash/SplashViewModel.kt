@@ -15,6 +15,7 @@ import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.syncrown.arpang.AppDataPref
+import com.syncrown.arpang.ArPangApplication
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestCheckMember

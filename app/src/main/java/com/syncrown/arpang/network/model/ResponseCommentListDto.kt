@@ -32,5 +32,17 @@ class ResponseCommentListDto {
         @SerializedName("write_se")
         @Expose
         var write_se: String? = null
+
+        @SerializedName("write_user_id")
+        @Expose
+        var write_user_id: String? = null
+
+        @SerializedName("complain_cnt")
+        @Expose
+        var complain_cnt: Int? = null
+
+        @SerializedName("comment_cnt")
+        @Expose
+        var comment_cnt: Int? = null
     }
 }

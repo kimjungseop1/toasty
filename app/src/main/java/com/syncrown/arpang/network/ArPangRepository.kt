@@ -14,13 +14,18 @@ import com.syncrown.arpang.network.model.RequestCartridgeListDto
 import com.syncrown.arpang.network.model.RequestCheckMember
 import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestCommentListDto
+import com.syncrown.arpang.network.model.RequestCommentReportDto
 import com.syncrown.arpang.network.model.RequestCommonListDto
 import com.syncrown.arpang.network.model.RequestDelCommentDto
+import com.syncrown.arpang.network.model.RequestDeleteStorageDto
+import com.syncrown.arpang.network.model.RequestDetailContentHashTagDto
+import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
 import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestMultiCommonListDto
 import com.syncrown.arpang.network.model.RequestMyFavoriteDto
+import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestRecommendTagListDto
 import com.syncrown.arpang.network.model.RequestSaveEditorDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
@@ -28,6 +33,12 @@ import com.syncrown.arpang.network.model.RequestShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.RequestShareDetailDto
 import com.syncrown.arpang.network.model.RequestStorageContentListDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
+import com.syncrown.arpang.network.model.RequestSubscribeByMeDto
+import com.syncrown.arpang.network.model.RequestSubscribeByMyDto
+import com.syncrown.arpang.network.model.RequestSubscribeRegDto
+import com.syncrown.arpang.network.model.RequestSubscribeReleaseDto
+import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
+import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
 import com.syncrown.arpang.network.model.RequestTemplateListDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
@@ -47,13 +58,18 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
+import com.syncrown.arpang.network.model.ResponseCommentReportDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
 import com.syncrown.arpang.network.model.ResponseDelCommentDto
+import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
+import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
+import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
@@ -61,6 +77,11 @@ import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
+import com.syncrown.arpang.network.model.ResponseSubscribeListDto
+import com.syncrown.arpang.network.model.ResponseSubscribeRegDto
+import com.syncrown.arpang.network.model.ResponseSubscribeReleaseDto
+import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
@@ -81,7 +102,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArPangRepository {
     companion object {
         const val BASE_URL_DEV = "http://192.168.0.132:8090"
-//        const val BASE_URL_DEV = "http://192.168.0.13:8090"
+
+        //        const val BASE_URL_DEV = "http://192.168.0.13:8090"
         const val BASE_URL_REAL = ""
     }
 
@@ -202,11 +224,11 @@ class ArPangRepository {
     val templateListLiveDataRepository: MutableLiveData<NetworkResult<ResponseTemplateListDto>> =
         MutableLiveData()
 
-    //TODO 019. 금지해시태그조회
+    // 019. 금지해시태그조회
     val ignoreTagCheckLiveDataRepository: MutableLiveData<NetworkResult<ResponseIgnoreTagCheckDto>> =
         MutableLiveData()
 
-    //TODO 020. 에디터 Object 저장(일괄)
+    // 020. 에디터 Object 저장(일괄)
     val saveEditorLiveDataRepository: MutableLiveData<NetworkResult<ResponseSaveEditorDto>> =
         MutableLiveData()
 
@@ -248,6 +270,50 @@ class ArPangRepository {
 
     //TODO 030. 댓글 삭제
     val delCommentLiveDataRepository: MutableLiveData<NetworkResult<ResponseDelCommentDto>> =
+        MutableLiveData()
+
+    //TODO 031. 상세컨텐츠의 해시태그 리스트
+    val detailContentHashListRepository: MutableLiveData<NetworkResult<ResponseDetailContentHashTagDto>> =
+        MutableLiveData()
+
+    //TODO 032. 컨텐츠 공개여부 설정하기
+    val publicContentSettingLiveDataRepository: MutableLiveData<NetworkResult<ResponsePublicContentSettingDto>> =
+        MutableLiveData()
+
+    // 033-1. 구독하기 등록 -- 미적용
+    val subscribeRegisterLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeRegDto>> =
+        MutableLiveData()
+
+    //TODO 033-2. 내가 구독한 사용자 목록
+    val subscribeListByMyLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeListDto>> =
+        MutableLiveData()
+
+    //TODO 033-3. 나를 구독한 사용자 목록
+    val subscribeListByMeLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeListDto>> =
+        MutableLiveData()
+
+    // 033-4. 구독해제 하기 -- 미적용
+    val subscribeReleaseLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeReleaseDto>> =
+        MutableLiveData()
+
+    //TODO 033-5. 구독자 전체 갯수 조회
+    val subscribeTotalCntLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeTotalDto>> =
+        MutableLiveData()
+
+    //TODO 034. 상세컨텐츠의 해시태그 리스트 편집
+    val editContentHashTagLiveDataRepository: MutableLiveData<NetworkResult<ResponseEditContentHashTagDto>> =
+        MutableLiveData()
+
+    //TODO 035. 보관함 컨텐츠 삭제
+    val storageContentDeleteLiveDataRepository: MutableLiveData<NetworkResult<ResponseDeleteStorageDto>> =
+        MutableLiveData()
+
+    //TODO 036. 댓글신고(다른사람이 쓴 댓글)
+    val commentReportLiveDataRepository: MutableLiveData<NetworkResult<ResponseCommentReportDto>> =
+        MutableLiveData()
+
+    //TODO 037. 구독한 사용자의 공유(공개)한 컨텐츠 리스트
+    val subscribeUserContentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeUserContentListDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -999,7 +1065,9 @@ class ArPangRepository {
     fun requestCommentList(requestCommentListDto: RequestCommentListDto) {
         arPangInterface.postCommentList(
             requestCommentListDto.cntnts_no,
-            requestCommentListDto.user_id
+            requestCommentListDto.user_id,
+            requestCommentListDto.currPage,
+            requestCommentListDto.pageSize
         ).enqueue(object : Callback<ResponseCommentListDto> {
             override fun onResponse(
                 call: Call<ResponseCommentListDto>,
@@ -1066,6 +1134,281 @@ class ArPangRepository {
                 delCommentLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
 
+        })
+    }
+
+    //TODO 031. 상세컨텐츠의 해시태그 리스트
+    fun requestDetailHashTagList(requestDetailContentHashTagDto: RequestDetailContentHashTagDto) {
+        arPangInterface.postDetailHashTagList(
+            requestDetailContentHashTagDto.cntnts_no
+        ).enqueue(object : Callback<ResponseDetailContentHashTagDto> {
+            override fun onResponse(
+                call: Call<ResponseDetailContentHashTagDto>,
+                response: Response<ResponseDetailContentHashTagDto>
+            ) {
+                if (response.code() == 200) {
+                    detailContentHashListRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    detailContentHashListRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseDetailContentHashTagDto>, t: Throwable) {
+                detailContentHashListRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 032. 컨텐츠 공개여부 설정하기
+    fun requestPublicContentSetting(requestPublicContentSettingDto: RequestPublicContentSettingDto) {
+        arPangInterface.postPublicContentSetting(
+            requestPublicContentSettingDto.cntnts_no,
+            requestPublicContentSettingDto.share_se,
+            requestPublicContentSettingDto.menu_code,
+            requestPublicContentSettingDto.user_id
+        ).enqueue(object : Callback<ResponsePublicContentSettingDto> {
+            override fun onResponse(
+                call: Call<ResponsePublicContentSettingDto>,
+                response: Response<ResponsePublicContentSettingDto>
+            ) {
+                if (response.code() == 200) {
+                    publicContentSettingLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    publicContentSettingLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponsePublicContentSettingDto>, t: Throwable) {
+                publicContentSettingLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 033-1. 구독하기 등록
+    fun requestSubscribeRegister(requestSubscribeRegDto: RequestSubscribeRegDto) {
+        arPangInterface.postSubscribeReg(
+            requestSubscribeRegDto.user_id,
+            requestSubscribeRegDto.sub_user_id
+        ).enqueue(object : Callback<ResponseSubscribeRegDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeRegDto>,
+                response: Response<ResponseSubscribeRegDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeRegisterLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    subscribeRegisterLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeRegDto>, t: Throwable) {
+                subscribeRegisterLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 033-2. 내가 구독한 사용자 목록
+    fun requestSubscribeListByMy(requestSubscribeByMyDto: RequestSubscribeByMyDto) {
+        arPangInterface.postSubscribeListByMy(
+            requestSubscribeByMyDto.user_id,
+            requestSubscribeByMyDto.currPage,
+            requestSubscribeByMyDto.pageSize
+        ).enqueue(object : Callback<ResponseSubscribeListDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeListDto>,
+                response: Response<ResponseSubscribeListDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeListByMyLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    subscribeListByMyLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeListDto>, t: Throwable) {
+                subscribeListByMyLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 033-3. 나를 구독한 사용자 목록
+    fun requestSubscribeListByMe(requestSubscribeByMeDto: RequestSubscribeByMeDto) {
+        arPangInterface.postSubscribeListByMe(
+            requestSubscribeByMeDto.user_id,
+            requestSubscribeByMeDto.currPage,
+            requestSubscribeByMeDto.pageSize
+        ).enqueue(object : Callback<ResponseSubscribeListDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeListDto>,
+                response: Response<ResponseSubscribeListDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeListByMeLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    subscribeListByMeLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeListDto>, t: Throwable) {
+                subscribeListByMeLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 033-4. 구독해제 하기
+    fun requestSubscribeRelease(requestSubscribeReleaseDto: RequestSubscribeReleaseDto) {
+        arPangInterface.postSubscribeRelease(
+            requestSubscribeReleaseDto.user_id,
+            requestSubscribeReleaseDto.sub_user_id
+        ).enqueue(object : Callback<ResponseSubscribeReleaseDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeReleaseDto>,
+                response: Response<ResponseSubscribeReleaseDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeReleaseLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    subscribeReleaseLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeReleaseDto>, t: Throwable) {
+                subscribeReleaseLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 033-5. 구독자 전체 갯수 조회
+    fun requestSubscribeTotalCount(requestSubscribeTotalDto: RequestSubscribeTotalDto) {
+        arPangInterface.postSubscribeTotalCount(
+            requestSubscribeTotalDto.user_id
+        ).enqueue(object : Callback<ResponseSubscribeTotalDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeTotalDto>,
+                response: Response<ResponseSubscribeTotalDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeTotalCntLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    subscribeTotalCntLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeTotalDto>, t: Throwable) {
+                subscribeTotalCntLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 034. 상세컨텐츠의 해시태그 리스트 편집
+    fun requestEditContentHashTag(requestEditContentHashTagDto: RequestEditContentHashTagDto) {
+        arPangInterface.postEditContentHashTag(
+            requestEditContentHashTagDto.cntnts_no,
+            requestEditContentHashTagDto.user_id,
+            requestEditContentHashTagDto.share_hash_tag
+        ).enqueue(object : Callback<ResponseEditContentHashTagDto> {
+            override fun onResponse(
+                call: Call<ResponseEditContentHashTagDto>,
+                response: Response<ResponseEditContentHashTagDto>
+            ) {
+                if (response.code() == 200) {
+                    editContentHashTagLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    editContentHashTagLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseEditContentHashTagDto>, t: Throwable) {
+                editContentHashTagLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 033-5. 구독자 전체 갯수 조회
+
+
+    //TODO 035. 보관함 컨텐츠 삭제
+    fun requestDeleteStorageContent(requestDeleteStorageDto: RequestDeleteStorageDto) {
+        arPangInterface.postDeleteStorageContent(
+            requestDeleteStorageDto.cntnts_no,
+            requestDeleteStorageDto.user_id
+        ).enqueue(object : Callback<ResponseDeleteStorageDto> {
+            override fun onResponse(
+                call: Call<ResponseDeleteStorageDto>,
+                response: Response<ResponseDeleteStorageDto>
+            ) {
+                if (response.code() == 200) {
+                    storageContentDeleteLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    storageContentDeleteLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseDeleteStorageDto>, t: Throwable) {
+                storageContentDeleteLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 036. 댓글신고(다른사람이 쓴 댓글)
+    fun requestCommentReport(requestCommentReportDto: RequestCommentReportDto) {
+        arPangInterface.postCommentReport(
+            requestCommentReportDto.cntnts_no,
+            requestCommentReportDto.comment_seq_no,
+            requestCommentReportDto.user_id,
+            requestCommentReportDto.write_user_id,
+            requestCommentReportDto.complain_desc
+        ).enqueue(object : Callback<ResponseCommentReportDto> {
+            override fun onResponse(
+                call: Call<ResponseCommentReportDto>,
+                response: Response<ResponseCommentReportDto>
+            ) {
+                if (response.code() == 200) {
+                    commentReportLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    commentReportLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCommentReportDto>, t: Throwable) {
+                commentReportLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+
+        })
+    }
+
+    //TODO 037. 구독한 사용자의 공유(공개)한 컨텐츠 리스트
+    fun requestSubscribeUserContentList(requestSubscribeUserContentListDto: RequestSubscribeUserContentListDto) {
+        arPangInterface.postSubscribeUserContentList(
+            requestSubscribeUserContentListDto.sub_user_id,
+            requestSubscribeUserContentListDto.currPage,
+            requestSubscribeUserContentListDto.pageSize,
+            requestSubscribeUserContentListDto.hash_tag,
+            requestSubscribeUserContentListDto.menu_code
+        ).enqueue(object : Callback<ResponseSubscribeUserContentListDto> {
+            override fun onResponse(
+                call: Call<ResponseSubscribeUserContentListDto>,
+                response: Response<ResponseSubscribeUserContentListDto>
+            ) {
+                if (response.code() == 200) {
+                    subscribeUserContentListLiveDataRepository.postValue(
+                        NetworkResult.Success(
+                            response.body()
+                        )
+                    )
+                } else {
+                    subscribeUserContentListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSubscribeUserContentListDto>, t: Throwable) {
+                subscribeUserContentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
         })
     }
 }

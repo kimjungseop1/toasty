@@ -243,6 +243,7 @@
     <string name="storage_detail_popup_desc_3">복사해서 재편집</string>
     <string name="storage_detail_popup_desc_4">삭제하기</string>
     <string name="storage_detail_input_hint">댓글을 남겨주세요</string>
+    <string name="storage_detail_input_submit">등록</string>
     <string name="storage_detail_input_hint_disable">댓글은 공개한 컨텐츠에만 달 수 있습니다.</string>
     <string name="storage_detail_more_tab_nondisclosure">이벤트 참여작을 비공개로 전환할 시\n이벤트 참여가 취소됩니다.\n비공개로 전환하시겠습니까?</string>
     <string name="storage_detail_more_tab_nondisclosure_btn">비공개</string>

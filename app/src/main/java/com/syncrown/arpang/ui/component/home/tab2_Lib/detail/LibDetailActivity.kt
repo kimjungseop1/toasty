@@ -1,5 +1,6 @@
 package com.syncrown.arpang.ui.component.home.tab2_Lib.detail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -15,9 +16,9 @@ import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,9 +35,15 @@ import com.syncrown.arpang.databinding.PopupMenuDetailBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAddCommentDto
 import com.syncrown.arpang.network.model.RequestCommentListDto
+import com.syncrown.arpang.network.model.RequestCommentReportDto
 import com.syncrown.arpang.network.model.RequestDelCommentDto
+import com.syncrown.arpang.network.model.RequestDeleteStorageDto
+import com.syncrown.arpang.network.model.RequestDetailContentHashTagDto
+import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
+import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
+import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
@@ -53,20 +60,107 @@ class LibDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityLibDetailBinding
     private val libDetailViewModel: LibDetailViewModel by viewModels()
 
+    private lateinit var data: ArrayList<ResponseCommentListDto.Root>
     private var cntntsNo = ""
+    private var cateName = ""
+
+    private var currentPage = 1
+    private var pageSize = 10
 
     private lateinit var detailCommentListAdapter: DetailCommentListAdapter
-    private var commentListObserver: Observer<NetworkResult<List<ResponseCommentListDto.Root>>>? = null
 
     override fun observeViewModel() {
         lifecycleScope.launch {
-            //TODO 코멘트 리스트 옵져브
-            libDetailViewModel.commentListResponseLiveData().observe(this@LibDetailActivity) { result ->
+            //TODO 상세페이지
+            libDetailViewModel.libContentDetailResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root
+                            setupUI(data)
+
+                            setCommentList(data?.cntnts_no.toString())
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            //TODO 공개 비공개 전환
+            libDetailViewModel.publicContentSettingLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data
+
+                            if (data?.msgCode.equals("SUCCESS")) {
+                                getDetailContent()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            //TODO 상세 해시태그 리스트
+            libDetailViewModel.hashTagListResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root ?: ArrayList()
+
+                            setHashTagListView(data)
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            //TODO 해시태그 편집
+            libDetailViewModel.editHashTagResponseLiveData().observe(this@LibDetailActivity) { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        val data: ArrayList<ResponseCommentListDto.Root>? = result.data?.root
-                        data?.let {
-                            showCommentView(it)
+                        val data = result.data?.msgCode
+
+                        if (data.equals("SUCCESS")) {
+                            getHashTagList()
+                        } else if (data.equals("FAIL")) {
+                            Log.e("jung","실패")
+                        } else if (data.equals("PROHIBITION_TAG")) {
+                            Log.e("jung","금지 태그 있음")
                         }
                     }
 
@@ -82,21 +176,114 @@ class LibDetailActivity : BaseActivity() {
                     }
                 }
             }
+        }
+
+        lifecycleScope.launch {
+            //TODO 코멘트 리스트 옵져브
+            libDetailViewModel.commentListResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root ?: ArrayList()
+
+                            if (currentPage > 1 && data.isEmpty()) {
+
+                            } else {
+                                detailCommentListAdapter.addMoreData(data)
+                                currentPage++
+                            }
+
+                            //댓글전체수 카운트
+                            binding.commentView.text = data[0].comment_cnt.toString()
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
         }
 
         lifecycleScope.launch {
             //TODO 코멘트 추가 옵져브
-            libDetailViewModel.addCommentResponseLiveData().observe(this@LibDetailActivity) { result ->
+            libDetailViewModel.addCommentResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.msgCode
+                            if (data.equals("SUCCESS")) {
+                                binding.inputComment.text?.clear()
+                                hideKeyBoard()
+
+                                setCommentList(cntntsNo)
+                            } else {
+                                Log.e("jung", "댓글 등록에 실패하였습니다.")
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            //TODO 코멘트 삭제 옵져브
+            libDetailViewModel.deleteCommentResponseLiveData()
+                .observe(this@LibDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.msgCode
+                            if (data.equals("SUCCESS")) {
+                                binding.inputComment.text?.clear()
+                                hideKeyBoard()
+
+                                setCommentList(cntntsNo)
+                            } else {
+                                Log.e("jung", "댓글 삭제에 실패하였습니다.")
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            //TODO 보관함 컨텐츠 삭제
+            libDetailViewModel.deleteLibContentResponseLiveData().observe(this@LibDetailActivity) { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         val data = result.data?.msgCode
                         if (data.equals("SUCCESS")) {
-                            binding.inputComment.text?.clear()
-                            hideKeyBoard()
-
-                            setCommentList(cntntsNo)
+                            setResult(RESULT_OK)
+                            finish()
                         } else {
-                            Log.e("jung","댓글 등록에 실패하였습니다.")
+                            Log.e("jung", "댓글 삭제에 실패하였습니다.")
                         }
                     }
 
@@ -115,18 +302,22 @@ class LibDetailActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            //TODO 코멘트 삭제 옵져브
-            libDetailViewModel.deleteCommentResponseLiveData().observe(this@LibDetailActivity) { result ->
+            //TODO 댓글 신고
+            libDetailViewModel.reportCommentResponseLiveData().observe(this@LibDetailActivity) { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         val data = result.data?.msgCode
                         if (data.equals("SUCCESS")) {
-                            binding.inputComment.text?.clear()
-                            hideKeyBoard()
-
-                            setCommentList(cntntsNo)
+                            val customToast = CustomToast()
+                            customToast.showToastMessage(
+                                supportFragmentManager,
+                                getString(R.string.lib_popup_report_comment),
+                                CustomToastType.WHITE
+                            ) {
+                                //close
+                            }
                         } else {
-                            Log.e("jung","댓글 삭제에 실패하였습니다.")
+                            Log.e("jung", "신고에 실패하였습니다.")
                         }
                     }
 
@@ -158,7 +349,8 @@ class LibDetailActivity : BaseActivity() {
 
         getDetailContent()
 
-        observeDetailContent()
+        data = ArrayList()
+        showCommentView()
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()
@@ -187,8 +379,36 @@ class LibDetailActivity : BaseActivity() {
             setPrinterAndAnotherPaper()
         }
 
-        binding.actionbar.actionMore.setOnClickListener {
-            showPopupWindow(binding.actionbar.actionMore)
+        //상세 페이지 태그 리스트 호출
+        getHashTagList()
+    }
+
+    private fun getHashTagList() {
+        val requestDetailContentHashTagDto = RequestDetailContentHashTagDto()
+        requestDetailContentHashTagDto.cntnts_no = cntntsNo
+
+        libDetailViewModel.getHashTagList(requestDetailContentHashTagDto)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setHashTagListView(data: ArrayList<ResponseDetailContentHashTagDto.Root>) {
+        TagResultListStorage.detailTagList = data
+
+        for (i in 0 until data.size) {
+            val customDynamicTagView = CustomDynamicTagView(this).apply {
+                text = "# " + data[i].hashtag_nm
+                tag = i
+            }
+
+            val layoutParams = FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(5, 5, 5, 5)
+            }
+
+            customDynamicTagView.layoutParams = layoutParams
+            binding.flexTagView.addView(customDynamicTagView)
         }
     }
 
@@ -200,34 +420,11 @@ class LibDetailActivity : BaseActivity() {
         libDetailViewModel.libContentDetail(requestStorageDetailDto)
     }
 
-    private fun observeDetailContent() {
-        lifecycleScope.launch {
-            libDetailViewModel.libContentDetailResponseLiveData()
-                .observe(this@LibDetailActivity) { result ->
-                    when (result) {
-                        is NetworkResult.Success -> {
-                            val data = result.data?.root
-                            setupUI(data)
-
-                            setCommentList(data?.cntnts_no.toString())
-                        }
-
-                        is NetworkResult.NetCode -> {
-                            Log.e("jung", "실패 : ${result.message}")
-                            if (result.message.equals("403")) {
-                                goLogin()
-                            }
-                        }
-
-                        is NetworkResult.Error -> {
-                            Log.e("jung", "오류 : ${result.message}")
-                        }
-                    }
-                }
-        }
-    }
-
     private fun setupUI(data: ResponseStorageDetailDto.Root?) {
+        binding.actionbar.actionMore.setOnClickListener {
+            showPopupWindow(binding.actionbar.actionMore, data?.share_se)
+        }
+
         //공개글 여부
         if (data?.share_se.equals("0")) {
             binding.desc1.text = getString(R.string.storage_detail_close_view)
@@ -239,7 +436,6 @@ class LibDetailActivity : BaseActivity() {
         binding.paperTypeView.text = data?.ctge_nm
 
         //작성 카테고리
-        var cateName = ""
         if (data?.menu_code.equals("AR_MENU01")) {
             cateName = getString(R.string.cartridge_empty_action_text_1)
         } else if (data?.menu_code.equals("AR_MENU02")) {
@@ -268,16 +464,8 @@ class LibDetailActivity : BaseActivity() {
             .load(data?.img_url)
             .into(binding.thumbnailView)
 
-        //댓글수 카운트
-        binding.commentView.text = data?.comment_cnt.toString()
-
         //좋아요 카운드
         binding.likeView.text = data?.favorite_cnt.toString()
-
-        //태그 리스트
-        TagResultListStorage.tagArrayList?.let {
-            showFlexTagView(it)
-        }
 
         if (data?.share_se.equals("0")) {
             binding.inputComment.isEnabled = false
@@ -295,26 +483,7 @@ class LibDetailActivity : BaseActivity() {
         TagResultListStorage.tagArrayList = null
     }
 
-    private fun showFlexTagView(data: ArrayList<String>) {
-        for (i in 0 until data.size) {
-            val customDynamicTagView = CustomDynamicTagView(this).apply {
-                text = data[i]
-                tag = i
-            }
-
-            val layoutParams = FlexboxLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(5, 5, 5, 5)
-            }
-
-            customDynamicTagView.layoutParams = layoutParams
-            binding.flexTagView.addView(customDynamicTagView)
-        }
-    }
-
-    private fun showPopupWindow(anchor: View) {
+    private fun showPopupWindow(anchor: View, shareSe: String?) {
         val popBinding = PopupMenuDetailBinding.inflate(LayoutInflater.from(this))
 
         val popupWindow = PopupWindow(
@@ -323,29 +492,20 @@ class LibDetailActivity : BaseActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, true
         )
 
+        popBinding.switchMenu1.isChecked = !shareSe.equals("0")
         popBinding.switchMenu1.setOnCheckedChangeListener { _, isChecked ->
+            val requestPublicContentSettingDto = RequestPublicContentSettingDto()
+            requestPublicContentSettingDto.cntnts_no = cntntsNo
+            requestPublicContentSettingDto.menu_code = cateName
+            requestPublicContentSettingDto.user_id = AppDataPref.userId
+
             if (isChecked) {
-                // 스위치가 켜졌을 때
-
-                // 공개글로 설정할수없을때 메시지
-                val customToast = CustomToast()
-                customToast.showToastMessage(
-                    supportFragmentManager,
-                    getString(R.string.storage_detail_more_tab_nondisclosure_error_toast),
-                    CustomToastType.RED
-                ) {
-                    //닫기
-                }
+                requestPublicContentSettingDto.share_se = "1"
             } else {
-                // 스위치가 꺼졌을 때
-                val dialogCommon = DialogCommon()
-                dialogCommon.showLibDetailNondisclosure(supportFragmentManager, {
-                    //닫기
-                }, {
-                    //비공개
-
-                })
+                requestPublicContentSettingDto.share_se = "0"
             }
+
+            libDetailViewModel.setPublicContentSetting(requestPublicContentSettingDto)
         }
 
         popBinding.menuItem2.setOnClickListener {
@@ -364,6 +524,7 @@ class LibDetailActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
+                setDeleteStorageContent()
             })
         }
 
@@ -371,15 +532,39 @@ class LibDetailActivity : BaseActivity() {
         popupWindow.showAsDropDown(anchor, 0, 0)
     }
 
+    private fun setDeleteStorageContent() {
+        val requestDeleteStorageDto = RequestDeleteStorageDto()
+        requestDeleteStorageDto.cntnts_no = cntntsNo
+        requestDeleteStorageDto.user_id = AppDataPref.userId
+
+        libDetailViewModel.deleteLibContent(requestDeleteStorageDto)
+    }
+
     private fun setCommentList(cntntsNo: String) {
         val requestCommentListDto = RequestCommentListDto()
         requestCommentListDto.cntnts_no = cntntsNo
         requestCommentListDto.user_id = AppDataPref.userId
+        requestCommentListDto.currPage = currentPage
+        requestCommentListDto.pageSize = pageSize
 
         libDetailViewModel.commentList(requestCommentListDto)
     }
 
-    private fun showCommentView(data : ArrayList<ResponseCommentListDto.Root>) {
+    private fun setupRecyclerViewScrollListener() {
+        binding.recyclerComment.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.recyclerComment.canScrollVertically(1)
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                ) {
+                    Log.e("jung", "addOnScrollListener : $currentPage")
+                    setCommentList(cntntsNo)
+                }
+            }
+        })
+    }
+
+    private fun showCommentView() {
         binding.recyclerComment.layoutManager = LinearLayoutManager(this)
         detailCommentListAdapter = DetailCommentListAdapter(
             this,
@@ -391,11 +576,13 @@ class LibDetailActivity : BaseActivity() {
                         showPopupDeleteMyComment(view, position, data[position].seq_no)
                     } else {
                         //남의댓글 신고하기
-                        showPopupReportOthers(view, position)
+                        showPopupReportOthers(view, position, data[position])
                     }
                 }
             })
         binding.recyclerComment.adapter = detailCommentListAdapter
+
+        setupRecyclerViewScrollListener()
     }
 
     private fun setDeleteComment(seqNo: String) {
@@ -431,7 +618,7 @@ class LibDetailActivity : BaseActivity() {
         popupWindow.showAsDropDown(view, 0, 0)
     }
 
-    private fun showPopupReportOthers(view: View, position: Int) {
+    private fun showPopupReportOthers(view: View, position: Int, root: ResponseCommentListDto.Root) {
         val popBinding = PopupLibReportBinding.inflate(LayoutInflater.from(this))
 
         val popupWindow = PopupWindow(
@@ -446,23 +633,23 @@ class LibDetailActivity : BaseActivity() {
                 //닫기
             }, {
                 //신고
-
-
-//                detailCommentListAdapter.removeItem(position)
-//                val customToast = CustomToast()
-//                customToast.showToastMessage(
-//                    supportFragmentManager,
-//                    getString(R.string.lib_popup_report_comment),
-//                    CustomToastType.WHITE
-//                ) {
-//                    //close
-//                }
+                setCommentReport(root)
             })
             popupWindow.dismiss()
         }
 
         popupWindow.elevation = 10.0f
         popupWindow.showAsDropDown(view, 0, 0)
+    }
+
+    private fun setCommentReport(root: ResponseCommentListDto.Root) {
+        val requestCommentReportDto =  RequestCommentReportDto()
+        requestCommentReportDto.cntnts_no = cntntsNo
+        requestCommentReportDto.comment_seq_no = root.seq_no.toString()
+        requestCommentReportDto.user_id = AppDataPref.userId
+        requestCommentReportDto.write_user_id = root.write_user_id.toString()
+
+        libDetailViewModel.reportComment(requestCommentReportDto)
     }
 
     private fun showEditView() {
@@ -701,12 +888,23 @@ class LibDetailActivity : BaseActivity() {
         tagEditLauncher.launch(intent)
     }
 
+    private fun updateHashTagList(tagText: String) {
+        val requestEditContentHashTagDto = RequestEditContentHashTagDto()
+        requestEditContentHashTagDto.cntnts_no = cntntsNo
+        requestEditContentHashTagDto.user_id = AppDataPref.userId
+        requestEditContentHashTagDto.share_hash_tag = tagText
+
+        libDetailViewModel.updateHashTag(requestEditContentHashTagDto)
+    }
+
     private val tagEditLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                TagResultListStorage.tagArrayList?.let {
-                    showFlexTagView(it)
-                }
+                val tagText = TagResultListStorage.tagArrayList
+                    ?.joinToString("") { it.replace("\\s".toRegex(), "") } ?: ""
+
+                binding.flexTagView.removeAllViews()
+                updateHashTagList(tagText)
             }
         }
 }

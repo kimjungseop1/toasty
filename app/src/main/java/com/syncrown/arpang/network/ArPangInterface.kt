@@ -10,13 +10,18 @@ import com.syncrown.arpang.network.model.ResponseCartridgeListDto
 import com.syncrown.arpang.network.model.ResponseCheckMember
 import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
+import com.syncrown.arpang.network.model.ResponseCommentReportDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
 import com.syncrown.arpang.network.model.ResponseDelCommentDto
+import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
+import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
+import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
@@ -24,6 +29,11 @@ import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
+import com.syncrown.arpang.network.model.ResponseSubscribeListDto
+import com.syncrown.arpang.network.model.ResponseSubscribeRegDto
+import com.syncrown.arpang.network.model.ResponseSubscribeReleaseDto
+import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
@@ -206,7 +216,7 @@ interface ArPangInterface {
 
     //TODO 016. 사용자 알림 설정
     @FormUrlEncoded
-    @POST("/ntv/atp/upate/user/notify")
+    @POST("/ntv/atp/upate/user/notify/setting")
     fun postUserAlertSetting(
         @Field("user_id") user_id: String,
         @Field("noti_event_se") noti_event_se: Int?,
@@ -217,7 +227,7 @@ interface ArPangInterface {
 
     //TODO 017. 사용자 알림 리스트
     @FormUrlEncoded
-    @POST("/ntv/atp/list/user/notify")
+    @POST("/ntv/atp/list/user/notify/setting")
     fun postUserAlertList(
         @Field("user_id") user_id: String
     ): Call<ResponseUserAlertListDto>
@@ -325,7 +335,9 @@ interface ArPangInterface {
     @POST("/ntv/atp/list/contents/comment")
     fun postCommentList(
         @Field("cntnts_no") cntnts_no: String,
-        @Field("user_id") user_id: String
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int
     ): Call<ResponseCommentListDto>
 
     //TODO 029. 댓글 작성
@@ -344,5 +356,102 @@ interface ArPangInterface {
         @Field("cntnts_no") cntnts_no: String,
         @Field("user_id") user_id: String,
         @Field("seq_no") seq_no: String
-    ):Call<ResponseDelCommentDto>
+    ): Call<ResponseDelCommentDto>
+
+    //TODO 031. 상세컨텐츠의 해시태그 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/hashtag/contents")
+    fun postDetailHashTagList(
+        @Field("cntnts_no") cntnts_no: String
+    ): Call<ResponseDetailContentHashTagDto>
+
+    //TODO 032. 컨텐츠 공개여부 설정하기
+    @FormUrlEncoded
+    @POST("/ntv/atp/update/contents/share/se")
+    fun postPublicContentSetting(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("share_se") share_se: String,
+        @Field("menu_code") menu_code: String,
+        @Field("user_id") user_id: String
+    ): Call<ResponsePublicContentSettingDto>
+
+    //TODO 033-1. 구독하기 등록
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/subscription/my")
+    fun postSubscribeReg(
+        @Field("user_id") user_id: String,
+        @Field("sub_user_id") sub_user_id: String,
+    ): Call<ResponseSubscribeRegDto>
+
+    //TODO 033-2. 내가 구독한 사용자 목록
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/subscription/my")
+    fun postSubscribeListByMy(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int
+    ): Call<ResponseSubscribeListDto>
+
+    //TODO 033-3. 나를 구독한 사용자 목록
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/subscription/me")
+    fun postSubscribeListByMe(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int
+    ): Call<ResponseSubscribeListDto>
+
+    //TODO 033-4. 구독해제 하기
+    @FormUrlEncoded
+    @POST("/ntv/atp/delete/subscription/my")
+    fun postSubscribeRelease(
+        @Field("user_id") user_id: String,
+        @Field("sub_user_id") sub_user_id: String
+    ): Call<ResponseSubscribeReleaseDto>
+
+    //TODO 033-5. 구독자 전체 갯수 조회
+    @FormUrlEncoded
+    @POST("/ntv/atp/select/subscription/myme/cnt")
+    fun postSubscribeTotalCount(
+        @Field("user_id") user_id: String
+    ): Call<ResponseSubscribeTotalDto>
+
+    //TODO 034. 상세컨텐츠의 해시태그 리스트 편집
+    @FormUrlEncoded
+    @POST("/ntv/atp/update/hashtag/contents")
+    fun postEditContentHashTag(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String,
+        @Field("share_hash_tag") share_hash_tag: String
+    ): Call<ResponseEditContentHashTagDto>
+
+    //TODO 035. 보관함 컨텐츠 삭제
+    @FormUrlEncoded
+    @POST("/ntv/atp/delete/contents/mysave")
+    fun postDeleteStorageContent(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String
+    ): Call<ResponseDeleteStorageDto>
+
+    //TODO 036. 댓글신고(다른사람이 쓴 댓글)
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/contents/comment/complain")
+    fun postCommentReport(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("comment_seq_no") comment_seq_no: String,
+        @Field("user_id") user_id: String,
+        @Field("write_user_id") write_user_id: String,
+        @Field("complain_desc") complain_desc: String?
+    ): Call<ResponseCommentReportDto>
+
+    //TODO 037. 구독한 사용자의 공유(공개)한 컨텐츠 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/subscription/user/contents/share")
+    fun postSubscribeUserContentList(
+        @Field("sub_user_id") sub_user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int,
+        @Field("hash_tag") hash_tag: String?,
+        @Field("menu_code") menu_code: String?
+    ): Call<ResponseSubscribeUserContentListDto>
 }

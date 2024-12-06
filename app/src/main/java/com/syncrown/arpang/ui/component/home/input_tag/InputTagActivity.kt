@@ -25,6 +25,7 @@ import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CustomDynamicTagView
 import com.syncrown.arpang.ui.commons.DialogCommon
+import com.syncrown.arpang.ui.component.home.input_tag.TagResultListStorage.detailTagList
 import com.syncrown.arpang.ui.component.home.input_tag.adapter.TagAllFavoriteListAdapter
 import com.syncrown.arpang.ui.component.home.input_tag.adapter.TagUseListAdapter
 import kotlinx.coroutines.launch
@@ -127,12 +128,23 @@ class InputTagActivity : BaseActivity() {
 
         })
 
+        //보관함 상세페이지에서 현재 액티비티로 들어왔을때 이미 등록되어있던 태그들을 보여주도록
+        setDefaultTag()
+
         binding.addBtn.isSelected = false
         binding.addBtn.setOnClickListener {
             if (isValidation()) {
                 addTagView(binding.inputTagView.text.toString())
 
                 hideKeyBoard()
+            }
+        }
+    }
+
+    private fun setDefaultTag() {
+        detailTagList?.let { detailItem ->
+            for (tag in detailItem) {
+                addTagView(tag.hashtag_nm.toString())
             }
         }
     }
@@ -237,6 +249,7 @@ class InputTagActivity : BaseActivity() {
                 dialogCommon.showTagDelete(supportFragmentManager, {
                     //nothing
                 }, {
+                    resultTagList.removeAt(position)
                     binding.flexTagView.removeView(clickedView)
                 })
             }

@@ -11,10 +11,12 @@ import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAppMainDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -131,5 +133,19 @@ class MainViewModel : BaseViewModel() {
 
     fun getUserProfileResponseLiveData(): LiveData<NetworkResult<ResponseUserProfileDto>> {
         return getUserProfileResponseLiveData
+    }
+
+    //구독자 전체 갯수
+    private val subscribeTotalCountResponseLiveData: LiveData<NetworkResult<ResponseSubscribeTotalDto>> =
+        arPangRepository.subscribeTotalCntLiveDataRepository
+
+    fun subscribeTotalCount(requestSubscribeTotalDto: RequestSubscribeTotalDto) {
+        viewModelScope.launch {
+            arPangRepository.requestSubscribeTotalCount(requestSubscribeTotalDto)
+        }
+    }
+
+    fun subscribeTotalCountResponseLiveData(): LiveData<NetworkResult<ResponseSubscribeTotalDto>> {
+        return subscribeTotalCountResponseLiveData
     }
 }
