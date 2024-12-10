@@ -12,10 +12,12 @@ import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
 import com.syncrown.arpang.network.model.ResponseCommentReportDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseContentReportDto
 import com.syncrown.arpang.network.model.ResponseDelCommentDto
 import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
 import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
@@ -24,14 +26,15 @@ import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
 import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
+import com.syncrown.arpang.network.model.ResponseScrapContentDto
+import com.syncrown.arpang.network.model.ResponseScrapUpdateDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseSubscribeListDto
-import com.syncrown.arpang.network.model.ResponseSubscribeRegDto
-import com.syncrown.arpang.network.model.ResponseSubscribeReleaseDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
@@ -313,7 +316,8 @@ interface ArPangInterface {
     @FormUrlEncoded
     @POST("/ntv/atp/detail/contents/share")
     fun postShareDetailContent(
-        @Field("cntnts_no") cntnts_no: String
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String
     ): Call<ResponseShareDetailDto>
 
     //TODO 026. 전체 인기있는 해시태그 리스트(상위5건)
@@ -377,11 +381,12 @@ interface ArPangInterface {
 
     //TODO 033-1. 구독하기 등록
     @FormUrlEncoded
-    @POST("/ntv/atp/insert/subscription/my")
+    @POST("/ntv/atp/update/subscription/my")
     fun postSubscribeReg(
         @Field("user_id") user_id: String,
         @Field("sub_user_id") sub_user_id: String,
-    ): Call<ResponseSubscribeRegDto>
+        @Field("subscription_se") subscription_se: Int
+    ): Call<ResponseSubscribeUpdateDto>
 
     //TODO 033-2. 내가 구독한 사용자 목록
     @FormUrlEncoded
@@ -400,14 +405,6 @@ interface ArPangInterface {
         @Field("currPage") currPage: Int,
         @Field("pageSize") pageSize: Int
     ): Call<ResponseSubscribeListDto>
-
-    //TODO 033-4. 구독해제 하기
-    @FormUrlEncoded
-    @POST("/ntv/atp/delete/subscription/my")
-    fun postSubscribeRelease(
-        @Field("user_id") user_id: String,
-        @Field("sub_user_id") sub_user_id: String
-    ): Call<ResponseSubscribeReleaseDto>
 
     //TODO 033-5. 구독자 전체 갯수 조회
     @FormUrlEncoded
@@ -454,4 +451,44 @@ interface ArPangInterface {
         @Field("hash_tag") hash_tag: String?,
         @Field("menu_code") menu_code: String?
     ): Call<ResponseSubscribeUserContentListDto>
+
+    //TODO 038. 좋아요 등록/해제
+    @FormUrlEncoded
+    @POST("/ntv/atp/update/contents/favorite")
+    fun postFavoriteUpdate(
+        @Field("user_id") user_id: String,
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("favorite_se") favorite_se: Int
+    ): Call<ResponseFavoriteDto>
+
+    //TODO 039. 공유공간 상세 게시글을 신고
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/contents/complain")
+    fun postContentReport(
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("user_id") user_id: String,
+        @Field("write_user_id") write_user_id: String,
+        @Field("complain_desc") complain_desc: String?
+    ): Call<ResponseContentReportDto>
+
+    //TODO 040. 스크랩 등록/삭제
+    @FormUrlEncoded
+    @POST("/ntv/atp/update/contents/scrap")
+    fun postScrapUpdate(
+        @Field("user_id") user_id: String,
+        @Field("cntnts_no") cntnts_no: String,
+        @Field("scrap_se") scrap_se: Int
+    ): Call<ResponseScrapUpdateDto>
+
+    //TODO 041. 스크랩 컨텐츠 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/scrap")
+    fun postScrapContentList(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int,
+        @Field("hash_tag") hash_tag: String?,
+        @Field("menu_code") menu_code: String?,
+        @Field("ctge_no") ctge_no: String?
+    ): Call<ResponseScrapContentDto>
 }

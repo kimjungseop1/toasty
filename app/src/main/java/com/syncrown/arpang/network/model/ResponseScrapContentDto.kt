@@ -3,10 +3,10 @@ package com.syncrown.arpang.network.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ResponseShareContentAllOpenListDto {
+class ResponseScrapContentDto {
     @SerializedName("root")
     @Expose
-    var root: ArrayList<Root>? = null
+    var root: ArrayList<Root> = ArrayList()
 
     class Root {
         @SerializedName("cntnts_no")

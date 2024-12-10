@@ -10,6 +10,7 @@
         layout="@layout/actionbar_style_5" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -93,19 +94,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="17dp"
-                    android:text="인생 두컷"
                     android:textColor="@color/color_424242"
                     android:textSize="12dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/anotherLinkView" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/nameView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="홍길동"
                     android:textColor="@color/color_424242"
                     android:textSize="16dp"
                     app:layout_constraintStart_toStartOf="@id/contentTypeView"
@@ -116,7 +115,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
-                    android:text="2일전"
                     android:textColor="@color/color_5B5B5B"
                     android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="@id/nameView"
@@ -128,12 +126,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40dp"
-                    android:text="홍길동님의 다른 게시글"
+                    android:layout_marginTop="17dp"
+                    android:bufferType="spannable"
+                    android:text="@string/share_detail_another_user"
                     android:textColor="@color/color_8e5d4b"
                     android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="@id/nameView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/contentTypeView" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/contentImage"
@@ -178,7 +177,7 @@
                     android:layout_marginTop="21dp"
                     android:layout_marginBottom="17dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icon_like_unsel"
+                    android:src="@drawable/selector_like_unlike"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@id/divider_1"
                     app:layout_constraintTop_toBottomOf="@id/divider_1" />
@@ -188,7 +187,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="111"
                     android:textColor="@color/color_black"
                     android:textSize="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/likeView"
@@ -210,7 +208,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="111"
                     android:textColor="@color/color_black"
                     android:textSize="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/commentView"
@@ -265,7 +262,7 @@
         android:paddingTop="5dp"
         android:paddingEnd="15dp"
         android:paddingBottom="5dp"
-        android:text="등록"
+        android:text="@string/storage_detail_input_submit"
         android:textColor="@color/color_white"
         android:textSize="16dp"
         android:translationZ="5dp"

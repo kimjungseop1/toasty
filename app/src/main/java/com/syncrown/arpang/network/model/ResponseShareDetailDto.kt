@@ -13,6 +13,10 @@ class ResponseShareDetailDto {
         @Expose
         var cntnts_no: String? = null
 
+        @SerializedName("write_user_id")
+        @Expose
+        var write_user_id: String? = null
+
         @SerializedName("img_url")
         @Expose
         var img_url: String? = null
@@ -48,5 +52,17 @@ class ResponseShareDetailDto {
         @SerializedName("favorite_cnt")
         @Expose
         var favorite_cnt: Int? = null
+
+        @SerializedName("favorite_se")
+        @Expose
+        var favorite_se: String? = null
+
+        @SerializedName("menu_code")
+        @Expose
+        var menu_code: String? = null
+
+        @SerializedName("menu_nm")
+        @Expose
+        var menu_nm: String? = null
     }
 }

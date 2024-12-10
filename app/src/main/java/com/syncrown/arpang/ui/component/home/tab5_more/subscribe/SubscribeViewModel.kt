@@ -6,10 +6,10 @@ import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestSubscribeByMeDto
 import com.syncrown.arpang.network.model.RequestSubscribeByMyDto
-import com.syncrown.arpang.network.model.RequestSubscribeReleaseDto
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
+import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeListDto
-import com.syncrown.arpang.network.model.ResponseSubscribeReleaseDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -68,16 +68,16 @@ class SubscribeViewModel : BaseViewModel() {
     /***********************************************************************************************
      * 구독해제
      **********************************************************************************************/
-    private val subscribeReleaseResponseLiveData: LiveData<NetworkResult<ResponseSubscribeReleaseDto>> =
-        arPangRepository.subscribeReleaseLiveDataRepository
+    private val subscribeUpdateResponseLiveData: LiveData<NetworkResult<ResponseSubscribeUpdateDto>> =
+        arPangRepository.subscribeUpdateLiveDataRepository
 
-    fun subscribeRelease(requestSubscribeReleaseDto: RequestSubscribeReleaseDto) {
+    fun subscribeUpdate(requestSubscribeUpdateDto: RequestSubscribeUpdateDto) {
         viewModelScope.launch {
-            arPangRepository.requestSubscribeRelease(requestSubscribeReleaseDto)
+            arPangRepository.requestSubscribeUpdate(requestSubscribeUpdateDto)
         }
     }
 
-    fun subscribeReleaseResponseLiveData(): LiveData<NetworkResult<ResponseSubscribeReleaseDto>> {
-        return subscribeReleaseResponseLiveData
+    fun subscribeUpdateResponseLiveData(): LiveData<NetworkResult<ResponseSubscribeUpdateDto>> {
+        return subscribeUpdateResponseLiveData
     }
 }

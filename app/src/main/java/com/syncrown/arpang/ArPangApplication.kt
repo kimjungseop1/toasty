@@ -10,7 +10,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
+import com.syncrown.arpang.db.push_db.PushMessageDatabase
 import com.syncrown.arpang.ui.commons.FontManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ArPangApplication : Application() {
     private var instance: ArPangApplication? = null
@@ -47,5 +51,12 @@ class ArPangApplication : Application() {
         FacebookSdk.setClientToken(getString(R.string.facebook_token))
         FacebookSdk.sdkInitialize(applicationContext)
         FacebookSdk.fullyInitialize()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = PushMessageDatabase.getDatabase(applicationContext).pushMessageDao()
+
+            //30일 지난 오래된 알림 메시지 삭제
+            dao.deleteOldMessages()
+        }
     }
 }

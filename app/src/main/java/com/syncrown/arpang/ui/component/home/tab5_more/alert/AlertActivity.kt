@@ -8,6 +8,7 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityAlertMainBinding
 import com.syncrown.arpang.db.push_db.PushMessageEntity
 import com.syncrown.arpang.ui.base.BaseActivity
+import com.syncrown.arpang.ui.component.fcm.MessageCountManager
 import com.syncrown.arpang.ui.component.home.tab5_more.alert.adapter.AlertListAdapter
 import kotlinx.coroutines.launch
 
@@ -40,8 +41,9 @@ class AlertActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //최초진입시 오래된 메시지 삭제 호출
-        alertViewModel.deleteOldMessages()
+
+        //메시지 카운트 초기화
+        MessageCountManager.resetCount()
 
         binding.actionbar.actionBack.setOnClickListener {
             finish()

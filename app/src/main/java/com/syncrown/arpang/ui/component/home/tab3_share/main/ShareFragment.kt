@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,14 +20,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.BottomSheetShareBinding
 import com.syncrown.arpang.databinding.FragmentShareBinding
+import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
+import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab3_share.detail.ShareDetailActivity
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
+import kotlinx.coroutines.launch
 
 class ShareFragment : Fragment(),
     ShareGridItemAdapter.OnItemClickListener,
@@ -40,9 +44,7 @@ class ShareFragment : Fragment(),
 
     // Variables
     private var currentPage = 1
-    private var menuCode = ""
-    private var isLoading = false
-    private var hasMoreData = true
+    private var menuCode = "AR_MENU02,AR_MENU05"
     private var currentSelectMode = -1
 
     private lateinit var adapter: ShareGridItemAdapter
@@ -146,11 +148,14 @@ class ShareFragment : Fragment(),
         val selectedCategories = categoryAdapter.getSelectedItems()
 
         menuCode = when {
-            selectedCategories.contains(0) || selectedCategories.containsAll(listOf(1, 2)) -> ""
+            selectedCategories.containsAll(listOf(1, 2)) -> "AR_MENU02,AR_MENU05"
+            selectedCategories.contains(0) -> "AR_MENU02,AR_MENU05"
             selectedCategories.contains(1) -> "AR_MENU02"
             selectedCategories.contains(2) -> "AR_MENU05"
-            else -> ""
+            else -> "AR_MENU02,AR_MENU05"
         }
+
+        Log.e("jung", "menuCode : $menuCode,  selectedCategories : $selectedCategories")
 
         updateSelectedCategories(selectedCategories)
         resetData()
@@ -184,8 +189,6 @@ class ShareFragment : Fragment(),
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!binding.recyclerShare.canScrollVertically(1)
                     && newState == RecyclerView.SCROLL_STATE_IDLE
-                    && !isLoading
-                    && hasMoreData
                 ) {
                     fetchData()
                 }
@@ -194,9 +197,6 @@ class ShareFragment : Fragment(),
     }
 
     private fun fetchData() {
-        if (isLoading) return
-        isLoading = true
-
         val requestDto = RequestShareContentAllOpenListDto().apply {
             currPage = currentPage
             pageSize = 18
@@ -207,23 +207,32 @@ class ShareFragment : Fragment(),
     }
 
     private fun observeShareList() {
-        shareViewModel.shareAllContentListResponseLiveData()
-            .observe(viewLifecycleOwner) { result ->
-                isLoading = false
+        lifecycleScope.launch {
+            shareViewModel.shareAllContentListResponseLiveData().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data?.root ?: ArrayList()
+                        if (currentPage > 1 && data.isEmpty()) {
+                            currentPage = 1
+                        } else {
+                            adapter.addMoreData(data)
+                            currentPage++
+                        }
+                    }
 
-                if (result == null) return@observe
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            (activity as? BaseActivity)?.goLogin()
+                        }
+                    }
 
-                val newData = result.data?.root ?: ArrayList()
-
-                if (newData.isEmpty()) {
-                    hasMoreData = false
-                    return@observe
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
                 }
-
-                // 데이터 추가 및 페이지 증가
-                adapter.addMoreData(newData)
-                currentPage++
             }
+        }
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -237,7 +246,6 @@ class ShareFragment : Fragment(),
         data.clear()
         adapter.notifyDataSetChanged()
         currentPage = 1
-        hasMoreData = true
     }
 
     override fun onItemClick(position: Int, cntntsNo: String) {

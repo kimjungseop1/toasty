@@ -18,8 +18,8 @@ import com.syncrown.arpang.databinding.PopupSubscribeBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestSubscribeByMeDto
 import com.syncrown.arpang.network.model.RequestSubscribeByMyDto
-import com.syncrown.arpang.network.model.RequestSubscribeReleaseDto
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
+import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -118,7 +118,7 @@ class SubscribeActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            subscribeViewModel.subscribeReleaseResponseLiveData()
+            subscribeViewModel.subscribeUpdateResponseLiveData()
                 .observe(this@SubscribeActivity) { result ->
                     when (result) {
                         is NetworkResult.Success -> {
@@ -233,15 +233,15 @@ class SubscribeActivity : BaseActivity() {
                 }
             },
             object : SubscribeListAdapter.OnItemClickListener {
-                override fun onClick(position: Int, positionData: ResponseSubscribeListDto.Root) {
+                override fun onClick(position: Int, posData: ResponseSubscribeListDto.Root) {
                     if (subscribeType == SubscribeType.MY) {
-                        goSubscribeDetail(positionData.sub_user_id.toString(), positionData.sub_nick_nm.toString())
+                        goSubscribeDetail(posData.sub_user_id.toString(), posData.sub_nick_nm.toString())
                     }
                 }
             },
             object : SubscribeListAdapter.OnSubscribeListener {
-                override fun onSubscribe(position: Int, positionData: ResponseSubscribeListDto.Root) {
-
+                override fun onSubscribe(position: Int, posData: ResponseSubscribeListDto.Root) {
+                    //TODO nothing
                 }
             })
         binding.recyclerSubscribe.adapter = subscribeListAdapter
@@ -262,7 +262,7 @@ class SubscribeActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
-                setSubscribeRelease(root)
+                setSubscribeUpdate(root, 0)
             })
             popupWindow.dismiss()
         }
@@ -271,12 +271,13 @@ class SubscribeActivity : BaseActivity() {
         popupWindow.showAsDropDown(anchor, 0, 0)
     }
 
-    private fun setSubscribeRelease(root: ResponseSubscribeListDto.Root) {
-        val requestSubscribeReleaseDto = RequestSubscribeReleaseDto()
-        requestSubscribeReleaseDto.user_id = AppDataPref.userId
-        requestSubscribeReleaseDto.sub_user_id = root.sub_user_id.toString()
+    private fun setSubscribeUpdate(root: ResponseSubscribeListDto.Root, subscription_se: Int) {
+        val requestSubscribeUpdateDto = RequestSubscribeUpdateDto()
+        requestSubscribeUpdateDto.user_id = AppDataPref.userId
+        requestSubscribeUpdateDto.sub_user_id = root.sub_user_id.toString()
+        requestSubscribeUpdateDto.subscription_se = subscription_se
 
-        subscribeViewModel.subscribeRelease(requestSubscribeReleaseDto)
+        subscribeViewModel.subscribeUpdate(requestSubscribeUpdateDto)
     }
 
     private fun setSelectedViewBackground() {

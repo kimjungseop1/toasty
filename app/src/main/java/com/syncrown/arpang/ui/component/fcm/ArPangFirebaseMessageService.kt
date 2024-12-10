@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.syncrown.arpang.R
@@ -29,18 +30,20 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
         Log.e("jung", "fcm notification title : ${remoteMessage.notification?.title}")
         Log.e("jung", "fcm notification body : ${remoteMessage.notification?.body}")
         Log.e("jung", "fcm data title : ${remoteMessage.data["title"]}")
-        Log.e("jung", "fcm data body : ${remoteMessage.data["body"]}")
+        Log.e("jung", "fcm data body : ${remoteMessage.data["content"]}")
+        Log.e("jung", "fcm data url : ${remoteMessage.data["url"]}")
 
         remoteMessage.data.let { data ->
-            val title = data["title"]
-            val body = data["body"]
-            val imageUrl = data["imageUrl"]
+            val title = data["title"] ?: ""
+            val body = data["content"] ?: ""
+            val imageUrl = data["url"] ?: ""
             val timeStamp = System.currentTimeMillis()
 
-            if (!title.isNullOrEmpty() && !body.isNullOrEmpty() && !imageUrl.isNullOrEmpty()) {
-                sendNotification(title, body)
-                insertToDatabase(title, body, imageUrl, timeStamp)
-            }
+            sendNotification(title, body)
+            insertToDatabase(title, body, imageUrl, timeStamp)
+
+            //새로받은 메시지 카운트 증가
+            MessageCountManager.incrementCount()
         }
     }
 
@@ -53,8 +56,8 @@ class ArPangFirebaseMessageService : FirebaseMessagingService() {
         val pushMessageEntity = PushMessageEntity(
             id = 0,
             title = title,
-            body = body,
-            imageUrl = url,
+            content = body,
+            url = url,
             receiveTime = timeStamp
         )
 

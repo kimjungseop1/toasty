@@ -187,14 +187,14 @@ class LibDetailActivity : BaseActivity() {
                             val data = result.data?.root ?: ArrayList()
 
                             if (currentPage > 1 && data.isEmpty()) {
-
+                                currentPage = 1
                             } else {
-                                detailCommentListAdapter.addMoreData(data)
+                                detailCommentListAdapter.updateData(data)
                                 currentPage++
-                            }
 
-                            //댓글전체수 카운트
-                            binding.commentView.text = data[0].comment_cnt.toString()
+                                //댓글전체수 카운트
+                                binding.commentView.text = data[0].comment_cnt.toString()
+                            }
                         }
 
                         is NetworkResult.NetCode -> {
@@ -222,6 +222,7 @@ class LibDetailActivity : BaseActivity() {
                                 binding.inputComment.text?.clear()
                                 hideKeyBoard()
 
+                                currentPage = 1
                                 setCommentList(cntntsNo)
                             } else {
                                 Log.e("jung", "댓글 등록에 실패하였습니다.")
@@ -253,6 +254,7 @@ class LibDetailActivity : BaseActivity() {
                                 binding.inputComment.text?.clear()
                                 hideKeyBoard()
 
+                                currentPage = 1
                                 setCommentList(cntntsNo)
                             } else {
                                 Log.e("jung", "댓글 삭제에 실패하였습니다.")
@@ -436,17 +438,7 @@ class LibDetailActivity : BaseActivity() {
         binding.paperTypeView.text = data?.ctge_nm
 
         //작성 카테고리
-        if (data?.menu_code.equals("AR_MENU01")) {
-            cateName = getString(R.string.cartridge_empty_action_text_1)
-        } else if (data?.menu_code.equals("AR_MENU02")) {
-            cateName = getString(R.string.cartridge_empty_action_text_2)
-        } else if (data?.menu_code.equals("AR_MENU03")) {
-            cateName = getString(R.string.cartridge_empty_action_text_4)
-        } else if (data?.menu_code.equals("AR_MENU04")) {
-            cateName = getString(R.string.cartridge_empty_action_text_5)
-        } else if (data?.menu_code.equals("AR_MENU05")) {
-            cateName = getString(R.string.cartridge_empty_action_text_3)
-        }
+        cateName = data?.menu_code.toString()
         binding.cateTypeView.text = cateName
 
         //작성자

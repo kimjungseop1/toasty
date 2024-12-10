@@ -4,6 +4,16 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class ResponseCommentListDto {
+    @SerializedName("sub")
+    @Expose
+    var sub: Sub? = null
+
+    class Sub {
+        @SerializedName("comment_cnt")
+        @Expose
+        var comment_cnt: Int? = null
+    }
+
     @SerializedName("root")
     @Expose
     var root: ArrayList<Root> = ArrayList()

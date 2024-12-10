@@ -20,6 +20,10 @@
             "package_name": "com.syncrown.arpang",
             "certificate_hash": "88f025243fe926301b63561d72a670603acc1e36"
           }
+        },
+        {
+          "client_id": "228227154329-druh62o37igd3lv9ipbjq2ndh85r09dj.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -29,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228227154329-druh62o37igd3lv9ipbjq2ndh85r09dj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

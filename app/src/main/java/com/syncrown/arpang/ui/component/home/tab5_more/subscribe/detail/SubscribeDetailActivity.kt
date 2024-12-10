@@ -20,9 +20,8 @@ import com.syncrown.arpang.databinding.ActivitySubscribeDetailBinding
 import com.syncrown.arpang.databinding.BottomSheetShareBinding
 import com.syncrown.arpang.databinding.PopupSubscribeActionDetailBinding
 import com.syncrown.arpang.network.NetworkResult
-import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
-import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -30,11 +29,6 @@ import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
-import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment
-import com.syncrown.arpang.ui.component.home.tab2_Lib.main.LibFragment.Companion
-import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.LibGridItemAdapter
-import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
-import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareGridItemAdapter
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.adapter.SubscribeUserGridItemAdapter
 import kotlinx.coroutines.launch
@@ -51,7 +45,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
 
     private lateinit var adapter: SubscribeUserGridItemAdapter
     private var data: ArrayList<ResponseSubscribeUserContentListDto.Root> = ArrayList()
-    private var menuCode = ""
+    private var menuCode = "AR_MENU02,AR_MENU05"
     private var curPage = 1
     private var curPageSize = 18
     private var currentSelectMode = -1
@@ -62,9 +56,34 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         private const val SPACE = 3
     }
 
-    private var isLike = false
+    private var isLike = true
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            subscribeDetailViewModel.subscribeUpdateResponseLiveData()
+                .observe(this@SubscribeDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data
+                            if (data?.msgCode.equals("SUCCESS")) {
+
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
         lifecycleScope.launch {
             subscribeDetailViewModel.subscribeUserContentListResponseLiveData()
                 .observe(this@SubscribeDetailActivity) { result ->
@@ -112,7 +131,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(
                 this,
-                R.drawable.icon_like_unsel
+                R.drawable.icon_like_sel
             ), null, null, null
         )
         binding.actionbar.actionEtc1.setOnClickListener {
@@ -130,6 +149,14 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                     icon
                 ), null, null, null
             )
+
+            var subscriptionSe: Int = if (isLike) {
+                1
+            } else {
+                0
+            }
+
+            setSubscribeUpdate(subscriptionSe)
         }
 
         binding.actionbar.actionMore.setOnClickListener {
@@ -141,6 +168,15 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         fetchData()
 
         setContentList()
+    }
+
+    private fun setSubscribeUpdate(subscription_se: Int) {
+        val requestSubscribeUpdateDto = RequestSubscribeUpdateDto()
+        requestSubscribeUpdateDto.user_id = AppDataPref.userId
+        requestSubscribeUpdateDto.sub_user_id = subUserId
+        requestSubscribeUpdateDto.subscription_se = subscription_se
+
+        subscribeDetailViewModel.subscribeUpdate(requestSubscribeUpdateDto)
     }
 
     private fun setContentList() {
@@ -187,10 +223,11 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             val selectedCategories = categoryAdapter.getSelectedItems()
             Log.e("jung", "size : " + selectedCategories.size)
             menuCode = when {
-                selectedCategories.contains(0) || selectedCategories.containsAll(listOf(1, 2)) -> ""
+                selectedCategories.containsAll(listOf(1, 2)) -> "AR_MENU02,AR_MENU05"
+                selectedCategories.contains(0) -> "AR_MENU02,AR_MENU05"
                 selectedCategories.contains(1) -> "AR_MENU02"
                 selectedCategories.contains(2) -> "AR_MENU05"
-                else -> ""
+                else -> "AR_MENU02,AR_MENU05"
             }
 
             updateSelectedCategories(selectedCategories)
@@ -274,7 +311,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             LinearLayout.LayoutParams.WRAP_CONTENT, true
         )
 
-        popBinding.menuItem1.text = "신고하기"
+        popBinding.menuItem1.text = getString(R.string.lib_popup_report)
         popBinding.menuItem1.setOnClickListener {
             val dialogCommon = DialogCommon()
             dialogCommon.showSubscribeDetailReport(supportFragmentManager, {
@@ -293,7 +330,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
             popupWindow.dismiss()
         }
 
-        popBinding.menuItem2.text = "차단하기"
+        popBinding.menuItem2.text = getString(R.string.lib_popup_reject)
         popBinding.menuItem2.setOnClickListener {
             val dialogCommon = DialogCommon()
             dialogCommon.showSubscribeDetailReject(supportFragmentManager, {
@@ -328,10 +365,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
     }
 
     override fun onItemClick(position: Int, cntntsNo: String) {
-        //goDetail()
-    }
-
-    private fun goDetail() {
 
     }
+
 }

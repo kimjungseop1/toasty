@@ -11,12 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.AppDataPref
+import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentMoreBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseUserProfileDto
 import com.syncrown.arpang.ui.commons.DialogCommon
+import com.syncrown.arpang.ui.component.fcm.MessageCountManager
 import com.syncrown.arpang.ui.component.home.MainViewModel
 import com.syncrown.arpang.ui.component.home.tab5_more.account.AccountManageActivity
 import com.syncrown.arpang.ui.component.home.tab5_more.alert.AlertActivity
@@ -98,6 +100,19 @@ class MoreFragment : Fragment() {
                     }
                 }
         }
+
+        lifecycleScope.launch {
+            MessageCountManager.unreadMessageCount.observe(viewLifecycleOwner) { count ->
+                if (count == 0) {
+                    binding.alertCnt.visibility = View.GONE
+                } else {
+                    binding.alertCnt.visibility = View.VISIBLE
+                }
+
+                //TODO 알림 갯수
+                binding.alertCnt.text = count.toString()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -128,7 +143,7 @@ class MoreFragment : Fragment() {
     private fun updateUi(data: ResponseUserProfileDto) {
         //TODO 사용자 이름
         if (data.nick_nm == null || data.nick_nm.toString().isEmpty()) {
-            binding.nameTxt.text = data.user_id
+            binding.nameTxt.text = getString(R.string.more_nick_name_empty_default)
         } else {
             binding.nameTxt.text = data.nick_nm
         }
@@ -137,9 +152,6 @@ class MoreFragment : Fragment() {
         binding.alertView.setOnClickListener {
             goAlert()
         }
-
-        //TODO 알림 갯수
-        binding.alertCnt.text = "0"
 
         //TODO 스크랩
         binding.scrapBtn.setOnClickListener {

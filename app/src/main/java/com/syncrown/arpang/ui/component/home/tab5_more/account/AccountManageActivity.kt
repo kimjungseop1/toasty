@@ -81,7 +81,7 @@ class AccountManageActivity : BaseActivity() {
     private fun updateUI(data: ResponseUserProfileDto) {
         //TODO 사용자 이름
         if (data.nick_nm == null || data.nick_nm.toString().isEmpty()) {
-            binding.nameTxt.text = data.user_id
+            binding.nameTxt.text = getString(R.string.more_nick_name_empty_default)
         } else {
             binding.nameTxt.text = data.nick_nm
         }

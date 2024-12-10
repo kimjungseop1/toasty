@@ -11,6 +11,7 @@ import com.syncrown.arpang.network.model.RequestDelCommentDto
 import com.syncrown.arpang.network.model.RequestDeleteStorageDto
 import com.syncrown.arpang.network.model.RequestDetailContentHashTagDto
 import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
+import com.syncrown.arpang.network.model.RequestFavoriteDto
 import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseAddCommentDto
@@ -20,6 +21,7 @@ import com.syncrown.arpang.network.model.ResponseDelCommentDto
 import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
 import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.ui.base.BaseViewModel

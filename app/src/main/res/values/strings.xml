@@ -25,12 +25,14 @@
     <string name="actionbar_print_text">인쇄</string>
     <string name="actionbar_print_preview">미리보기</string>
     <string name="lib_popup_report">신고하기</string>
+    <string name="lib_popup_reject">차단하기</string>
     <string name="lib_popup_report_comment">게시글을 신고하였습니다.</string>
     <string name="lib_popup_delete">삭제하기</string>
     <string name="lib_ar_video_popup_delete">AR 영상을 보관함에서 삭제하실 경우\n기존 인쇄한 사진의 재생이 불가능합니다.\n삭제하시겠습니까?</string>
     <string name="lib_detail_popup_paper_not">용지가 장착되어 있지 않습니다.적합한 용지를 장착해주세요.</string>
     <string name="subscribe_toast_desc_1">사용자를 신고하였습니다.</string>
     <string name="subscribe_toast_desc_2">사용자를 차단하였습니다.</string>
+    <string name="subscribe_toast_desc_3">사용자를 구독하였습니다.</string>
     <string name="block_user_manage_desc_1">해제됨</string>
     <string name="block_user_manage_desc_2">차단 해제</string>
     <string name="from_kakao_login_account">카카오로 로그인</string>
@@ -39,6 +41,7 @@
     <string name="from_facebook_login_account">페이스북으로 로그인</string>
     <string name="from_apple_login_account">애플로 로그인</string>
     <string name="from_empty_email_account">등록된 이메일이 없습니다.</string>
+    <string name="share_content_comment_report">댓글을 신고하였습니다.</string>
 
     <!-- 검색  -->
     <string name="search_actionbar_hint">검색어를 입력해주세요</string>
@@ -266,8 +269,13 @@
     <string name="share_detail_alert_comment_warning_user">사용자를 신고하시겠습니까?\n신고가 누적된 사용자는 관리자 판단하에\n사용이 제한 될 수 있습니다.</string>
     <string name="share_detail_alert_user_reject">사용자를 차단하면 더이상 상대방의 컨텐츠를\n볼 수 없습니다.또한 구독중이면 구독이 취소됩니다.\n차단하시겠습니까?</string>
     <string name="share_detail_alert_user_reject_btn">차단</string>
+    <string name="share_detail_another_user">%s님의 다른 게시글</string>
+    <string name="share_detail_content_report">게시글을 신고하였습니다.</string>
+    <string name="share_detail_comment_report">댓글을 신고하였습니다.</string>
 
     <!--  더보기  -->
+    <string name="more_nick_name_empty_default">닉네임 없음</string>
+
     <string name="more_logout_popup_message">로그아웃 하시겠습니까?</string>
     <string name="more_logout_popup_cancel">취소</string>
     <string name="more_logout_popup_ok">로그아웃</string>

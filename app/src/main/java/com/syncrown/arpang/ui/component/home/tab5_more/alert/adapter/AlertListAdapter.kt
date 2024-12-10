@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.syncrown.arpang.databinding.ItemAlertListBinding
 import com.syncrown.arpang.db.push_db.PushMessageEntity
+import java.util.concurrent.TimeUnit
 
 class AlertListAdapter(
     private val context: Context,
@@ -50,13 +53,38 @@ class AlertListAdapter(
 
             alertBinding.titleView.text = items[position].title
 
-            alertBinding.contentView.text = items[position].body
+            alertBinding.contentView.text = items[position].content
 
-            alertBinding.dateView.text = items[position].receiveTime.toString()
+            alertBinding.dateView.text = getTimeAgo(items[position].receiveTime)
 
             Glide.with(context)
-                .load(items[position].imageUrl)
+                .load(items[position].url)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(5)))
                 .into(alertBinding.contentImage)
+        }
+    }
+
+    fun getTimeAgo(timeInMillis: Long): String {
+        val currentTime = System.currentTimeMillis()
+        val diff = currentTime - timeInMillis
+
+        return when {
+            diff < TimeUnit.MINUTES.toMillis(1) -> {
+                val seconds = TimeUnit.MILLISECONDS.toSeconds(diff)
+                "$seconds" + "초 전"
+            }
+            diff < TimeUnit.HOURS.toMillis(1) -> {
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
+                "$minutes" + "분 전"
+            }
+            diff < TimeUnit.DAYS.toMillis(1) -> {
+                val hours = TimeUnit.MILLISECONDS.toHours(diff)
+                "$hours" + "시간 전"
+            }
+            else -> {
+                val days = TimeUnit.MILLISECONDS.toDays(diff)
+                "$days" + "일 전"
+            }
         }
     }
 

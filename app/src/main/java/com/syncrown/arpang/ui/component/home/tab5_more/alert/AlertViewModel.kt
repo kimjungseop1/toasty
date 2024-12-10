@@ -44,15 +44,4 @@ class AlertViewModel(application: Application) : AndroidViewModel(application) {
         }
         return result
     }
-
-    /**
-     * =============================================================================================
-     * 30일이 넘는 데이터를 삭제
-     * =============================================================================================
-     */
-    fun deleteOldMessages() {
-        viewModelScope.launch(Dispatchers.IO) {
-            pushMessageDao.deleteOldMessages()
-        }
-    }
 }

@@ -15,6 +15,7 @@ interface PushMessageDao {
         SELECT * 
         FROM push_message_table 
         WHERE DATE(receiveTime / 1000, 'unixepoch') = DATE('now')
+        ORDER BY receiveTime DESC
     """)
     suspend fun getMessageTodayEntities(): List<PushMessageEntity>
 
@@ -23,6 +24,7 @@ interface PushMessageDao {
         SELECT * 
         FROM push_message_table 
         WHERE receiveTime / 1000 >= strftime('%s', 'now', '-7 days')
+        ORDER BY receiveTime DESC
     """)
     suspend fun getMessageUntilWeekEntities(): List<PushMessageEntity>
 
@@ -30,7 +32,7 @@ interface PushMessageDao {
     @Query("""
         DELETE 
         FROM push_message_table 
-        WHERE receiveTime / 1000 < strftime('%s', 'now', '-30 days')
+        WHERE receiveTime / 1000 > strftime('%s', 'now', '+30 days')
     """)
     suspend fun deleteOldMessages()
 }

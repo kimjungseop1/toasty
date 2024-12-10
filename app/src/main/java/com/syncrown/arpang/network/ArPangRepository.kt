@@ -16,10 +16,12 @@ import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestCommentListDto
 import com.syncrown.arpang.network.model.RequestCommentReportDto
 import com.syncrown.arpang.network.model.RequestCommonListDto
+import com.syncrown.arpang.network.model.RequestContentReportDto
 import com.syncrown.arpang.network.model.RequestDelCommentDto
 import com.syncrown.arpang.network.model.RequestDeleteStorageDto
 import com.syncrown.arpang.network.model.RequestDetailContentHashTagDto
 import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
+import com.syncrown.arpang.network.model.RequestFavoriteDto
 import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
@@ -28,6 +30,8 @@ import com.syncrown.arpang.network.model.RequestMyFavoriteDto
 import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestRecommendTagListDto
 import com.syncrown.arpang.network.model.RequestSaveEditorDto
+import com.syncrown.arpang.network.model.RequestScrapContentDto
+import com.syncrown.arpang.network.model.RequestScrapUpdateDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.RequestShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.RequestShareDetailDto
@@ -35,9 +39,8 @@ import com.syncrown.arpang.network.model.RequestStorageContentListDto
 import com.syncrown.arpang.network.model.RequestStorageDetailDto
 import com.syncrown.arpang.network.model.RequestSubscribeByMeDto
 import com.syncrown.arpang.network.model.RequestSubscribeByMyDto
-import com.syncrown.arpang.network.model.RequestSubscribeRegDto
-import com.syncrown.arpang.network.model.RequestSubscribeReleaseDto
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
+import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
 import com.syncrown.arpang.network.model.RequestTemplateListDto
@@ -60,10 +63,12 @@ import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseCommentListDto
 import com.syncrown.arpang.network.model.ResponseCommentReportDto
 import com.syncrown.arpang.network.model.ResponseCommonListDto
+import com.syncrown.arpang.network.model.ResponseContentReportDto
 import com.syncrown.arpang.network.model.ResponseDelCommentDto
 import com.syncrown.arpang.network.model.ResponseDeleteStorageDto
 import com.syncrown.arpang.network.model.ResponseDetailContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
+import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
@@ -72,15 +77,16 @@ import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
 import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
+import com.syncrown.arpang.network.model.ResponseScrapContentDto
+import com.syncrown.arpang.network.model.ResponseScrapUpdateDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseStorageDetailDto
 import com.syncrown.arpang.network.model.ResponseSubscribeListDto
-import com.syncrown.arpang.network.model.ResponseSubscribeRegDto
-import com.syncrown.arpang.network.model.ResponseSubscribeReleaseDto
 import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
+import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
 import com.syncrown.arpang.network.model.ResponseTemplateListDto
@@ -280,8 +286,8 @@ class ArPangRepository {
     val publicContentSettingLiveDataRepository: MutableLiveData<NetworkResult<ResponsePublicContentSettingDto>> =
         MutableLiveData()
 
-    // 033-1. 구독하기 등록 -- 미적용
-    val subscribeRegisterLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeRegDto>> =
+    // 033-1. 구독하기 등록/해제 -- 미적용
+    val subscribeUpdateLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeUpdateDto>> =
         MutableLiveData()
 
     //TODO 033-2. 내가 구독한 사용자 목록
@@ -292,9 +298,9 @@ class ArPangRepository {
     val subscribeListByMeLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeListDto>> =
         MutableLiveData()
 
-    // 033-4. 구독해제 하기 -- 미적용
-    val subscribeReleaseLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeReleaseDto>> =
-        MutableLiveData()
+    // 033-4. 구독해제 하기 -- 통합
+//    val subscribeReleaseLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeReleaseDto>> =
+//        MutableLiveData()
 
     //TODO 033-5. 구독자 전체 갯수 조회
     val subscribeTotalCntLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeTotalDto>> =
@@ -314,6 +320,22 @@ class ArPangRepository {
 
     //TODO 037. 구독한 사용자의 공유(공개)한 컨텐츠 리스트
     val subscribeUserContentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeUserContentListDto>> =
+        MutableLiveData()
+
+    //TODO 038. 좋아요 등록/삭제
+    val favoriteUpdateLiveDataRepository: MutableLiveData<NetworkResult<ResponseFavoriteDto>> =
+        MutableLiveData()
+
+    //TODO 039. 공유공간 상세 게시글을 신고
+    val contentReportLiveDataRepository: MutableLiveData<NetworkResult<ResponseContentReportDto>> =
+        MutableLiveData()
+
+    //TODO 040. 스크랩 등록/삭제
+    val scrapUpdateLiveDataRepository: MutableLiveData<NetworkResult<ResponseScrapUpdateDto>> =
+        MutableLiveData()
+
+    //TODO 041. 스크랩 컨텐츠 리스트
+    val scrapContentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseScrapContentDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -998,7 +1020,8 @@ class ArPangRepository {
     //TODO 025. 공개(공유)된 컨텐츠 상세조회
     fun requestShareContentDetail(requestShareDetailDto: RequestShareDetailDto) {
         arPangInterface.postShareDetailContent(
-            requestShareDetailDto.cntnts_no
+            requestShareDetailDto.cntnts_no,
+            requestShareDetailDto.user_id
         ).enqueue(object : Callback<ResponseShareDetailDto> {
             override fun onResponse(
                 call: Call<ResponseShareDetailDto>,
@@ -1185,25 +1208,26 @@ class ArPangRepository {
         })
     }
 
-    //TODO 033-1. 구독하기 등록
-    fun requestSubscribeRegister(requestSubscribeRegDto: RequestSubscribeRegDto) {
+    //TODO 033-1. 구독하기 등록/해제
+    fun requestSubscribeUpdate(requestSubscribeUpdateDto: RequestSubscribeUpdateDto) {
         arPangInterface.postSubscribeReg(
-            requestSubscribeRegDto.user_id,
-            requestSubscribeRegDto.sub_user_id
-        ).enqueue(object : Callback<ResponseSubscribeRegDto> {
+            requestSubscribeUpdateDto.user_id,
+            requestSubscribeUpdateDto.sub_user_id,
+            requestSubscribeUpdateDto.subscription_se
+        ).enqueue(object : Callback<ResponseSubscribeUpdateDto> {
             override fun onResponse(
-                call: Call<ResponseSubscribeRegDto>,
-                response: Response<ResponseSubscribeRegDto>
+                call: Call<ResponseSubscribeUpdateDto>,
+                response: Response<ResponseSubscribeUpdateDto>
             ) {
                 if (response.code() == 200) {
-                    subscribeRegisterLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    subscribeUpdateLiveDataRepository.postValue(NetworkResult.Success(response.body()))
                 } else {
-                    subscribeRegisterLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                    subscribeUpdateLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
                 }
             }
 
-            override fun onFailure(call: Call<ResponseSubscribeRegDto>, t: Throwable) {
-                subscribeRegisterLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            override fun onFailure(call: Call<ResponseSubscribeUpdateDto>, t: Throwable) {
+                subscribeUpdateLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
 
         })
@@ -1256,29 +1280,6 @@ class ArPangRepository {
                 subscribeListByMeLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
 
-        })
-    }
-
-    //TODO 033-4. 구독해제 하기
-    fun requestSubscribeRelease(requestSubscribeReleaseDto: RequestSubscribeReleaseDto) {
-        arPangInterface.postSubscribeRelease(
-            requestSubscribeReleaseDto.user_id,
-            requestSubscribeReleaseDto.sub_user_id
-        ).enqueue(object : Callback<ResponseSubscribeReleaseDto> {
-            override fun onResponse(
-                call: Call<ResponseSubscribeReleaseDto>,
-                response: Response<ResponseSubscribeReleaseDto>
-            ) {
-                if (response.code() == 200) {
-                    subscribeReleaseLiveDataRepository.postValue(NetworkResult.Success(response.body()))
-                } else {
-                    subscribeReleaseLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseSubscribeReleaseDto>, t: Throwable) {
-                subscribeReleaseLiveDataRepository.postValue(NetworkResult.Error(t.message))
-            }
         })
     }
 
@@ -1408,6 +1409,106 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseSubscribeUserContentListDto>, t: Throwable) {
                 subscribeUserContentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 038. 좋아요 등록
+    fun requestFavoriteUpdate(requestFavoriteDto: RequestFavoriteDto) {
+        arPangInterface.postFavoriteUpdate(
+            requestFavoriteDto.user_id,
+            requestFavoriteDto.cntnts_no,
+            requestFavoriteDto.favorite_se
+        ).enqueue(object : Callback<ResponseFavoriteDto> {
+            override fun onResponse(
+                call: Call<ResponseFavoriteDto>,
+                response: Response<ResponseFavoriteDto>
+            ) {
+                if (response.code() == 200) {
+                    favoriteUpdateLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    favoriteUpdateLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseFavoriteDto>, t: Throwable) {
+                favoriteUpdateLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 039. 공유공간 상세 게시글을 신고
+    fun requestContentReport(requestContentReportDto: RequestContentReportDto) {
+        arPangInterface.postContentReport(
+            requestContentReportDto.cntnts_no,
+            requestContentReportDto.user_id,
+            requestContentReportDto.write_user_id,
+            requestContentReportDto.complain_desc
+        ).enqueue(object : Callback<ResponseContentReportDto> {
+            override fun onResponse(
+                call: Call<ResponseContentReportDto>,
+                response: Response<ResponseContentReportDto>
+            ) {
+                if (response.code() == 200) {
+                    contentReportLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    contentReportLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseContentReportDto>, t: Throwable) {
+                contentReportLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 040. 스크랩 등록/삭제
+    fun requestScrapUpdate(requestScrapUpdateDto: RequestScrapUpdateDto) {
+        arPangInterface.postScrapUpdate(
+            requestScrapUpdateDto.user_id,
+            requestScrapUpdateDto.cntnts_no,
+            requestScrapUpdateDto.scrap_se
+        ).enqueue(object : Callback<ResponseScrapUpdateDto> {
+            override fun onResponse(
+                call: Call<ResponseScrapUpdateDto>,
+                response: Response<ResponseScrapUpdateDto>
+            ) {
+                if (response.code() == 200) {
+                    scrapUpdateLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    scrapUpdateLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseScrapUpdateDto>, t: Throwable) {
+                scrapUpdateLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 041. 스크랩 컨텐츠 리스트
+    fun requestScrapContentList(requestScrapContentDto: RequestScrapContentDto) {
+        arPangInterface.postScrapContentList(
+            requestScrapContentDto.user_id,
+            requestScrapContentDto.currPage,
+            requestScrapContentDto.pageSize,
+            requestScrapContentDto.hash_tag,
+            requestScrapContentDto.menu_code,
+            requestScrapContentDto.ctge_no
+        ).enqueue(object : Callback<ResponseScrapContentDto> {
+            override fun onResponse(
+                call: Call<ResponseScrapContentDto>,
+                response: Response<ResponseScrapContentDto>
+            ) {
+                if (response.code() == 200) {
+                    scrapContentListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    scrapContentListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseScrapContentDto>, t: Throwable) {
+                scrapContentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }
