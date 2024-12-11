@@ -72,14 +72,14 @@ class SubscribeListAdapter(
                         .load(R.drawable.icon_like_unsel)
                         .into(binding.likeView)
                 }
+
+                binding.moreView.setOnClickListener {
+                    mDelListener.onDelete(position, binding.moreView)
+                }
             }
 
             binding.subscribeView.setOnClickListener {
                 mSubscribe.onSubscribe(position, items[position])
-            }
-
-            binding.moreView.setOnClickListener {
-                mDelListener.onDelete(position, binding.moreView)
             }
 
             binding.root.setOnClickListener {

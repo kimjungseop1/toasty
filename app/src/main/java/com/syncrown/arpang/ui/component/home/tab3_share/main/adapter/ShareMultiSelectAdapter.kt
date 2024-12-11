@@ -14,7 +14,7 @@ import com.syncrown.arpang.databinding.ItemCategoryMultiBinding
 class ShareMultiSelectAdapter(
     private val context: Context,
     private val itemList: List<String>,
-    private val itemSelectedListener: OnItemSelectedListener
+    private val itemSelectedListener: OnItemSelectedListener?
 ) : RecyclerView.Adapter<ShareMultiSelectAdapter.ViewHolder>() {
 
     interface OnItemSelectedListener {
@@ -29,7 +29,7 @@ class ShareMultiSelectAdapter(
 
     init {
         // 어댑터가 초기화될 때 첫 번째 아이템이 선택된 상태임을 알림
-        itemSelectedListener.onItemSelected(0, true)
+        itemSelectedListener?.onItemSelected(0, true)
     }
 
     class ViewHolder(val binding: ItemCategoryMultiBinding) : RecyclerView.ViewHolder(binding.root)
@@ -112,7 +112,7 @@ class ShareMultiSelectAdapter(
                 }
             }
             notifyDataSetChanged()
-            itemSelectedListener.onItemSelected(position, selectedItems.contains(position))
+            itemSelectedListener?.onItemSelected(position, selectedItems.contains(position))
         }
     }
 

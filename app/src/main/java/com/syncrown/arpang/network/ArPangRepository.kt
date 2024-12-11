@@ -8,6 +8,7 @@ import com.syncrown.arpang.network.model.RequestAddCommentDto
 import com.syncrown.arpang.network.model.RequestAllFavoriteDto
 import com.syncrown.arpang.network.model.RequestAppMainDto
 import com.syncrown.arpang.network.model.RequestAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.RequestBlockUserListDto
 import com.syncrown.arpang.network.model.RequestCartridgeByAppMenuDto
 import com.syncrown.arpang.network.model.RequestCartridgeListByTagDto
 import com.syncrown.arpang.network.model.RequestCartridgeListDto
@@ -43,6 +44,8 @@ import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.RequestTagsByCartridgeDto
+import com.syncrown.arpang.network.model.RequestTargetUserBlockDto
+import com.syncrown.arpang.network.model.RequestTargetUserReportDto
 import com.syncrown.arpang.network.model.RequestTemplateListDto
 import com.syncrown.arpang.network.model.RequestUpdateProfileDto
 import com.syncrown.arpang.network.model.RequestUserAlertListDto
@@ -55,6 +58,7 @@ import com.syncrown.arpang.network.model.ResponseAddCommentDto
 import com.syncrown.arpang.network.model.ResponseAllFavoriteDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseBlockUserListDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
@@ -89,6 +93,8 @@ import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseTargetUserBlockDto
+import com.syncrown.arpang.network.model.ResponseTargetUserReportDto
 import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserAlertListDto
@@ -109,7 +115,7 @@ class ArPangRepository {
     companion object {
         const val BASE_URL_DEV = "http://192.168.0.132:8090"
 
-        //        const val BASE_URL_DEV = "http://192.168.0.13:8090"
+//        const val BASE_URL_DEV = "http://192.168.0.13:8090"
         const val BASE_URL_REAL = ""
     }
 
@@ -286,7 +292,7 @@ class ArPangRepository {
     val publicContentSettingLiveDataRepository: MutableLiveData<NetworkResult<ResponsePublicContentSettingDto>> =
         MutableLiveData()
 
-    // 033-1. 구독하기 등록/해제 -- 미적용
+    //TODO 033-1. 구독하기 등록/해제
     val subscribeUpdateLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeUpdateDto>> =
         MutableLiveData()
 
@@ -297,10 +303,6 @@ class ArPangRepository {
     //TODO 033-3. 나를 구독한 사용자 목록
     val subscribeListByMeLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeListDto>> =
         MutableLiveData()
-
-    // 033-4. 구독해제 하기 -- 통합
-//    val subscribeReleaseLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeReleaseDto>> =
-//        MutableLiveData()
 
     //TODO 033-5. 구독자 전체 갯수 조회
     val subscribeTotalCntLiveDataRepository: MutableLiveData<NetworkResult<ResponseSubscribeTotalDto>> =
@@ -336,6 +338,18 @@ class ArPangRepository {
 
     //TODO 041. 스크랩 컨텐츠 리스트
     val scrapContentListLiveDataRepository: MutableLiveData<NetworkResult<ResponseScrapContentDto>> =
+        MutableLiveData()
+
+    //TODO 042. 특정 사용자 신고하기
+    val targetUserReportLiveDataRepository: MutableLiveData<NetworkResult<ResponseTargetUserReportDto>> =
+        MutableLiveData()
+
+    //TODO 043. 특정 사용자 차단 등록/해제
+    val targetUserBlockUpdateLiveDataRepository: MutableLiveData<NetworkResult<ResponseTargetUserBlockDto>> =
+        MutableLiveData()
+
+    //TODO 044. 차단한 사용자 목록
+    val blockUserListLiveDataRepository: MutableLiveData<NetworkResult<ResponseBlockUserListDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -1509,6 +1523,78 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseScrapContentDto>, t: Throwable) {
                 scrapContentListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 042. 특정 사용자 신고하기
+    fun requestTargetUserReport(requestTargetUserReportDto: RequestTargetUserReportDto) {
+        arPangInterface.postTargetUserReport(
+            requestTargetUserReportDto.user_id,
+            requestTargetUserReportDto.complain_user_id,
+            requestTargetUserReportDto.complain_desc
+        ).enqueue(object : Callback<ResponseTargetUserReportDto> {
+            override fun onResponse(
+                call: Call<ResponseTargetUserReportDto>,
+                response: Response<ResponseTargetUserReportDto>
+            ) {
+                if (response.code() == 200) {
+                    targetUserReportLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    targetUserReportLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseTargetUserReportDto>, t: Throwable) {
+                targetUserReportLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 043. 특정 사용자 차단 등록/해제
+    fun requestTargetUserBlock(requestTargetUserBlockDto: RequestTargetUserBlockDto) {
+        arPangInterface.postTargetUserBlock(
+            requestTargetUserBlockDto.user_id,
+            requestTargetUserBlockDto.block_user_id,
+            requestTargetUserBlockDto.block_se
+        ).enqueue(object : Callback<ResponseTargetUserBlockDto> {
+            override fun onResponse(
+                call: Call<ResponseTargetUserBlockDto>,
+                response: Response<ResponseTargetUserBlockDto>
+            ) {
+                if (response.code() == 200) {
+                    targetUserBlockUpdateLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    targetUserBlockUpdateLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseTargetUserBlockDto>, t: Throwable) {
+                targetUserBlockUpdateLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 044. 차단한 사용자 목록
+    fun requestBlockUserList(requestBlockUserListDto: RequestBlockUserListDto) {
+        arPangInterface.postBlockUserList(
+            requestBlockUserListDto.user_id,
+            requestBlockUserListDto.currPage,
+            requestBlockUserListDto.pageSize
+        ).enqueue(object : Callback<ResponseBlockUserListDto> {
+            override fun onResponse(
+                call: Call<ResponseBlockUserListDto>,
+                response: Response<ResponseBlockUserListDto>
+            ) {
+                if (response.code() == 200) {
+                    blockUserListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    blockUserListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBlockUserListDto>, t: Throwable) {
+                blockUserListLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

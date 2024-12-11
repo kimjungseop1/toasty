@@ -34,6 +34,7 @@ import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.MoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
+import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.util.PrintUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -375,7 +376,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun goCS() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_umBxmxb/chat"))
         startActivity(intent)
     }
 }

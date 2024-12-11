@@ -30,7 +30,7 @@ class RequestSaveEditorDto {
 
     @SerializedName("share_se")
     @Expose
-    var share_se: String? = null
+    var share_se: Int = -1
 
     @SerializedName("menu_code")
     @Expose

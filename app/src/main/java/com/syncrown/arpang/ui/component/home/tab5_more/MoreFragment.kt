@@ -2,11 +2,14 @@ package com.syncrown.arpang.ui.component.home.tab5_more
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -140,6 +143,7 @@ class MoreFragment : Fragment() {
         moreViewModel.getUserProfile(requestUserProfileDto)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUi(data: ResponseUserProfileDto) {
         //TODO 사용자 이름
         if (data.nick_nm == null || data.nick_nm.toString().isEmpty()) {
@@ -220,15 +224,22 @@ class MoreFragment : Fragment() {
 
         //TODO 고객센터
         binding.csView.setOnClickListener {
-
+            goCS()
         }
     }
 
     private fun goSubscribe(subscribeType: SubscribeType) {
         val intent = Intent(requireContext(), SubscribeActivity::class.java)
         intent.putExtra("SUBSCRIBE_TYPE", subscribeType.name)
-        startActivity(intent)
+        subscribeLauncher.launch(intent)
     }
+
+    private val subscribeLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                getSubscribeCount()
+            }
+        }
 
     private fun goAlert() {
         val intent = Intent(requireContext(), AlertActivity::class.java)
@@ -274,6 +285,11 @@ class MoreFragment : Fragment() {
     private fun goLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+    }
+
+    private fun goCS() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_umBxmxb/chat"))
         startActivity(intent)
     }
 }

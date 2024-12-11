@@ -64,5 +64,9 @@ class ResponseShareDetailDto {
         @SerializedName("menu_nm")
         @Expose
         var menu_nm: String? = null
+
+        @SerializedName("subscription_se")
+        @Expose
+        var subscription_se: Int? = null
     }
 }

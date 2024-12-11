@@ -4,6 +4,7 @@ import com.syncrown.arpang.network.model.ResponseAddCommentDto
 import com.syncrown.arpang.network.model.ResponseAllFavoriteDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
 import com.syncrown.arpang.network.model.ResponseAppMenuByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseBlockUserListDto
 import com.syncrown.arpang.network.model.ResponseCartridgeByAppMenuDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListByTagDto
 import com.syncrown.arpang.network.model.ResponseCartridgeListDto
@@ -38,6 +39,8 @@ import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.network.model.ResponseTagsByCartridgeDto
+import com.syncrown.arpang.network.model.ResponseTargetUserBlockDto
+import com.syncrown.arpang.network.model.ResponseTargetUserReportDto
 import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.network.model.ResponseUpdateProfileDto
 import com.syncrown.arpang.network.model.ResponseUserAlertListDto
@@ -265,7 +268,7 @@ interface ArPangInterface {
         @Field("editor_data") editor_data: String?,
         @Field("pixel_x") pixel_x: Int?,
         @Field("share_hash_tag") share_hash_tag: String?,
-        @Field("share_se") share_se: String?,
+        @Field("share_se") share_se: Int,
         @Field("menu_code") menu_code: Int,
         @Field("parent_cntnts_no") parent_cntnts_no: String?
     ): Call<ResponseSaveEditorDto>
@@ -491,4 +494,31 @@ interface ArPangInterface {
         @Field("menu_code") menu_code: String?,
         @Field("ctge_no") ctge_no: String?
     ): Call<ResponseScrapContentDto>
+
+    //TODO 042. 특정 사용자 신고하기
+    @FormUrlEncoded
+    @POST("/ntv/atp/insert/user/complain")
+    fun postTargetUserReport(
+        @Field("user_id") user_id: String,
+        @Field("complain_user_id") complain_user_id: String,
+        @Field("complain_desc") complain_desc: String?
+    ): Call<ResponseTargetUserReportDto>
+
+    //TODO 043. 특정 사용자 차단 등록/해제
+    @FormUrlEncoded
+    @POST("/ntv/atp/update/user/block/my")
+    fun postTargetUserBlock(
+        @Field("user_id") user_id: String,
+        @Field("block_user_id") block_user_id: String,
+        @Field("block_se") block_se: Int
+    ): Call<ResponseTargetUserBlockDto>
+
+    //TODO 044. 차단한 사용자 목록
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/user/block/my")
+    fun postBlockUserList(
+        @Field("user_id") user_id: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int
+    ): Call<ResponseBlockUserListDto>
 }

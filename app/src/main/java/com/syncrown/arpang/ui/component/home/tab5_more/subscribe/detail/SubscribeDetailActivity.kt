@@ -1,6 +1,7 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.subscribe.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,8 @@ import com.syncrown.arpang.databinding.PopupSubscribeActionDetailBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
+import com.syncrown.arpang.network.model.RequestTargetUserBlockDto
+import com.syncrown.arpang.network.model.RequestTargetUserReportDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
@@ -29,11 +32,12 @@ import com.syncrown.arpang.ui.commons.CustomToast
 import com.syncrown.arpang.ui.commons.CustomToastType
 import com.syncrown.arpang.ui.commons.DialogCommon
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
+import com.syncrown.arpang.ui.component.home.tab3_share.detail.ShareDetailActivity
 import com.syncrown.arpang.ui.component.home.tab3_share.main.adapter.ShareMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.adapter.SubscribeUserGridItemAdapter
 import kotlinx.coroutines.launch
 
-class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSelectedListener,
+class SubscribeDetailActivity : BaseActivity(),
     SubscribeUserGridItemAdapter.OnItemClickListener {
     private lateinit var binding: ActivitySubscribeDetailBinding
     private val subscribeDetailViewModel: SubscribeDetailViewModel by viewModels()
@@ -56,7 +60,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         private const val SPACE = 3
     }
 
-    private var isLike = true
+    private var isLike = -1
 
     override fun observeViewModel() {
         lifecycleScope.launch {
@@ -92,10 +96,81 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                             val data = result.data?.root ?: ArrayList()
 
                             if (curPage > 1 && data.isEmpty()) {
-
+                                curPage = 1
                             } else {
                                 adapter.addMoreData(data)
                                 curPage++
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            subscribeDetailViewModel.targetUserReportResponseLiveData()
+                .observe(this@SubscribeDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.msgCode
+                            if (data.equals("SUCCESS")) {
+                                val customToast = CustomToast()
+                                customToast.showToastMessage(
+                                    supportFragmentManager,
+                                    getString(R.string.subscribe_toast_desc_1),
+                                    CustomToastType.BLUE
+                                ) {
+                                    //close
+                                }
+                            } else {
+                                Log.e("jung", "신고 실패")
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            subscribeDetailViewModel.targetUserBlockResponseLiveData()
+                .observe(this@SubscribeDetailActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.msgCode
+                            if (data.equals("SUCCESS")) {
+                                val customToast = CustomToast()
+                                customToast.showToastMessage(
+                                    supportFragmentManager,
+                                    getString(R.string.subscribe_toast_desc_2),
+                                    CustomToastType.BLUE
+                                ) {
+                                    //close
+                                }
+
+                                setResult(RESULT_OK)
+                                finish()
+                            } else {
+                                Log.e("jung", "신고 실패")
                             }
                         }
 
@@ -128,16 +203,11 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         val titleName = intent.getStringExtra("SUB_USER_NAME")
         binding.actionbar.actionTitle.text = titleName
         binding.actionbar.actionEtc1.text = getString(R.string.subscribe_title)
-        binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
-            ContextCompat.getDrawable(
-                this,
-                R.drawable.icon_like_sel
-            ), null, null, null
-        )
-        binding.actionbar.actionEtc1.setOnClickListener {
-            isLike = !isLike
 
-            val icon = if (isLike) {
+        subscribeStatusUi()
+
+        binding.actionbar.actionEtc1.setOnClickListener {
+            val icon = if (isLike == 1) {
                 R.drawable.icon_like_sel
             } else {
                 R.drawable.icon_like_unsel
@@ -150,10 +220,10 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                 ), null, null, null
             )
 
-            var subscriptionSe: Int = if (isLike) {
-                1
+            val subscriptionSe: Int = if (isLike == 1) {
+                0 //해제
             } else {
-                0
+                1 //구독
             }
 
             setSubscribeUpdate(subscriptionSe)
@@ -170,6 +240,25 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         setContentList()
     }
 
+    private fun subscribeStatusUi() {
+        isLike = intent.getIntExtra("SUB_USER_SUBSCRIBED", -1)
+        if (isLike == 1) {
+            binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.icon_like_sel
+                ), null, null, null
+            )
+        } else {
+            binding.actionbar.actionEtc1.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.icon_like_unsel
+                ), null, null, null
+            )
+        }
+    }
+
     private fun setSubscribeUpdate(subscription_se: Int) {
         val requestSubscribeUpdateDto = RequestSubscribeUpdateDto()
         requestSubscribeUpdateDto.user_id = AppDataPref.userId
@@ -180,7 +269,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
     }
 
     private fun setContentList() {
-        categoryAdapter = ShareMultiSelectAdapter(this, itemList, this)
+        categoryAdapter = ShareMultiSelectAdapter(this, itemList, null)
         binding.contentTypeView.text = itemList[0]
         binding.contentTypeView.setOnClickListener {
             showTypeBottomSheet()
@@ -318,14 +407,7 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                 //닫기
             }, {
                 //신고
-                val customToast = CustomToast()
-                customToast.showToastMessage(
-                    supportFragmentManager,
-                    getString(R.string.subscribe_toast_desc_1),
-                    CustomToastType.BLUE
-                ) {
-                    //close
-                }
+                moreSetUserReport()
             })
             popupWindow.dismiss()
         }
@@ -337,20 +419,32 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
                 //닫기
             }, {
                 //차단
-                val customToast = CustomToast()
-                customToast.showToastMessage(
-                    supportFragmentManager,
-                    getString(R.string.subscribe_toast_desc_2),
-                    CustomToastType.BLUE
-                ) {
-                    //close
-                }
+                moreSetUserBlock()
             })
             popupWindow.dismiss()
         }
 
         popupWindow.elevation = 10.0f
         popupWindow.showAsDropDown(anchor, 0, 0)
+    }
+
+    private fun moreSetUserReport() {
+        val requestTargetUserReportDto = RequestTargetUserReportDto().apply {
+            user_id = AppDataPref.userId
+            complain_user_id = subUserId
+        }
+
+        subscribeDetailViewModel.userReport(requestTargetUserReportDto)
+    }
+
+    private fun moreSetUserBlock() {
+        val requestTargetUserBlockDto = RequestTargetUserBlockDto().apply {
+            user_id = AppDataPref.userId
+            block_user_id = subUserId
+            block_se = 1
+        }
+
+        subscribeDetailViewModel.userBlock(requestTargetUserBlockDto)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -360,12 +454,11 @@ class SubscribeDetailActivity : BaseActivity(), ShareMultiSelectAdapter.OnItemSe
         curPage = 1
     }
 
-    override fun onItemSelected(position: Int, isSelected: Boolean) {
-        Log.e("jung", "pos : $position, isSelected : $isSelected")
-    }
-
     override fun onItemClick(position: Int, cntntsNo: String) {
-
+        Log.e("jung","position : $position,  cntntsNo : $cntntsNo")
+        val intent = Intent(this, ShareDetailActivity::class.java)
+        intent.putExtra("CONTENT_DETAIL_NO", cntntsNo)
+        startActivity(intent)
     }
 
 }

@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemCutOffBinding
+import com.syncrown.arpang.network.model.ResponseBlockUserListDto
 
 class BlockUserAdapter(
-    private val items: ArrayList<String>,
+    private val items: ArrayList<ResponseBlockUserListDto.Root>,
     private val listener: OnItemClickListener
 ) :
     RecyclerView.Adapter<BlockUserAdapter.CutOffViewHolder>() {
@@ -17,18 +18,17 @@ class BlockUserAdapter(
     private val selectedPositions: MutableSet<Int> = mutableSetOf()
 
     fun interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onBlockClick(position: Int, blockUserId: String)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     class CutOffViewHolder(
-        private val context: Context,
         private val binding: ItemCutOffBinding,
         private val listener: OnItemClickListener,
         private val adapter: BlockUserAdapter
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
+        @SuppressLint("SetTextI18n")
+        fun bind(item: ResponseBlockUserListDto.Root, isSelected: Boolean) {
             binding.unblockingBtn.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -38,22 +38,22 @@ class BlockUserAdapter(
                         adapter.selectedPositions.add(position)
                     }
                     adapter.notifyItemChanged(position)
-                    listener.onItemClick(position)
+                    listener.onBlockClick(position, item.block_user_id.toString())
                 }
             }
-        }
 
-        fun bind(item: String, isSelected: Boolean) {
             binding.blockingTxt.visibility = if (isSelected) View.VISIBLE else View.GONE
             binding.unblockingBtn.visibility = if (isSelected) View.GONE else View.VISIBLE
+
+            binding.nameTxt.text = item.block_nick_nm
+            binding.bodyTxt.text = item.block_user_share_cnt.toString() + "건의 공개된 게시글"
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CutOffViewHolder {
-        val context = parent.context
         val binding =
             ItemCutOffBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CutOffViewHolder(context, binding, listener, this)
+        return CutOffViewHolder(binding, listener, this)
     }
 
     override fun onBindViewHolder(holder: CutOffViewHolder, position: Int) {
@@ -62,4 +62,18 @@ class BlockUserAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun addMoreData(data: ArrayList<ResponseBlockUserListDto.Root>) {
+        if (data.size != 0) {
+            val startPosition = items.size
+            items.addAll(data)
+            notifyItemRangeInserted(startPosition, data.size)
+        }
+    }
+
+    fun updateItem(position: Int) {
+        //selectedPositions.remove(position)
+        notifyItemChanged(position)
+    }
+
 }

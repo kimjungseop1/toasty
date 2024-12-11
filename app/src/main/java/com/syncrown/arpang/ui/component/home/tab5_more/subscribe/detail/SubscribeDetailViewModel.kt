@@ -6,8 +6,12 @@ import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestSubscribeUpdateDto
 import com.syncrown.arpang.network.model.RequestSubscribeUserContentListDto
+import com.syncrown.arpang.network.model.RequestTargetUserBlockDto
+import com.syncrown.arpang.network.model.RequestTargetUserReportDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUpdateDto
 import com.syncrown.arpang.network.model.ResponseSubscribeUserContentListDto
+import com.syncrown.arpang.network.model.ResponseTargetUserBlockDto
+import com.syncrown.arpang.network.model.ResponseTargetUserReportDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -48,5 +52,41 @@ class SubscribeDetailViewModel : BaseViewModel() {
 
     fun subscribeUpdateResponseLiveData(): LiveData<NetworkResult<ResponseSubscribeUpdateDto>> {
         return subscribeUpdateResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 특정 사람 신고하기
+     * =============================================================================================
+     */
+    private val targetUserReportResponseLiveData: LiveData<NetworkResult<ResponseTargetUserReportDto>> =
+        arPangRepository.targetUserReportLiveDataRepository
+
+    fun userReport(requestTargetUserReportDto: RequestTargetUserReportDto) {
+        viewModelScope.launch {
+            arPangRepository.requestTargetUserReport(requestTargetUserReportDto)
+        }
+    }
+
+    fun targetUserReportResponseLiveData(): LiveData<NetworkResult<ResponseTargetUserReportDto>> {
+        return targetUserReportResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 특정 사람 차단하기
+     * =============================================================================================
+     */
+    private val targetUserBlockResponseLiveData: LiveData<NetworkResult<ResponseTargetUserBlockDto>> =
+        arPangRepository.targetUserBlockUpdateLiveDataRepository
+
+    fun userBlock(requestTargetUserBlockDto: RequestTargetUserBlockDto) {
+        viewModelScope.launch {
+            arPangRepository.requestTargetUserBlock(requestTargetUserBlockDto)
+        }
+    }
+
+    fun targetUserBlockResponseLiveData(): LiveData<NetworkResult<ResponseTargetUserBlockDto>> {
+        return targetUserBlockResponseLiveData
     }
 }

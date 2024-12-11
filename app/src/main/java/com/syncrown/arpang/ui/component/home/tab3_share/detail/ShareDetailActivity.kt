@@ -67,6 +67,7 @@ class ShareDetailActivity : BaseActivity() {
 
     private lateinit var data: ArrayList<ResponseCommentListDto.Root>
     private var writeUserId = ""
+    private var isSubscribe = -1
     private var cntntsNo = ""
     private var currentPage = 1
     private var curPageSize = 10
@@ -80,6 +81,8 @@ class ShareDetailActivity : BaseActivity() {
                             val data = result.data?.root
                             data?.let {
                                 setupUI(it)
+
+                                isSubscribe = data.subscription_se!!
                             }
                         }
 
@@ -941,8 +944,9 @@ class ShareDetailActivity : BaseActivity() {
 
     private fun goSubscribeUser(data: ResponseShareDetailDto.ROOT) {
         val intent = Intent(this, SubscribeDetailActivity::class.java)
-        intent.putExtra("SUB_USER_ID", AppDataPref.userId)
+        intent.putExtra("SUB_USER_ID", data.write_user_id)
         intent.putExtra("SUB_USER_NAME", data.nick_nm)
+        intent.putExtra("SUB_USER_SUBSCRIBED", isSubscribe)
         startActivity(intent)
     }
 }

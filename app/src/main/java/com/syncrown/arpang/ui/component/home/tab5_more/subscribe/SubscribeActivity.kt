@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -183,13 +184,16 @@ class SubscribeActivity : BaseActivity() {
         updateUI()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        setResult(RESULT_OK)
+    }
+
     private fun updateUI() {
         if (type == SubscribeType.ME.name) {
             binding.clMeView.performClick()
-            getSubscribeMeList()
         } else {
             binding.clMyView.performClick()
-            getSubscribeMyList()
         }
     }
 
@@ -229,19 +233,31 @@ class SubscribeActivity : BaseActivity() {
             subscribeType,
             object : SubscribeListAdapter.OnItemDeleteListener {
                 override fun onDelete(position: Int, view: View) {
-                    showPopupWindow(view, position, data[position])
+                    if (data[position].is_sub_me == 1) {
+                        showPopupWindow(view, position, data[position])
+                    }
                 }
             },
             object : SubscribeListAdapter.OnItemClickListener {
                 override fun onClick(position: Int, posData: ResponseSubscribeListDto.Root) {
                     if (subscribeType == SubscribeType.MY) {
+                        Log.e("jung","subActivity sub_user_id : ${posData.sub_user_id}")
                         goSubscribeDetail(posData.sub_user_id.toString(), posData.sub_nick_nm.toString())
                     }
                 }
             },
             object : SubscribeListAdapter.OnSubscribeListener {
                 override fun onSubscribe(position: Int, posData: ResponseSubscribeListDto.Root) {
-                    //TODO nothing
+                    if (subscribeType == SubscribeType.MY) {
+
+                        Log.e("jung","position : $position, data : ${posData.sub_nick_nm}, is_sub_me : ${posData.is_sub_me}")
+//                        val mOption = if (posData.is_sub_me == 1) {
+//                            0
+//                        } else {
+//                            1
+//                        }
+//                        setSubscribeUpdate(posData.sub_user_id.toString(), mOption)
+                    }
                 }
             })
         binding.recyclerSubscribe.adapter = subscribeListAdapter
@@ -262,7 +278,7 @@ class SubscribeActivity : BaseActivity() {
                 //닫기
             }, {
                 //삭제
-                setSubscribeUpdate(root, 0)
+                setSubscribeUpdate(root.sub_user_id.toString(), 0)
             })
             popupWindow.dismiss()
         }
@@ -271,10 +287,10 @@ class SubscribeActivity : BaseActivity() {
         popupWindow.showAsDropDown(anchor, 0, 0)
     }
 
-    private fun setSubscribeUpdate(root: ResponseSubscribeListDto.Root, subscription_se: Int) {
+    private fun setSubscribeUpdate(subUserId: String, subscription_se: Int) {
         val requestSubscribeUpdateDto = RequestSubscribeUpdateDto()
         requestSubscribeUpdateDto.user_id = AppDataPref.userId
-        requestSubscribeUpdateDto.sub_user_id = root.sub_user_id.toString()
+        requestSubscribeUpdateDto.sub_user_id = subUserId
         requestSubscribeUpdateDto.subscription_se = subscription_se
 
         subscribeViewModel.subscribeUpdate(requestSubscribeUpdateDto)
@@ -302,6 +318,15 @@ class SubscribeActivity : BaseActivity() {
         val intent = Intent(this, SubscribeDetailActivity::class.java)
         intent.putExtra("SUB_USER_ID", subUserId)
         intent.putExtra("SUB_USER_NAME", subUserName)
-        startActivity(intent)
+        intent.putExtra("SUB_USER_SUBSCRIBED", 1)
+        subscribeDetailLauncher.launch(intent)
     }
+
+    private val subscribeDetailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                getTotalCount()
+                binding.clMyView.performClick()
+            }
+        }
 }

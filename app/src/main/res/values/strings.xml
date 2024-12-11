@@ -323,10 +323,10 @@
     <string name="account_withdrawal_reason_4">기타 사유</string>
     <string name="account_withdrawal_etc_hint">기타 사유를 입력해 주세요</string>
 
-    <string name="account_change_name">이름 변경</string>
-    <string name="account_change_name_desc_1">이름</string>
+    <string name="account_change_name">닉네임 변경</string>
+    <string name="account_change_name_desc_1">닉네임</string>
     <string name="account_change_name_desc_2">* 이름은 한달에 한번만 변경할 수 있습니다.</string>
-    <string name="account_change_name_desc_3">이름이 변경되었습니다.</string>
+    <string name="account_change_name_desc_3">닉네임이 변경되었습니다.</string>
 
     <string name="customer_center_title">고객센터</string>
 
