@@ -571,6 +571,6 @@ interface ArPangInterface {
     @POST("/ntv/atp/list/banner")
     fun postMainBanner(
         @Field("banner_se_code") banner_se_code: String,
-        @Field("menu_code") menu_code: String
+        @Field("menu_code") menu_code: String?
     ): Call<ResponseMainBannerDto>
 }

@@ -23,6 +23,9 @@ import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityMainBinding
 import com.syncrown.arpang.databinding.BottomSheetEventBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestMainBannerDto
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.BackPressCloseHandler
 import com.syncrown.arpang.ui.component.home.adapter.MainEventPagerAdapter
@@ -34,13 +37,11 @@ import com.syncrown.arpang.ui.component.home.tab3_share.main.ShareFragment
 import com.syncrown.arpang.ui.component.home.tab4_store.StoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.MoreFragment
 import com.syncrown.arpang.ui.component.home.tab5_more.subscribe.SubscribeActivity
-import com.syncrown.arpang.ui.component.join.term_privacy.PolishWebActivity
 import com.syncrown.arpang.ui.util.PrintUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -104,6 +105,32 @@ class MainActivity : BaseActivity() {
                     paperStatusJob?.cancel()
                 } else {
                     startPaperStatusJob()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            mainViewModel.popupBannerResponseLiveData().observe(this@MainActivity) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data?.root ?: ArrayList()
+                        data.let {
+                            if (AppDataPref.isMainEvent) {
+                                showEventBottomSheet(it)
+                            }
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
                 }
             }
         }
@@ -211,9 +238,10 @@ class MainActivity : BaseActivity() {
             goArPage()
         }
 
-        if (AppDataPref.isMainEvent) {
-            showEventBottomSheet()
-        }
+//        if (AppDataPref.isMainEvent) {
+//            showEventBottomSheet() // 메인 -> 홈으로 이동
+//        }
+        setEventPopupBannerData()
     }
 
     private fun startBatteryCheckJob() {
@@ -288,7 +316,15 @@ class MainActivity : BaseActivity() {
         itemView.removeViewAt(itemView.childCount - 1)
     }
 
-    private fun showEventBottomSheet() {
+    private fun setEventPopupBannerData() {
+        val requestMainBannerDto = RequestMainBannerDto().apply {
+            banner_se_code = "AR_POP_BAN"
+        }
+
+        mainViewModel.popupBanner(requestMainBannerDto)
+    }
+
+    private fun showEventBottomSheet(data: ArrayList<ResponseMainBannerDto.Root>) {
         if (bottomSheetDialog?.isShowing == true) {
             return
         }
@@ -298,11 +334,8 @@ class MainActivity : BaseActivity() {
         bottomSheetDialog?.window?.setDimAmount(0.7f)
         bottomSheetDialog?.setContentView(binding.root)
 
-        val pageData = listOf("1", "2", "3")
-        val adapter = MainEventPagerAdapter(
-            this, pageData
-        ) { position ->
-            Log.e("jung", "pos : $position")
+        val adapter = MainEventPagerAdapter(data) { _, clickLink ->
+            Log.e("jung", "clickLink: $clickLink")
         }
         binding.eventViewPager.adapter = adapter
         binding.eventViewPager.registerOnPageChangeCallback(object :

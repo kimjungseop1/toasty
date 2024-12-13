@@ -9,11 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.RequestMainBannerDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.RequestStorageContentListDto
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
 import com.syncrown.arpang.network.model.ResponseSubscribeTotalDto
@@ -33,6 +35,20 @@ class MainViewModel : BaseViewModel() {
 
     fun paperGuideActivityClosed(newMessage: String) {
         _onPaperGuideActivityClosed.postValue(newMessage)
+    }
+
+    //TODO 팝업배너
+    private val popupBannerResponseLiveData: LiveData<NetworkResult<ResponseMainBannerDto>> =
+        arPangRepository.mainBannerLiveDataRepository
+
+    fun popupBanner(requestMainBannerDto: RequestMainBannerDto) {
+        viewModelScope.launch {
+            arPangRepository.requestMainBanner(requestMainBannerDto)
+        }
+    }
+
+    fun popupBannerResponseLiveData(): LiveData<NetworkResult<ResponseMainBannerDto>> {
+        return popupBannerResponseLiveData
     }
 
 
@@ -59,6 +75,20 @@ class MainViewModel : BaseViewModel() {
 
     fun appMainResponseLiveData(): LiveData<NetworkResult<ResponseAppMainDto>> {
         return appMainResponseLiveData
+    }
+
+    //TODO 메인베너,이렇게활용 리스트
+    private val homeBannerResponseLiveData: LiveData<NetworkResult<ResponseMainBannerDto>> =
+        arPangRepository.mainBannerLiveDataRepository
+
+    fun homeBanner(requestMainBannerDto: RequestMainBannerDto) {
+        viewModelScope.launch {
+            arPangRepository.requestMainBanner(requestMainBannerDto)
+        }
+    }
+
+    fun homeBannerResponseLiveData(): LiveData<NetworkResult<ResponseMainBannerDto>> {
+        return homeBannerResponseLiveData
     }
 
     /***********************************************************************************************

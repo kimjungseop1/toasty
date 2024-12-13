@@ -10,5 +10,5 @@ class RequestMainBannerDto {
 
     @SerializedName("menu_code")
     @Expose
-    var menu_code: String = ""
+    var menu_code: String? = null
 }
