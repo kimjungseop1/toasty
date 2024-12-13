@@ -26,13 +26,18 @@ import com.syncrown.arpang.network.model.RequestFavoriteDto
 import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
+import com.syncrown.arpang.network.model.RequestMainBannerDto
 import com.syncrown.arpang.network.model.RequestMultiCommonListDto
 import com.syncrown.arpang.network.model.RequestMyFavoriteDto
+import com.syncrown.arpang.network.model.RequestNoticeDetailDto
+import com.syncrown.arpang.network.model.RequestNoticeListDto
 import com.syncrown.arpang.network.model.RequestPublicContentSettingDto
 import com.syncrown.arpang.network.model.RequestRecommendTagListDto
+import com.syncrown.arpang.network.model.RequestResultMatchDto
 import com.syncrown.arpang.network.model.RequestSaveEditorDto
 import com.syncrown.arpang.network.model.RequestScrapContentDto
 import com.syncrown.arpang.network.model.RequestScrapUpdateDto
+import com.syncrown.arpang.network.model.RequestSearchingMatchDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.RequestShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.RequestShareDetailDto
@@ -76,13 +81,19 @@ import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
+import com.syncrown.arpang.network.model.ResponseNoticeDetailDto
+import com.syncrown.arpang.network.model.ResponseNoticeListDto
+import com.syncrown.arpang.network.model.ResponsePopularTagDto
 import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
+import com.syncrown.arpang.network.model.ResponseResultMatchDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseScrapContentDto
 import com.syncrown.arpang.network.model.ResponseScrapUpdateDto
+import com.syncrown.arpang.network.model.ResponseSearchingMatchDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
@@ -115,7 +126,7 @@ class ArPangRepository {
     companion object {
         const val BASE_URL_DEV = "http://192.168.0.132:8090"
 
-//        const val BASE_URL_DEV = "http://192.168.0.13:8090"
+        //        const val BASE_URL_DEV = "http://192.168.0.13:8090"
         const val BASE_URL_REAL = ""
     }
 
@@ -352,6 +363,30 @@ class ArPangRepository {
     val blockUserListLiveDataRepository: MutableLiveData<NetworkResult<ResponseBlockUserListDto>> =
         MutableLiveData()
 
+    //TODO 045. 공지사항 리스트
+    val noticeListLiveDataRepository: MutableLiveData<NetworkResult<ResponseNoticeListDto>> =
+        MutableLiveData()
+
+    //TODO 046. 공지사항 상세보기
+    val noticeDetailLiveDataRepository: MutableLiveData<NetworkResult<ResponseNoticeDetailDto>> =
+        MutableLiveData()
+
+    //TODO 047. 인기 검색 태그
+    val popularTagSearchLiveDataRepository: MutableLiveData<NetworkResult<ResponsePopularTagDto>> =
+        MutableLiveData()
+
+    //TODO 048. 입력된 단어가 포함된 이름/공유/보관함 검색중 리스트
+    val searchingMatchListLiveDataRepository: MutableLiveData<NetworkResult<ResponseSearchingMatchDto>> =
+        MutableLiveData()
+
+    //TODO 049. 입력된 단어가 포함된 이름/공유/보관함 검색결과 리스트
+    val resultMatchingLiveDataRepository: MutableLiveData<NetworkResult<ResponseResultMatchDto>> =
+        MutableLiveData()
+
+    //TODO 050. 메인베너, 팝업베너, 이렇게활용 리스트
+    val mainBannerLiveDataRepository: MutableLiveData<NetworkResult<ResponseMainBannerDto>> =
+        MutableLiveData()
+
     /***********************************************************************************************
      * API response를 라이브데이터에 추가
      **********************************************************************************************/
@@ -436,7 +471,8 @@ class ArPangRepository {
             requestJoinDto.email, requestJoinDto.nick_nm,
             requestJoinDto.stt_msg, requestJoinDto.nation,
             requestJoinDto.lang, requestJoinDto.birth_day,
-            requestJoinDto.markt_recptn_agre, requestJoinDto.profile
+            requestJoinDto.markt_recptn_agre, requestJoinDto.profile,
+            requestJoinDto.app_id
         ).enqueue(object : Callback<ResponseJoinDto> {
             override fun onResponse(
                 call: Call<ResponseJoinDto>,
@@ -1595,6 +1631,143 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseBlockUserListDto>, t: Throwable) {
                 blockUserListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 045. 공지사항 리스트
+    fun requestNoticeList(requestNoticeListDto: RequestNoticeListDto) {
+        arPangInterface.postNoticeList(
+            requestNoticeListDto.app_id,
+            requestNoticeListDto.lang_code
+        ).enqueue(object : Callback<ResponseNoticeListDto> {
+            override fun onResponse(
+                call: Call<ResponseNoticeListDto>,
+                response: Response<ResponseNoticeListDto>
+            ) {
+                if (response.code() == 200) {
+                    noticeListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    noticeListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseNoticeListDto>, t: Throwable) {
+                noticeListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 046. 공지사항 상세보기
+    fun requestNoticeDetail(requestNoticeDetailDto: RequestNoticeDetailDto) {
+        arPangInterface.postNoticeDetail(
+            requestNoticeDetailDto.bbsid
+        ).enqueue(object : Callback<ResponseNoticeDetailDto> {
+            override fun onResponse(
+                call: Call<ResponseNoticeDetailDto>,
+                response: Response<ResponseNoticeDetailDto>
+            ) {
+                if (response.code() == 200) {
+                    noticeDetailLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    noticeDetailLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseNoticeDetailDto>, t: Throwable) {
+                noticeDetailLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 047. 인기 검색 태그
+    fun requestPopularTag() {
+        arPangInterface.postPopularTag()
+            .enqueue(object : Callback<ResponsePopularTagDto> {
+                override fun onResponse(
+                    call: Call<ResponsePopularTagDto>,
+                    response: Response<ResponsePopularTagDto>
+                ) {
+                    if (response.code() == 200) {
+                        popularTagSearchLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                    } else {
+                        popularTagSearchLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponsePopularTagDto>, t: Throwable) {
+                    popularTagSearchLiveDataRepository.postValue(NetworkResult.Error(t.message))
+                }
+            })
+    }
+
+    //TODO 048. 입력된 단어가 포함된 이름/공유/보관함 검색중 리스트
+    fun requestSearchingInputMatch(requestSearchingMatchDto: RequestSearchingMatchDto) {
+        arPangInterface.postSearchingInputMatch(
+            requestSearchingMatchDto.user_id,
+            requestSearchingMatchDto.search_nm
+        ).enqueue(object : Callback<ResponseSearchingMatchDto> {
+            override fun onResponse(
+                call: Call<ResponseSearchingMatchDto>,
+                response: Response<ResponseSearchingMatchDto>
+            ) {
+                if (response.code() == 200) {
+                    searchingMatchListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    searchingMatchListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSearchingMatchDto>, t: Throwable) {
+                searchingMatchListLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 049. 입력된 단어가 포함된 이름/공유/보관함 검색결과 리스트
+    fun requestResultMatch(requestResultMatchDto: RequestResultMatchDto) {
+        arPangInterface.postResultMatch(
+            requestResultMatchDto.user_id,
+            requestResultMatchDto.search_nm,
+            requestResultMatchDto.currPage,
+            requestResultMatchDto.pageSize
+        ).enqueue(object : Callback<ResponseResultMatchDto> {
+            override fun onResponse(
+                call: Call<ResponseResultMatchDto>,
+                response: Response<ResponseResultMatchDto>
+            ) {
+                if (response.code() == 200) {
+                    resultMatchingLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    resultMatchingLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseResultMatchDto>, t: Throwable) {
+                resultMatchingLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 050. 메인베너, 팝업베너, 이렇게활용 리스트
+    fun requestMainBanner(requestMainBannerDto: RequestMainBannerDto) {
+        arPangInterface.postMainBanner(
+            requestMainBannerDto.banner_se_code,
+            requestMainBannerDto.menu_code
+        ).enqueue(object : Callback<ResponseMainBannerDto> {
+            override fun onResponse(
+                call: Call<ResponseMainBannerDto>,
+                response: Response<ResponseMainBannerDto>
+            ) {
+                if (response.code() == 200) {
+                    mainBannerLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    mainBannerLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseMainBannerDto>, t: Throwable) {
+                mainBannerLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

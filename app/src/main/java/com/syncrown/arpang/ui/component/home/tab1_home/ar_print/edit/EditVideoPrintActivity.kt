@@ -128,6 +128,9 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                 //최종 만들어진 이미지 저장
                 saveBitmapToExternalStorage()
 
+                //최종 만들어진 비디오 저장
+                saveVideo(videoPath.toString())
+
                 saveRoomDB()
 
 
@@ -185,17 +188,36 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                     // 새로운 데이터 삽입
                     dao.insertVideoImage(entity)
                 }
-                Log.d("EditVideoPrintActivity", "비디오와 이미지 경로 DB 저장 성공")
+                Log.d("jung", "비디오와 이미지 경로 DB 저장 성공")
             } catch (e: Exception) {
-                Log.e("EditVideoPrintActivity", "DB 저장 중 오류 발생: ${e.message}")
+                Log.e("jung", "DB 저장 중 오류 발생: ${e.message}")
             }
         }
 
     }
 
+    private fun saveVideo(path: String) {
+        val result = moveVideoToExternalStorage(path)
+        if (result.first) {
+            Log.e("jung", "영상 복사 성공: ${result.second}")
+
+            val cacheFile = File(path)
+            if (cacheFile.exists()) {
+                if (cacheFile.delete()) {
+                    Log.e("jung", "캐시 파일 제거 성공")
+                } else {
+                    Log.e("jung", "캐시 파일 제거 실패")
+                }
+            }
+
+        } else {
+            Log.e("jung", "영상 복사 실패")
+        }
+    }
+
     private fun saveBitmapToExternalStorage(): Pair<Boolean, String?> {
         val bitmap = ArImageStorage.bitmap
-        var videoFilePath = ArImageStorage.resultVideoPath
+        val videoFilePath = ArImageStorage.resultVideoPath
 
         // 비디오 파일 이름을 추출
         val videoFile = File(videoFilePath)
@@ -207,7 +229,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
         // 디렉터리 생성 확인
         if (!targetDir.exists() && !targetDir.mkdirs()) {
-            Log.e("saveBitmapToExternalStorage", "디렉터리 생성 실패: ${targetDir.absolutePath}")
+            Log.e("jung", "디렉터리 생성 실패: ${targetDir.absolutePath}")
             return Pair(false, null)
         }
 
@@ -223,19 +245,40 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
                 }
             }
-            Log.d("saveBitmapToExternalStorage", "이미지 저장 성공: ${imageFile.absolutePath}")
+            Log.d("jung", "이미지 저장 성공: ${imageFile.absolutePath}")
             Pair(true, imageFile.absolutePath)
         } catch (e: IOException) {
             e.printStackTrace()
-            Log.e("saveBitmapToExternalStorage", "IOException 발생: ${e.message}")
+            Log.e("jung", "IOException 발생: ${e.message}")
             Pair(false, null)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("saveBitmapToExternalStorage", "예상치 못한 예외 발생: ${e.message}")
+            Log.e("jung", "예상치 못한 예외 발생: ${e.message}")
             Pair(false, null)
         }
     }
 
+    private fun moveVideoToExternalStorage(cacheFilePath: String): Pair<Boolean, String?> {
+        val externalMoviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val targetDir = File(externalMoviesDir, "ArPangVideo/Videos")
+
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+
+        val cacheFile = File(cacheFilePath)
+        val targetFile = File(targetDir, cacheFile.name)
+
+        ArImageStorage.resultVideoPath = targetFile.absolutePath
+
+        return try {
+            cacheFile.copyTo(targetFile, overwrite = true)
+            Pair(true, targetFile.absolutePath)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Pair(false, null)
+        }
+    }
 
     private fun setBottomMenuList() {
         val arrayList = ArrayList<NavBarItem>()

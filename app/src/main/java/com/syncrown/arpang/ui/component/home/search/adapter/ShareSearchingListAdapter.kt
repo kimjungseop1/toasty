@@ -5,14 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.syncrown.arpang.databinding.ItemSearchInputBinding
+import com.syncrown.arpang.network.model.ResponseSearchingMatchDto
 
-class SearchingListAdapter(
+class ShareSearchingListAdapter(
     private val context: Context,
-    private val items: ArrayList<String>
-) : RecyclerView.Adapter<SearchingListAdapter.NoticeHolder>() {
+    private val items: ArrayList<ResponseSearchingMatchDto.Sub1>
+) : RecyclerView.Adapter<ShareSearchingListAdapter.NoticeHolder>() {
 
     interface OnItemClickListener {
-        fun onClick(position: Int)
+        fun onClick(position: Int, hashtagNm: String)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {
@@ -41,8 +42,10 @@ class SearchingListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(context: Context?, position: Int) {
             binding.root.setOnClickListener {
-                mListener?.onClick(position)
+                mListener?.onClick(position, items[position].hashtag_nm.toString())
             }
+
+            binding.searchText.text = items[position].hashtag_nm
         }
     }
 

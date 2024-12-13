@@ -1,20 +1,19 @@
-package com.syncrown.arpang.ui.component.home.tab5_more.notice.adapter
+package com.syncrown.arpang.ui.component.home.search.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.syncrown.arpang.databinding.ItemNoticeBinding
-import com.syncrown.arpang.network.model.ResponseNoticeListDto
-import java.util.concurrent.TimeUnit
+import com.syncrown.arpang.databinding.ItemSearchInputBinding
+import com.syncrown.arpang.network.model.ResponseSearchingMatchDto
 
-class NoticeListAdapter(
+class LibSearchingListAdapter(
     private val context: Context,
-    private val items: ArrayList<ResponseNoticeListDto.Root>
-) : RecyclerView.Adapter<NoticeListAdapter.NoticeHolder>() {
+    private val items: ArrayList<ResponseSearchingMatchDto.Sub2>
+) : RecyclerView.Adapter<LibSearchingListAdapter.NoticeHolder>() {
 
     interface OnItemClickListener {
-        fun onClick(position: Int, bbsid: String)
+        fun onClick(position: Int, hashtagNm: String)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {
@@ -23,7 +22,7 @@ class NoticeListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeHolder {
         return NoticeHolder(
-            ItemNoticeBinding.inflate(
+            ItemSearchInputBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -39,15 +38,14 @@ class NoticeListAdapter(
         return items.size
     }
 
-    inner class NoticeHolder(private val binding: ItemNoticeBinding) :
+    inner class NoticeHolder(private val binding: ItemSearchInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(context: Context?, position: Int) {
             binding.root.setOnClickListener {
-                mListener?.onClick(position, items[position].bbsid.toString())
+                mListener?.onClick(position, items[position].hashtag_nm.toString())
             }
 
-            binding.messageView.text = items[position].title
-            binding.dateView.text = items[position].start_dt
+            binding.searchText.text = items[position].hashtag_nm
         }
     }
 

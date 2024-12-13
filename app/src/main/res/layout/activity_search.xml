@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="desc_6, customTabView, pagerView" />
+        app:constraint_referenced_ids="desc_6, customTabView" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/desc_1"
@@ -255,6 +255,8 @@
         android:layout_marginTop="23dp"
         android:clipToPadding="false"
         android:paddingStart="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/desc_6"
         app:tabIndicator="@null"
@@ -263,11 +265,41 @@
         app:tabTextAppearance="@style/tabTextSizeStyle"
         app:tabTextColor="@color/color_5B5B5B" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pagerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerNameResult"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customTabView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerShareResult"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customTabView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerLibResult"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/customTabView" />

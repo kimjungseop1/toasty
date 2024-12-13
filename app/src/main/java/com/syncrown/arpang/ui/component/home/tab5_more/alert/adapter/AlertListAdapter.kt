@@ -1,7 +1,9 @@
 package com.syncrown.arpang.ui.component.home.tab5_more.alert.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -57,10 +59,16 @@ class AlertListAdapter(
 
             alertBinding.dateView.text = getTimeAgo(items[position].receiveTime)
 
-            Glide.with(context)
-                .load(items[position].url)
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(5)))
-                .into(alertBinding.contentImage)
+            if (items[position].url.isEmpty()) {
+                alertBinding.contentImage.visibility = View.GONE
+            } else {
+                alertBinding.contentImage.visibility = View.VISIBLE
+
+                Glide.with(context)
+                    .load(items[position].url)
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(5)))
+                    .into(alertBinding.contentImage)
+            }
         }
     }
 

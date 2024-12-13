@@ -47,7 +47,7 @@
     <string name="search_actionbar_hint">검색어를 입력해주세요</string>
     <string name="search_step_first_desc_1">최근 검색어</string>
     <string name="search_step_first_desc_2">전체삭제</string>
-    <string name="search_step_first_desc_3">추천 검색어</string>
+    <string name="search_step_first_desc_3">인기 검색 태그</string>
     <string name="search_step_first_desc_4">최근 검색어가 없습니다.</string>
     <string name="search_step_second_desc_1">사용자</string>
     <string name="search_step_second_desc_1_1">사용자 %s</string>
@@ -325,8 +325,10 @@
 
     <string name="account_change_name">닉네임 변경</string>
     <string name="account_change_name_desc_1">닉네임</string>
-    <string name="account_change_name_desc_2">* 이름은 한달에 한번만 변경할 수 있습니다.</string>
+    <string name="account_change_name_desc_2">* 닉네임은 한달에 한번만 변경할 수 있습니다.</string>
     <string name="account_change_name_desc_3">닉네임이 변경되었습니다.</string>
+    <string name="account_change_dupple_name">중복된 닉네임입니다.</string>
+    <string name="account_change_input_name">변경할 이름을 입력해주세요.</string>
 
     <string name="customer_center_title">고객센터</string>
 

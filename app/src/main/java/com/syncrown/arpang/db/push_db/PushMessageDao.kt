@@ -11,28 +11,38 @@ interface PushMessageDao {
     suspend fun insertMessage(entity: PushMessageEntity)
 
     // 오늘의 메시지만 가져오는 쿼리
-    @Query("""
+    @Query(
+        """
         SELECT * 
         FROM push_message_table 
-        WHERE DATE(receiveTime / 1000, 'unixepoch') = DATE('now')
+        WHERE datetime(receiveTime / 1000, 'unixepoch') 
+            BETWEEN datetime('now', 'start of day') 
+            AND datetime('now', 'start of day', '+1 day')
         ORDER BY receiveTime DESC
-    """)
+    """
+    )
     suspend fun getMessageTodayEntities(): List<PushMessageEntity>
 
-    // 일주일 이내의 메시지를 가져오는 쿼리
-    @Query("""
+    // 오늘의 현재시간기준 일주일전 24시까지의 데이터들만 보여줌
+    @Query(
+        """
         SELECT * 
         FROM push_message_table 
-        WHERE receiveTime / 1000 >= strftime('%s', 'now', '-7 days')
+        WHERE datetime(receiveTime / 1000, 'unixepoch') 
+            BETWEEN datetime('now', '-7 day') 
+            AND datetime('now', 'start of day')
         ORDER BY receiveTime DESC
-    """)
+    """
+    )
     suspend fun getMessageUntilWeekEntities(): List<PushMessageEntity>
 
-    // 30일이 넘는 데이터를 삭제하는 쿼리
-    @Query("""
+    // 오늘 날짜시간기준 30일이 넘어가는 데이터들 삭제
+    @Query(
+        """
         DELETE 
         FROM push_message_table 
-        WHERE receiveTime / 1000 > strftime('%s', 'now', '+30 days')
-    """)
+        WHERE datetime(receiveTime/1000, 'unixepoch') < datetime('now', '-30 days', 'start of day');
+    """
+    )
     suspend fun deleteOldMessages()
 }

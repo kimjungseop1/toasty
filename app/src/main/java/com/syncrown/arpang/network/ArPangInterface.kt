@@ -22,13 +22,19 @@ import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
 import com.syncrown.arpang.network.model.ResponseMyFavoriteDto
+import com.syncrown.arpang.network.model.ResponseNoticeDetailDto
+import com.syncrown.arpang.network.model.ResponseNoticeListDto
+import com.syncrown.arpang.network.model.ResponsePopularTagDto
 import com.syncrown.arpang.network.model.ResponsePublicContentSettingDto
 import com.syncrown.arpang.network.model.ResponseRecommendTagListDto
+import com.syncrown.arpang.network.model.ResponseResultMatchDto
 import com.syncrown.arpang.network.model.ResponseSaveEditorDto
 import com.syncrown.arpang.network.model.ResponseScrapContentDto
 import com.syncrown.arpang.network.model.ResponseScrapUpdateDto
+import com.syncrown.arpang.network.model.ResponseSearchingMatchDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareContentUserOpenListDto
 import com.syncrown.arpang.network.model.ResponseShareDetailDto
@@ -97,7 +103,8 @@ interface ArPangInterface {
         @Field("lang") lang: String?,
         @Field("birth_day") birth_day: String?,
         @Field("markt_recptn_agre") markt_recptn_agre: Int?,
-        @Field("profile") profile: String?
+        @Field("profile") profile: String?,
+        @Field("app_id") app_id: String
     ): Call<ResponseJoinDto>
 
     //TODO 005. 로그인
@@ -521,4 +528,49 @@ interface ArPangInterface {
         @Field("currPage") currPage: Int,
         @Field("pageSize") pageSize: Int
     ): Call<ResponseBlockUserListDto>
+
+    //TODO 045. 공지사항 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/notice")
+    fun postNoticeList(
+        @Field("app_id") app_id: String,
+        @Field("lang_code") lang_code: String?
+    ): Call<ResponseNoticeListDto>
+
+    //TODO 046. 공지사항 상세보기
+    @FormUrlEncoded
+    @POST("/ntv/atp/detail/notice")
+    fun postNoticeDetail(
+        @Field("bbsid") bbsid: String
+    ): Call<ResponseNoticeDetailDto>
+
+    //TODO 047. 인기 검색 태그
+    @POST("/ntv/atp/list/search/popular/hashtag")
+    fun postPopularTag(): Call<ResponsePopularTagDto>
+
+    //TODO 048. 입력된 단어가 포함된 이름/공유/보관함 검색중 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/search/hashtag/all")
+    fun postSearchingInputMatch(
+        @Field("user_id") user_id: String,
+        @Field("search_nm") search_nm: String
+    ): Call<ResponseSearchingMatchDto>
+
+    //TODO 049. 입력된 단어가 포함된 이름/공유/보관함 검색결과 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/search/all")
+    fun postResultMatch(
+        @Field("user_id") user_id: String,
+        @Field("search_nm") search_nm: String,
+        @Field("currPage") currPage: Int,
+        @Field("pageSize") pageSize: Int
+    ): Call<ResponseResultMatchDto>
+
+    //TODO 050. 메인베너, 팝업베너, 이렇게활용 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/banner")
+    fun postMainBanner(
+        @Field("banner_se_code") banner_se_code: String,
+        @Field("menu_code") menu_code: String
+    ): Call<ResponseMainBannerDto>
 }

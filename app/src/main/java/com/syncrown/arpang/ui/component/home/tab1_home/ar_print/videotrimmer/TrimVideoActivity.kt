@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import androidx.annotation.OptIn
 import androidx.core.app.ActivityCompat
@@ -31,7 +30,6 @@ import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.videotrimmer.vie
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.IOException
 
 @SuppressLint("UnsafeOptInUsageError")
 class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChangedListener {
@@ -94,25 +92,8 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
                     Log.e("jung","영상 클립 완료")
                     // 인쇄 편집으로 이동
                     val filePath = isSave.second
-                    if (filePath != null) {
-                        val result = moveFileToExternalStorage(filePath)
-                        if (result.first) {
-                            Log.e("jung", "영상 복사 성공: ${result.second}")
-
-                            val cacheFile = File(filePath)
-                            if (cacheFile.exists()) {
-                                if (cacheFile.delete()) {
-                                    Log.e("jung", "캐시 파일 제거 성공")
-                                } else {
-                                    Log.e("jung", "캐시 파일 제거 실패")
-                                }
-                            }
-
-                            goEditVideoPrint(result.second)
-                        } else {
-                            Log.e("jung", "영상 복사 실패")
-                        }
-                    }
+                    ArImageStorage.resultVideoPath = filePath.toString()
+                    goEditVideoPrint(filePath)
                 } else {
                     Log.e("jung","영상 클립 실패")
                 }
@@ -205,28 +186,6 @@ class TrimVideoActivity : BaseActivity(), VideoTrimmerView.OnSelectedRangeChange
     override fun onSelectRangeEnd(startMillis: Long, endMillis: Long) {
         binding.videoTrimmerView.setSelectedRange(startMillis, endMillis)
         playVideo(videoPath, startMillis, endMillis)
-    }
-
-    private fun moveFileToExternalStorage(cacheFilePath: String): Pair<Boolean, String?> {
-        val externalMoviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val targetDir = File(externalMoviesDir, "ArPangVideo/Videos")
-
-        if (!targetDir.exists()) {
-            targetDir.mkdirs()
-        }
-
-        val cacheFile = File(cacheFilePath)
-        val targetFile = File(targetDir, cacheFile.name)
-
-        ArImageStorage.resultVideoPath = targetFile.absolutePath
-
-        return try {
-            cacheFile.copyTo(targetFile, overwrite = true)
-            Pair(true, targetFile.absolutePath)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Pair(false, null)
-        }
     }
 
     private fun displayTrimmerView(path: String) {
