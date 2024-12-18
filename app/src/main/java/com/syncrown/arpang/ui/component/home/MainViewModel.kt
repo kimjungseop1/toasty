@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.RequestLibPaperListDto
 import com.syncrown.arpang.network.model.RequestMainBannerDto
 import com.syncrown.arpang.network.model.RequestShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.RequestStorageContentListDto
 import com.syncrown.arpang.network.model.RequestSubscribeTotalDto
 import com.syncrown.arpang.network.model.RequestUserProfileDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseLibPaperListDto
 import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseShareContentAllOpenListDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
@@ -39,11 +41,11 @@ class MainViewModel : BaseViewModel() {
 
     //TODO 팝업배너
     private val popupBannerResponseLiveData: LiveData<NetworkResult<ResponseMainBannerDto>> =
-        arPangRepository.mainBannerLiveDataRepository
+        arPangRepository.popupBannerLiveDataRepository
 
     fun popupBanner(requestMainBannerDto: RequestMainBannerDto) {
         viewModelScope.launch {
-            arPangRepository.requestMainBanner(requestMainBannerDto)
+            arPangRepository.requestPopupBanner(requestMainBannerDto)
         }
     }
 
@@ -77,7 +79,7 @@ class MainViewModel : BaseViewModel() {
         return appMainResponseLiveData
     }
 
-    //TODO 메인베너,이렇게활용 리스트
+    //TODO 메인베너
     private val homeBannerResponseLiveData: LiveData<NetworkResult<ResponseMainBannerDto>> =
         arPangRepository.mainBannerLiveDataRepository
 
@@ -111,6 +113,20 @@ class MainViewModel : BaseViewModel() {
     @SuppressLint("NullSafeMutableLiveData")
     fun clearLibListData() {
         storageContentLiveData.value = null
+    }
+
+    //TODO 내 보관함에 사용된 용지 리스트
+    private val libPaperListLiveData: MutableLiveData<NetworkResult<ResponseLibPaperListDto>> =
+        arPangRepository.libPaperListLiveDataRepository
+
+    fun filterPaperList(requestLibPaperListDto: RequestLibPaperListDto) {
+        viewModelScope.launch {
+            arPangRepository.requestLibPaperList(requestLibPaperListDto)
+        }
+    }
+
+    fun filterPaperListResponseLiveData(): MutableLiveData<NetworkResult<ResponseLibPaperListDto>> {
+        return libPaperListLiveData
     }
 
     /***********************************************************************************************

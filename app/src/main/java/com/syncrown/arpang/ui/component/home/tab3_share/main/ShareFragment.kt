@@ -15,6 +15,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syncrown.arpang.R
@@ -73,7 +74,8 @@ class ShareFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Category Adapter 설정
+        setEventView()
+
         categoryAdapter = ShareMultiSelectAdapter(requireContext(), itemList, this)
         setupUI()
 
@@ -83,6 +85,22 @@ class ShareFragment : Fragment(),
     override fun onDestroyView() {
         super.onDestroyView()
         shareViewModel.clearShareListData()
+    }
+
+    private fun setEventView() {
+        // 이벤트 이미지
+        Glide.with(requireContext())
+            .load(R.drawable.sample_img_1)
+            .circleCrop()
+            .into(binding.bannerImg)
+
+        // 이벤트 제목
+        binding.bannerTitle.text = ""
+
+        // 이벤트 내용
+        binding.bannerSubTitle.text = ""
+
+        // 이벤트 페이지 이동
     }
 
     // UI 초기화

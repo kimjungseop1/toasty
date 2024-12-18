@@ -3,9 +3,9 @@ package com.syncrown.arpang.ui.component.home.tab1_home.main.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.syncrown.arpang.ui.component.home.tab1_home.main.Case1Fragment
-import com.syncrown.arpang.ui.component.home.tab1_home.main.Case2Fragment
-import com.syncrown.arpang.ui.component.home.tab1_home.main.Case3Fragment
+import com.syncrown.arpang.ui.component.home.tab1_home.main.use.Case1Fragment
+import com.syncrown.arpang.ui.component.home.tab1_home.main.use.Case2Fragment
+import com.syncrown.arpang.ui.component.home.tab1_home.main.use.Case3Fragment
 
 class CasePagerAdapter (fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

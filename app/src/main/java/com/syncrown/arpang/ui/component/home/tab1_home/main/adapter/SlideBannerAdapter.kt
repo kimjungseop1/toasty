@@ -8,17 +8,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemHomeBannerBinding
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 
 class SlideBannerAdapter(
     private val context: Context,
     viewPager: ViewPager2,
-    private val sliderItems: ArrayList<String>,
+    private val sliderItems: ArrayList<ResponseMainBannerDto.Root>,
     private val onPageChangeListener: OnPageChangeListener
 ) : RecyclerView.Adapter<SlideBannerAdapter.SlideBannerHolder>() {
     private val viewPager2: ViewPager2 = viewPager
 
     interface OnItemClickListener {
-        fun onClick(position: Int)
+        fun onClick(position: Int, clickLink: String)
     }
 
     interface OnPageChangeListener {
@@ -54,9 +55,12 @@ class SlideBannerAdapter(
         RecyclerView.ViewHolder(binding.root) {
         private val bannerBinding: ItemHomeBannerBinding = binding
         fun onBind(context: Context, position: Int) {
-            // 데이터 바인딩 로직
+            bannerBinding.bannerImg.setOnClickListener {
+                mListener?.onClick(position, sliderItems[position].click_link.toString())
+            }
+
             Glide.with(context)
-                .load(R.drawable.sample_img_1)
+                .load(sliderItems[position].file_path)
                 .into(bannerBinding.bannerImg)
         }
 

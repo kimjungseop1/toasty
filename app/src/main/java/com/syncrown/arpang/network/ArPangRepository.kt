@@ -25,6 +25,7 @@ import com.syncrown.arpang.network.model.RequestEditContentHashTagDto
 import com.syncrown.arpang.network.model.RequestFavoriteDto
 import com.syncrown.arpang.network.model.RequestIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.RequestJoinDto
+import com.syncrown.arpang.network.model.RequestLibPaperListDto
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.network.model.RequestMainBannerDto
 import com.syncrown.arpang.network.model.RequestMultiCommonListDto
@@ -80,6 +81,7 @@ import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
+import com.syncrown.arpang.network.model.ResponseLibPaperListDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
@@ -385,6 +387,14 @@ class ArPangRepository {
 
     //TODO 050. 메인베너, 팝업베너, 이렇게활용 리스트
     val mainBannerLiveDataRepository: MutableLiveData<NetworkResult<ResponseMainBannerDto>> =
+        MutableLiveData()
+
+    //TODO 050-1. 팝업베너 리스트
+    val popupBannerLiveDataRepository: MutableLiveData<NetworkResult<ResponseMainBannerDto>> =
+        MutableLiveData()
+
+    //TODO 051. 내 보관함에 사용된 용지 리스트
+    val libPaperListLiveDataRepository: MutableLiveData<NetworkResult<ResponseLibPaperListDto>> =
         MutableLiveData()
 
     /***********************************************************************************************
@@ -1768,6 +1778,51 @@ class ArPangRepository {
 
             override fun onFailure(call: Call<ResponseMainBannerDto>, t: Throwable) {
                 mainBannerLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 050-1. 팝업베너 리스트
+    fun requestPopupBanner(requestMainBannerDto: RequestMainBannerDto) {
+        arPangInterface.postMainBanner(
+            requestMainBannerDto.banner_se_code,
+            requestMainBannerDto.menu_code
+        ).enqueue(object : Callback<ResponseMainBannerDto> {
+            override fun onResponse(
+                call: Call<ResponseMainBannerDto>,
+                response: Response<ResponseMainBannerDto>
+            ) {
+                if (response.code() == 200) {
+                    popupBannerLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    popupBannerLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseMainBannerDto>, t: Throwable) {
+                popupBannerLiveDataRepository.postValue(NetworkResult.Error(t.message))
+            }
+        })
+    }
+
+    //TODO 051. 내 보관함에 사용된 용지 리스트
+    fun requestLibPaperList(requestLibPaperListDto: RequestLibPaperListDto) {
+        arPangInterface.postLibPaperList(
+            requestLibPaperListDto.user_id
+        ).enqueue(object : Callback<ResponseLibPaperListDto> {
+            override fun onResponse(
+                call: Call<ResponseLibPaperListDto>,
+                response: Response<ResponseLibPaperListDto>
+            ) {
+                if (response.code() == 200) {
+                    libPaperListLiveDataRepository.postValue(NetworkResult.Success(response.body()))
+                } else {
+                    libPaperListLiveDataRepository.postValue(NetworkResult.NetCode("${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseLibPaperListDto>, t: Throwable) {
+                libPaperListLiveDataRepository.postValue(NetworkResult.Error(t.message))
             }
         })
     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +25,15 @@ import com.syncrown.arpang.databinding.BottomSheetCartridgeSelectBinding
 import com.syncrown.arpang.databinding.BottomSheetFilterBinding
 import com.syncrown.arpang.databinding.BottomSheetTypeBinding
 import com.syncrown.arpang.databinding.FragmentLibBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestLibPaperListDto
 import com.syncrown.arpang.network.model.RequestStorageContentListDto
+import com.syncrown.arpang.network.model.ResponseLibPaperListDto
 import com.syncrown.arpang.network.model.ResponseStorageContentListDto
+import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.GridSpacingItemDecoration
 import com.syncrown.arpang.ui.component.home.MainViewModel
-import com.syncrown.arpang.ui.component.home.input_tag.TagResultListStorage
 import com.syncrown.arpang.ui.component.home.tab2_Lib.detail.LibDetailActivity
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.CartridgeMultiSelectAdapter
 import com.syncrown.arpang.ui.component.home.tab2_Lib.main.adapter.FilterCategoryAdapter
@@ -62,8 +66,9 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     private val selectedChildPositions = mutableMapOf<Int, Set<Int>>() // 선택 위치 저장용 맵
     private var shareFilter = "" // 필터값 저장 - 공개 비공개 전체
 
-    private val cartridgeList =
-        listOf("전체", "마리 앙뜨와네트2세", "다용도 용지", "현상수배 용지", "스튜디오 용지", "사세대 이름이 긴 용지")
+    private lateinit var cartridgeList: ArrayList<ResponseLibPaperListDto.Root>
+    private lateinit var ctgeNoList: ArrayList<String>
+
     private lateinit var cartridgeMultiSelectAdapter: CartridgeMultiSelectAdapter
 
     private val itemList = listOf("전체", "AR 영상", "인생두컷", "자유인쇄", "라벨 스티커", "행사 스티커")
@@ -91,20 +96,49 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
         categoryAdapter = MultiSelectAdapter(requireContext(), itemList, this)
         menuCodeList = ArrayList()
+        ctgeNoList = ArrayList()
+
+        setCartridgeFilterData()
+
         setupUI()
 
         observeLibList()
+    }
 
+    private fun setCartridgeFilterData() {
+        val requestLibPaperListDto = RequestLibPaperListDto().apply {
+            user_id = AppDataPref.userId
+        }
+
+        libViewModel.filterPaperList(requestLibPaperListDto)
+    }
+
+    private fun setFilterPaperUi(data: ArrayList<ResponseLibPaperListDto.Root>) {
+        val allItem = ResponseLibPaperListDto.Root().apply {
+            ctge_no = "0"
+            ctge_nm = "전체"
+        }
+        data.add(0, allItem)
+
+        cartridgeList = data
+
+        cartridgeMultiSelectAdapter =
+            CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
+        binding.paperBtn.text = cartridgeList[0].ctge_nm
+        binding.paperBtn.setOnClickListener {
+            showCartridgeBottomSheet()
+        }
     }
 
     private fun setupUI() {
-        binding.filterBtn.setOnClickListener { showFilterBottomSheet() }
-        cartridgeMultiSelectAdapter =
-            CartridgeMultiSelectAdapter(requireContext(), cartridgeList, this)
-        binding.paperBtn.text = cartridgeList[0]
-        binding.paperBtn.setOnClickListener { showCartridgeBottomSheet() }
+        binding.filterBtn.setOnClickListener {
+            showFilterBottomSheet()
+        }
+
         binding.contentsBtn.text = itemList[0]
-        binding.contentsBtn.setOnClickListener { showTypeBottomSheet() }
+        binding.contentsBtn.setOnClickListener {
+            showTypeBottomSheet()
+        }
 
         binding.gridBtn.setOnClickListener {
             setLayoutStyle(GRID_SPAN_COUNT, true)
@@ -353,12 +387,33 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
         sheetBinding.recyclerCate.adapter = cartridgeMultiSelectAdapter
 
         sheetBinding.submitBtn.setOnClickListener {
-            val selectedCartridge = cartridgeMultiSelectAdapter.getSelectedItems()
-            cartridgeMultiSelectAdapter.saveCurrentSelection()
-            updateSelectedCartridge(selectedCartridge)
-            bottomSheetDialog.dismiss()
+            handleCtgeSubmit(bottomSheetDialog)
         }
         bottomSheetDialog.show()
+    }
+
+    private fun handleCtgeSubmit(bottomSheetDialog: BottomSheetDialog) {
+        val selectedCartridge = cartridgeMultiSelectAdapter.getSelectedItems()
+        cartridgeMultiSelectAdapter.saveCurrentSelection()
+        updateSelectedCartridge(selectedCartridge)
+
+        for (i in selectedCartridge.indices) {
+            val selectedIndex = selectedCartridge[i]
+
+            when (selectedIndex) {
+                0 -> {
+                    ctgeNoList.clear()
+                }
+
+                else -> {
+                    ctgeNoList.add(cartridgeList[selectedIndex].ctge_no.toString())
+                }
+            }
+        }
+
+        resetData()
+        fetchData()
+        bottomSheetDialog.dismiss()
     }
 
     private fun showTypeBottomSheet() {
@@ -389,7 +444,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
     private fun handleCategorySubmit(bottomSheetDialog: BottomSheetDialog) {
         val selectedCategories = categoryAdapter.getSelectedItems()
-
+        Log.e("jung", "aaa : $selectedCategories, size : ${selectedCategories.size}")
         if (selectedCategories.contains(0)) {
             menuCodeList.add("")
         }
@@ -470,6 +525,18 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
 
                 menu_code = menuCodeBuilder.toString()
             }
+            if (ctgeNoList.isNotEmpty()) {
+                val ctgeNoBuilder = StringBuilder()
+                for (ctgeNo in ctgeNoList) {
+                    ctgeNoBuilder.append(ctgeNo).append(",")
+                }
+
+                if (ctgeNoBuilder.isNotEmpty()) {
+                    ctgeNoBuilder.deleteCharAt(ctgeNoBuilder.length - 1)
+                }
+
+                ctge_no = ctgeNoBuilder.toString()
+            }
 
             if (shareFilter.isNotEmpty()) {
                 share_se = shareFilter
@@ -497,6 +564,26 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
                 adapter.addMoreData(newData)
                 currentPage++
             }
+
+        libViewModel.filterPaperListResponseLiveData().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    val data = result.data?.root ?: ArrayList()
+                    setFilterPaperUi(data)
+                }
+
+                is NetworkResult.NetCode -> {
+                    Log.e("jung", "실패 : ${result.message}")
+                    if (result.message.equals("403")) {
+                        (activity as? BaseActivity)?.goLogin()
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Log.e("jung", "오류 : ${result.message}")
+                }
+            }
+        }
     }
 
     private fun clearItemDecorations(recyclerView: RecyclerView) {
@@ -541,7 +628,7 @@ class LibFragment : Fragment(), LibGridItemAdapter.OnItemClickListener,
     override fun onCartridgeItemSelected(position: Int, isSelected: Boolean) {}
 
     private fun updateSelectedCartridge(selectedCartridge: List<Int>) {
-        binding.paperBtn.text = cartridgeList[selectedCartridge[0]]
+        binding.paperBtn.text = cartridgeList[selectedCartridge[0]].ctge_nm
         binding.selectCartridgeCnt.visibility =
             if (cartridgeMultiSelectAdapter.getSelectedItemCount() > 1) View.VISIBLE else View.GONE
         binding.selectCartridgeCnt.text =

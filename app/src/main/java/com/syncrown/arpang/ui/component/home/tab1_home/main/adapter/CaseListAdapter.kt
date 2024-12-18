@@ -4,15 +4,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.syncrown.arpang.databinding.ItemCaseBinding
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 
 class CaseListAdapter(
     private val context: Context,
-    private val sliderItems: ArrayList<String>
+    private val sliderItems: ArrayList<ResponseMainBannerDto.Root>
 ) : RecyclerView.Adapter<CaseListAdapter.CaseHolder>() {
 
     interface OnItemClickListener {
-        fun onClick(position: Int)
+        fun onClick(position: Int, clickLink: String)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {
@@ -40,11 +42,16 @@ class CaseListAdapter(
     inner class CaseHolder(binding: ItemCaseBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val eventBinding: ItemCaseBinding = binding
-        fun onBind(context: Context?, position: Int) {
-            // 데이터 바인딩 로직
+        fun onBind(context: Context, position: Int) {
             eventBinding.cardRootView.setOnClickListener {
-                mListener?.onClick(position)
+                mListener?.onClick(position, sliderItems[position].click_link.toString())
             }
+
+            Glide.with(context)
+                .load(sliderItems[position].file_path)
+                .into(eventBinding.caseImgView)
+
+            eventBinding.caseTitleView.text = sliderItems[position].title
         }
     }
 

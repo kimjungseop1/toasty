@@ -1,7 +1,6 @@
 package com.syncrown.arpang.ui.component.join.consent
 
 import android.content.Intent
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -28,7 +27,6 @@ class JoinConsentActivity : BaseActivity() {
                     result.data.let { data ->
                         when (data?.msgCode) {
                             "SUCCESS" -> {
-                                Log.e(TAG, "성공 id : " + AppDataPref.userId)
                                 AppDataPref.save(this)
                                 isCanceled = false
 

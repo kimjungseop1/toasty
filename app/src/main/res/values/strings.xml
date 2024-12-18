@@ -167,6 +167,8 @@
     <string name="home_desc_3">이렇게 활용해 볼까요?</string>
     <string name="home_desc_4">서비스 이용 가이드</string>
     <string name="home_desc_5">서비스 이용방법을 확인해보세요.</string>
+    <string name="home_other_paper_job_title">다른 용지로 할 수 있는 작업들이에요.</string>
+    <string name="home_paper_match_job_title">현재 용지로는 아래와 같은 작업이 가능해요</string>
 
     <!--  디바이스 연결  -->
     <string name="device_connect_title">디바이스 연결</string>

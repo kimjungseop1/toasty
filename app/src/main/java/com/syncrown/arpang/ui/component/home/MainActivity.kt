@@ -115,6 +115,7 @@ class MainActivity : BaseActivity() {
                     is NetworkResult.Success -> {
                         val data = result.data?.root ?: ArrayList()
                         data.let {
+                            Log.e("jung","isMainEvent : ${AppDataPref.isMainEvent}")
                             if (AppDataPref.isMainEvent) {
                                 showEventBottomSheet(it)
                             }
@@ -368,10 +369,8 @@ class MainActivity : BaseActivity() {
         }
 
         binding.continueCheckView.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                AppDataPref.isMainEvent = false
-                AppDataPref.save(this)
-            }
+            AppDataPref.isMainEvent = !isChecked
+            AppDataPref.save(this)
         }
 
         binding.closeView.setOnClickListener { bottomSheetDialog?.dismiss() }

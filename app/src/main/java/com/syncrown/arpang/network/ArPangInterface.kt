@@ -21,6 +21,7 @@ import com.syncrown.arpang.network.model.ResponseEditContentHashTagDto
 import com.syncrown.arpang.network.model.ResponseFavoriteDto
 import com.syncrown.arpang.network.model.ResponseIgnoreTagCheckDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
+import com.syncrown.arpang.network.model.ResponseLibPaperListDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.network.model.ResponseMultiCommonListDto
@@ -573,4 +574,11 @@ interface ArPangInterface {
         @Field("banner_se_code") banner_se_code: String,
         @Field("menu_code") menu_code: String?
     ): Call<ResponseMainBannerDto>
+
+    //TODO 051. 내 보관함에 사용된 용지 리스트
+    @FormUrlEncoded
+    @POST("/ntv/atp/list/contents/mysave/catridge")
+    fun postLibPaperList(
+        @Field("user_id") user_id: String
+    ): Call<ResponseLibPaperListDto>
 }

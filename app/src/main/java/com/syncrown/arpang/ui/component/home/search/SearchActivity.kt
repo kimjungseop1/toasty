@@ -70,7 +70,6 @@ class SearchActivity : BaseActivity() {
         lifecycleScope.launch {
             searchViewModel.getWords().observe(this@SearchActivity) { result ->
                 if (result != null) {
-                    Log.e("jung", "result : $result")
                     if (result.isNotEmpty()) {
                         result.forEach { searchWordEntity ->
                             setCurrentSearch(searchWordEntity.searchWord)
@@ -173,6 +172,8 @@ class SearchActivity : BaseActivity() {
         binding.actionbar.actionBack.setOnClickListener {
             finish()
         }
+
+        binding.actionbar.actionSearch.requestFocus()
 
         binding.deleteAllBtn.setOnClickListener {
             binding.flexSearchView.removeAllViews()
@@ -425,6 +426,8 @@ class SearchActivity : BaseActivity() {
                 )
             }
         })
+
+        userListAdapter.updateQuery(binding.actionbar.actionSearch.text.toString())
     }
 
     private fun setShareSearch(shareData: ArrayList<ResponseSearchingMatchDto.Sub1>) {
@@ -441,6 +444,8 @@ class SearchActivity : BaseActivity() {
                 )
             }
         })
+
+        shareListAdapter.updateQuery(binding.actionbar.actionSearch.text.toString())
     }
 
     private fun setStorageSearch(libData: ArrayList<ResponseSearchingMatchDto.Sub2>) {
@@ -457,6 +462,8 @@ class SearchActivity : BaseActivity() {
                 )
             }
         })
+
+        storageListAdapter.updateQuery(binding.actionbar.actionSearch.text.toString())
     }
 
     /***********************************************************************************************

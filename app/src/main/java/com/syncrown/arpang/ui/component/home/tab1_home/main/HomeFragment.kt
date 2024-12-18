@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab1_home.main
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,15 +14,19 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentHomeBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestAppMainDto
+import com.syncrown.arpang.network.model.RequestMainBannerDto
 import com.syncrown.arpang.network.model.ResponseAppMainDto
+import com.syncrown.arpang.network.model.ResponseMainBannerDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.component.home.MainViewModel
@@ -40,10 +45,14 @@ import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.PossibleJobA
 import com.syncrown.arpang.ui.component.home.tab1_home.main.adapter.SlideBannerAdapter
 import com.syncrown.arpang.ui.component.home.tab1_home.manual.UseManual1DepthActivity
 import com.syncrown.arpang.ui.util.PrintUtil
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: MainViewModel by activityViewModels()
+
+    private val mainBannerData = ArrayList<ResponseMainBannerDto.Root>()
+
     private val possibleList = ArrayList<ResponseAppMainDto.Root>()
     private val imPossibleList = ArrayList<ResponseAppMainDto.Root>()
 
@@ -71,7 +80,7 @@ class HomeFragment : Fragment() {
         }
 
         //TODO 메인 베너
-        showSlideBanner()
+        setHomeBanner()
 
         //TODO 용지 장착 가이드 (프린트 연결되고 용지 없는 상태에서 visible)
         binding.guidePaperBtn.setOnClickListener {
@@ -97,31 +106,62 @@ class HomeFragment : Fragment() {
         showBottomEventBanner()
 
         updateView()
+
+        //TODO 데이터 옵져빙
+        observeHome()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateAppMainMenu() {
-        homeViewModel.appMainResponseLiveData().observe(requireActivity()) { result ->
-            when (result) {
-                is NetworkResult.Success -> {
-                    val data = result.data
+    private fun observeHome() {
+        lifecycleScope.launch {
+            homeViewModel.appMainResponseLiveData().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data
 
-                    data?.root?.let {
-                        possibleList.clear()
-                        possibleList.addAll(it)
-                        binding.possibleJobRecycler.adapter?.notifyDataSetChanged()
+                        data?.root?.let {
+                            possibleList.clear()
+                            possibleList.addAll(it)
+                            binding.possibleJobRecycler.adapter?.notifyDataSetChanged()
+                        }
+                    }
+
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            (activity as? BaseActivity)?.goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
                     }
                 }
+            }
+        }
 
-                is NetworkResult.NetCode -> {
-                    Log.e("jung", "실패 : ${result.message}")
-                    if (result.message.equals("403")) {
-                        (activity as? BaseActivity)?.goLogin()
+        lifecycleScope.launch {
+            homeViewModel.homeBannerResponseLiveData().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        val data = result.data?.root
+                        data?.let {
+                            mainBannerData.clear()
+                            mainBannerData.addAll(it)
+                            showSlideBanner()
+                        }
                     }
-                }
 
-                is NetworkResult.Error -> {
-                    Log.e("jung", "오류 : ${result.message}")
+                    is NetworkResult.NetCode -> {
+                        Log.e("jung", "실패 : ${result.message}")
+                        if (result.message.equals("403")) {
+                            (activity as? BaseActivity)?.goLogin()
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Log.e("jung", "오류 : ${result.message}")
+                    }
                 }
             }
         }
@@ -158,8 +198,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-
-        updateAppMainMenu()
     }
 
     // 현재 장착된 용지와 다른용지로 작업가능한 메뉴들 목록
@@ -179,10 +217,6 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-
-        updateAppMainMenu()
-
-        Log.e("jung", "imPossibleList.size : " + imPossibleList.size)
 
         if (imPossibleList.size == 0) {
             binding.desc2Sub.visibility = View.GONE
@@ -219,7 +253,10 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        handler.postDelayed(slideRunnable, 3000)
+
+        if (mainBannerData.size > 1) {
+            handler.postDelayed(slideRunnable, 500)
+        }
 
         invalidateTab()
     }
@@ -256,27 +293,31 @@ class HomeFragment : Fragment() {
         startActivity(intent)
     }
 
-    private val slideRunnable = Runnable { binding.bannerView.currentItem += 1 }
+    private val slideRunnable = Runnable {
+        binding.bannerView.currentItem += 1
+    }
+
+    private fun setHomeBanner() {
+        val requestMainBannerDto = RequestMainBannerDto().apply {
+            banner_se_code = "AR_MAIN_BAN"
+        }
+
+        homeViewModel.homeBanner(requestMainBannerDto)
+    }
 
     @SuppressLint("SetTextI18n")
     private fun showSlideBanner() {
-        val arrayList = ArrayList<String>()
-        arrayList.add("1")
-        arrayList.add("2")
-        arrayList.add("3")
-        arrayList.add("4")
+        if (mainBannerData.isEmpty()) return
 
         val pagerWidth = resources.displayMetrics.widthPixels * 0.9
         val screenWidth = resources.displayMetrics.widthPixels
         val pagerPadding = ((screenWidth - pagerWidth) * 0.5).toInt()
         val offsetPx = ((screenWidth - pagerWidth) * 0.05).toInt()
 
-        binding.bannerView.currentItem = 0
-        binding.pageView.text = binding.bannerView.currentItem.toString() + " /" + arrayList.size
         val bannerAdapter = SlideBannerAdapter(
             requireContext(),
             binding.bannerView,
-            arrayList,
+            mainBannerData,
             object : SlideBannerAdapter.OnPageChangeListener {
                 override fun onPageChanged(currentPage: Int, totalItems: Int) {
                     binding.pageView.text = "$currentPage / $totalItems"
@@ -285,30 +326,50 @@ class HomeFragment : Fragment() {
 
         binding.bannerView.apply {
             adapter = bannerAdapter
-            offscreenPageLimit = arrayList.size
-            setPadding(pagerPadding, 0, pagerPadding, 0)
-            setPageTransformer { page, position ->
-                page.translationX = position * offsetPx
-            }
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    if (arrayList.size > 1 && handler != null) {
-                        handler.removeCallbacks(slideRunnable)
-                        handler.postDelayed(slideRunnable, 3000)
-                    }
+            offscreenPageLimit = mainBannerData.size
+
+            binding.pageView.text = "1 / ${mainBannerData.size}"
+
+            if (mainBannerData.size > 1) {
+                setPadding(pagerPadding, 0, pagerPadding, 0)
+                setPageTransformer { page, position ->
+                    page.translationX = position * offsetPx
                 }
-            })
+                isUserInputEnabled = true
+                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        if (mainBannerData.size > 1 && handler != null) {
+                            handler.removeCallbacks(slideRunnable)
+                            handler.postDelayed(slideRunnable, 3000)
+                        }
+                    }
+                })
+            } else {
+                setPadding(18, 0, 18, 0)
+                isUserInputEnabled = false
+            }
         }
 
-        binding.bannerLeft.setOnClickListener {
-            binding.bannerView.currentItem -= 1
-        }
+        bannerAdapter.setOnItemClickListener(object : SlideBannerAdapter.OnItemClickListener {
+            override fun onClick(position: Int, clickLink: String) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(clickLink))
+                startActivity(intent)
+            }
+        })
 
-        binding.bannerRight.setOnClickListener {
-            binding.bannerView.currentItem += 1
-        }
+        if (mainBannerData.size > 1) {
+            binding.bannerLeft.setOnClickListener {
+                binding.bannerView.currentItem -= 1
+            }
 
+            binding.bannerRight.setOnClickListener {
+                binding.bannerView.currentItem += 1
+            }
+        } else {
+            binding.bannerLeft.visibility = View.GONE
+            binding.bannerRight.visibility = View.GONE
+        }
     }
 
     private fun setTabMargins(tabLayout: TabLayout) {
@@ -336,7 +397,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun goArPrint(code : String) {
+    private fun goArPrint(code: String) {
         if (currentPaperNM.isEmpty()) {
             val intent = Intent(requireContext(), EmptyCartridgeActivity::class.java)
             intent.putExtra("MAIN_MENU_CODE", code)

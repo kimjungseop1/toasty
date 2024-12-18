@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ItemCategoryMultiBinding
+import com.syncrown.arpang.network.model.ResponseLibPaperListDto
 
 class CartridgeMultiSelectAdapter(
     private val context: Context,
-    private val itemList: List<String>,
+    private val itemList: ArrayList<ResponseLibPaperListDto.Root>,
     private val itemSelectedListener: OnCartridgeItemSelectedListener
 ) : RecyclerView.Adapter<CartridgeMultiSelectAdapter.ViewHolder>() {
 
@@ -42,7 +43,7 @@ class CartridgeMultiSelectAdapter(
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemList[position]
-        holder.binding.contentView.text = item
+        holder.binding.contentView.text = item.ctge_nm
 
         if (selectedItems.contains(position)) {
             holder.binding.contentView.setTextColor(
