@@ -8,6 +8,10 @@ class RequestCheckNickNameDto {
     @Expose
     var user_id: String = ""
 
+    @SerializedName("app_id")
+    @Expose
+    var app_id: String = ""
+
     @SerializedName("nick_nm")
     @Expose
     var nick_nm: String = ""

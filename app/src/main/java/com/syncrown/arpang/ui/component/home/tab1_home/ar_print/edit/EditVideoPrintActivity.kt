@@ -30,6 +30,9 @@ import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditVideoPrintBinding
 import com.syncrown.arpang.db.ar_db.ArVideoImageDatabase
 import com.syncrown.arpang.db.ar_db.ArVideoImageEntity
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestTemplateListDto
+import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -70,6 +73,8 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
 
     private lateinit var videoPath: Uri
 
+    private var iconData = ArrayList<ResponseTemplateListDto.Root>()
+
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             dialogCommon.showEditCancel(supportFragmentManager, {
@@ -88,7 +93,33 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     private lateinit var resultBitmap: Bitmap
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            editVidePrintViewModel.templateIconResponseLiveData()
+                .observe(this@EditVideoPrintActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data = result.data?.root ?: ArrayList()
 
+                            data.let {
+                                iconData = data
+
+                                setStickerIcon()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
     }
 
     override fun initViewBinding() {
@@ -162,6 +193,10 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         mPhotoEditor.setOnPhotoEditorListener(this)
 
         setBottomMenuList()
+
+        // 스티커 아이콘 데이터
+        iconData = ArrayList()
+        stickerData()
     }
 
     private fun saveRoomDB() {
@@ -224,7 +259,8 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         val videoNameWithoutExtension = videoFile.nameWithoutExtension // 확장자를 제외한 파일명
 
         // 이미지 저장 경로 설정
-        val externalMoviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val externalMoviesDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val targetDir = File(externalMoviesDir, "ArPangVideo/Images")
 
         // 디렉터리 생성 확인
@@ -259,7 +295,8 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
     }
 
     private fun moveVideoToExternalStorage(cacheFilePath: String): Pair<Boolean, String?> {
-        val externalMoviesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val externalMoviesDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val targetDir = File(externalMoviesDir, "ArPangVideo/Videos")
 
         if (!targetDir.exists()) {
@@ -439,7 +476,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
                     5 -> {
                         //TODO 스티커
                         binding.iconView.root.visibility = View.VISIBLE
-                        setStickerIcon()
+                        //setStickerIcon()
                     }
 
                     6 -> {
@@ -477,6 +514,14 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
         }
     }
 
+    private fun stickerData() {
+        val requestTemplateListDto = RequestTemplateListDto().apply {
+            ctgy_se = "IC"
+        }
+
+        editVidePrintViewModel.templateIcons(requestTemplateListDto)
+    }
+
     private fun setStickerIcon() {
         clearItemDecorations(binding.iconView.recyclerIcon)
 
@@ -490,7 +535,7 @@ class EditVideoPrintActivity : BaseActivity(), OnPhotoEditorListener,
             )
         )
 
-        val freeAdapter = StickerAdapter(this)
+        val freeAdapter = StickerAdapter(this, iconData)
         binding.iconView.recyclerIcon.adapter = freeAdapter
         binding.iconView.recyclerIcon.setHasFixedSize(true)
         freeAdapter.setStickerListener(this)

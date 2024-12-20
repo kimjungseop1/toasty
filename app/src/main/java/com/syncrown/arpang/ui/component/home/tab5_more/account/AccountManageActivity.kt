@@ -3,6 +3,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.account
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
@@ -109,8 +110,16 @@ class AccountManageActivity : BaseActivity() {
 
     private fun goChangeName() {
         val intent = Intent(this, ChangeNameActivity::class.java)
-        startActivity(intent)
+        changeNameLauncher.launch(intent)
     }
+
+    private val changeNameLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                Log.e("jung","changeNameLauncher")
+                getUserProfile()
+            }
+        }
 
     private fun goWithdrawal() {
         val intent = Intent(this, WithdrawalActivity::class.java)

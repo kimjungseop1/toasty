@@ -1,4 +1,4 @@
-package com.syncrown.arpang.ui.component.home.tab1_home.ar_print.edit
+package com.syncrown.arpang.ui.component.home.tab1_home.life2cut.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class EditVidePrintViewModel : BaseViewModel() {
+class EditPrint2CutImageViewModel : BaseViewModel() {
     private val arPangRepository: ArPangRepository = ArPangRepository()
 
     /***********************************************************************************************

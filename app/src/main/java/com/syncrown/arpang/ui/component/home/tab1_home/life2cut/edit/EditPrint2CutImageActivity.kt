@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +17,9 @@ import com.bumptech.glide.Glide
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.ActivityEditPrintTwoCutBinding
+import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestTemplateListDto
+import com.syncrown.arpang.network.model.ResponseTemplateListDto
 import com.syncrown.arpang.ui.base.BaseActivity
 import com.syncrown.arpang.ui.commons.CommonFunc
 import com.syncrown.arpang.ui.commons.DialogCommon
@@ -25,6 +29,7 @@ import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.crop.CropImageAc
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.crop.ImageStorage
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.image_select.ImageSelectActivity
 import com.syncrown.arpang.ui.component.home.input_tag.InputTagActivity
+import com.syncrown.arpang.ui.component.home.tab1_home.ar_print.edit.EditVidePrintViewModel
 import com.syncrown.arpang.ui.component.home.tab1_home.life2cut.preview.TwoCutPreviewActivity
 import com.syncrown.arpang.ui.photoeditor.OnPhotoEditorListener
 import com.syncrown.arpang.ui.photoeditor.PhotoEditor
@@ -39,6 +44,9 @@ import java.io.IOException
 class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
     StickerAdapter.StickerListener {
     private lateinit var binding: ActivityEditPrintTwoCutBinding
+    private val cutImageViewModel: EditPrint2CutImageViewModel by viewModels()
+
+    private var iconData = ArrayList<ResponseTemplateListDto.Root>()
 
     private lateinit var firstFilePath: String
     private lateinit var secondFilePath: String
@@ -65,7 +73,33 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
     private lateinit var resultBitmap: Bitmap
 
     override fun observeViewModel() {
+        lifecycleScope.launch {
+            cutImageViewModel.templateIconResponseLiveData()
+                .observe(this@EditPrint2CutImageActivity) { result ->
+                    when (result) {
+                        is NetworkResult.Success -> {
+                            val data: ArrayList<ResponseTemplateListDto.Root>? = result.data?.root
 
+                            data?.let {
+                                iconData = data
+
+                                setStickerIcon()
+                            }
+                        }
+
+                        is NetworkResult.NetCode -> {
+                            Log.e("jung", "실패 : ${result.message}")
+                            if (result.message.equals("403")) {
+                                goLogin()
+                            }
+                        }
+
+                        is NetworkResult.Error -> {
+                            Log.e("jung", "오류 : ${result.message}")
+                        }
+                    }
+                }
+        }
     }
 
     override fun initViewBinding() {
@@ -124,6 +158,9 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
         )
 
         setImageInit()
+
+        iconData = ArrayList()
+        stickerData()
 
         lifecycleScope.launch {
             setEditView()
@@ -184,13 +221,6 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
                         item.setCheckable(false)
                     } else {
                         binding.stickerLayout.root.visibility = View.VISIBLE
-                        val gridLayoutManager = GridLayoutManager(this, 3)
-                        binding.stickerLayout.rvEmoji.layoutManager = gridLayoutManager
-                        val stickerAdapter = StickerAdapter(this)
-                        binding.stickerLayout.rvEmoji.adapter = stickerAdapter
-                        binding.stickerLayout.rvEmoji.setHasFixedSize(true)
-                        stickerAdapter.setStickerListener(this)
-
                         item.setCheckable(true)
                     }
 
@@ -231,6 +261,22 @@ class EditPrint2CutImageActivity : BaseActivity(), OnPhotoEditorListener,
 
     }
 
+    private fun stickerData() {
+        val requestTemplateListDto = RequestTemplateListDto().apply {
+            ctgy_se = "IC"
+        }
+
+        cutImageViewModel.templateIcons(requestTemplateListDto)
+    }
+
+    private fun setStickerIcon() {
+        val gridLayoutManager = GridLayoutManager(this, 3)
+        binding.stickerLayout.rvEmoji.layoutManager = gridLayoutManager
+        val stickerAdapter = StickerAdapter(this, iconData)
+        binding.stickerLayout.rvEmoji.adapter = stickerAdapter
+        binding.stickerLayout.rvEmoji.setHasFixedSize(true)
+        stickerAdapter.setStickerListener(this)
+    }
 
     private fun setImageInit() {
         Glide.with(this).load(firstFilePath).into(binding.firstImageView)

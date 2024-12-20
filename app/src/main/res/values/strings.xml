@@ -97,6 +97,7 @@
     <string name="join_email_title">회원가입 하고\n토스티와 추억을 인쇄해보세요.</string>
     <string name="join_email_desc_1">이메일</string>
     <string name="join_email_desc_1_1">sample@input.email</string>
+    <string name="join_email_desc_1_2">닉네임</string>
     <string name="join_email_desc_2">이름</string>
     <string name="join_email_desc_2_2">서비스에서 사용하실 이름을 입력해주세요</string>
     <string name="join_email_warning_name">* 이름을 두글자 이상 입력해주세요.</string>
@@ -110,6 +111,7 @@
     <string name="join_email_consent_2">[필수] 개인정보 수집 및 이용</string>
     <string name="join_email_consent_3">[선택] 광고성 정보 수신 동의</string>
     <string name="join_email_btn">회원 가입</string>
+    <string name="join_nick_hint">서비스에서 사용하실 이름을 입력해주세요</string>
 
     <!-- 이메일 인증 -->
     <string name="cert_email_title">ARPANG</string>

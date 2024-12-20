@@ -127,8 +127,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ArPangRepository {
     companion object {
         const val BASE_URL_DEV = "http://192.168.0.132:8090"
-
-        //        const val BASE_URL_DEV = "http://192.168.0.13:8090"
         const val BASE_URL_REAL = ""
     }
 
@@ -583,6 +581,7 @@ class ArPangRepository {
     fun requestCheckNickName(requestCheckNickNameDto: RequestCheckNickNameDto) {
         arPangInterface.postCheckNickName(
             requestCheckNickNameDto.user_id,
+            requestCheckNickNameDto.app_id,
             requestCheckNickNameDto.nick_nm
         ).enqueue(object : Callback<ResponseCheckNickNameDto> {
             override fun onResponse(

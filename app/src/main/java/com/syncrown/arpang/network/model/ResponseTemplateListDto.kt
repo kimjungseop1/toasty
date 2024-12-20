@@ -6,20 +6,20 @@ import com.google.gson.annotations.SerializedName
 class ResponseTemplateListDto {
     @SerializedName("root")
     @Expose
-    var root: ArrayList<Root>? = null
+    var root: ArrayList<Root>? = ArrayList()
 
     class Root {
         @SerializedName("seq_no")
         @Expose
-        var seq_no: Int = -1
+        var seq_no: String? = null
 
         @SerializedName("ctgy_se")
         @Expose
-        var ctgy_se: String = ""
+        var ctgy_se: String? = null
 
         @SerializedName("ctgy_code_step1")
         @Expose
-        var ctgy_code_step1: String = ""
+        var ctgy_code_step1: String? = null
 
         @SerializedName("ctgy_code_step2")
         @Expose
@@ -43,7 +43,7 @@ class ResponseTemplateListDto {
 
         @SerializedName("file_origin_nm")
         @Expose
-        var file_origin_nm: String = ""
+        var file_origin_nm: String? = null
 
         @SerializedName("file_svr_nm")
         @Expose
@@ -51,7 +51,7 @@ class ResponseTemplateListDto {
 
         @SerializedName("file_path")
         @Expose
-        var file_path: String = ""
+        var file_path: String? = null
 
         @SerializedName("file_thumb_path")
         @Expose
@@ -75,6 +75,6 @@ class ResponseTemplateListDto {
 
         @SerializedName("dithering_se")
         @Expose
-        var dithering_se: Int = -1
+        var dithering_se: Int? = null
     }
 }

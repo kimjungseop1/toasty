@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withStarted
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
@@ -239,8 +240,11 @@ class MainActivity : BaseActivity() {
             goArPage()
         }
 
-//        if (AppDataPref.isMainEvent) {
-//            showEventBottomSheet() // 메인 -> 홈으로 이동
+
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                setEventPopupBannerData()
+//            }
 //        }
         setEventPopupBannerData()
     }
@@ -287,6 +291,7 @@ class MainActivity : BaseActivity() {
     private fun changeFragment(fragment: Fragment): Fragment {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_container, fragment)
+            .addToBackStack(null)
             .commit()
 
         return fragment

@@ -2,6 +2,7 @@ package com.syncrown.arpang.ui.component.home.tab5_more.account.name
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.syncrown.arpang.AppDataPref
@@ -18,6 +19,13 @@ import kotlinx.coroutines.launch
 class ChangeNameActivity : BaseActivity() {
     private lateinit var binding: ActivityChangeNameBinding
     private val changeNameViewModel: ChangeNameViewModel by viewModels()
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            setResult(RESULT_OK)
+            finish()
+        }
+    }
 
     override fun observeViewModel() {
         lifecycleScope.launch {
@@ -66,10 +74,6 @@ class ChangeNameActivity : BaseActivity() {
                                         val msg = getString(R.string.account_change_name_desc_3)
                                         showToastMessage(msg, CustomToastType.BLUE)
                                     }
-
-                                    "FAIL" -> {
-
-                                    }
                                 }
                             }
                         }
@@ -97,7 +101,10 @@ class ChangeNameActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        onBackPressedDispatcher.addCallback(callback)
+
         binding.actionbar.actionBack.setOnClickListener {
+            setResult(RESULT_OK)
             finish()
         }
 
@@ -118,6 +125,7 @@ class ChangeNameActivity : BaseActivity() {
     private fun checkDuplicateNickName() {
         val requestCheckNickNameDto = RequestCheckNickNameDto()
         requestCheckNickNameDto.user_id = AppDataPref.userId
+        requestCheckNickNameDto.app_id = "APP_ARPANG"
         requestCheckNickNameDto.nick_nm = binding.inputName.text.toString()
 
         changeNameViewModel.checkNickName(requestCheckNickNameDto)

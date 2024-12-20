@@ -10,8 +10,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.syncrown.arpang.databinding.RowStickerBinding
+import com.syncrown.arpang.network.model.ResponseTemplateListDto
 
-class StickerAdapter(private val context: Context) : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
+class StickerAdapter(
+    private val context: Context,
+    private val iconData: ArrayList<ResponseTemplateListDto.Root>
+) : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
     private var mStickerListener: StickerListener? = null
 
     fun setStickerListener(stickerListener: StickerListener?) {
@@ -30,12 +34,12 @@ class StickerAdapter(private val context: Context) : RecyclerView.Adapter<Sticke
     override fun onBindViewHolder(holder: StickerAdapter.ViewHolder, position: Int) {
         Glide.with(context)
             .asBitmap()
-            .load(stickerPathList[position])
+            .load(iconData[position].file_path)
             .into(holder.binding.imgSticker)
     }
 
     override fun getItemCount(): Int {
-        return stickerPathList.size
+        return iconData.size
     }
 
     inner class ViewHolder(val binding: RowStickerBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -45,7 +49,7 @@ class StickerAdapter(private val context: Context) : RecyclerView.Adapter<Sticke
                 if (mStickerListener != null) {
                     Glide.with(itemView.context)
                         .asBitmap()
-                        .load(stickerPathList[adapterPosition])
+                        .load(iconData[adapterPosition].file_path)
                         .into(object : CustomTarget<Bitmap?>(256, 256) {
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
                                 mStickerListener?.onStickerClick(resource)
@@ -58,15 +62,4 @@ class StickerAdapter(private val context: Context) : RecyclerView.Adapter<Sticke
         }
     }
 
-    private val stickerPathList = arrayOf(
-        "https://cdn-icons-png.flaticon.com/256/4392/4392452.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392455.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392459.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392462.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392465.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392467.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392469.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392471.png",
-        "https://cdn-icons-png.flaticon.com/256/4392/4392522.png",
-    )
 }

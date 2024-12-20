@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.syncrown.arpang.AppDataPref
 import com.syncrown.arpang.R
 import com.syncrown.arpang.databinding.FragmentMoreBinding
@@ -122,11 +124,16 @@ class MoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getSubscribeCount()
-
-        getUserProfile()
-
         observeData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            getUserProfile()
+
+            getSubscribeCount()
+        }
     }
 
     private fun getSubscribeCount() {

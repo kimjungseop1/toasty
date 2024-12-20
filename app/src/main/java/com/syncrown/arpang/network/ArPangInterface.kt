@@ -136,9 +136,10 @@ interface ArPangInterface {
 
     //TODO 007. 별명 중복 체크
     @FormUrlEncoded
-    @POST("/ntv/atp/nick/duple")
+    @POST("/ntv/nick/duple/check")
     fun postCheckNickName(
         @Field("user_id") user_id: String,
+        @Field("app_id") app_id: String,
         @Field("nick_nm") nick_nm: String
     ): Call<ResponseCheckNickNameDto>
 

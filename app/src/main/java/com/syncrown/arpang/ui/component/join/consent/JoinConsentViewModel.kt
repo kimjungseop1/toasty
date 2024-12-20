@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.airbnb.lottie.L
 import com.syncrown.arpang.network.ArPangRepository
 import com.syncrown.arpang.network.NetworkResult
+import com.syncrown.arpang.network.model.RequestCheckNickNameDto
 import com.syncrown.arpang.network.model.RequestJoinDto
 import com.syncrown.arpang.network.model.RequestLoginDto
+import com.syncrown.arpang.network.model.ResponseCheckNickNameDto
 import com.syncrown.arpang.network.model.ResponseJoinDto
 import com.syncrown.arpang.network.model.ResponseLoginDto
 import com.syncrown.arpang.ui.base.BaseViewModel
@@ -31,6 +33,24 @@ class JoinConsentViewModel : BaseViewModel() {
 
     fun joinMemberResponseLiveData(): LiveData<NetworkResult<ResponseJoinDto>> {
         return joinMemberResponseLiveData
+    }
+
+    /**
+     * =============================================================================================
+     * 닉네임 중복체크
+     * =============================================================================================
+     */
+    private val checkNickNameResponseLiveData: LiveData<NetworkResult<ResponseCheckNickNameDto>> =
+        arPangRepository.checkNickLiveDataRepository
+
+    fun checkNickName(requestCheckNickNameDto: RequestCheckNickNameDto) {
+        viewModelScope.launch {
+            arPangRepository.requestCheckNickName(requestCheckNickNameDto)
+        }
+    }
+
+    fun checkNickNameResponseLiveData(): LiveData<NetworkResult<ResponseCheckNickNameDto>> {
+        return checkNickNameResponseLiveData
     }
 
     /**

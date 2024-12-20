@@ -12,7 +12,6 @@ import com.syncrown.arpang.databinding.ActivtyLoginBinding
 import com.syncrown.arpang.network.NetworkResult
 import com.syncrown.arpang.network.model.RequestLoginDto
 import com.syncrown.arpang.ui.base.BaseActivity
-import com.syncrown.arpang.ui.component.home.MainActivity
 import com.syncrown.arpang.ui.component.join.consent.JoinConsentActivity
 
 
@@ -30,8 +29,6 @@ class LoginActivity : BaseActivity() {
                     result.data?.let { data ->
                         when (data.msgCode) {
                             "SUCCESS" -> {
-                                AppDataPref.save(this)
-
                                 if (result.data.member_check == 1) {
                                     //로그인
                                     val requestLoginDto = RequestLoginDto()
